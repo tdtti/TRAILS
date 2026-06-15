@@ -249,125 +249,118 @@ input, select, textarea, [contenteditable="true"] {
         </div>
 
         <form id="selfRegForm" onsubmit="submitSelfRegistration(event)" class="space-y-4 text-sm">
-    <div>
-    <label class="block text-xs font-bold text-gray-400 uppercase mb-1">Full Name</label>
-    <input id="regName" required placeholder="EX: MANU KEISHNAN L M" oninput="this.value = this.value.toUpperCase()" class="w-full p-3 border border-gray-200 rounded-xl focus:ring-2 focus:ring-blue-500 outline-none">
-</div>
-
-<!-- NEW: STAFF SPECIFIC TENURE FIELD -->
-<div id="regTenureGroup" class="hidden">
-    <label class="block text-xs font-bold text-gray-400 uppercase mb-1">Tenure</label>
-    <input id="regTenure" placeholder="ENTER TENURE (E.G. 10 MONTHS)" oninput="this.value = this.value.toUpperCase()" class="w-full p-3 border border-gray-200 rounded-xl focus:ring-2 focus:ring-blue-500 outline-none">
-</div>
-
-<!-- NEW: STAFF SPECIFIC CUSTOM AMOUNT FIELD -->
-<div id="regCustomAmountGroup" class="hidden">
-    <label class="block text-xs font-bold text-gray-400 uppercase mb-1">Custom Amount (₹)</label>
-    <input id="regCustomAmount" type="number" placeholder="Enter custom amount" class="w-full p-3 border border-gray-200 rounded-xl focus:ring-2 focus:ring-blue-500 outline-none">
-</div>
-
-<div>
-    <label class="block text-xs font-bold text-gray-400 uppercase mb-1">Whatsapp Number (10 Digits)</label>
-    <input id="regPhone" required type="tel" placeholder="10-digit mobile number" oninput="this.value = this.value.replace(/\D/g, '').slice(0, 10)" class="w-full p-3 border border-gray-200 rounded-xl focus:ring-2 focus:ring-blue-500 outline-none">
-</div>
-
-<!-- NEW: GENDER dropdown inside self-registration grid -->
-<div class="grid grid-cols-2 gap-3">
-    <div>
-        <label class="block text-xs font-bold text-gray-400 uppercase mb-1">Gender</label>
-        <select id="regGender" required class="w-full p-3 border border-gray-200 rounded-xl bg-white focus:ring-2 focus:ring-blue-500 outline-none">
-            <option value="">Select Gender</option>
-            <option>M</option>
-            <option>F</option>
-        </select>
-    </div>
-    <div>
-        <label class="block text-xs font-bold text-gray-400 uppercase mb-1">School</label>
-        <select id="regSchool" required onchange="filterClasses(this.value, 'regClass')" class="w-full p-3 border border-gray-200 rounded-xl bg-white focus:ring-2 focus:ring-blue-500 outline-none">
-                <option value="">Select School</option>
-                <option value="TDEMNS-td1">TDEMNS-td1</option>
-                <option value="GTDLPS-34318">GTDLPS-34318</option>
-                <option value="TDTTI-34347">TDTTI-34347</option>
-                <option value="TDHS-34028">TDHS-34028</option>
-            </select>
-        </div>
-        <div id="regClassDivGroup" class="grid grid-cols-2 gap-2">
+            <!-- Full Name (Compulsory) -->
             <div>
-                <label class="block text-xs font-bold text-gray-400 uppercase mb-1">Class</label>
-                <select id="regClass" class="w-full p-3 border border-gray-200 rounded-xl bg-white outline-none">
-                    <option value="">Class</option>
+                <label class="block text-xs font-bold text-gray-400 uppercase mb-1">Full Name</label>
+                <input id="regName" required placeholder="ENTER FULL NAME" oninput="this.value = this.value.toUpperCase()" class="w-full p-3 border border-gray-200 rounded-xl focus:ring-2 focus:ring-blue-500 outline-none">
+            </div>
+
+            <!-- Parent Name (Student Only) -->
+            <div id="regParentGroup">
+                <label class="block text-xs font-bold text-gray-400 uppercase mb-1">Parent Name / PEN No</label>
+                <input id="regParent" placeholder="ENTER PARENT NAME OR EMPLOYEE CODE" oninput="this.value = this.value.toUpperCase()" class="w-full p-3 border border-gray-200 rounded-xl focus:ring-2 focus:ring-blue-500 outline-none">
+            </div>
+
+            <!-- Phone (Compulsory) -->
+            <div>
+                <label class="block text-xs font-bold text-gray-400 uppercase mb-1">Phone Number (10 Digits)</label>
+                <input id="regPhone" required type="tel" placeholder="10-digit mobile number" oninput="this.value = this.value.replace(/\D/g, '').slice(0, 10)" class="w-full p-3 border border-gray-200 rounded-xl focus:ring-2 focus:ring-blue-500 outline-none">
+            </div>
+
+            <!-- Gender & School Grid -->
+            <div class="grid grid-cols-2 gap-3">
+                <div>
+                    <label class="block text-xs font-bold text-gray-400 uppercase mb-1">Gender</label>
+                    <select id="regGender" required class="w-full p-3 border border-gray-200 rounded-xl bg-white focus:ring-2 focus:ring-blue-500 outline-none">
+                        <option value="">Select Gender</option>
+                        <option>Male</option>
+                        <option>Female</option>
+                    </select>
+                </div>
+                <div>
+                    <label class="block text-xs font-bold text-gray-400 uppercase mb-1">School</label>
+                    <select id="regSchool" required onchange="filterClasses(this.value, 'regClass')" class="w-full p-3 border border-gray-200 rounded-xl bg-white focus:ring-2 focus:ring-blue-500 outline-none">
+                        <option value="">Select School</option>
+                        <option value="TDEMNS-td1">TDEMNS-td1</option>
+                        <option value="GTDLPS-34318">GTDLPS-34318</option>
+                        <option value="TDTTI-34347">TDTTI-34347</option>
+                        <option value="TDHS-34028">TDHS-34028</option>
+                    </select>
+                </div>
+            </div>
+
+            <!-- Class & Division (Student Only) -->
+            <div id="regClassDivGroup">
+                <label class="block text-xs font-bold text-gray-400 uppercase mb-1">Class & Div</label>
+                <div class="grid grid-cols-2 gap-2">
+                    <select id="regClass" class="p-3 border border-gray-200 rounded-xl bg-white outline-none">
+                        <option value="">Class</option>
+                    </select>
+                    <select id="regDiv" class="p-3 border border-gray-200 rounded-xl bg-white outline-none">
+                        <option value="">Div</option>
+                        <option>A</option><option>B</option><option>C</option><option>D</option><option>E</option><option>F</option><option>G</option>
+                    </select>
+                </div>
+            </div>
+
+            <!-- Bus Selection (Student Only) -->
+            <div id="regBusGroup">
+                <label class="block text-xs font-bold text-gray-400 uppercase mb-1">Select Bus</label>
+                <select id="regBus" class="w-full p-3 border border-gray-200 rounded-xl bg-white focus:ring-2 focus:ring-blue-500 outline-none" onchange="populatePredefinedStops(this.value)">
+                    <option value="">Select Bus</option>
+                    <option>KL32P4201SR</option>
+                    <option>KL32M0528VM</option>
+                    <option>KL32L2382K</option>
+                    <option>KL07BU4184C</option>
+                    <option>KL32L0827U</option>
                 </select>
             </div>
-            <div>
-                <label class="block text-xs font-bold text-gray-400 uppercase mb-1">Div</label>
-                <select id="regDiv" class="w-full p-3 border border-gray-200 rounded-xl bg-white outline-none">
-                    <option value="">Div</option>
-                    <option>A</option><option>B</option><option>C</option><option>D</option><option>E</option><option>F</option><option>G</option>
+
+            <!-- Entry & Exit Stops (Student Only) -->
+            <div id="regStopsGroup" class="grid grid-cols-2 gap-3">
+                <div>
+                    <label class="block text-xs font-bold text-gray-400 uppercase mb-1">Entry Stop</label>
+                    <select id="regEntry" class="w-full p-3 border border-gray-200 rounded-xl bg-white focus:ring-2 focus:ring-blue-500 outline-none">
+                        <option value="">Select Entry</option>
+                    </select>
+                </div>
+                <div>
+                    <label class="block text-xs font-bold text-gray-400 uppercase mb-1">Exit Stop</label>
+                    <select id="regExit" class="w-full p-3 border border-gray-200 rounded-xl bg-white focus:ring-2 focus:ring-blue-500 outline-none">
+                        <option value="">Select Exit</option>
+                    </select>
+                </div>
+            </div>
+
+            <!-- Travel Status / both time / morning only / evening only (Student Only) -->
+            <div id="regStatusGroup">
+                <label class="block text-xs font-bold text-gray-400 uppercase mb-1">Travel Time</label>
+                <select id="regStatus" class="w-full p-3 border border-gray-200 rounded-xl bg-white focus:ring-2 focus:ring-blue-500 outline-none">
+                    <option>Both Time</option>
+                    <option>Morning Only</option>
+                    <option>Evening Only</option>
                 </select>
             </div>
-        </div>
-    </div>
 
-    <!-- BUS GROUP -->
-    <div id="regBusGroup">
-        <label class="block text-xs font-bold text-gray-400 uppercase mb-1">Select Bus</label>
-        <select id="regBus" onchange="populatePredefinedStops(this.value)" class="w-full p-3 border border-gray-200 rounded-xl bg-white focus:ring-2 focus:ring-blue-500 outline-none">
-            <option value="">Select Bus</option>
-            <option>KL32P4201SR</option>
-            <option>KL32M0528VM</option>
-            <option>KL32L2382K</option>
-            <option>KL07BU4184C</option>
-            <option>KL32L0827U</option>
-        </select>
-    </div>
+            <!-- Staff Specific: Tenure (Added) -->
+            <div id="regTenureGroup" class="hidden">
+                <label class="block text-xs font-bold text-gray-400 uppercase mb-1">Tenure</label>
+                <input id="regTenure" placeholder="ENTER TENURE (E.G. 10 MONTHS)" oninput="this.value = this.value.toUpperCase()" class="w-full p-3 border border-gray-200 rounded-xl focus:ring-2 focus:ring-blue-500 outline-none">
+            </div>
 
-    <!-- STOPS GROUP -->
-    <div id="regStopsGroup" class="grid grid-cols-2 gap-3">
-        <div>
-            <label class="block text-xs font-bold text-gray-400 uppercase mb-1">Entry Stop (Strict)</label>
-            <select id="regEntry" class="w-full p-3 border border-gray-200 rounded-xl bg-white focus:ring-2 focus:ring-blue-500 outline-none">
-                <option value="">Select Entry</option>
-            </select>
-        </div>
-        <div>
-            <label class="block text-xs font-bold text-gray-400 uppercase mb-1">Exit Stop (Strict)</label>
-            <select id="regExit" onchange="autoFillRegFee(this.value)" class="w-full p-3 border border-gray-200 rounded-xl bg-white focus:ring-2 focus:ring-blue-500 outline-none">
-                <option value="">Select Exit</option>
-            </select>
-        </div>
-    </div>
+            <!-- Staff Specific: Custom Amount (Added) -->
+            <div id="regCustomAmountGroup" class="hidden">
+                <label class="block text-xs font-bold text-gray-400 uppercase mb-1">Custom Amount (₹)</label>
+                <input id="regCustomAmount" type="number" placeholder="Enter custom amount" class="w-full p-3 border border-gray-200 rounded-xl focus:ring-2 focus:ring-blue-500 outline-none">
+            </div>
 
-    <!-- STATUS GROUP -->
-    <div id="regStatusGroup">
-        <label class="block text-xs font-bold text-gray-400 uppercase mb-1">Travel Time</label>
-        <select id="regStatus" class="w-full p-3 border border-gray-200 rounded-xl bg-white focus:ring-2 focus:ring-blue-500 outline-none">
-            <option>Both Time</option>
-            <option>Morning Only</option>
-            <option>Evening Only</option>
-        </select>
+            <!-- Submit Button -->
+            <button type="submit" class="w-full mt-2 bg-gradient-to-r from-blue-600 to-indigo-600 text-white py-4 rounded-xl font-bold hover:shadow-lg transition-all">
+                Submit Registration
+            </button>
+        </form>
     </div>
-
-    <!-- STUDENT AUTO-CALCULATED FEE BOX -->
-    <div id="regFeeGroup" class="bg-blue-50 p-4 rounded-2xl border border-blue-100 flex justify-between items-center mt-3">
-        <div>
-            <span class="block text-xs font-bold text-blue-500 uppercase tracking-wider">Estimated Monthly Fee</span>
-            <span class="text-[10px] text-gray-500">Calculated automatically based on Exit Stop</span>
-        </div>
-        <div class="text-right">
-            <span id="regFeeDisplay" class="text-2xl font-black text-blue-700">₹0</span>
-        </div>
-    </div>
-
-    <!-- STAFF MANUAL FEE INPUT BOX -->
-    <div id="regStaffFeeGroup" class="hidden mt-3">
-        <label class="block text-xs font-bold text-gray-400 uppercase mb-1">Decided Transport Fee (₹)</label>
-        <input type="number" id="regStaffFeeInput" placeholder="Enter decided fee amount (e.g. 1000)" class="w-full p-3 border border-gray-200 rounded-xl focus:ring-2 focus:ring-blue-500 outline-none font-bold text-blue-700">
-    </div>
-
-    <button type="submit" class="w-full mt-2 bg-gradient-to-r from-blue-600 to-indigo-600 text-white py-4 rounded-xl font-bold hover:shadow-lg transition-all">
-        Submit Registration
-    </button>
-</form>
+</div>
 <script>
     const API_URL = "https://script.google.com/macros/s/AKfycbwCx3gwQ1QswvdVSBC5wSYMNWaUJCZsjlEUH6xOVnuzRAX5x7WOw1ao5SvFFgKC-MVyuQ/exec";
 
@@ -4955,55 +4948,55 @@ async function initializeRegistrationMode(type) {
     document.getElementById('selfRegisterSection').classList.remove('hidden');
     
     const regFormTitle = document.getElementById('regFormTitle');
-    const classDivGroup = document.getElementById('regClassDivGroup');
-    const parentGroup = document.getElementById('regParentGroup');
 
     if (type === 'staff') {
         regFormTitle.innerText = "Staff Registration Portal";
-        classDivGroup.classList.add('hidden'); 
-        parentGroup.classList.add('hidden'); 
         
-        // Hide Student Specific Fields
-        document.getElementById('regBus').parentNode.classList.add('hidden');
-        document.getElementById('regEntry').parentNode.parentNode.classList.add('hidden'); 
-        document.getElementById('regStatus').parentNode.classList.add('hidden');
+        // 1. Hide Student-Only Elements using absolute wrapper IDs
+        document.getElementById('regClassDivGroup').classList.add('hidden'); 
+        document.getElementById('regParentGroup').classList.add('hidden'); 
+        document.getElementById('regBusGroup').classList.add('hidden');
+        document.getElementById('regStopsGroup').classList.add('hidden'); 
+        document.getElementById('regStatusGroup').classList.add('hidden');
         
-        // Show Staff Specific Fields
+        // 2. Show Staff-Only Elements
         document.getElementById('regTenureGroup').classList.remove('hidden');
         document.getElementById('regCustomAmountGroup').classList.remove('hidden');
         
-        // Set Required Validations
+        // 3. Clear Required Flags for Student elements
         document.getElementById('regClass').required = false;
         document.getElementById('regBus').required = false;
         document.getElementById('regEntry').required = false;
         document.getElementById('regExit').required = false;
         document.getElementById('regStatus').required = false;
         
+        // 4. Force Required Flags for Staff elements
         document.getElementById('regTenure').required = true;
         document.getElementById('regCustomAmount').required = true;
         
-        document.getElementById('regSchool').value = "TDEMNS-td1"; 
+        document.getElementById('regSchool').value = "TDEMNS-td1"; // Default filler school
     } else {
         regFormTitle.innerText = "Student Registration Portal";
-        classDivGroup.classList.remove('hidden');
-        parentGroup.classList.remove('hidden');
         
-        // Show Student Specific Fields
-        document.getElementById('regBus').parentNode.classList.remove('hidden');
-        document.getElementById('regEntry').parentNode.parentNode.classList.remove('hidden');
-        document.getElementById('regStatus').parentNode.classList.remove('hidden');
+        // 1. Show Student-Only Elements
+        document.getElementById('regClassDivGroup').classList.remove('hidden');
+        document.getElementById('regParentGroup').classList.remove('hidden');
+        document.getElementById('regBusGroup').classList.remove('hidden');
+        document.getElementById('regStopsGroup').classList.remove('hidden');
+        document.getElementById('regStatusGroup').classList.remove('hidden');
         
-        // Hide Staff Specific Fields
+        // 2. Hide Staff-Only Elements
         document.getElementById('regTenureGroup').classList.add('hidden');
         document.getElementById('regCustomAmountGroup').classList.add('hidden');
         
-        // Set Required Validations
+        // 3. Enforce Required Flags for Student elements
         document.getElementById('regClass').required = true;
         document.getElementById('regBus').required = true;
         document.getElementById('regEntry').required = true;
         document.getElementById('regExit').required = true;
         document.getElementById('regStatus').required = true;
         
+        // 4. Remove Required Flags for Staff elements
         document.getElementById('regTenure').required = false;
         document.getElementById('regCustomAmount').required = false;
     }
