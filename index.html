@@ -251,12 +251,18 @@ input, select, textarea, [contenteditable="true"] {
         <form id="selfRegForm" onsubmit="submitSelfRegistration(event)" class="space-y-4 text-sm">
     <div>
     <label class="block text-xs font-bold text-gray-400 uppercase mb-1">Full Name</label>
-    <input id="regName" required placeholder="ENTER FULL NAME" oninput="this.value = this.value.toUpperCase()" class="w-full p-3 border border-gray-200 rounded-xl focus:ring-2 focus:ring-blue-500 outline-none">
+    <input id="regName" required placeholder="EX: MANU KEISHNAN L M" oninput="this.value = this.value.toUpperCase()" class="w-full p-3 border border-gray-200 rounded-xl focus:ring-2 focus:ring-blue-500 outline-none">
 </div>
 
-<div id="regParentGroup">
+<!-- Inside #selfRegForm -->
+<div id="regTenureGroup" class="hidden">
     <label class="block text-xs font-bold text-gray-400 uppercase mb-1">Tenure</label>
-    <input id="regParent" placeholder="ENTER PARENT NAME OR EMPLOYEE CODE" oninput="this.value = this.value.toUpperCase()" class="w-full p-3 border border-gray-200 rounded-xl focus:ring-2 focus:ring-blue-500 outline-none">
+    <input id="regTenure" placeholder="ENTER TENURE (E.G. 10 MONTHS)" oninput="this.value = this.value.toUpperCase()" class="w-full p-3 border border-gray-200 rounded-xl focus:ring-2 focus:ring-blue-500 outline-none">
+</div>
+
+<div id="regCustomAmountGroup" class="hidden">
+    <label class="block text-xs font-bold text-gray-400 uppercase mb-1">Custom Amount (₹)</label>
+    <input id="regCustomAmount" type="number" placeholder="Enter custom amount" class="w-full p-3 border border-gray-200 rounded-xl focus:ring-2 focus:ring-blue-500 outline-none">
 </div>
 
 <div>
@@ -270,8 +276,8 @@ input, select, textarea, [contenteditable="true"] {
         <label class="block text-xs font-bold text-gray-400 uppercase mb-1">Gender</label>
         <select id="regGender" required class="w-full p-3 border border-gray-200 rounded-xl bg-white focus:ring-2 focus:ring-blue-500 outline-none">
             <option value="">Select Gender</option>
-            <option>Male</option>
-            <option>Female</option>
+            <option>M</option>
+            <option>F</option>
         </select>
     </div>
     <div>
@@ -362,7 +368,7 @@ input, select, textarea, [contenteditable="true"] {
     </button>
 </form>
 <script>
-    const API_URL = "https://script.google.com/macros/s/AKfycbxIvFpiydf_Z1jzkY2duIdPejExqc_YjGqNz89ZxxOzmiFyKnBiM7vDUP_euRkv7wogLA/exec";
+    const API_URL = "https://script.google.com/macros/s/AKfycbwCx3gwQ1QswvdVSBC5wSYMNWaUJCZsjlEUH6xOVnuzRAX5x7WOw1ao5SvFFgKC-MVyuQ/exec";
 
     // Disable context menu (Right-Click)
 document.addEventListener('contextmenu', event => event.preventDefault());
@@ -931,7 +937,7 @@ function getFilteredDB() {
         // Use the new helper function here
         let dateOnly = paid ? formatMyDate(d[m+'DateTime']) : '-';
 
-        return `
+        return `https://script.google.com/macros/s/AKfycbzM_F9fh6Fot5alH2BpBLvgKYMSCOzynWkfdiC2J5ELtfNk3H2WleSO2NKZU7WQZJ-OWw/exec
             <tr class="border-b text-sm hover:bg-gray-50">
                 <td class="p-4 font-bold text-gray-700">${m}</td>
                 <td class="p-4 font-bold ${paid ? 'text-green-600':'text-gray-300'}">
@@ -1191,12 +1197,12 @@ function downloadStudentPDF() {
         <option>KL32P4201SR</option><option>KL32M0528VM</option><option>KL32L2382K</option><option>KL07BU4184C</option><option>KL32L0827U</option><option>STAFF</option>
     </select>
     
-    <select id="f2" onchange="filterClasses(this.value)" required class="p-2 border rounded">
+    <select id="f2" onchange="filterClasses(this.value); autoFetchFee();" required class="p-2 border rounded">
         <option value="">School</option>
         <option>TDEMNS-td1</option><option>GTDLPS-34318</option><option>TDTTI-34347</option><option>TDHS-34028</option>
     </select>                
     
-    <select id="f3" required class="p-2 border rounded">
+    <select id="f3" onchange="autoFetchFee();" required class="p-2 border rounded">
         <option value="">Class</option>
     </select> 
     
@@ -1224,8 +1230,16 @@ function downloadStudentPDF() {
     <input list="exitStops" id="f9" required placeholder="Exit Stop" oninput="this.value = this.value.toUpperCase()" class="p-2 border rounded">
     <datalist id="exitStops"></datalist>
     
-    <select id="f10" required class="p-2 border rounded"><option>Both Time</option><option>Morning Only</option><option>Evening Only</option><option></option></select>
-    <input id="f11" required placeholder="Fee Amount" type="number" class="p-2 border rounded">
+    <!-- Trigger reduction calculation onchange -->
+<select id="f10" onchange="applyFeeReduction()" required class="p-2 border rounded">
+    <option>Both Time</option>
+    <option>Morning Only</option>
+    <option>Evening Only</option>
+    <option>SPONSER</option>
+</select>
+
+<!-- Capture base input values on manual edits -->
+<input id="f11" required placeholder="Fee Amount" type="number" oninput="this.dataset.baseFee = this.value; applyFeeReduction();" class="p-2 border rounded">
     
     <div class="col-span-2 md:col-span-4 flex gap-2">
         <button type="submit" id="sBtn" class="bg-blue-600 text-white px-6 py-2 rounded font-bold">Save</button>
@@ -3736,66 +3750,69 @@ async function clearAllLogsUI() {
         Please wait...
     </button>
 </div><br><br><br>
-            // Replace the form inside renderTab7(c) with this version:
+            
 <form id="staffForm" onsubmit="saveStaff(event)" class="grid grid-cols-2 md:grid-cols-4 gap-3 mb-6 bg-gray-50 p-4 rounded border text-sm">
-    <select id="sf1" onchange="filterStops(this.value)" required class="p-2 border rounded">
-        <option value="">Bus</option>
-        <option>KL32P4201SR</option><option>KL32M0528VM</option><option>KL32L2382K</option><option>KL07BU4184C</option><option>KL32L0827U</option>
-    </select>
-    
-    <select id="sf2" required class="p-2 border rounded">
-        <option value="">School</option>
-        <option>TDEMNS-td1</option><option>GTDLPS-34318</option><option>TDTTI-34347</option><option>TDHS-34028</option>
-    </select>                
-    
-    <!-- UPPERCASE ENFORCED -->
-    <input id="sf5" required placeholder="Staff Name" oninput="this.value = this.value.toUpperCase()" class="p-2 border rounded md:col-span-2">
-    <input id="sf6" placeholder="Designation (Optional)" oninput="this.value = this.value.toUpperCase()" class="p-2 border rounded">
-    
-    <!-- 10-DIGIT PHONE ENFORCED -->
-    <input id="sf7" required type="tel" placeholder="Phone" oninput="this.value = this.value.replace(/\D/g, '').slice(0, 10)" class="p-2 border rounded">
-    
-    <!-- NEW: GENDER DROPDOWN -->
-    <select id="sf12" required class="p-2 border rounded">
-        <option value="">Select Gender</option>
-        <option>Male</option>
-        <option>Female</option>
-    </select>
+        <select id="sf2" required class="p-2 border rounded">
+            <option value="">School</option>
+            <option>TDEMNS-td1</option><option>GTDLPS-34318</option><option>TDTTI-34347</option><option>TDHS-34028</option>
+        </select>                
+        
+        <input id="sf5" required placeholder="Staff Name" oninput="this.value = this.value.toUpperCase()" class="p-2 border rounded md:col-span-2">
+        <input id="sf6" placeholder="Designation" oninput="this.value = this.value.toUpperCase()" class="p-2 border rounded">
+        <input id="sf7" required type="tel" placeholder="Phone" oninput="this.value = this.value.replace(/\D/g, '').slice(0, 10)" class="p-2 border rounded">
+        
+        <select id="sf12" required class="p-2 border rounded">
+            <option value="">Select Gender</option>
+            <option>Male</option><option>Female</option>
+        </select>
 
-    <input list="entryStops" id="sf8" placeholder="Entry Stop" oninput="this.value = this.value.toUpperCase()" class="p-2 border rounded">
-    <input list="exitStops" id="sf9" required placeholder="Exit Stop" oninput="this.value = this.value.toUpperCase()" class="p-2 border rounded">
+        <!-- NEW: TENURE FIELD -->
+        <input id="sf13" required placeholder="Tenure (e.g. 2 YEARS)" oninput="this.value = this.value.toUpperCase()" class="p-2 border rounded">
+        
+        <!-- NEW: CUSTOM AMOUNT -->
+        <input id="sf11" required placeholder="Custom Amount (₹)" type="number" class="p-2 border rounded">
+        
+        <div class="col-span-2 md:col-span-4 flex gap-2">
+            <button type="submit" id="staffBtn" class="bg-blue-600 text-white px-6 py-2 rounded font-bold">Save</button>
+            <button type="button" onclick="renderTab7(document.getElementById('tabContent'))" class="bg-gray-400 text-white px-4 py-2 rounded hidden" id="staffCBtn">Cancel</button>
+        </div>
+    </form>
     
-    <select id="sf10" required class="p-2 border rounded"><option>Both Time</option><option>Morning Only</option><option>Evening Only</option></select>
-    <input id="sf11" required placeholder="Fee Amount" type="number" class="p-2 border rounded">
+    <div class="flex flex-wrap gap-2 mb-4">
+    <input type="text" id="sSearchT7" onkeyup="searchT7()" placeholder="Search Staff Name, Phone, School..." class="flex-grow p-2 border-2 border-gray-300 rounded focus:outline-none focus:border-blue-500">
+    <button type="button" onclick="printStaffLandscapeRoster()" class="bg-indigo-600 hover:bg-indigo-700 text-white px-4 py-2 rounded-xl text-sm font-bold shadow-md transition-all">
+        🖨️ Print Landscape Register (A4)
+    </button>
+</div>
     
-    <div class="col-span-2 md:col-span-4 flex gap-2">
-        <button type="submit" id="staffBtn" class="bg-blue-600 text-white px-6 py-2 rounded font-bold">Save</button>
-        <button type="button" onclick="renderTab7(document.getElementById('tabContent'))" class="bg-gray-400 text-white px-4 py-2 rounded hidden" id="staffCBtn">Cancel</button>
+    <div class="overflow-x-auto shadow-sm rounded-xl border border-gray-200 bg-white">
+        <table class="w-full text-left text-sm border-collapse bg-white whitespace-nowrap">
+            <thead class="bg-gray-800 text-white text-xs uppercase tracking-wider select-none">
+                <tr>
+                    <th onclick="sortTab7Table('StudentName')" class="p-3 border cursor-pointer hover:bg-gray-700">Staff Name ↕</th>
+                    <th onclick="sortTab7Table('School')" class="p-3 border cursor-pointer hover:bg-gray-700 text-center">School ↕</th>
+                    <th onclick="sortTab7Table('Phone')" class="p-3 border cursor-pointer hover:bg-gray-700 text-center">Phone ↕</th>
+                    <th onclick="sortTab7Table('Fee')" class="p-3 border cursor-pointer hover:bg-gray-700 text-center">Amount ↕</th>
+                    <th class="p-3 border text-center cursor-default">Action</th>
+                </tr>
+            </thead>
+            <tbody id="t7Body">
+                ${generateTab7Rows(currentTab7DB)}
+            </tbody>
+            
+            <!-- Compulsory Staff Grand Total Footer -->
+            <tfoot class="bg-gray-100 border-t-2 border-gray-300 font-extrabold text-xs">
+                <tr id="t7TotalsRow">
+                    <td colspan="3" class="p-3 text-right uppercase tracking-wider font-extrabold text-gray-700">Grand Total Fee:</td>
+                    <td id="t7GrandTotalVal" class="p-3 text-center font-black text-blue-700 text-sm bg-blue-50/50">₹0</td>
+                    <td class="p-3"></td>
+                </tr>
+            </tfoot>
+        </table>
     </div>
-</form>
-            
-            <input type="text" id="sSearchT7" onkeyup="searchT7()" placeholder="Search Staff Name, Phone, School..." class="w-full p-2 border-2 border-gray-300 rounded mb-4 focus:outline-none focus:border-blue-500">
-            
-            <div class="overflow-x-auto shadow-sm rounded-xl border border-gray-200 bg-white">
-                <table class="w-full text-left text-sm border-collapse bg-white whitespace-nowrap">
-                    <thead class="bg-gray-800 text-white text-xs uppercase tracking-wider select-none">
-                        <tr>
-                            <th onclick="sortTab7Table('StudentName')" class="p-3 border cursor-pointer hover:bg-gray-700">Staff Name ↕</th>
-                            <th onclick="sortTab7Table('School')" class="p-3 border cursor-pointer hover:bg-gray-700 text-center">School ↕</th>
-                            <th onclick="sortTab7Table('Phone')" class="p-3 border cursor-pointer hover:bg-gray-700 text-center">Phone ↕</th>
-                            <th onclick="sortTab7Table('Fee')" class="p-3 border cursor-pointer hover:bg-gray-700 text-center">Fee ↕</th>
-                            <th class="p-3 border text-center cursor-default">Action</th>
-                        </tr>
-                    </thead>
-                    <tbody id="t7Body">
-                        ${generateTab7Rows(currentTab7DB)}
-                    </tbody>
-                </table>
-            </div>
 
-            <!-- Reuses the exact same UI Card container from Tab 1 -->
-            <div id="studentProfileCard" class="hidden mt-8"></div>
-        `;
+    <div id="studentProfileCard" class="hidden mt-8"></div>
+`;
         
         filterStops('');
     
@@ -3811,6 +3828,14 @@ async function clearAllLogsUI() {
     if (curUser && curUser.role === "Admin") {
         refreshRegButton('staff');
     }
+
+    // Place at the very bottom of renderTab7(c):
+updateTab7Totals();
+
+// Inside sortTab7Table(col), right after body generation:
+document.getElementById('t7Body').innerHTML = generateTab7Rows(currentTab7DB);
+updateTab7Totals();
+searchT7();
 }
     function generateTab7Rows(data) {
         if (!data || data.length === 0) return '<tr><td colspan="5" class="p-6 text-center text-gray-400 italic">No staff records found.</td></tr>';
@@ -3851,30 +3876,80 @@ async function clearAllLogsUI() {
         searchT7();
     }
 
-    function searchT7() { 
-        const searchInput = document.getElementById('sSearchT7');
-        if (!searchInput) return;
-        const q = searchInput.value.toLowerCase(); 
-        Array.from(document.getElementById('t7Body').rows).forEach(r => {
-            r.style.display = r.innerText.toLowerCase().includes(q) ? '' : 'none';
-        }); 
+    // Performs search filtering and updates staff grand totals dynamically as you type
+function searchT7() {
+    const searchInput = document.getElementById('sSearchT7');
+    if (!searchInput) return;
+    
+    const q = searchInput.value.trim().toLowerCase();
+    const rows = Array.from(document.getElementById('t7Body').rows);
+    
+    let visibleFeeSum = 0;
+
+    rows.forEach(r => {
+        if (r.cells.length < 5) return;
+        
+        const name = r.cells[0].innerText.toLowerCase();
+        const school = r.cells[1].innerText.toLowerCase();
+        const phone = r.cells[2].innerText.toLowerCase();
+        const feeText = r.cells[3].innerText.replace(/[^\d.]/g, ''); 
+        const feeVal = parseFloat(feeText) || 0;
+
+        const match = name.includes(q) || 
+                      school.includes(q) || 
+                      phone.includes(q) || 
+                      feeText.includes(q);
+
+        if (match) {
+            r.style.display = '';
+            visibleFeeSum += feeVal;
+        } else {
+            r.style.display = 'none';
+        }
+    });
+
+    const totalValEl = document.getElementById('t7GrandTotalVal');
+    if (totalValEl) {
+        totalValEl.innerText = '₹' + visibleFeeSum.toLocaleString('en-IN');
     }
+}
+
+function updateTab7Totals() {
+    const tbody = document.getElementById('t7Body');
+    if (!tbody) return;
+    
+    const rows = Array.from(tbody.rows);
+    let sum = 0;
+    
+    rows.forEach(r => {
+        if (r.cells.length >= 5) {
+            const feeText = r.cells[3].innerText.replace(/[^\d.]/g, '');
+            sum += (parseFloat(feeText) || 0);
+        }
+    });
+    
+    const totalValEl = document.getElementById('t7GrandTotalVal');
+    if (totalValEl) {
+        totalValEl.innerText = '₹' + sum.toLocaleString('en-IN');
+    }
+}
+
 
     async function saveStaff(e) {
     e.preventDefault();
     const d = { 
-        BusId: v('sf1'), 
+        BusId: 'OFFICE', 
         School: v('sf2'), 
         Class: 'STAFF', 
         Div: '-', 
         StudentName: v('sf5'), 
-        ParentName: v('sf6'), 
+        ParentName: v('sf6') || '', 
         Phone: v('sf7'), 
-        Gender: v('sf12'), // <-- ADDED
-        Entry: v('sf8'), 
-        Exit: v('sf9'), 
-        Status: v('sf10'), 
-        Fee: v('sf11') 
+        Gender: v('sf12'), 
+        Entry: '-', 
+        Exit: '-', 
+        Status: v('sf13'), // Save Tenure in Status column
+        Fee: v('sf11') // Save Custom Amount in Fee column
     };
     showLoad();
     await fetch(API_URL, {method:'POST', body:JSON.stringify({action: editID?"updateStudent":"saveStudent", data:d, rowIndex:editID})});
@@ -3883,16 +3958,13 @@ async function clearAllLogsUI() {
 
 function editStaff(s) {
     editID = s._rowIndex; 
-    setV('sf1', s.BusId); filterStops(s.BusId); 
     setV('sf2', s.School); 
     setV('sf5', s.StudentName); 
     setV('sf6', s['Parent Name'] || s.ParentName); 
     setV('sf7', s.Phone); 
-    setV('sf12', s.Gender || ''); // <-- ADDED
-    setV('sf8', s.Entry); 
-    setV('sf9', s.Exit); 
-    setV('sf10', s.Status); 
-    setV('sf11', s.Fee);
+    setV('sf12', s.Gender || ''); 
+    setV('sf13', s.Status || ''); // Load Tenure from Status column
+    setV('sf11', s.Fee); // Load Custom Amount
     
     document.getElementById('staffBtn').innerText = "Update"; 
     document.getElementById('staffBtn').className = "bg-amber-500 text-white px-6 py-2 rounded font-bold"; 
@@ -4865,7 +4937,6 @@ async function initializeRegistrationMode(type) {
         
         hideLoad();
         
-        // Block form rendering if registration is closed
         if (res.success && !res.data[type]) {
             const container = document.getElementById('selfRegisterSection');
             container.classList.remove('hidden');
@@ -4884,7 +4955,6 @@ async function initializeRegistrationMode(type) {
         hideLoad();
     }
 
-    // --- If enabled, continue with standard form setup ---
     document.getElementById('selfRegisterSection').classList.remove('hidden');
     
     const regFormTitle = document.getElementById('regFormTitle');
@@ -4895,13 +4965,50 @@ async function initializeRegistrationMode(type) {
         regFormTitle.innerText = "Staff Registration Portal";
         classDivGroup.classList.add('hidden'); 
         parentGroup.classList.add('hidden'); 
+        
+        // Hide Student Specific Fields
+        document.getElementById('regBus').parentNode.classList.add('hidden');
+        document.getElementById('regEntry').parentNode.parentNode.classList.add('hidden'); // entry/exit grid
+        document.getElementById('regStatus').parentNode.classList.add('hidden');
+        
+        // Show Staff Specific Fields
+        document.getElementById('regTenureGroup').classList.remove('hidden');
+        document.getElementById('regCustomAmountGroup').classList.remove('hidden');
+        
+        // Adjust Required Validations
         document.getElementById('regClass').required = false;
+        document.getElementById('regBus').required = false;
+        document.getElementById('regEntry').required = false;
+        document.getElementById('regExit').required = false;
+        document.getElementById('regStatus').required = false;
+        
+        document.getElementById('regTenure').required = true;
+        document.getElementById('regCustomAmount').required = true;
+        
         document.getElementById('regSchool').value = "TDEMNS-td1"; 
     } else {
         regFormTitle.innerText = "Student Registration Portal";
         classDivGroup.classList.remove('hidden');
         parentGroup.classList.remove('hidden');
+        
+        // Show Student Specific Fields
+        document.getElementById('regBus').parentNode.classList.remove('hidden');
+        document.getElementById('regEntry').parentNode.parentNode.classList.remove('hidden');
+        document.getElementById('regStatus').parentNode.classList.remove('hidden');
+        
+        // Hide Staff Specific Fields
+        document.getElementById('regTenureGroup').classList.add('hidden');
+        document.getElementById('regCustomAmountGroup').classList.add('hidden');
+        
+        // Adjust Required Validations
         document.getElementById('regClass').required = true;
+        document.getElementById('regBus').required = true;
+        document.getElementById('regEntry').required = true;
+        document.getElementById('regExit').required = true;
+        document.getElementById('regStatus').required = true;
+        
+        document.getElementById('regTenure').required = false;
+        document.getElementById('regCustomAmount').required = false;
     }
 }
 
@@ -4962,18 +5069,20 @@ async function submitSelfRegistration(e) {
     const urlParams = new URLSearchParams(window.location.search);
     const regType = urlParams.get('register');
 
+    const isStaff = (regType === 'staff');
     const payload = {
-        BusId: document.getElementById('regBus').value,
+        BusId: isStaff ? 'OFFICE' : document.getElementById('regBus').value,
         School: document.getElementById('regSchool').value,
-        Class: regType === 'staff' ? 'STAFF' : document.getElementById('regClass').value,
-        Div: regType === 'staff' ? '-' : document.getElementById('regDiv').value,
+        Class: isStaff ? 'STAFF' : document.getElementById('regClass').value,
+        Div: isStaff ? '-' : document.getElementById('regDiv').value,
         StudentName: document.getElementById('regName').value.trim().toUpperCase(),
-        ParentName: regType === 'staff' ? '' : document.getElementById('regParent').value.trim().toUpperCase(),
+        ParentName: isStaff ? '' : document.getElementById('regParent').value.trim().toUpperCase(),
         Phone: phoneVal,
-        Gender: document.getElementById('regGender').value, // <-- ADDED
-        Entry: document.getElementById('regEntry').value,
-        Exit: document.getElementById('regExit').value,
-        Status: document.getElementById('regStatus').value
+        Gender: document.getElementById('regGender').value,
+        Entry: isStaff ? '-' : document.getElementById('regEntry').value,
+        Exit: isStaff ? '-' : document.getElementById('regExit').value,
+        Status: isStaff ? document.getElementById('regTenure').value.trim().toUpperCase() : document.getElementById('regStatus').value,
+        Fee: isStaff ? parseFloat(document.getElementById('regCustomAmount').value) || 0 : 0
     };
 
     showLoad();
@@ -5567,6 +5676,206 @@ function printLandscapeRoster() {
     });
 
     // Create a temporary container on the body
+    let printContainer = document.getElementById('landscapeRosterPrintContainer');
+    if (!printContainer) {
+        printContainer = document.createElement('div');
+        printContainer.id = 'landscapeRosterPrintContainer';
+        document.body.appendChild(printContainer);
+    }
+    printContainer.innerHTML = printHtml;
+
+    // Inject styles forcing landscape layouts and hiding the primary UI during print execution
+    let printStyle = document.getElementById('landscapeRosterPrintStyle');
+    if (!printStyle) {
+        printStyle = document.createElement('style');
+        printStyle.id = 'landscapeRosterPrintStyle';
+        document.head.appendChild(printStyle);
+    }
+
+    printStyle.innerHTML = `
+        @media print {
+            body * { visibility: hidden !important; }
+            #landscapeRosterPrintContainer, #landscapeRosterPrintContainer * { visibility: visible !important; }
+            #landscapeRosterPrintContainer {
+                position: absolute !important;
+                left: 0 !important;
+                top: 0 !important;
+                width: 100% !important;
+                margin: 0 !important;
+                padding: 0 !important;
+                border: none !important;
+            }
+            @page { 
+                size: A4 landscape; 
+                margin: 5mm; 
+            }
+            .print-page {
+                page-break-after: always;
+            }
+            .print-page:last-child {
+                page-break-after: avoid;
+            }
+        }
+    `;
+
+    // Wait briefly for style bindings, then trigger printing dialog
+    setTimeout(() => {
+        window.print();
+        
+        // Remove print layouts immediately to return view to normal
+        setTimeout(() => {
+            printContainer.innerHTML = '';
+            printStyle.innerHTML = '';
+        }, 500);
+    }, 250);
+}
+
+// Looks up standard class-wise school rates from the local database and auto-populates them
+function autoFetchFee() {
+    const school = document.getElementById('f2').value;
+    const cls = document.getElementById('f3').value;
+    if (!school) return;
+
+    // Search existing students to find standard rates
+    const match = db.find(s => s.School === school && s.Class === cls && parseFloat(s.Fee) > 0);
+    const feeInput = document.getElementById('f11');
+    
+    if (feeInput) {
+        if (match) {
+            feeInput.value = match.Fee;
+            feeInput.dataset.baseFee = match.Fee;
+        } else {
+            // Hardcoded fallbacks if the sheet has no records for the school yet
+            const defaultFees = { "TDEMNS-td1": 1100, "GTDLPS-34318": 1200, "TDTTI-34347": 1300, "TDHS-34028": 1400 };
+            feeInput.value = defaultFees[school] || "";
+            feeInput.dataset.baseFee = feeInput.value;
+        }
+        applyFeeReduction();
+    }
+}
+
+// Applies a 50% discount if Morning Only or Evening Only are selected
+function applyFeeReduction() {
+    const status = document.getElementById('f10').value;
+    const feeInput = document.getElementById('f11');
+    if (!feeInput || !feeInput.value) return;
+
+    if (!feeInput.dataset.baseFee || parseFloat(feeInput.dataset.baseFee) === 0) {
+        feeInput.dataset.baseFee = feeInput.value;
+    }
+
+    const baseFee = parseFloat(feeInput.dataset.baseFee) || 0;
+
+    if (status === "Morning Only" || status === "Evening Only") {
+        feeInput.value = Math.round(baseFee * 0.5);
+    } else {
+        feeInput.value = baseFee; // Restore full fee
+    }
+}
+// Generates and prints an A4 Landscape layout for Staff, grouped by School
+function printStaffLandscapeRoster() {
+    const data = currentTab7DB;
+    if (!data || data.length === 0) {
+        return msg("No Data", "No staff data available to print.", "warning");
+    }
+
+    // 1. Group currently loaded staff database by School
+    const groups = {};
+    data.forEach(s => {
+        if (!s.StudentName || s.Class !== 'STAFF') return; // Only process Staff entries
+        const key = s.School;
+        if (!groups[key]) groups[key] = [];
+        groups[key].push(s);
+    });
+
+    const groupKeys = Object.keys(groups);
+    if (groupKeys.length === 0) {
+        return msg("No Data", "No valid staff groups found in this view.", "warning");
+    }
+
+    // Sort schools alphabetically
+    groupKeys.sort();
+
+    const months = ["Jun", "Jul", "Aug", "Sep", "Oct", "Nov", "Dec", "Jan", "Feb", "Mar"];
+    let printHtml = '';
+
+    // 2. Iterate through each school group and compile a dedicated A4 Landscape page
+    groupKeys.forEach(school => {
+        const staffList = groups[school];
+        staffList.sort((a, b) => a.StudentName.localeCompare(b.StudentName));
+
+        // Track totals for the bottom row
+        let totalCustomAmount = 0;
+        let monthTotals = { Jun: 0, Jul: 0, Aug: 0, Sep: 0, Oct: 0, Nov: 0, Dec: 0, Jan: 0, Feb: 0, Mar: 0 };
+
+        const rowsHtml = staffList.map((s, idx) => {
+            const amtVal = parseFloat(s.Fee) || 0;
+            totalCustomAmount += amtVal;
+
+            const monthCells = months.map(m => {
+                const amt = parseFloat(s[m]) || 0;
+                monthTotals[m] += amt;
+                return `<td style="border: 1px solid #cbd5e1; padding: 4px; text-align: center; font-size: 8px;">${amt > 0 ? '₹' + amt : '-'}</td>`;
+            }).join('');
+
+            return `
+                <tr style="border-bottom: 1px solid #e2e8f0;">
+                    <td style="border: 1px solid #cbd5e1; padding: 4px; font-weight: bold; font-size: 8px; color: #1e293b;">${idx + 1}. ${s.StudentName}</td>
+                    <td style="border: 1px solid #cbd5e1; padding: 4px; text-align: center; font-size: 8px; font-weight: bold; color: #475569;">${s.Gender || '-'}</td>
+                    <td style="border: 1px solid #cbd5e1; padding: 4px; text-align: center; font-size: 8px; color: #475569;">${s.Phone || '-'}</td>
+                    <td style="border: 1px solid #cbd5e1; padding: 4px; text-align: center; font-size: 8px; color: #475569;">${s.Status || '-'}</td> <!-- Status column stores Tenure -->
+                    <td style="border: 1px solid #cbd5e1; padding: 4px; text-align: center; font-weight: bold; font-size: 8px; color: #0f172a;">₹${s.Fee}</td>
+                    ${monthCells}
+                </tr>
+            `;
+        }).join('');
+
+        // Bottom Grand Total Row for this school's staff
+        const totalsHtml = `
+            <tr style="background-color: #f8fafc; font-weight: bold;">
+                <td colspan="4" style="border: 1px solid #94a3b8; padding: 6px; text-align: right; font-size: 8px; font-weight: 900; text-transform: uppercase;">Total:</td>
+                <td style="border: 1px solid #94a3b8; padding: 6px; text-align: center; font-size: 8px; font-weight: 900; color: #1e3a8a;">₹${totalCustomAmount}</td>
+                ${months.map(m => `<td style="border: 1px solid #94a3b8; padding: 6px; text-align: center; font-size: 8px; font-weight: 900; color: #166534;">${monthTotals[m] > 0 ? '₹' + monthTotals[m] : '-'}</td>`).join('')}
+            </tr>
+        `;
+
+        // 3. Assemble full print page structure
+        printHtml += `
+            <div class="print-page" style="page-break-after: always; box-sizing: border-box; padding: 5mm; background: white; font-family: Arial, sans-serif;">
+                <!-- Header block -->
+                <div style="display: flex; justify-content: space-between; align-items: flex-end; border-bottom: 2px solid #1e3a8a; padding-bottom: 8px; margin-bottom: 12px;">
+                    <div>
+                        <h1 style="margin: 0; font-size: 16px; font-weight: 900; color: #1e3a8a; text-transform: uppercase; tracking-wide">${school}</h1>
+                        <p style="margin: 4px 0 0 0; font-size: 11px; color: #475569; font-weight: bold;">STAFF DIRECTORY & TRANSIT FEES</p>
+                    </div>
+                    <div style="text-align: right;">
+                        <p style="margin: 0; font-size: 9px; color: #64748b; font-weight: bold; uppercase">Staff Landscape Register</p>
+                        <p style="margin: 2px 0 0 0; font-size: 8px; color: #94a3b8;">Printed: ${new Date().toLocaleDateString('en-GB')}</p>
+                    </div>
+                </div>
+
+                <!-- 15-Column Roster Table -->
+                <table style="width: 100%; border-collapse: collapse; font-size: 8px; margin-bottom: 10px;">
+                    <thead>
+                        <tr style="background-color: #1e293b; color: white; text-transform: uppercase; font-size: 7px; tracking-wide">
+                            <th style="border: 1px solid #475569; padding: 5px; text-align: left;">Staff Name</th>
+                            <th style="border: 1px solid #475569; padding: 5px; text-align: center; width: 45px;">Gender</th>
+                            <th style="border: 1px solid #475569; padding: 5px; text-align: center; width: 70px;">Phone</th>
+                            <th style="border: 1px solid #475569; padding: 5px; text-align: center; width: 85px;">Tenure</th>
+                            <th style="border: 1px solid #475569; padding: 5px; text-align: center; width: 55px;">Amount</th>
+                            ${months.map(m => `<th style="border: 1px solid #475569; padding: 5px; text-align: center; width: 40px;">${m}</th>`).join('')}
+                        </tr>
+                    </thead>
+                    <tbody>
+                        ${rowsHtml}
+                        ${totalsHtml}
+                    </tbody>
+                </table>
+            </div>
+        `;
+    });
+
+    // Create or locate the temporary print container on the body
     let printContainer = document.getElementById('landscapeRosterPrintContainer');
     if (!printContainer) {
         printContainer = document.createElement('div');
