@@ -262,6 +262,11 @@ input, select, textarea, [contenteditable="true"] {
             </div>
 
             <!-- Phone (Compulsory) -->
+            <!-- NEW: STAFF SPECIFIC DESIGNATION FIELD -->
+<div id="regDesignationGroup" class="hidden">
+    <label class="block text-xs font-bold text-gray-400 uppercase mb-1">Designation</label>
+    <input id="regDesignation" placeholder="ENTER DESIGNATION (E.G. LECTURER, CLERK)" oninput="this.value = this.value.toUpperCase()" class="w-full p-3 border border-gray-200 rounded-xl focus:ring-2 focus:ring-blue-500 outline-none">
+</div>
             <div>
                 <label class="block text-xs font-bold text-gray-400 uppercase mb-1">Phone Number (10 Digits)</label>
                 <input id="regPhone" required type="tel" placeholder="10-digit mobile number" oninput="this.value = this.value.replace(/\D/g, '').slice(0, 10)" class="w-full p-3 border border-gray-200 rounded-xl focus:ring-2 focus:ring-blue-500 outline-none">
@@ -4959,7 +4964,8 @@ async function initializeRegistrationMode(type) {
         document.getElementById('regStopsGroup').classList.add('hidden'); 
         document.getElementById('regStatusGroup').classList.add('hidden');
         
-        // 2. Show Staff-Only Elements
+        // 2. Show Staff-Only Elements (Designation added)
+        document.getElementById('regDesignationGroup').classList.remove('hidden');
         document.getElementById('regTenureGroup').classList.remove('hidden');
         document.getElementById('regCustomAmountGroup').classList.remove('hidden');
         
@@ -4971,6 +4977,7 @@ async function initializeRegistrationMode(type) {
         document.getElementById('regStatus').required = false;
         
         // 4. Force Required Flags for Staff elements
+        document.getElementById('regDesignation').required = true;
         document.getElementById('regTenure').required = true;
         document.getElementById('regCustomAmount').required = true;
         
@@ -4986,6 +4993,7 @@ async function initializeRegistrationMode(type) {
         document.getElementById('regStatusGroup').classList.remove('hidden');
         
         // 2. Hide Staff-Only Elements
+        document.getElementById('regDesignationGroup').classList.add('hidden');
         document.getElementById('regTenureGroup').classList.add('hidden');
         document.getElementById('regCustomAmountGroup').classList.add('hidden');
         
@@ -4997,6 +5005,7 @@ async function initializeRegistrationMode(type) {
         document.getElementById('regStatus').required = true;
         
         // 4. Remove Required Flags for Staff elements
+        document.getElementById('regDesignation').required = false;
         document.getElementById('regTenure').required = false;
         document.getElementById('regCustomAmount').required = false;
     }
@@ -5046,6 +5055,7 @@ function populatePredefinedStops(busId) {
     });
 }
 
+// Packages the payload, ensuring Designation, Tenure, and Custom Amounts are properly mapped for staff
 async function submitSelfRegistration(e) {
     e.preventDefault();
     
@@ -5064,7 +5074,10 @@ async function submitSelfRegistration(e) {
         Class: isStaff ? 'STAFF' : document.getElementById('regClass').value,
         Div: isStaff ? '-' : document.getElementById('regDiv').value,
         StudentName: document.getElementById('regName').value.trim().toUpperCase(),
-        ParentName: isStaff ? '' : document.getElementById('regParent').value.trim().toUpperCase(),
+        
+        // SHIFTED/MAP: designation saved to ParentName column for staff
+        ParentName: isStaff ? document.getElementById('regDesignation').value.trim().toUpperCase() : document.getElementById('regParent').value.trim().toUpperCase(),
+        
         Phone: phoneVal,
         Gender: document.getElementById('regGender').value,
         Entry: isStaff ? '-' : document.getElementById('regEntry').value,
