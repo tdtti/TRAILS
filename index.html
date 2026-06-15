@@ -1238,8 +1238,14 @@ function downloadStudentPDF() {
 </select>
 
 <!-- Capture base input values on manual edits -->
-<input id="f11" required placeholder="Fee Amount" type="number" oninput="this.dataset.baseFee = this.value; applyFeeReduction();" class="p-2 border rounded">
-    
+<<!-- Locate this input in #sForm inside renderTab1(c): -->
+<input id="f11" required placeholder="Fee Amount" type="number" class="p-2 border rounded">
+
+<!-- Replace it with this wrapper div containing the new dynamic badge: -->
+<div class="flex flex-col">
+    <input id="f11" required placeholder="Fee Amount" type="number" oninput="this.dataset.baseFee = this.value; applyFeeReduction();" class="p-2 border rounded w-full">
+    <span id="lblExpectedFee" class="text-[10px] font-black text-blue-600 block mt-1 tracking-wide">Expected Fee: ₹0</span>
+</div>
     <div class="col-span-2 md:col-span-4 flex gap-2">
         <button type="submit" id="sBtn" class="bg-blue-600 text-white px-6 py-2 rounded font-bold">Save</button>
         <button type="button" onclick="renderTab1(document.getElementById('tabContent'))" class="bg-gray-400 text-white px-4 py-2 rounded hidden" id="cBtn">Cancel</button>
@@ -1483,11 +1489,27 @@ function downloadStudentPDF() {
     setV('f5', s.StudentName); 
     setV('f6', s['Parent Name']||s.ParentName); 
     setV('f7', s.Phone); 
-    setV('f12', s.Gender || ''); // <-- ADDED
+    setV('f12', s.Gender || ''); 
     setV('f8', s.Entry); 
     setV('f9', s.Exit); 
     setV('f10', s.Status); 
-    setV('f11', s.Fee);
+    
+    // Assign stored fee and configure base tracker
+    const feeInput = document.getElementById('f11');
+    if (feeInput) {
+        feeInput.value = s.Fee;
+        
+        // If they already have a discount applied, calculate and store the original expected base fee
+        const isReduced = (s.Status === "Morning Only" || s.Status === "Evening Only");
+        feeInput.dataset.baseFee = isReduced ? Math.round(parseFloat(s.Fee) * 2) : s.Fee;
+        
+        // Update label
+        const lblExpected = document.getElementById('lblExpectedFee');
+        if (lblExpected) {
+            lblExpected.innerText = `Expected Fee: ₹${feeInput.dataset.baseFee}`;
+        }
+    }
+    
     document.getElementById('sBtn').innerText = "Update"; 
     document.getElementById('sBtn').className = "bg-amber-500 text-white px-6 py-2 rounded font-bold"; 
     document.getElementById('cBtn').classList.remove('hidden');
@@ -5735,44 +5757,66 @@ function printLandscapeRoster() {
 function autoFetchFee() {
     const school = document.getElementById('f2').value;
     const cls = document.getElementById('f3').value;
-    if (!school) return;
-
-    // Search existing students to find standard rates
-    const match = db.find(s => s.School === school && s.Class === cls && parseFloat(s.Fee) > 0);
+    const lblExpected = document.getElementById('lblExpectedFee');
     const feeInput = document.getElementById('f11');
     
+    if (!school) {
+        if (lblExpected) lblExpected.innerText = "Expected Fee: ₹0";
+        return;
+    }
+
+    // 1. Search the local database for an existing student with the same School and Class
+    const match = db.find(s => s.School === school && s.Class === cls && parseFloat(s.Fee) > 0);
+    
+    let expectedBaseFee = 0;
+    if (match) {
+        expectedBaseFee = parseFloat(match.Fee) || 0;
+    } else {
+        // Fallback default values per school if no match is found
+        const defaultFees = {
+            "TDEMNS-td1": 1100,
+            "GTDLPS-34318": 1200,
+            "TDTTI-34347": 1300,
+            "TDHS-34028": 1400
+        };
+        expectedBaseFee = defaultFees[school] || 1200;
+    }
+
+    // 2. Display the expected base fee in the label
+    if (lblExpected) {
+        lblExpected.innerText = `Expected Fee: ₹${expectedBaseFee}`;
+    }
+
+    // 3. Set the base value on the input and apply the 50% reduction if applicable
     if (feeInput) {
-        if (match) {
-            feeInput.value = match.Fee;
-            feeInput.dataset.baseFee = match.Fee;
-        } else {
-            // Hardcoded fallbacks if the sheet has no records for the school yet
-            const defaultFees = { "TDEMNS-td1": 1100, "GTDLPS-34318": 1200, "TDTTI-34347": 1300, "TDHS-34028": 1400 };
-            feeInput.value = defaultFees[school] || "";
-            feeInput.dataset.baseFee = feeInput.value;
-        }
+        feeInput.value = expectedBaseFee;
+        feeInput.dataset.baseFee = expectedBaseFee;
         applyFeeReduction();
     }
 }
 
 // Applies a 50% discount if Morning Only or Evening Only are selected
 function applyFeeReduction() {
-    const status = document.getElementById('f10').value;
+    const status = document.getElementById('f10').value; // Both Time, Morning Only, Evening Only, SPONSER
     const feeInput = document.getElementById('f11');
-    if (!feeInput || !feeInput.value) return;
+    if (!feeInput) return;
 
+    // Initialize dataset.baseFee from current input value if not set
     if (!feeInput.dataset.baseFee || parseFloat(feeInput.dataset.baseFee) === 0) {
-        feeInput.dataset.baseFee = feeInput.value;
+        feeInput.dataset.baseFee = feeInput.value || 0;
     }
 
     const baseFee = parseFloat(feeInput.dataset.baseFee) || 0;
 
     if (status === "Morning Only" || status === "Evening Only") {
+        // Reduce by 50%
         feeInput.value = Math.round(baseFee * 0.5);
     } else {
-        feeInput.value = baseFee; // Restore full fee
+        // Restore full fee
+        feeInput.value = baseFee;
     }
 }
+
 // Generates and prints an A4 Landscape layout for Staff, grouped by School
 function printStaffLandscapeRoster() {
     const data = currentTab7DB;
