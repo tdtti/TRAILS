@@ -4529,8 +4529,7 @@ function startAdminMapRefresh() {
 
 // Function to forcibly end a specific bus's live location from Admin Panel
 async function adminEndBusLocation(busId) {
-    // Replaced native confirm() with beautiful SweetAlert2 modal
-    const result = await Swal.fire({
+        const result = await Swal.fire({
         title: 'End Live Location?',
         text: `Are you sure you want to forcibly stop Live Location sharing for ${busId}?`,
         icon: 'warning',
