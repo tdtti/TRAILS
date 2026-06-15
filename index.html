@@ -254,12 +254,13 @@ input, select, textarea, [contenteditable="true"] {
     <input id="regName" required placeholder="EX: MANU KEISHNAN L M" oninput="this.value = this.value.toUpperCase()" class="w-full p-3 border border-gray-200 rounded-xl focus:ring-2 focus:ring-blue-500 outline-none">
 </div>
 
-<!-- Inside #selfRegForm -->
+<!-- NEW: STAFF SPECIFIC TENURE FIELD -->
 <div id="regTenureGroup" class="hidden">
     <label class="block text-xs font-bold text-gray-400 uppercase mb-1">Tenure</label>
     <input id="regTenure" placeholder="ENTER TENURE (E.G. 10 MONTHS)" oninput="this.value = this.value.toUpperCase()" class="w-full p-3 border border-gray-200 rounded-xl focus:ring-2 focus:ring-blue-500 outline-none">
 </div>
 
+<!-- NEW: STAFF SPECIFIC CUSTOM AMOUNT FIELD -->
 <div id="regCustomAmountGroup" class="hidden">
     <label class="block text-xs font-bold text-gray-400 uppercase mb-1">Custom Amount (₹)</label>
     <input id="regCustomAmount" type="number" placeholder="Enter custom amount" class="w-full p-3 border border-gray-200 rounded-xl focus:ring-2 focus:ring-blue-500 outline-none">
@@ -3724,119 +3725,117 @@ async function clearAllLogsUI() {
     
 // --- Tab 7: Staff Records ---
     function renderTab7(c) {
-    // Filter ONLY staff members (remains identical...)
     currentTab7DB = getFilteredDB().filter(s => s.Class === 'STAFF');
     currentTab7DB.sort((a, b) => String(a.StudentName).toLowerCase().localeCompare(String(b.StudentName).toLowerCase()));
     
     tab7SortCol = 'StudentName';
     tab7SortAsc = true;
 
-        c.innerHTML = `
-            <h2 class="text-2xl font-bold mb-4">Manage Staff</h2>
-            <div class="flex flex-wrap items-center gap-4 mb-4 bg-gray-50 p-3 rounded-2xl border border-gray-200 shadow-sm">
-    <!-- Share Button -->
-    <button type="button" onclick="generateWhatsAppShare('staff')" class="bg-green-600 hover:bg-green-700 text-white px-4 py-2 rounded-xl text-sm font-bold shadow-md transition-colors">
-        📢 Share Staff Reg Link
-    </button>
-    
-    <!-- Present Status Indicator -->
-    <div class="flex items-center gap-2 border-l border-gray-300 pl-4">
-        <span class="text-xs font-bold text-gray-400 uppercase tracking-wide">Status:</span>
-        <span id="txtRegStatusStaff" class="px-3 py-1.5 rounded-xl text-xs font-black uppercase bg-yellow-100 text-yellow-800 animate-pulse">Checking...</span>
-    </div>
-    
-    <!-- Action Button -->
-    <button id="btnToggleRegStaff" onclick="toggleReg('staff')" class="px-4 py-2 rounded-xl text-sm font-bold shadow-md transition-all bg-gray-100 text-gray-400 border border-gray-200 cursor-not-allowed" disabled>
-        Please wait...
-    </button>
-</div><br><br><br>
-            
-<form id="staffForm" onsubmit="saveStaff(event)" class="grid grid-cols-2 md:grid-cols-4 gap-3 mb-6 bg-gray-50 p-4 rounded border text-sm">
-        <select id="sf2" required class="p-2 border rounded">
-            <option value="">School</option>
-            <option>TDEMNS-td1</option><option>GTDLPS-34318</option><option>TDTTI-34347</option><option>TDHS-34028</option>
-        </select>                
-        
-        <input id="sf5" required placeholder="Staff Name" oninput="this.value = this.value.toUpperCase()" class="p-2 border rounded md:col-span-2">
-        <input id="sf6" placeholder="Designation" oninput="this.value = this.value.toUpperCase()" class="p-2 border rounded">
-        <input id="sf7" required type="tel" placeholder="Phone" oninput="this.value = this.value.replace(/\D/g, '').slice(0, 10)" class="p-2 border rounded">
-        
-        <select id="sf12" required class="p-2 border rounded">
-            <option value="">Select Gender</option>
-            <option>Male</option><option>Female</option>
-        </select>
+    let regControlsHtml = '';
+    if (curUser && curUser.role === "Admin") {
+        regControlsHtml = `
+        <div class="flex flex-wrap items-center gap-4 mb-4 bg-gray-50 p-3 rounded-2xl border border-gray-200 shadow-sm">
+            <button type="button" onclick="generateWhatsAppShare('staff')" class="bg-green-600 hover:bg-green-700 text-white px-4 py-2 rounded-xl text-sm font-bold shadow-md transition-colors">
+                📢 Share Staff Reg Link
+            </button>
+            <div class="flex items-center gap-2 border-l border-gray-300 pl-4">
+                <span class="text-xs font-bold text-gray-400 uppercase tracking-wide">Status:</span>
+                <span id="txtRegStatusStaff" class="px-3 py-1.5 rounded-xl text-xs font-black uppercase bg-yellow-100 text-yellow-800 animate-pulse">Checking...</span>
+            </div>
+            <button id="btnToggleRegStaff" onclick="toggleReg('staff')" class="px-4 py-2 rounded-xl text-sm font-bold shadow-md transition-all bg-gray-100 text-gray-400 border border-gray-200 cursor-not-allowed" disabled>
+                Please wait...
+            </button>
+        </div>`;
+    }
 
-        <!-- NEW: TENURE FIELD -->
-        <input id="sf13" required placeholder="Tenure (e.g. 2 YEARS)" oninput="this.value = this.value.toUpperCase()" class="p-2 border rounded">
+    c.innerHTML = `
+        <h2 class="text-2xl font-bold mb-4">Manage Staff</h2>
         
-        <!-- NEW: CUSTOM AMOUNT -->
-        <input id="sf11" required placeholder="Custom Amount (₹)" type="number" class="p-2 border rounded">
+        ${regControlsHtml}
         
-        <div class="col-span-2 md:col-span-4 flex gap-2">
-            <button type="submit" id="staffBtn" class="bg-blue-600 text-white px-6 py-2 rounded font-bold">Save</button>
-            <button type="button" onclick="renderTab7(document.getElementById('tabContent'))" class="bg-gray-400 text-white px-4 py-2 rounded hidden" id="staffCBtn">Cancel</button>
+        <form id="staffForm" onsubmit="saveStaff(event)" class="grid grid-cols-2 md:grid-cols-4 gap-3 mb-6 bg-gray-50 p-4 rounded border text-sm">
+            <select id="sf2" required class="p-2 border rounded">
+                <option value="">School</option>
+                <option>TDEMNS-td1</option><option>GTDLPS-34318</option><option>TDTTI-34347</option><option>TDHS-34028</option>
+            </select>                
+            
+            <input id="sf5" required placeholder="Staff Name" oninput="this.value = this.value.toUpperCase()" class="p-2 border rounded md:col-span-2">
+            <input id="sf6" placeholder="Designation (Optional)" oninput="this.value = this.value.toUpperCase()" class="p-2 border rounded">
+            <input id="sf7" required type="tel" placeholder="Phone" oninput="this.value = this.value.replace(/\D/g, '').slice(0, 10)" class="p-2 border rounded">
+            
+            <select id="sf12" required class="p-2 border rounded">
+                <option value="">Select Gender</option>
+                <option>Male</option><option>Female</option>
+            </select>
+
+            <!-- STAFF SPECIFIC FIELD: TENURE -->
+            <input id="sf13" required placeholder="Tenure (e.g. 10 Months)" oninput="this.value = this.value.toUpperCase()" class="p-2 border rounded">
+            
+            <!-- STAFF SPECIFIC FIELD: CUSTOM AMOUNT -->
+            <input id="sf11" required placeholder="Custom Amount (₹)" type="number" class="p-2 border rounded">
+            
+            <div class="col-span-2 md:col-span-4 flex gap-2">
+                <button type="submit" id="staffBtn" class="bg-blue-600 text-white px-6 py-2 rounded font-bold">Save</button>
+                <button type="button" onclick="renderTab7(document.getElementById('tabContent'))" class="bg-gray-400 text-white px-4 py-2 rounded hidden" id="staffCBtn">Cancel</button>
+            </div>
+        </form>
+        
+        <div class="flex flex-wrap gap-2 mb-4">
+            <input type="text" id="sSearchT7" onkeyup="searchT7()" placeholder="Search Staff Name, Phone, School..." class="flex-grow p-2 border-2 border-gray-300 rounded focus:outline-none focus:border-blue-500">
+            <button type="button" onclick="printStaffLandscapeRoster()" class="bg-indigo-600 hover:bg-indigo-700 text-white px-4 py-2 rounded-xl text-sm font-bold shadow-md transition-all">
+                🖨️ Print Landscape Register (A4)
+            </button>
         </div>
-    </form>
-    
-    <div class="flex flex-wrap gap-2 mb-4">
-    <input type="text" id="sSearchT7" onkeyup="searchT7()" placeholder="Search Staff Name, Phone, School..." class="flex-grow p-2 border-2 border-gray-300 rounded focus:outline-none focus:border-blue-500">
-    <button type="button" onclick="printStaffLandscapeRoster()" class="bg-indigo-600 hover:bg-indigo-700 text-white px-4 py-2 rounded-xl text-sm font-bold shadow-md transition-all">
-        🖨️ Print Landscape Register (A4)
-    </button>
-</div>
-    
-    <div class="overflow-x-auto shadow-sm rounded-xl border border-gray-200 bg-white">
-        <table class="w-full text-left text-sm border-collapse bg-white whitespace-nowrap">
-            <thead class="bg-gray-800 text-white text-xs uppercase tracking-wider select-none">
-                <tr>
-                    <th onclick="sortTab7Table('StudentName')" class="p-3 border cursor-pointer hover:bg-gray-700">Staff Name ↕</th>
-                    <th onclick="sortTab7Table('School')" class="p-3 border cursor-pointer hover:bg-gray-700 text-center">School ↕</th>
-                    <th onclick="sortTab7Table('Phone')" class="p-3 border cursor-pointer hover:bg-gray-700 text-center">Phone ↕</th>
-                    <th onclick="sortTab7Table('Fee')" class="p-3 border cursor-pointer hover:bg-gray-700 text-center">Amount ↕</th>
-                    <th class="p-3 border text-center cursor-default">Action</th>
-                </tr>
-            </thead>
-            <tbody id="t7Body">
-                ${generateTab7Rows(currentTab7DB)}
-            </tbody>
-            
-            <!-- Compulsory Staff Grand Total Footer -->
-            <tfoot class="bg-gray-100 border-t-2 border-gray-300 font-extrabold text-xs">
-                <tr id="t7TotalsRow">
-                    <td colspan="3" class="p-3 text-right uppercase tracking-wider font-extrabold text-gray-700">Grand Total Fee:</td>
-                    <td id="t7GrandTotalVal" class="p-3 text-center font-black text-blue-700 text-sm bg-blue-50/50">₹0</td>
-                    <td class="p-3"></td>
-                </tr>
-            </tfoot>
-        </table>
-    </div>
-
-    <div id="studentProfileCard" class="hidden mt-8"></div>
-`;
         
-        filterStops('');
+        <div class="overflow-x-auto shadow-sm rounded-xl border border-gray-200 bg-white">
+            <table class="w-full text-left text-sm border-collapse bg-white whitespace-nowrap">
+                <thead class="bg-gray-800 text-white text-xs uppercase tracking-wider select-none">
+                    <tr>
+                        <th onclick="sortTab7Table('StudentName')" class="p-3 border cursor-pointer hover:bg-gray-700">Staff Name ↕</th>
+                        <th onclick="sortTab7Table('School')" class="p-3 border cursor-pointer hover:bg-gray-700 text-center">School ↕</th>
+                        <th onclick="sortTab7Table('Phone')" class="p-3 border cursor-pointer hover:bg-gray-700 text-center">Phone ↕</th>
+                        <th onclick="sortTab7Table('Fee')" class="p-3 border cursor-pointer hover:bg-gray-700 text-center">Amount ↕</th>
+                        <th class="p-3 border text-center cursor-default">Action</th>
+                    </tr>
+                </thead>
+                <tbody id="t7Body">
+                    ${generateTab7Rows(currentTab7DB)}
+                </tbody>
+                
+                <!-- Grand Total Footer Row -->
+                <tfoot class="bg-gray-100 border-t-2 border-gray-300 font-extrabold text-xs">
+                    <tr id="t7TotalsRow">
+                        <td colspan="3" class="p-3 text-right uppercase tracking-wider font-extrabold text-gray-700">Grand Total Fee:</td>
+                        <td id="t7GrandTotalVal" class="p-3 text-center font-black text-blue-700 text-sm bg-blue-50/50">₹0</td>
+                        <td class="p-3"></td>
+                    </tr>
+                </tfoot>
+            </table>
+        </div>
+
+        <div id="studentProfileCard" class="hidden mt-8"></div>
+    `;
     
-    // --- ADD THE LOCKING LOGIC HERE ---
+    // Apply school-level lock restrictions if applicable
     if (curUser.role === "School" || curUser.role === "Teacher") {
-        const sf2 = document.getElementById('sf2'); // Staff School Dropdown
+        const sf2 = document.getElementById('sf2');
         if (sf2) {
             sf2.value = getUserSchool();
             sf2.disabled = true;
         }
     }
 
+    // Refresh dynamic status settings
     if (curUser && curUser.role === "Admin") {
         refreshRegButton('staff');
     }
 
-    // Place at the very bottom of renderTab7(c):
-updateTab7Totals();
-
-// Inside sortTab7Table(col), right after body generation:
-document.getElementById('t7Body').innerHTML = generateTab7Rows(currentTab7DB);
-updateTab7Totals();
-searchT7();
+    // Run the dynamic footer calculations
+    updateTab7Totals();
 }
+
+
+
     function generateTab7Rows(data) {
         if (!data || data.length === 0) return '<tr><td colspan="5" class="p-6 text-center text-gray-400 italic">No staff records found.</td></tr>';
         
@@ -3934,11 +3933,10 @@ function updateTab7Totals() {
     }
 }
 
-
     async function saveStaff(e) {
     e.preventDefault();
     const d = { 
-        BusId: 'OFFICE', 
+        BusId: 'OFFICE', // Default bypass values for Staff
         School: v('sf2'), 
         Class: 'STAFF', 
         Div: '-', 
@@ -3948,8 +3946,8 @@ function updateTab7Totals() {
         Gender: v('sf12'), 
         Entry: '-', 
         Exit: '-', 
-        Status: v('sf13'), // Save Tenure in Status column
-        Fee: v('sf11') // Save Custom Amount in Fee column
+        Status: v('sf13'), // Status column stores Tenure
+        Fee: v('sf11') // Fee column stores Custom Amount
     };
     showLoad();
     await fetch(API_URL, {method:'POST', body:JSON.stringify({action: editID?"updateStudent":"saveStudent", data:d, rowIndex:editID})});
@@ -4967,14 +4965,14 @@ async function initializeRegistrationMode(type) {
         
         // Hide Student Specific Fields
         document.getElementById('regBus').parentNode.classList.add('hidden');
-        document.getElementById('regEntry').parentNode.parentNode.classList.add('hidden'); // entry/exit grid
+        document.getElementById('regEntry').parentNode.parentNode.classList.add('hidden'); 
         document.getElementById('regStatus').parentNode.classList.add('hidden');
         
         // Show Staff Specific Fields
         document.getElementById('regTenureGroup').classList.remove('hidden');
         document.getElementById('regCustomAmountGroup').classList.remove('hidden');
         
-        // Adjust Required Validations
+        // Set Required Validations
         document.getElementById('regClass').required = false;
         document.getElementById('regBus').required = false;
         document.getElementById('regEntry').required = false;
@@ -4999,7 +4997,7 @@ async function initializeRegistrationMode(type) {
         document.getElementById('regTenureGroup').classList.add('hidden');
         document.getElementById('regCustomAmountGroup').classList.add('hidden');
         
-        // Adjust Required Validations
+        // Set Required Validations
         document.getElementById('regClass').required = true;
         document.getElementById('regBus').required = true;
         document.getElementById('regEntry').required = true;
@@ -5010,7 +5008,6 @@ async function initializeRegistrationMode(type) {
         document.getElementById('regCustomAmount').required = false;
     }
 }
-
 // Strictly populates select elements with values matching the predefined array
 function populatePredefinedStops(busId) {
     const entrySelect = document.getElementById('regEntry');
@@ -5059,7 +5056,6 @@ function populatePredefinedStops(busId) {
 async function submitSelfRegistration(e) {
     e.preventDefault();
     
-    // Double-check the 10-digit rule before sending to the server
     const phoneVal = document.getElementById('regPhone').value.trim();
     if (phoneVal.length !== 10) {
         return msg("Invalid Input", "Please enter a valid 10-digit mobile number.", "warning");
@@ -5067,8 +5063,8 @@ async function submitSelfRegistration(e) {
 
     const urlParams = new URLSearchParams(window.location.search);
     const regType = urlParams.get('register');
-
     const isStaff = (regType === 'staff');
+
     const payload = {
         BusId: isStaff ? 'OFFICE' : document.getElementById('regBus').value,
         School: document.getElementById('regSchool').value,
@@ -5095,7 +5091,7 @@ async function submitSelfRegistration(e) {
         if (response.success) {
             Swal.fire({
                 title: 'Success!',
-                text: 'Registration completed successfully.',
+                text: 'Your registration has been submitted successfully.',
                 icon: 'success',
                 confirmButtonColor: '#2563eb'
             }).then(() => {
