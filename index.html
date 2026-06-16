@@ -26,7 +26,9 @@ body {
     /* Discourage mobile reader engines */
     -webkit-text-size-adjust: none;
 }
-
+input.uppercase {
+    text-transform: uppercase;
+}
 /* Re-enable selection specifically for form inputs so typing works */
 input, select, textarea, [contenteditable="true"] {
     -webkit-user-select: text;
@@ -249,125 +251,124 @@ input, select, textarea, [contenteditable="true"] {
         </div>
 
         <form id="selfRegForm" onsubmit="submitSelfRegistration(event)" class="space-y-4 text-sm">
-            <!-- Full Name (Compulsory) -->
-            <div>
-                <label class="block text-xs font-bold text-gray-400 uppercase mb-1">Full Name</label>
-                <input id="regName" required placeholder="ENTER FULL NAME" oninput="this.value = this.value.toUpperCase()" class="w-full p-3 border border-gray-200 rounded-xl focus:ring-2 focus:ring-blue-500 outline-none">
-            </div>
-
-            <!-- Parent Name (Student Only) -->
-            <div id="regParentGroup">
-                <label class="block text-xs font-bold text-gray-400 uppercase mb-1">Parent Name / PEN No</label>
-                <input id="regParent" placeholder="ENTER PARENT NAME OR EMPLOYEE CODE" oninput="this.value = this.value.toUpperCase()" class="w-full p-3 border border-gray-200 rounded-xl focus:ring-2 focus:ring-blue-500 outline-none">
-            </div>
-
-            <!-- Phone (Compulsory) -->
-            <!-- NEW: STAFF SPECIFIC DESIGNATION FIELD -->
-<div id="regDesignationGroup" class="hidden">
-    <label class="block text-xs font-bold text-gray-400 uppercase mb-1">Designation</label>
-    <input id="regDesignation" placeholder="ENTER DESIGNATION (EX: PPTTI/LPSTUPST/HST)" oninput="this.value = this.value.toUpperCase()" class="w-full p-3 border border-gray-200 rounded-xl focus:ring-2 focus:ring-blue-500 outline-none">
+    <!-- Update Self Reg Form inputs in HTML -->
+<div>
+    <label class="block text-xs font-bold text-gray-400 uppercase mb-1">Full Name</label>
+    <input id="regName" required placeholder="Enter full name" oninput="this.value = this.value.toUpperCase()" class="w-full p-3 border border-gray-200 rounded-xl focus:ring-2 focus:ring-blue-500 outline-none uppercase">
 </div>
+
+<!-- ADDED: Selectable Gender in Self Registration -->
+<div>
+    <label class="block text-xs font-bold text-gray-400 uppercase mb-1">Gender</label>
+    <select id="regGender" required class="w-full p-3 border border-gray-200 rounded-xl bg-white focus:ring-2 focus:ring-blue-500 outline-none">
+        <option value="">Select Gender</option>
+        <option>Male</option>
+        <option>Female</option>
+    </select>
+</div>
+
+
+<!-- NEW: STAFF SPECIFIC TENURE FIELD -->
+<div id="regTenureGroup" class="hidden">
+    <label class="block text-xs font-bold text-gray-400 uppercase mb-1">Tenure</label>
+    <input id="regTenure" placeholder="ENTER TENURE (E.G. 10 MONTHS)" oninput="this.value = this.value.toUpperCase()" class="w-full p-3 border border-gray-200 rounded-xl focus:ring-2 focus:ring-blue-500 outline-none">
+</div>
+
+<div>
+    <label class="block text-xs font-bold text-gray-400 uppercase mb-1">Phone</label>
+    <input id="regPhone" required type="tel" placeholder="10-digit mobile number" oninput="this.value = this.value.replace(/[^0-9]/g, '').slice(0, 10)" class="w-full p-3 border border-gray-200 rounded-xl focus:ring-2 focus:ring-blue-500 outline-none">
+</div>
+
+    <div class="grid grid-cols-2 gap-3">
+        <div>
+            <label class="block text-xs font-bold text-gray-400 uppercase mb-1">School</label>
+            <select id="regSchool" required onchange="filterClasses(this.value, 'regClass')" class="w-full p-3 border border-gray-200 rounded-xl bg-white focus:ring-2 focus:ring-blue-500 outline-none">
+                <option value="">Select School</option>
+                <option value="TDEMNS-td1">TDEMNS-td1</option>
+                <option value="GTDLPS-34318">GTDLPS-34318</option>
+                <option value="TDTTI-34347">TDTTI-34347</option>
+                <option value="TDHS-34028">TDHS-34028</option>
+            </select>
+        </div>
+        <div id="regClassDivGroup" class="grid grid-cols-2 gap-2">
             <div>
-                <label class="block text-xs font-bold text-gray-400 uppercase mb-1">Phone Number (10 Digits)</label>
-                <input id="regPhone" required type="tel" placeholder="10-digit mobile number" oninput="this.value = this.value.replace(/\D/g, '').slice(0, 10)" class="w-full p-3 border border-gray-200 rounded-xl focus:ring-2 focus:ring-blue-500 outline-none">
-            </div>
-
-            <!-- Gender & School Grid -->
-            <div class="grid grid-cols-2 gap-3">
-                <div>
-                    <label class="block text-xs font-bold text-gray-400 uppercase mb-1">Gender</label>
-                    <select id="regGender" required class="w-full p-3 border border-gray-200 rounded-xl bg-white focus:ring-2 focus:ring-blue-500 outline-none">
-                        <option value="">Select Gender</option>
-                        <option>Male</option>
-                        <option>Female</option>
-                    </select>
-                </div>
-                <div>
-                    <label class="block text-xs font-bold text-gray-400 uppercase mb-1">School</label>
-                    <select id="regSchool" required onchange="filterClasses(this.value, 'regClass')" class="w-full p-3 border border-gray-200 rounded-xl bg-white focus:ring-2 focus:ring-blue-500 outline-none">
-                        <option value="">Select School</option>
-                        <option value="TDEMNS-td1">TDEMNS-td1</option>
-                        <option value="GTDLPS-34318">GTDLPS-34318</option>
-                        <option value="TDTTI-34347">TDTTI-34347</option>
-                        <option value="TDHS-34028">TDHS-34028</option>
-                    </select>
-                </div>
-            </div>
-
-            <!-- Class & Division (Student Only) -->
-            <div id="regClassDivGroup">
-                <label class="block text-xs font-bold text-gray-400 uppercase mb-1">Class & Div</label>
-                <div class="grid grid-cols-2 gap-2">
-                    <select id="regClass" class="p-3 border border-gray-200 rounded-xl bg-white outline-none">
-                        <option value="">Class</option>
-                    </select>
-                    <select id="regDiv" class="p-3 border border-gray-200 rounded-xl bg-white outline-none">
-                        <option value="">Div</option>
-                        <option>A</option><option>B</option><option>C</option><option>D</option><option>E</option><option>F</option><option>G</option>
-                    </select>
-                </div>
-            </div>
-
-            <!-- Bus Selection (Student Only) -->
-            <div id="regBusGroup">
-                <label class="block text-xs font-bold text-gray-400 uppercase mb-1">Select Bus</label>
-                <select id="regBus" class="w-full p-3 border border-gray-200 rounded-xl bg-white focus:ring-2 focus:ring-blue-500 outline-none" onchange="populatePredefinedStops(this.value)">
-                    <option value="">Select Bus</option>
-                    <option>KL32P4201SR</option>
-                    <option>KL32M0528VM</option>
-                    <option>KL32L2382K</option>
-                    <option>KL07BU4184C</option>
-                    <option>KL32L0827U</option>
+                <label class="block text-xs font-bold text-gray-400 uppercase mb-1">Class</label>
+                <select id="regClass" class="w-full p-3 border border-gray-200 rounded-xl bg-white outline-none">
+                    <option value="">Class</option>
                 </select>
             </div>
-
-            <!-- Entry & Exit Stops (Student Only) -->
-            <div id="regStopsGroup" class="grid grid-cols-2 gap-3">
-                <div>
-                    <label class="block text-xs font-bold text-gray-400 uppercase mb-1">Entry Stop</label>
-                    <select id="regEntry" class="w-full p-3 border border-gray-200 rounded-xl bg-white focus:ring-2 focus:ring-blue-500 outline-none">
-                        <option value="">Select Entry</option>
-                    </select>
-                </div>
-                <div>
-                    <label class="block text-xs font-bold text-gray-400 uppercase mb-1">Exit Stop</label>
-                    <select id="regExit" class="w-full p-3 border border-gray-200 rounded-xl bg-white focus:ring-2 focus:ring-blue-500 outline-none">
-                        <option value="">Select Exit</option>
-                    </select>
-                </div>
-            </div>
-
-            <!-- Travel Status / both time / morning only / evening only (Student Only) -->
-            <div id="regStatusGroup">
-                <label class="block text-xs font-bold text-gray-400 uppercase mb-1">Travel Time</label>
-                <select id="regStatus" class="w-full p-3 border border-gray-200 rounded-xl bg-white focus:ring-2 focus:ring-blue-500 outline-none">
-                    <option>Both Time</option>
-                    <option>Morning Only</option>
-                    <option>Evening Only</option>
+            <div>
+                <label class="block text-xs font-bold text-gray-400 uppercase mb-1">Div</label>
+                <select id="regDiv" class="w-full p-3 border border-gray-200 rounded-xl bg-white outline-none">
+                    <option value="">Div</option>
+                    <option>A</option><option>B</option><option>C</option><option>D</option><option>E</option><option>F</option><option>G</option>
                 </select>
             </div>
-
-            <!-- Staff Specific: Tenure (Added) -->
-            <div id="regTenureGroup" class="hidden">
-                <label class="block text-xs font-bold text-gray-400 uppercase mb-1">Tenure</label>
-                <input id="regTenure" placeholder="ENTER TENURE (E.G. 10 MONTHS)" oninput="this.value = this.value.toUpperCase()" class="w-full p-3 border border-gray-200 rounded-xl focus:ring-2 focus:ring-blue-500 outline-none">
-            </div>
-
-            <!-- Staff Specific: Custom Amount (Added) -->
-            <div id="regCustomAmountGroup" class="hidden">
-                <label class="block text-xs font-bold text-gray-400 uppercase mb-1">Custom Amount (₹)</label>
-                <input id="regCustomAmount" type="number" placeholder="Enter custom amount" class="w-full p-3 border border-gray-200 rounded-xl focus:ring-2 focus:ring-blue-500 outline-none">
-            </div>
-
-            <!-- Submit Button -->
-            <button type="submit" class="w-full mt-2 bg-gradient-to-r from-blue-600 to-indigo-600 text-white py-4 rounded-xl font-bold hover:shadow-lg transition-all">
-                Submit Registration
-            </button>
-        </form>
+        </div>
     </div>
+
+    <!-- BUS GROUP -->
+    <div id="regBusGroup">
+        <label class="block text-xs font-bold text-gray-400 uppercase mb-1">Select Bus</label>
+        <select id="regBus" onchange="populatePredefinedStops(this.value)" class="w-full p-3 border border-gray-200 rounded-xl bg-white focus:ring-2 focus:ring-blue-500 outline-none">
+            <option value="">Select Bus</option>
+            <option>KL32P4201SR</option>
+            <option>KL32M0528VM</option>
+            <option>KL32L2382K</option>
+            <option>KL07BU4184C</option>
+            <option>KL32L0827U</option>
+        </select>
+    </div>
+
+    <!-- STOPS GROUP -->
+    <div id="regStopsGroup" class="grid grid-cols-2 gap-3">
+        <div>
+            <label class="block text-xs font-bold text-gray-400 uppercase mb-1">Entry Stop (Strict)</label>
+            <select id="regEntry" class="w-full p-3 border border-gray-200 rounded-xl bg-white focus:ring-2 focus:ring-blue-500 outline-none">
+                <option value="">Select Entry</option>
+            </select>
+        </div>
+        <div>
+            <label class="block text-xs font-bold text-gray-400 uppercase mb-1">Exit Stop (Strict)</label>
+            <select id="regExit" onchange="autoFillRegFee(this.value)" class="w-full p-3 border border-gray-200 rounded-xl bg-white focus:ring-2 focus:ring-blue-500 outline-none">
+                <option value="">Select Exit</option>
+            </select>
+        </div>
+    </div>
+
+    <!-- STATUS GROUP -->
+    <div id="regStatusGroup">
+        <label class="block text-xs font-bold text-gray-400 uppercase mb-1">Travel Time</label>
+        <select id="regStatus" class="w-full p-3 border border-gray-200 rounded-xl bg-white focus:ring-2 focus:ring-blue-500 outline-none">
+            <option>Both Time</option>
+            <option>Morning Only</option>
+            <option>Evening Only</option>
+        </select>
+    </div>
+
+    <!-- STUDENT AUTO-CALCULATED FEE BOX -->
+    <div id="regFeeGroup" class="bg-blue-50 p-4 rounded-2xl border border-blue-100 flex justify-between items-center mt-3">
+        <div>
+            <span class="block text-xs font-bold text-blue-500 uppercase tracking-wider">Estimated Monthly Fee</span>
+            <span class="text-[10px] text-gray-500">Calculated automatically based on Exit Stop</span>
+        </div>
+        <div class="text-right">
+            <span id="regFeeDisplay" class="text-2xl font-black text-blue-700">₹0</span>
+        </div>
+    </div>
+
+    <!-- NEW: STAFF SPECIFIC CUSTOM AMOUNT FIELD -->
+<div id="regCustomAmountGroup" class="hidden">
+    <label class="block text-xs font-bold text-gray-400 uppercase mb-1">Custom Amount (₹)</label>
+    <input id="regCustomAmount" type="number" placeholder="Enter custom amount" class="w-full p-3 border border-gray-200 rounded-xl focus:ring-2 focus:ring-blue-500 outline-none">
 </div>
+
+    <button type="submit" class="w-full mt-2 bg-gradient-to-r from-blue-600 to-indigo-600 text-white py-4 rounded-xl font-bold hover:shadow-lg transition-all">
+        Submit Registration
+    </button>
+</form>
 <script>
-    const API_URL = "https://script.google.com/macros/s/AKfycbwCx3gwQ1QswvdVSBC5wSYMNWaUJCZsjlEUH6xOVnuzRAX5x7WOw1ao5SvFFgKC-MVyuQ/exec";
+    const API_URL = "https://script.google.com/macros/s/AKfycbx8dlMaL5EiGpaO65tMSEqvCufQtV9h142QHaqb5vAH8aTB4ApCZCnfE4lNTlsrZmFS/exec";
 
     // Disable context menu (Right-Click)
 document.addEventListener('contextmenu', event => event.preventDefault());
@@ -936,7 +937,7 @@ function getFilteredDB() {
         // Use the new helper function here
         let dateOnly = paid ? formatMyDate(d[m+'DateTime']) : '-';
 
-        return `https://script.google.com/macros/s/AKfycbzM_F9fh6Fot5alH2BpBLvgKYMSCOzynWkfdiC2J5ELtfNk3H2WleSO2NKZU7WQZJ-OWw/exec
+        return `
             <tr class="border-b text-sm hover:bg-gray-50">
                 <td class="p-4 font-bold text-gray-700">${m}</td>
                 <td class="p-4 font-bold ${paid ? 'text-green-600':'text-gray-300'}">
@@ -1191,75 +1192,65 @@ function downloadStudentPDF() {
         ${regControlsHtml}
          ${summaryHtml}
             <form id="sForm" onsubmit="saveS(event)" class="grid grid-cols-2 md:grid-cols-4 gap-3 mb-6 bg-gray-50 p-4 rounded border text-sm">
-    <select id="f1" onchange="filterStops(this.value)" required class="p-2 border rounded">
-        <option value="">Bus</option>
-        <option>KL32P4201SR</option><option>KL32M0528VM</option><option>KL32L2382K</option><option>KL07BU4184C</option><option>KL32L0827U</option><option>STAFF</option>
-    </select>
-    
-    <select id="f2" onchange="filterClasses(this.value); autoFetchFee();" required class="p-2 border rounded">
-        <option value="">School</option>
-        <option>TDEMNS-td1</option><option>GTDLPS-34318</option><option>TDTTI-34347</option><option>TDHS-34028</option>
-    </select>                
-    
-    <select id="f3" onchange="autoFetchFee();" required class="p-2 border rounded">
-        <option value="">Class</option>
-    </select> 
-    
-    <select id="f4" required class="p-2 border rounded">
-        <option value="">Div</option><option>A</option><option>B</option><option>C</option><option>D</option><option>E</option><option>F</option><option>G</option><option>STAFF</option>
-    </select>
-    
-    <!-- UPPERCASE ENFORCED ON TYPING -->
-    <input id="f5" required placeholder="Student Name" oninput="this.value = this.value.toUpperCase()" class="p-2 border rounded md:col-span-2">
-    <input id="f6" required placeholder="Parent Name" oninput="this.value = this.value.toUpperCase()" class="p-2 border rounded">
-    
-    <!-- 10-DIGIT NUMERIC ENFORCED ON TYPING -->
-    <input id="f7" required type="tel" placeholder="Phone" oninput="this.value = this.value.replace(/\D/g, '').slice(0, 10)" class="p-2 border rounded">
-    
-    <!-- NEW: GENDER SELECT DROPDOWN -->
-    <select id="f12" required class="p-2 border rounded">
-        <option value="">Select Gender</option>
-        <option>Male</option>
-        <option>Female</option>
-    </select>
-    
-    <input list="entryStops" id="f8" placeholder="Entry Stop" oninput="this.value = this.value.toUpperCase()" class="p-2 border rounded">
-    <datalist id="entryStops"></datalist>
-    
-    <input list="exitStops" id="f9" required placeholder="Exit Stop" oninput="this.value = this.value.toUpperCase()" class="p-2 border rounded">
-    <datalist id="exitStops"></datalist>
-    
-    <!-- Trigger reduction calculation onchange -->
-<select id="f10" onchange="applyFeeReduction()" required class="p-2 border rounded">
+                <select id="f1" onchange="filterStops(this.value)" required class="p-2 border rounded">
+                    <option value="">Bus</option>
+                    <option>KL32P4201SR</option>
+                    <option>KL32M0528VM</option>
+                    <option>KL32L2382K</option>
+                    <option>KL07BU4184C</option>
+                    <option>KL32L0827U</option>
+                    <option>STAFF</option>
+                </select>
+                
+                <select id="f2" onchange="filterClasses(this.value); autoFetchFee();" required class="p-2 border rounded">
+                    <option value="">School</option>
+                    <option>TDEMNS-td1</option>
+                    <option>GTDLPS-34318</option>
+                    <option>TDTTI-34347</option>
+                    <option>TDHS-34028</option>
+                </select>                
+                
+                <select id="f3" onchange="autoFetchFee();" required class="p-2 border rounded">
+                    <option value="">Class</option>
+                </select> 
+                
+                <select id="f4" required class="p-2 border rounded"><option value="">Div</option><option>A</option><option>B</option><option>C</option><option>D</option><option>E</option><option>F</option><option>G</option><option>STAFF</option></select>
+                <!-- Input enforces auto-uppercase -->
+                <input id="f5" required placeholder="Student Name" oninput="this.value = this.value.toUpperCase()" class="p-2 border rounded md:col-span-2 uppercase">
+                <!-- ADDED: Selectable Gender dropdown -->
+                <select id="fGender" required class="p-2 border rounded bg-white">
+                <option value="">Select Gender</option>
+                <option>M</option>
+                <option>F</option>
+                </select>
+                <input id="f6" required placeholder="Parent Name" oninput="this.value = this.value.toUpperCase()" class="p-2 border rounded uppercase">
+                <input id="f7" required type="tel" placeholder="Phone" oninput="this.value = this.value.replace(/[^0-9]/g, '').slice(0, 10)" class="p-2 border rounded">
+                
+                <input list="entryStops" id="f8" placeholder="Entry Stop" class="p-2 border rounded">
+                <datalist id="entryStops"></datalist>
+                
+                <input list="exitStops" id="f9" required placeholder="Exit Stop" onchange="autoFillFee(this.value, 'f11')" class="p-2 border rounded">
+                <datalist id="exitStops"></datalist>
+                
+                <select id="f10" onchange="applyFeeReduction()" required class="p-2 border rounded">
     <option>Both Time</option>
     <option>Morning Only</option>
     <option>Evening Only</option>
     <option>SPONSER</option>
 </select>
-
-<!-- Capture base input values on manual edits -->
-<<!-- Locate this input in #sForm inside renderTab1(c): -->
-<input id="f11" required placeholder="Fee Amount" type="number" class="p-2 border rounded">
-
-<!-- Replace it with this wrapper div containing the new dynamic badge: -->
-<div class="flex flex-col">
-    <input id="f11" required placeholder="Fee Amount" type="number" oninput="this.dataset.baseFee = this.value; applyFeeReduction();" class="p-2 border rounded w-full">
-    <span id="lblExpectedFee" class="text-[10px] font-black text-blue-600 block mt-1 tracking-wide">Expected Fee: ₹0</span>
-</div>
-    <div class="col-span-2 md:col-span-4 flex gap-2">
-        <button type="submit" id="sBtn" class="bg-blue-600 text-white px-6 py-2 rounded font-bold">Save</button>
-        <button type="button" onclick="renderTab1(document.getElementById('tabContent'))" class="bg-gray-400 text-white px-4 py-2 rounded hidden" id="cBtn">Cancel</button>
-    </div>
-</form>
+                <input id="f11" required placeholder="Fee Amount" type="number" oninput="this.dataset.baseFee = this.value; applyFeeReduction();" class="p-2 border rounded">
+                <div class="col-span-2 md:col-span-4 flex gap-2">
+                    <button type="submit" id="sBtn" class="bg-blue-600 text-white px-6 py-2 rounded font-bold">Save</button>
+                    <button type="button" onclick="renderTab1(document.getElementById('tabContent'))" class="bg-gray-400 text-white px-4 py-2 rounded hidden" id="cBtn">Cancel</button>
+                </div>
+            </form>
             
             <div class="flex flex-wrap gap-2 mb-4">
     <input type="text" id="sSearchT1" onkeyup="searchT1()" placeholder="Search Name, Phone, Bus, Class, Division..." class="flex-grow p-2 border-2 border-gray-300 rounded focus:outline-none focus:border-blue-500">
     <button type="button" onclick="printLandscapeRoster()" class="bg-indigo-600 hover:bg-indigo-700 text-white px-4 py-2 rounded-xl text-sm font-bold shadow-md transition-all">
-        🖨️ Print Landscape Register (A4)
-    </button>
+        🖨️ Print </button>
 </div>
-
-                   
+            
             <div class="overflow-x-auto shadow-sm rounded-xl border border-gray-200 bg-white">
     <table class="w-full text-left text-sm border-collapse bg-white whitespace-nowrap">
         <thead class="bg-gray-800 text-white text-xs uppercase tracking-wider select-none">
@@ -1291,11 +1282,13 @@ function downloadStudentPDF() {
             <div id="studentProfileCard" class="hidden mt-8"></div>
         `;
         
-        // Run default dropdown populations
+       // (Existing setup calls inside renderTab1...)
     filterStops('');
     filterClasses('');
+    
+    // Call the totalizer to calculate values upon load
     updateTab1Totals();
-
+    
     // --- ADD THE LOCKING LOGIC HERE ---
     const uSchool = getUserSchool();
     const uClass = curUser.tclass || curUser.tClass;
@@ -1388,16 +1381,25 @@ function downloadStudentPDF() {
         });
 
         // Re-render table body
-            document.getElementById('t1Body').innerHTML = generateTab1Rows(currentTab1DB);
+    document.getElementById('t1Body').innerHTML = generateTab1Rows(currentTab1DB);
     
-        // Recalculate the totals row
-            updateTab1Totals();
+    // Recalculate the totals row
+    updateTab1Totals();
     
-        // Re-apply search filter
-            searchT1();
+    // Re-apply search filter
+    searchT1();
     }
 
-    
+    // Update Search Function to work with new DOM structure seamlessly
+    function searchT1() { 
+        const searchInput = document.getElementById('sSearchT1');
+        if (!searchInput) return;
+        
+        const q = searchInput.value.toLowerCase(); 
+        Array.from(document.getElementById('t1Body').rows).forEach(r => {
+            r.style.display = r.innerText.toLowerCase().includes(q) ? '' : 'none';
+        }); 
+    }
     
     const classMapping = {
         "TDEMNS-td1":["PREKG-td1", "LKG-td1", "UKG-td1","TEACHER-PPTTC-td1"],
@@ -1429,25 +1431,17 @@ function downloadStudentPDF() {
     
     
     async function saveS(e) {
-    e.preventDefault();
-    const d = { 
-        BusId: v('f1'), 
-        School: v('f2'), 
-        Class: v('f3'), 
-        Div: v('f4'), 
-        StudentName: v('f5'), 
-        ParentName: v('f6'), 
-        Phone: v('f7'), 
-        Gender: v('f12'), // <-- ADDED
-        Entry: v('f8'), 
-        Exit: v('f9'), 
-        Status: v('f10'), 
-        Fee: v('f11') 
-    };
-    showLoad();
-    await fetch(API_URL, {method:'POST', body:JSON.stringify({action: editID?"updateStudent":"saveStudent", data:d, rowIndex:editID})});
-    editID = null; await fetchData(true); hideLoad(); renderTab1(document.getElementById('tabContent')); msg("Success","Record saved!","success");
-}
+        e.preventDefault();
+        const d = { 
+    BusId: v('f1'), School: v('f2'), Class: v('f3'), Div: v('f4'), 
+    StudentName: v('f5'), 
+    Gender: v('fGender'), // ADDED
+    ParentName: v('f6'), Phone: v('f7'), Entry: v('f8'), Exit: v('f9'), Status: v('f10'), Fee: v('f11') 
+};
+        showLoad();
+        await fetch(API_URL, {method:'POST', body:JSON.stringify({action: editID?"updateStudent":"saveStudent", data:d, rowIndex:editID})});
+        editID = null; await fetchData(); hideLoad(); renderTab1(document.getElementById('tabContent')); msg("Success","Record saved!","success");
+    }
     
     
     
@@ -1480,40 +1474,24 @@ function downloadStudentPDF() {
     const setV = (id, val) => document.getElementById(id).value = val;
     
     function editS(s) {
-    editID = s._rowIndex; 
-    setV('f1', s.BusId); 
-    filterStops(s.BusId); 
-    setV('f2', s.School); 
-    setV('f3', s.Class); 
-    setV('f4', s.Div); 
-    setV('f5', s.StudentName); 
-    setV('f6', s['Parent Name']||s.ParentName); 
-    setV('f7', s.Phone); 
-    setV('f12', s.Gender || ''); 
-    setV('f8', s.Entry); 
-    setV('f9', s.Exit); 
-    setV('f10', s.Status); 
-    
-    // Assign stored fee and configure base tracker
-    const feeInput = document.getElementById('f11');
-    if (feeInput) {
-        feeInput.value = s.Fee;
-        
-        // If they already have a discount applied, calculate and store the original expected base fee
-        const isReduced = (s.Status === "Morning Only" || s.Status === "Evening Only");
-        feeInput.dataset.baseFee = isReduced ? Math.round(parseFloat(s.Fee) * 2) : s.Fee;
-        
-        // Update label
-        const lblExpected = document.getElementById('lblExpectedFee');
-        if (lblExpected) {
-            lblExpected.innerText = `Expected Fee: ₹${feeInput.dataset.baseFee}`;
-        }
+        editID = s._rowIndex; 
+        setV('f1',s.BusId); 
+        filterStops(s.BusId); // Dynamically load stops for this bus
+        setV('f2',s.School); 
+        setV('f3',s.Class); 
+        setV('f4',s.Div); 
+        setV('f5', s.StudentName); 
+setV('fGender', s.Gender || ''); // ADDED
+setV('f6', s['Parent Name'] || s.ParentName);
+        setV('f7',s.Phone); 
+        setV('f8',s.Entry); 
+        setV('f9',s.Exit); 
+        setV('f10',s.Status); 
+        setV('f11',s.Fee);
+        document.getElementById('sBtn').innerText = "Update"; 
+        document.getElementById('sBtn').className = "bg-amber-500 text-white px-6 py-2 rounded font-bold"; 
+        document.getElementById('cBtn').classList.remove('hidden');
     }
-    
-    document.getElementById('sBtn').innerText = "Update"; 
-    document.getElementById('sBtn').className = "bg-amber-500 text-white px-6 py-2 rounded font-bold"; 
-    document.getElementById('cBtn').classList.remove('hidden');
-}
 
     async function delS(r, tabId = 1) {
         if(!confirm("Delete forever?")) return;
@@ -3780,12 +3758,12 @@ async function clearAllLogsUI() {
             </select>                
             
             <input id="sf5" required placeholder="Staff Name" oninput="this.value = this.value.toUpperCase()" class="p-2 border rounded md:col-span-2">
-            <input id="sf6" placeholder="Designation (Optional)" oninput="this.value = this.value.toUpperCase()" class="p-2 border rounded">
+            <input id="sf6" placeholder="Designation" oninput="this.value = this.value.toUpperCase()" class="p-2 border rounded">
             <input id="sf7" required type="tel" placeholder="Phone" oninput="this.value = this.value.replace(/\D/g, '').slice(0, 10)" class="p-2 border rounded">
             
             <select id="sf12" required class="p-2 border rounded">
                 <option value="">Select Gender</option>
-                <option>Male</option><option>Female</option>
+                <option>M</option><option>F</option>
             </select>
 
             <!-- STAFF SPECIFIC FIELD: TENURE -->
@@ -3853,9 +3831,6 @@ async function clearAllLogsUI() {
     // Run the dynamic footer calculations
     updateTab7Totals();
 }
-
-
-
     function generateTab7Rows(data) {
         if (!data || data.length === 0) return '<tr><td colspan="5" class="p-6 text-center text-gray-400 italic">No staff records found.</td></tr>';
         
@@ -3895,7 +3870,42 @@ async function clearAllLogsUI() {
         searchT7();
     }
 
-    // Performs search filtering and updates staff grand totals dynamically as you type
+  async function saveStaff(e) {
+    e.preventDefault();
+    const d = { 
+        BusId: 'OFFICE', // Default bypass values for Staff
+        School: v('sf2'), 
+        Class: 'STAFF', 
+        Div: '-', 
+        StudentName: v('sf5'), 
+        ParentName: v('sf6') || '', 
+        Phone: v('sf7'), 
+        Gender: v('sf12'), 
+        Entry: '-', 
+        Exit: '-', 
+        Status: v('sf13'), // Status column stores Tenure
+        Fee: v('sf11') // Fee column stores Custom Amount
+    };
+    showLoad();
+    await fetch(API_URL, {method:'POST', body:JSON.stringify({action: editID?"updateStudent":"saveStudent", data:d, rowIndex:editID})});
+    editID = null; await fetchData(true); hideLoad(); renderTab7(document.getElementById('tabContent')); msg("Success","Staff record saved!","success");
+}
+
+function editStaff(s) {
+    editID = s._rowIndex; 
+    setV('sf2', s.School); 
+    setV('sf5', s.StudentName); 
+    setV('sf6', s['Parent Name'] || s.ParentName); 
+    setV('sf7', s.Phone); 
+    setV('sf12', s.Gender || ''); 
+    setV('sf13', s.Status || ''); // Load Tenure from Status column
+    setV('sf11', s.Fee); // Load Custom Amount
+    
+    document.getElementById('staffBtn').innerText = "Update"; 
+    document.getElementById('staffBtn').className = "bg-amber-500 text-white px-6 py-2 rounded font-bold"; 
+    document.getElementById('staffCBtn').classList.remove('hidden');
+}
+
 function searchT7() {
     const searchInput = document.getElementById('sSearchT7');
     if (!searchInput) return;
@@ -3951,42 +3961,6 @@ function updateTab7Totals() {
     if (totalValEl) {
         totalValEl.innerText = '₹' + sum.toLocaleString('en-IN');
     }
-}
-
-    async function saveStaff(e) {
-    e.preventDefault();
-    const d = { 
-        BusId: 'OFFICE', // Default bypass values for Staff
-        School: v('sf2'), 
-        Class: 'STAFF', 
-        Div: '-', 
-        StudentName: v('sf5'), 
-        ParentName: v('sf6') || '', 
-        Phone: v('sf7'), 
-        Gender: v('sf12'), 
-        Entry: '-', 
-        Exit: '-', 
-        Status: v('sf13'), // Status column stores Tenure
-        Fee: v('sf11') // Fee column stores Custom Amount
-    };
-    showLoad();
-    await fetch(API_URL, {method:'POST', body:JSON.stringify({action: editID?"updateStudent":"saveStudent", data:d, rowIndex:editID})});
-    editID = null; await fetchData(true); hideLoad(); renderTab7(document.getElementById('tabContent')); msg("Success","Staff record saved!","success");
-}
-
-function editStaff(s) {
-    editID = s._rowIndex; 
-    setV('sf2', s.School); 
-    setV('sf5', s.StudentName); 
-    setV('sf6', s['Parent Name'] || s.ParentName); 
-    setV('sf7', s.Phone); 
-    setV('sf12', s.Gender || ''); 
-    setV('sf13', s.Status || ''); // Load Tenure from Status column
-    setV('sf11', s.Fee); // Load Custom Amount
-    
-    document.getElementById('staffBtn').innerText = "Update"; 
-    document.getElementById('staffBtn').className = "bg-amber-500 text-white px-6 py-2 rounded font-bold"; 
-    document.getElementById('staffCBtn').classList.remove('hidden');
 }
     
     
@@ -4547,7 +4521,8 @@ function startAdminMapRefresh() {
 
 // Function to forcibly end a specific bus's live location from Admin Panel
 async function adminEndBusLocation(busId) {
-        const result = await Swal.fire({
+    // Replaced native confirm() with beautiful SweetAlert2 modal
+    const result = await Swal.fire({
         title: 'End Live Location?',
         text: `Are you sure you want to forcibly stop Live Location sharing for ${busId}?`,
         icon: 'warning',
@@ -4975,63 +4950,60 @@ async function initializeRegistrationMode(type) {
     document.getElementById('selfRegisterSection').classList.remove('hidden');
     
     const regFormTitle = document.getElementById('regFormTitle');
+    const classDivGroup = document.getElementById('regClassDivGroup');
+    const parentGroup = document.getElementById('regParentGroup');
 
     if (type === 'staff') {
         regFormTitle.innerText = "Staff Registration Portal";
+        classDivGroup.classList.add('hidden'); 
+        parentGroup.classList.add('hidden'); 
         
-        // 1. Hide Student-Only Elements using absolute wrapper IDs
-        document.getElementById('regClassDivGroup').classList.add('hidden'); 
-        document.getElementById('regParentGroup').classList.add('hidden'); 
-        document.getElementById('regBusGroup').classList.add('hidden');
-        document.getElementById('regStopsGroup').classList.add('hidden'); 
-        document.getElementById('regStatusGroup').classList.add('hidden');
+        // Hide Student Specific Fields
+        document.getElementById('regBus').parentNode.classList.add('hidden');
+        document.getElementById('regEntry').parentNode.parentNode.classList.add('hidden'); 
+        document.getElementById('regStatus').parentNode.classList.add('hidden');
         
-        // 2. Show Staff-Only Elements (Designation added)
-        document.getElementById('regDesignationGroup').classList.remove('hidden');
+        // Show Staff Specific Fields
         document.getElementById('regTenureGroup').classList.remove('hidden');
         document.getElementById('regCustomAmountGroup').classList.remove('hidden');
         
-        // 3. Clear Required Flags for Student elements
+        // Set Required Validations
         document.getElementById('regClass').required = false;
         document.getElementById('regBus').required = false;
         document.getElementById('regEntry').required = false;
         document.getElementById('regExit').required = false;
         document.getElementById('regStatus').required = false;
         
-        // 4. Force Required Flags for Staff elements
-        document.getElementById('regDesignation').required = true;
         document.getElementById('regTenure').required = true;
         document.getElementById('regCustomAmount').required = true;
         
-        document.getElementById('regSchool').value = "TDEMNS-td1"; // Default filler school
+        document.getElementById('regSchool').value = "TDEMNS-td1"; 
     } else {
         regFormTitle.innerText = "Student Registration Portal";
+        classDivGroup.classList.remove('hidden');
+        parentGroup.classList.remove('hidden');
         
-        // 1. Show Student-Only Elements
-        document.getElementById('regClassDivGroup').classList.remove('hidden');
-        document.getElementById('regParentGroup').classList.remove('hidden');
-        document.getElementById('regBusGroup').classList.remove('hidden');
-        document.getElementById('regStopsGroup').classList.remove('hidden');
-        document.getElementById('regStatusGroup').classList.remove('hidden');
+        // Show Student Specific Fields
+        document.getElementById('regBus').parentNode.classList.remove('hidden');
+        document.getElementById('regEntry').parentNode.parentNode.classList.remove('hidden');
+        document.getElementById('regStatus').parentNode.classList.remove('hidden');
         
-        // 2. Hide Staff-Only Elements
-        document.getElementById('regDesignationGroup').classList.add('hidden');
+        // Hide Staff Specific Fields
         document.getElementById('regTenureGroup').classList.add('hidden');
         document.getElementById('regCustomAmountGroup').classList.add('hidden');
         
-        // 3. Enforce Required Flags for Student elements
+        // Set Required Validations
         document.getElementById('regClass').required = true;
         document.getElementById('regBus').required = true;
         document.getElementById('regEntry').required = true;
         document.getElementById('regExit').required = true;
         document.getElementById('regStatus').required = true;
         
-        // 4. Remove Required Flags for Staff elements
-        document.getElementById('regDesignation').required = false;
         document.getElementById('regTenure').required = false;
         document.getElementById('regCustomAmount').required = false;
     }
 }
+
 // Strictly populates select elements with values matching the predefined array
 function populatePredefinedStops(busId) {
     const entrySelect = document.getElementById('regEntry');
@@ -5077,7 +5049,6 @@ function populatePredefinedStops(busId) {
     });
 }
 
-// Packages the payload, ensuring Designation, Tenure, and Custom Amounts are properly mapped for staff
 async function submitSelfRegistration(e) {
     e.preventDefault();
     
@@ -5096,10 +5067,7 @@ async function submitSelfRegistration(e) {
         Class: isStaff ? 'STAFF' : document.getElementById('regClass').value,
         Div: isStaff ? '-' : document.getElementById('regDiv').value,
         StudentName: document.getElementById('regName').value.trim().toUpperCase(),
-        
-        // SHIFTED/MAP: designation saved to ParentName column for staff
-        ParentName: isStaff ? document.getElementById('regDesignation').value.trim().toUpperCase() : document.getElementById('regParent').value.trim().toUpperCase(),
-        
+        ParentName: isStaff ? '' : document.getElementById('regParent').value.trim().toUpperCase(),
         Phone: phoneVal,
         Gender: document.getElementById('regGender').value,
         Entry: isStaff ? '-' : document.getElementById('regEntry').value,
@@ -5587,6 +5555,44 @@ function generateStudentSummaryHtml(data) {
     };
 }
 
+function getStudents() {
+  // Safe Auto-migration: Checks and builds the Gender column structures
+  setupGenderColumn();
+
+  const data = SpreadsheetApp.openById(SHEET_ID).getSheetByName("Students").getDataRange().getValues();
+  const headers = data[0];
+  let results = [];
+  for (let i = 1; i < data.length; i++) {
+    let obj = { _rowIndex: i + 1 };
+    headers.forEach((h, idx) => { obj[h] = data[i][idx]; });
+    results.push(obj);
+  }
+  return results;
+}
+
+function setupGenderColumn() {
+  const ss = SpreadsheetApp.openById(SHEET_ID);
+  const sheet = ss.getSheetByName("Students");
+  const headers = sheet.getRange(1, 1, 1, sheet.getLastColumn()).getValues()[0];
+  
+  if (headers.indexOf("Gender") === -1) {
+    // Insert column directly after StudentName (Column C / Index 2) -> Column 4 (D)
+    sheet.insertColumnAfter(3);
+    sheet.getRange(1, 4).setValue("Gender").setFontWeight("bold");
+    
+    // Create spreadsheet validation dropdown
+    const rule = SpreadsheetApp.newDataValidation()
+      .requireValueInList(["Male", "Female"], true)
+      .setAllowInvalid(false)
+      .setHelpText("Select Male or Female")
+      .build();
+      
+    // Apply rule to column D (excluding header)
+    sheet.getRange("D2:D5000").setDataValidation(rule);
+  }
+}
+
+
 // Generates and prints an A4 Landscape layout grouped by School, Class, and Division
 function printLandscapeRoster() {
     const data = currentTab1DB;
@@ -5757,65 +5763,45 @@ function printLandscapeRoster() {
 function autoFetchFee() {
     const school = document.getElementById('f2').value;
     const cls = document.getElementById('f3').value;
-    const lblExpected = document.getElementById('lblExpectedFee');
+    if (!school) return;
+
+    // Search existing students to find standard rates
+    const match = db.find(s => s.School === school && s.Class === cls && parseFloat(s.Fee) > 0);
     const feeInput = document.getElementById('f11');
     
-    if (!school) {
-        if (lblExpected) lblExpected.innerText = "Expected Fee: ₹0";
-        return;
-    }
-
-    // 1. Search the local database for an existing student with the same School and Class
-    const match = db.find(s => s.School === school && s.Class === cls && parseFloat(s.Fee) > 0);
-    
-    let expectedBaseFee = 0;
-    if (match) {
-        expectedBaseFee = parseFloat(match.Fee) || 0;
-    } else {
-        // Fallback default values per school if no match is found
-        const defaultFees = {
-            "TDEMNS-td1": 1100,
-            "GTDLPS-34318": 1200,
-            "TDTTI-34347": 1300,
-            "TDHS-34028": 1400
-        };
-        expectedBaseFee = defaultFees[school] || 1200;
-    }
-
-    // 2. Display the expected base fee in the label
-    if (lblExpected) {
-        lblExpected.innerText = `Expected Fee: ₹${expectedBaseFee}`;
-    }
-
-    // 3. Set the base value on the input and apply the 50% reduction if applicable
     if (feeInput) {
-        feeInput.value = expectedBaseFee;
-        feeInput.dataset.baseFee = expectedBaseFee;
+        if (match) {
+            feeInput.value = match.Fee;
+            feeInput.dataset.baseFee = match.Fee;
+        } else {
+            // Hardcoded fallbacks if the sheet has no records for the school yet
+            const defaultFees = { "TDEMNS-td1": 1100, "GTDLPS-34318": 1200, "TDTTI-34347": 1300, "TDHS-34028": 1400 };
+            feeInput.value = defaultFees[school] || "";
+            feeInput.dataset.baseFee = feeInput.value;
+        }
         applyFeeReduction();
     }
 }
 
 // Applies a 50% discount if Morning Only or Evening Only are selected
 function applyFeeReduction() {
-    const status = document.getElementById('f10').value; // Both Time, Morning Only, Evening Only, SPONSER
+    const status = document.getElementById('f10').value;
     const feeInput = document.getElementById('f11');
-    if (!feeInput) return;
+    if (!feeInput || !feeInput.value) return;
 
-    // Initialize dataset.baseFee from current input value if not set
     if (!feeInput.dataset.baseFee || parseFloat(feeInput.dataset.baseFee) === 0) {
-        feeInput.dataset.baseFee = feeInput.value || 0;
+        feeInput.dataset.baseFee = feeInput.value;
     }
 
     const baseFee = parseFloat(feeInput.dataset.baseFee) || 0;
 
     if (status === "Morning Only" || status === "Evening Only") {
-        // Reduce by 50%
         feeInput.value = Math.round(baseFee * 0.5);
     } else {
-        // Restore full fee
-        feeInput.value = baseFee;
+        feeInput.value = baseFee; // Restore full fee
     }
 }
+
 
 // Generates and prints an A4 Landscape layout for Staff, grouped by School
 function printStaffLandscapeRoster() {
@@ -5974,6 +5960,7 @@ function printStaffLandscapeRoster() {
         }, 500);
     }, 250);
 }
+
 
 </script>
 </body>
