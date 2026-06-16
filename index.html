@@ -282,7 +282,7 @@ input, select, textarea, [contenteditable="true"] {
     <!-- 5. School Selection (For both) -->
     <div>
         <label class="block text-xs font-bold text-gray-400 uppercase mb-1">School Name</label>
-        <select id="regSchool" required onchange="filterClasses(this.value, 'regClass')" class="w-full p-3 border border-gray-200 rounded-xl bg-white focus:ring-2 focus:ring-blue-500 outline-none">
+        <select id="regSchool" required onchange="filterClasses(this.value, 'regClass'); calculateRegFee();" class="w-full p-3 border border-gray-200 rounded-xl bg-white focus:ring-2 focus:ring-blue-500 outline-none">
             <option value="">Select School</option>
             <option value="TDEMNS-td1">TDEMNS-td1</option>
             <option value="GTDLPS-34318">GTDLPS-34318</option>
@@ -337,7 +337,7 @@ input, select, textarea, [contenteditable="true"] {
     <!-- 9. Travel Time / Status (Student Only) -->
     <div id="regStatusGroup">
         <label class="block text-xs font-bold text-gray-400 uppercase mb-1">Travel Time</label>
-        <select id="regStatus" class="w-full p-3 border border-gray-200 rounded-xl bg-white focus:ring-2 focus:ring-blue-500 outline-none">
+        <select id="regStatus" onchange="calculateRegFee()" class="w-full p-3 border border-gray-200 rounded-xl bg-white focus:ring-2 focus:ring-blue-500 outline-none">
             <option>Both Time</option>
             <option>Morning Only</option>
             <option>Evening Only</option>
@@ -355,6 +355,20 @@ input, select, textarea, [contenteditable="true"] {
         <label class="block text-xs font-bold text-gray-400 uppercase mb-1">Custom Amount (₹)</label>
         <input id="regCustomAmount" type="number" placeholder="Enter custom amount" class="w-full p-3 border border-gray-200 rounded-xl focus:ring-2 focus:ring-blue-500 outline-none">
     </div>
+
+    <!-- Inside <form id="selfRegForm" ...> (Place right above the Submit Button) -->
+
+<!-- NEW: DYNAMIC FEE DISPLAY CARD -->
+<div id="regFeeDisplayGroup" class="hidden bg-blue-50 p-4 rounded-xl border border-blue-100 flex justify-between items-center animate-fade-in">
+    <div>
+        <p class="text-[10px] text-blue-500 uppercase font-black tracking-wider leading-none mb-1">Estimated Monthly Fee</p>
+        <h4 class="text-sm font-black text-blue-900 leading-none">Transportation Rate</h4>
+    </div>
+    <div class="text-right">
+        <span id="txtRegFee" class="text-2xl font-black text-blue-600 block leading-none">₹0</span>
+        <span class="text-[9px] text-blue-400 block font-bold uppercase tracking-wider mt-1 leading-none">Per Month</span>
+    </div>
+</div>
 
     <!-- Submit Button -->
     <button type="submit" class="w-full mt-2 bg-gradient-to-r from-blue-600 to-indigo-600 text-white py-4 rounded-xl font-bold hover:shadow-lg transition-all">
@@ -5001,6 +5015,8 @@ async function initializeRegistrationMode(type) {
         document.getElementById('regTenure').required = false;
         document.getElementById('regCustomAmount').required = false;
     }
+    // Place at the bottom of initializeRegistrationMode(type):
+calculateRegFee();
 }
 
 // Strictly populates select elements with values matching the predefined array
@@ -5960,6 +5976,43 @@ function printStaffLandscapeRoster() {
         }, 500);
     }, 250);
 }
+
+
+// Calculates and updates the registration portal fee display card instantly
+function calculateRegFee() {
+    const school = document.getElementById('regSchool').value;
+    const status = document.getElementById('regStatus').value;
+    const regType = new URLSearchParams(window.location.search).get('register');
+
+    // If it's a staff form or no school is selected yet, hide the card
+    if (regType === 'staff' || !school) {
+        document.getElementById('regFeeDisplayGroup').classList.add('hidden');
+        return;
+    }
+
+    // Otherwise, reveal the calculation card
+    document.getElementById('regFeeDisplayGroup').classList.remove('hidden');
+
+    // Standard school fee mappings (identical to the backend schema)
+    const baseSchoolFees = {
+        "TDEMNS-td1": 1100,
+        "GTDLPS-34318": 1200,
+        "TDTTI-34347": 1300,
+        "TDHS-34028": 1400
+    };
+
+    let calculatedFee = baseSchoolFees[school] || 1200;
+
+    // Apply the 50% discount logic instantly on the screen
+    if (status === "Morning Only" || status === "Evening Only") {
+        calculatedFee = Math.round(calculatedFee * 0.5);
+    }
+
+    // Display the calculated amount
+    document.getElementById('txtRegFee').innerText = '₹' + calculatedFee;
+}
+
+
 
 
 </script>
