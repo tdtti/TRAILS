@@ -323,26 +323,26 @@ input, select, textarea, [contenteditable="true"] {
     <div id="regStopsGroup" class="grid grid-cols-2 gap-3">
         <div>
             <label class="block text-xs font-bold text-gray-400 uppercase mb-1">Entry Stop (Strict)</label>
-            <select id="regEntry" class="w-full p-3 border border-gray-200 rounded-xl bg-white focus:ring-2 focus:ring-blue-500 outline-none">
-                <option value="">Select Entry</option>
-            </select>
+            <select id="regEntry" onchange="fetchStopFee()" class="w-full p-3 border border-gray-200 rounded-xl bg-white focus:ring-2 focus:ring-blue-500 outline-none">
+    <option value="">Select Entry</option>
+</select>
         </div>
         <div>
             <label class="block text-xs font-bold text-gray-400 uppercase mb-1">Exit Stop (Strict)</label>
-            <select id="regExit" class="w-full p-3 border border-gray-200 rounded-xl bg-white focus:ring-2 focus:ring-blue-500 outline-none">
-                <option value="">Select Exit</option>
-            </select>
+            <select id="regExit" onchange="fetchStopFee()" class="w-full p-3 border border-gray-200 rounded-xl bg-white focus:ring-2 focus:ring-blue-500 outline-none">
+    <option value="">Select Exit</option>
+</select>
         </div>
     </div>
 
     <!-- 9. Travel Time / Status (Student Only) -->
     <div id="regStatusGroup">
         <label class="block text-xs font-bold text-gray-400 uppercase mb-1">Travel Time</label>
-        <select id="regStatus" onchange="calculateRegFee()" class="w-full p-3 border border-gray-200 rounded-xl bg-white focus:ring-2 focus:ring-blue-500 outline-none">
-            <option>Both Time</option>
-            <option>Morning Only</option>
-            <option>Evening Only</option>
-        </select>
+        <select id="regStatus" onchange="localRecalculateRegFee()" class="w-full p-3 border border-gray-200 rounded-xl bg-white focus:ring-2 focus:ring-blue-500 outline-none">
+    <option selected>Both Time</option>
+    <option>Morning Only</option>
+    <option>Evening Only</option>
+</select>
     </div>
 
     <!-- 10. Tenure (Staff Only - always capitalized) -->
@@ -377,7 +377,7 @@ input, select, textarea, [contenteditable="true"] {
     </button>
 </form>
 <script>
-    const API_URL = "https://script.google.com/macros/s/AKfycbyalOUFjokziuAsZNgeLbf60rbBLqZ-d0R5eZEBuxjHNfRSzZcHxByiIEofKydBfTwCsw/exec";
+    const API_URL = "https://script.google.com/macros/s/AKfycby0fFAYjKsoW8P-DiXdfUEaMckETdXRuVCICYDk6OoKp1oXkcRsDByzc_c08It3kVaM8w/exec";
 
     // Disable context menu (Right-Click)
 document.addEventListener('contextmenu', event => event.preventDefault());
@@ -1425,19 +1425,26 @@ function downloadStudentPDF() {
     
     classSelect.innerHTML = '<option value="">Class</option>';
     
-    // If no school selected, show all classes
+    // Check if the query target is a student form (Tab 1 f3, or public portal regClass)
+    const isStudentReg = (targetId === 'f3' || targetId === 'regClass');
+
     if (!schoolId) {
         const all = ["PREKG-td1", "LKG-td1", "UKG-td1", "I-34318", "II-34318", "III-34318", "IV-34318", "V-34347", "VI-34347", "VII-34347", "VIII-34028", "IX-34028", "X-34028"];
-        all.forEach(c => classSelect.innerHTML += `<option value="${c}">${c}</option>`);
+        all.forEach(c => {
+            if (isStudentReg && c.indexOf("TEACHER") !== -1) return; // Hide teacher classes
+            classSelect.innerHTML += `<option value="${c}">${c}</option>`;
+        });
         return;
     }
     
     const allowed = classMapping[schoolId];
     if (allowed) {
-        allowed.forEach(c => classSelect.innerHTML += `<option value="${c}">${c}</option>`);
+        allowed.forEach(c => {
+            if (isStudentReg && c.indexOf("TEACHER") !== -1) return; // Hide teacher classes
+            classSelect.innerHTML += `<option value="${c}">${c}</option>`;
+        });
     }
 }
-    
     
     async function saveS(e) {
         e.preventDefault();
@@ -6021,6 +6028,78 @@ function calculateRegFee() {
     document.getElementById('txtRegFee').innerText = '₹' + calculatedFee;
 }
 
+
+// Triggers stop-based fee retrieval from the Sheet when boarding choices are adjusted
+async function fetchStopFee() {
+    const school = document.getElementById('regSchool').value;
+    const entry = document.getElementById('regEntry').value;
+    const exit = document.getElementById('regExit').value;
+    const status = document.getElementById('regStatus').value;
+    
+    // Only query if school and at least one boarding stop is selected
+    if (!school || (!entry && !exit)) {
+        document.getElementById('regFeeDisplayGroup').classList.add('hidden');
+        return;
+    }
+
+    const txtFee = document.getElementById('txtRegFee');
+    const feeDisplayGroup = document.getElementById('regFeeDisplayGroup');
+    
+    feeDisplayGroup.classList.remove('hidden');
+    txtFee.innerText = "Syncing...";
+    txtFee.className = "text-xl font-black text-blue-600 block leading-none animate-pulse";
+
+    try {
+        const res = await fetch(API_URL, {
+            method: 'POST',
+            body: JSON.stringify({
+                action: "getStopFee",
+                data: { School: school, Entry: entry, Exit: exit }
+            })
+        }).then(r => r.json());
+
+        if (res.success && res.data) {
+            let baseFee = res.data.fee;
+            
+            // Cache the base rate locally to handle trip time adjustments offline
+            txtFee.dataset.baseFee = baseFee;
+
+            if (status === "Morning Only" || status === "Evening Only") {
+                baseFee = Math.round(baseFee * 0.5);
+            }
+
+            txtFee.innerText = '₹' + baseFee;
+            txtFee.className = "text-2xl font-black text-blue-600 block leading-none";
+        } else {
+            throw new Error("Invalid response");
+        }
+    } catch (e) {
+        // Safe offline fallback calculations
+        let fallbackFee = 1200;
+        const defaultFees = { "TDEMNS-td1": 1100, "GTDLPS-34318": 1200, "TDTTI-34347": 1300, "TDHS-34028": 1400 };
+        if (defaultFees[school]) fallbackFee = defaultFees[school];
+        
+        txtFee.dataset.baseFee = fallbackFee;
+        if (status === "Morning Only" || status === "Evening Only") {
+            fallbackFee = Math.round(fallbackFee * 0.5);
+        }
+        txtFee.innerText = '₹' + fallbackFee;
+        txtFee.className = "text-2xl font-black text-blue-600 block leading-none";
+    }
+}
+
+// Adjusts the display rate instantly offline when Morning/Evening selections toggle
+function localRecalculateRegFee() {
+    const status = document.getElementById('regStatus').value;
+    const txtFee = document.getElementById('txtRegFee');
+    if (!txtFee || !txtFee.dataset.baseFee) return;
+
+    let baseFee = parseFloat(txtFee.dataset.baseFee) || 1200;
+    if (status === "Morning Only" || status === "Evening Only") {
+        baseFee = Math.round(baseFee * 0.5);
+    }
+    txtFee.innerText = '₹' + baseFee;
+}
 
 
 
