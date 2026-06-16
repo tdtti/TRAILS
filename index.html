@@ -5985,48 +5985,6 @@ function printStaffLandscapeRoster() {
 }
 
 
-// Calculates and updates the registration portal fee display card instantly using the live sheet data
-function calculateRegFee() {
-    const school = document.getElementById('regSchool').value;
-    const cls = document.getElementById('regClass').value;
-    const status = document.getElementById('regStatus').value;
-    const regType = new URLSearchParams(window.location.search).get('register');
-
-    // If it's a staff form or no school is selected yet, hide the card
-    if (regType === 'staff' || !school) {
-        document.getElementById('regFeeDisplayGroup').classList.add('hidden');
-        return;
-    }
-
-    document.getElementById('regFeeDisplayGroup').classList.remove('hidden');
-
-    let baseFee = 0;
-    const key = school + "|" + cls;
-    
-    // Check if we loaded the live fee mapping from the sheet, otherwise use fallback defaults
-    if (window.feeStructure && window.feeStructure[key]) {
-        baseFee = window.feeStructure[key];
-    } else {
-        // Fallback safety estimates if this specific class has no sheet entries yet
-        const baseSchoolFees = {
-            "TDEMNS-td1": 0,
-            "GTDLPS-34318": 0,
-            "TDTTI-34347": 0,
-            "TDHS-34028": 0
-        };
-        baseFee = baseSchoolFees[school] || 0;
-    }
-
-    // Apply the 50% discount logic instantly
-    if (status === "Morning Only" || status === "Evening Only") {
-        calculatedFee = Math.round(baseFee * 0.5);
-    } else {
-        calculatedFee = baseFee;
-    }
-
-    // Display the calculated amount
-    document.getElementById('txtRegFee').innerText = '₹' + calculatedFee;
-}
 
 
 // Triggers stop-based fee retrieval from the Sheet when boarding choices are adjusted
