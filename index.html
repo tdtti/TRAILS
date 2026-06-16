@@ -262,8 +262,8 @@ input, select, textarea, [contenteditable="true"] {
         <label class="block text-xs font-bold text-gray-400 uppercase mb-1">Gender</label>
         <select id="regGender" required class="w-full p-3 border border-gray-200 rounded-xl bg-white focus:ring-2 focus:ring-blue-500 outline-none">
             <option value="">Select Gender</option>
-            <option>Male</option>
-            <option>Female</option>
+            <option>M</option>
+            <option>F</option>
         </select>
     </div>
 
@@ -5582,9 +5582,9 @@ function setupGenderColumn() {
     
     // Create spreadsheet validation dropdown
     const rule = SpreadsheetApp.newDataValidation()
-      .requireValueInList(["Male", "Female"], true)
+      .requireValueInList(["M", "F"], true)
       .setAllowInvalid(false)
-      .setHelpText("Select Male or Female")
+      .setHelpText("Select M or F")
       .build();
       
     // Apply rule to column D (excluding header)
