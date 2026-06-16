@@ -322,13 +322,13 @@ input, select, textarea, [contenteditable="true"] {
     <!-- 8. Entry & Exit Stop (Student Only - Predefined Dropdowns) -->
     <div id="regStopsGroup" class="grid grid-cols-2 gap-3">
         <div>
-            <label class="block text-xs font-bold text-gray-400 uppercase mb-1">Entry Stop (Strict)</label>
-            <select id="regEntry" class="w-full p-3 border border-gray-200 rounded-xl bg-white focus:ring-2 focus:ring-blue-500 outline-none">
-                <option value="">Select Entry</option>
-            </select>
+            <label class="block text-xs font-bold text-gray-400 uppercase mb-1">Entry Stop</label>
+            <select id="regEntry" onchange="fetchStopFee()" class="w-full p-3 border border-gray-200 rounded-xl bg-white focus:ring-2 focus:ring-blue-500 outline-none">
+    <option value="">Select Entry</option>
+</select>
         </div>
         <div>
-            <label class="block text-xs font-bold text-gray-400 uppercase mb-1">Exit Stop (Strict)</label>
+            <label class="block text-xs font-bold text-gray-400 uppercase mb-1">Exit Stop</label>
             <select id="regExit" onchange="fetchStopFee()" class="w-full p-3 border border-gray-200 rounded-xl bg-white focus:ring-2 focus:ring-blue-500 outline-none">
     <option value="">Select Exit</option>
 </select>
@@ -1419,6 +1419,23 @@ function downloadStudentPDF() {
         
     };
 
+    
+    
+    
+    async function saveS(e) {
+        e.preventDefault();
+        const d = { 
+    BusId: v('f1'), School: v('f2'), Class: v('f3'), Div: v('f4'), 
+    StudentName: v('f5'), 
+    Gender: v('fGender'), // ADDED
+    ParentName: v('f6'), Phone: v('f7'), Entry: v('f8'), Exit: v('f9'), Status: v('f10'), Fee: v('f11') 
+};
+        showLoad();
+        await fetch(API_URL, {method:'POST', body:JSON.stringify({action: editID?"updateStudent":"saveStudent", data:d, rowIndex:editID})});
+        editID = null; await fetchData(); hideLoad(); renderTab1(document.getElementById('tabContent')); msg("Success","Record saved!","success");
+    }
+    
+    
     function filterClasses(schoolId, targetId = 'f3') {
     const classSelect = document.getElementById(targetId);
     if (!classSelect) return;
@@ -1445,23 +1462,6 @@ function downloadStudentPDF() {
         });
     }
 }
-    
-    
-    async function saveS(e) {
-        e.preventDefault();
-        const d = { 
-    BusId: v('f1'), School: v('f2'), Class: v('f3'), Div: v('f4'), 
-    StudentName: v('f5'), 
-    Gender: v('fGender'), // ADDED
-    ParentName: v('f6'), Phone: v('f7'), Entry: v('f8'), Exit: v('f9'), Status: v('f10'), Fee: v('f11') 
-};
-        showLoad();
-        await fetch(API_URL, {method:'POST', body:JSON.stringify({action: editID?"updateStudent":"saveStudent", data:d, rowIndex:editID})});
-        editID = null; await fetchData(); hideLoad(); renderTab1(document.getElementById('tabContent')); msg("Success","Record saved!","success");
-    }
-    
-    
-    
    
 
     function filterStops(busId) {
@@ -6032,7 +6032,7 @@ async function fetchStopFee() {
         }
     } catch (e) {
         // Safe offline fallback calculations
-        let fallbackFee = 1200;
+        let fallbackFee = 0;
         const defaultFees = { "TDEMNS-td1": 1100, "GTDLPS-34318": 1200, "TDTTI-34347": 1300, "TDHS-34028": 1400 };
         if (defaultFees[school]) fallbackFee = defaultFees[school];
         
