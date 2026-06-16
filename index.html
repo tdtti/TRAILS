@@ -5812,7 +5812,7 @@ function autoFetchFee() {
             feeInput.dataset.baseFee = match.Fee;
         } else {
             // Hardcoded fallbacks if the sheet has no records for the school yet
-            const defaultFees = { "TDEMNS-td1": 1100, "GTDLPS-34318": 1200, "TDTTI-34347": 1300, "TDHS-34028": 1400 };
+            const defaultFees = { "TDEMNS-td1": 0, "GTDLPS-34318": 0, "TDTTI-34347": 0, "TDHS-34028": 0 };
             feeInput.value = defaultFees[school] || "";
             feeInput.dataset.baseFee = feeInput.value;
         }
@@ -6046,7 +6046,7 @@ async function fetchStopFee() {
     } catch (e) {
         // Fallback calculations if network is slow/offline
         let fallbackFee = 1200;
-        const defaultFees = { "TDEMNS-td1": 1100, "GTDLPS-34318": 1200, "TDTTI-34347": 1300, "TDHS-34028": 1400 };
+        const defaultFees = { "TDEMNS-td1": 0, "GTDLPS-34318": 0, "TDTTI-34347": 0, "TDHS-34028": 0 };
         if (defaultFees[school]) fallbackFee = defaultFees[school];
         
         txtFee.dataset.baseFee = fallbackFee;
