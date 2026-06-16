@@ -282,7 +282,7 @@ input, select, textarea, [contenteditable="true"] {
     <!-- 5. School Selection (For both) -->
     <div>
         <label class="block text-xs font-bold text-gray-400 uppercase mb-1">School Name</label>
-        <select id="regSchool" class="w-full p-3 border border-gray-200 rounded-xl bg-white focus:ring-2 focus:ring-blue-500 outline-none">
+        <select id="regSchool" required onchange="filterClasses(this.value, 'regClass'); fetchStopFee();" class="w-full p-3 border border-gray-200 rounded-xl bg-white focus:ring-2 focus:ring-blue-500 outline-none">
             <option value="">Select School</option>
             <option value="TDEMNS-td1">TDEMNS-td1</option>
             <option value="GTDLPS-34318">GTDLPS-34318</option>
@@ -323,13 +323,16 @@ input, select, textarea, [contenteditable="true"] {
     <div id="regStopsGroup" class="grid grid-cols-2 gap-3">
         <div>
             <label class="block text-xs font-bold text-gray-400 uppercase mb-1">Entry Stop</label>
-            <select id="regEntry" onchange="fetchStopFee()" class="w-full p-3 border border-gray-200 rounded-xl bg-white focus:ring-2 focus:ring-blue-500 outline-none">
+            <!-- Entry Stop: Normal selection (NO onchange trigger) -->
+<select id="regEntry" class="w-full p-3 border border-gray-200 rounded-xl bg-white focus:ring-2 focus:ring-blue-500 outline-none">
     <option value="">Select Entry</option>
 </select>
+
         </div>
         <div>
             <label class="block text-xs font-bold text-gray-400 uppercase mb-1">Exit Stop</label>
-            <select id="regExit" onchange="fetchStopFee()" class="w-full p-3 border border-gray-200 rounded-xl bg-white focus:ring-2 focus:ring-blue-500 outline-none">
+            <!-- Exit Stop: Triggers the Stop Sheet Fee Lookup when chosen -->
+<select id="regExit" onchange="fetchStopFee()" class="w-full p-3 border border-gray-200 rounded-xl bg-white focus:ring-2 focus:ring-blue-500 outline-none">
     <option value="">Select Exit</option>
 </select>
         </div>
@@ -377,7 +380,7 @@ input, select, textarea, [contenteditable="true"] {
     </button>
 </form>
 <script>
-    const API_URL = "https://script.google.com/macros/s/AKfycbxoRQLqeN1AvZ4EmRU2XyX9cxWLvbs0zbhATlI2BNsZ5MHF-PHw8HK8fOGWW8pkOyCJag/exec";
+    const API_URL = "https://script.google.com/macros/s/AKfycbz-Zx5KXstvxwhIgT3wDyUZ6N8VDuvE1A3vJk8oJZp7kKTLfyYhNFBohQWzWaQOgAXNCQ/exec";
 
     // Disable context menu (Right-Click)
 document.addEventListener('contextmenu', event => event.preventDefault());
@@ -1440,25 +1443,40 @@ function downloadStudentPDF() {
     const classSelect = document.getElementById(targetId);
     if (!classSelect) return;
     
-    classSelect.innerHTML = '<option value="">Class</option>';
-    
-    // Check if the query target is a student form (Tab 1 f3, or public portal regClass)
-    const isStudentReg = (targetId === 'f3' || targetId === 'regClass');
-
-    if (!schoolId) {
-        const all = ["PREKG-td1", "LKG-td1", "UKG-td1", "I-34318", "II-34318", "III-34318", "IV-34318", "V-34347", "VI-34347", "VII-34347", "VIII-34028", "IX-34028", "X-34028"];
-        all.forEach(c => {
-            if (isStudentReg && c.indexOf("TEACHER") !== -1) return; // Hide teacher classes
-            classSelect.innerHTML += `<option value="${c}">${c}</option>`;
-        });
+    classSelect.innerHTML = '// Programmatically populates class selections and hides teacher-only options for student forms
+function filterClasses(schoolId, targetId) {
+    const activeTargetId = targetId || 'f3';
+    const classSelect = document.getElementById(activeTargetId);
+    if (!classSelect) {
+        console.warn("Class selection element not found: " + activeTargetId);
         return;
     }
     
-    const allowed = classMapping[schoolId];
+    // Reset dropdown state
+    classSelect.innerHTML = '<option value="">Class</option>';
+    
+    const isStudentReg = (activeTargetId === 'f3' || activeTargetId === 'regClass');
+    
+    // Local encapsulated map to prevent scoping issues
+    const map = {
+        "TDEMNS-td1": ["PREKG-td1", "LKG-td1", "UKG-td1", "TEACHER-PPTTC-td1"],
+        "GTDLPS-34318": ["I-34318", "II-34318", "III-34318", "IV-34318", "TEACHER-LPST-34318"],
+        "TDTTI-34347": ["V-34347", "VI-34347", "VII-34347", "TEACHER-UPST-34347"],
+        "TDHS-34028": ["VIII-34028", "IX-34028", "X-34028", "TEACHER-HST-34028"]
+    };
+
+    const allowed = schoolId ? map[schoolId] : ["PREKG-td1", "LKG-td1", "UKG-td1", "I-34318", "II-34318", "III-34318", "IV-34318", "V-34347", "VI-34347", "VII-34347", "VIII-34028", "IX-34028", "X-34028"];
+    
     if (allowed) {
-        allowed.forEach(c => {
-            if (isStudentReg && c.indexOf("TEACHER") !== -1) return; // Hide teacher classes
-            classSelect.innerHTML += `<option value="${c}">${c}</option>`;
+        allowed.forEach(function(c) {
+            // Hide teacher options strictly for student registration forms
+            if (isStudentReg && c && c.indexOf("TEACHER") !== -1) {
+                return; 
+            }
+            const opt = document.createElement('option');
+            opt.value = c;
+            opt.text = c;
+            classSelect.appendChild(opt);
         });
     }
 }
@@ -5987,14 +6005,14 @@ function printStaffLandscapeRoster() {
 
 
 // Triggers stop-based fee retrieval from the Sheet when boarding choices are adjusted
+// Queries the database to fetch route fee rates strictly based on the Exit Stop selection
 async function fetchStopFee() {
-    const school = document.getElementById('regSchool').value;
-    const entry = document.getElementById('regEntry').value;
     const exit = document.getElementById('regExit').value;
     const status = document.getElementById('regStatus').value;
+    const school = document.getElementById('regSchool').value;
     
-    // Only query if school and at least one boarding stop is selected
-    if (!school || (!entry && !exit)) {
+    // Only perform the fetch if an Exit stop is selected
+    if (!exit) {
         document.getElementById('regFeeDisplayGroup').classList.add('hidden');
         return;
     }
@@ -6011,16 +6029,17 @@ async function fetchStopFee() {
             method: 'POST',
             body: JSON.stringify({
                 action: "getStopFee",
-                data: { School: school, Entry: entry, Exit: exit }
+                data: { Exit: exit } // Query only Exit stop details
             })
         }).then(r => r.json());
 
         if (res.success && res.data) {
             let baseFee = res.data.fee;
             
-            // Cache the base rate locally to handle trip time adjustments offline
+            // Cache the base rate locally
             txtFee.dataset.baseFee = baseFee;
 
+            // Apply 50% discount if Morning Only or Evening Only is selected
             if (status === "Morning Only" || status === "Evening Only") {
                 baseFee = Math.round(baseFee * 0.5);
             }
@@ -6031,8 +6050,8 @@ async function fetchStopFee() {
             throw new Error("Invalid response");
         }
     } catch (e) {
-        // Safe offline fallback calculations
-        let fallbackFee = 0;
+        // Fallback calculations if network is slow/offline
+        let fallbackFee = 1200;
         const defaultFees = { "TDEMNS-td1": 1100, "GTDLPS-34318": 1200, "TDTTI-34347": 1300, "TDHS-34028": 1400 };
         if (defaultFees[school]) fallbackFee = defaultFees[school];
         
@@ -6043,6 +6062,19 @@ async function fetchStopFee() {
         txtFee.innerText = '₹' + fallbackFee;
         txtFee.className = "text-2xl font-black text-blue-600 block leading-none";
     }
+}
+
+// Adjusts the display rate instantly offline when Morning/Evening selections toggle
+function localRecalculateRegFee() {
+    const status = document.getElementById('regStatus').value;
+    const txtFee = document.getElementById('txtRegFee');
+    if (!txtFee || !txtFee.dataset.baseFee) return;
+
+    let baseFee = parseFloat(txtFee.dataset.baseFee) || 1200;
+    if (status === "Morning Only" || status === "Evening Only") {
+        baseFee = Math.round(baseFee * 0.5);
+    }
+    txtFee.innerText = '₹' + baseFee;
 }
 
 // Adjusts the display rate instantly offline when Morning/Evening selections toggle
