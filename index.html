@@ -1439,11 +1439,7 @@ function downloadStudentPDF() {
     }
     
     
-    function filterClasses(schoolId, targetId = 'f3') {
-    const classSelect = document.getElementById(targetId);
-    if (!classSelect) return;
-    
-    classSelect.innerHTML = '// Programmatically populates class selections and hides teacher-only options for student forms
+    // Programmatically populates class selections and hides teacher-only options for student forms
 function filterClasses(schoolId, targetId) {
     const activeTargetId = targetId || 'f3';
     const classSelect = document.getElementById(activeTargetId);
@@ -1480,7 +1476,6 @@ function filterClasses(schoolId, targetId) {
         });
     }
 }
-   
 
     function filterStops(busId) {
         const entryDatalist = document.getElementById('entryStops');
@@ -6004,7 +5999,6 @@ function printStaffLandscapeRoster() {
 }
 
 
-// Triggers stop-based fee retrieval from the Sheet when boarding choices are adjusted
 // Queries the database to fetch route fee rates strictly based on the Exit Stop selection
 async function fetchStopFee() {
     const exit = document.getElementById('regExit').value;
@@ -6077,18 +6071,9 @@ function localRecalculateRegFee() {
     txtFee.innerText = '₹' + baseFee;
 }
 
-// Adjusts the display rate instantly offline when Morning/Evening selections toggle
-function localRecalculateRegFee() {
-    const status = document.getElementById('regStatus').value;
-    const txtFee = document.getElementById('txtRegFee');
-    if (!txtFee || !txtFee.dataset.baseFee) return;
 
-    let baseFee = parseFloat(txtFee.dataset.baseFee) || 1200;
-    if (status === "Morning Only" || status === "Evening Only") {
-        baseFee = Math.round(baseFee * 0.5);
-    }
-    txtFee.innerText = '₹' + baseFee;
-}
+
+
 
 
 
