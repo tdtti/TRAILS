@@ -282,7 +282,7 @@ input, select, textarea, [contenteditable="true"] {
     <!-- 5. School Selection (For both) -->
     <div>
         <label class="block text-xs font-bold text-gray-400 uppercase mb-1">School Name</label>
-        <select id="regSchool" class="w-full p-3 border border-gray-200 rounded-xl bg-white focus:ring-2 focus:ring-blue-500 outline-none">
+        <select id="regSchool" required onchange="filterClasses(this.value, 'regClass'); calculateRegFee();" class="w-full p-3 border border-gray-200 rounded-xl bg-white focus:ring-2 focus:ring-blue-500 outline-none">
             <option value="">Select School</option>
             <option value="TDEMNS-td1">TDEMNS-td1</option>
             <option value="GTDLPS-34318">GTDLPS-34318</option>
@@ -295,9 +295,10 @@ input, select, textarea, [contenteditable="true"] {
     <div id="regClassDivGroup">
         <label class="block text-xs font-bold text-gray-400 uppercase mb-1">Class & Div</label>
         <div class="grid grid-cols-2 gap-2">
-            <select id="regClass" class="p-3 border border-gray-200 rounded-xl bg-white outline-none">
-                <option value="">Class</option>
-            </select>
+            <select id="regClass" onchange="calculateRegFee()" class="p-3 border border-gray-200 rounded-xl bg-white outline-none">
+    <option value="">Class</option>
+</select>
+
             <select id="regDiv" class="p-3 border border-gray-200 rounded-xl bg-white outline-none">
                 <option value="">Div</option>
                 <option>A</option><option>B</option><option>C</option><option>D</option><option>E</option><option>F</option><option>G</option>
@@ -327,8 +328,8 @@ input, select, textarea, [contenteditable="true"] {
             </select>
         </div>
         <div>
-            <label class="block text-xs font-bold text-gray-400 uppercase mb-1">Exit Stop (Strict)</label>             
-            <select id="regExit" required onchange="filterClasses(this.value, 'regExit'); calculateRegFee();" class="w-full p-3 border border-gray-200 rounded-xl bg-white focus:ring-2 focus:ring-blue-500 outline-none">
+            <label class="block text-xs font-bold text-gray-400 uppercase mb-1">Exit Stop (Strict)</label>
+            <select id="regExit" class="w-full p-3 border border-gray-200 rounded-xl bg-white focus:ring-2 focus:ring-blue-500 outline-none">
                 <option value="">Select Exit</option>
             </select>
         </div>
@@ -376,7 +377,7 @@ input, select, textarea, [contenteditable="true"] {
     </button>
 </form>
 <script>
-    const API_URL = "https://script.google.com/macros/s/AKfycbx8dlMaL5EiGpaO65tMSEqvCufQtV9h142QHaqb5vAH8aTB4ApCZCnfE4lNTlsrZmFS/exec";
+    const API_URL = "https://script.google.com/macros/s/AKfycbyalOUFjokziuAsZNgeLbf60rbBLqZ-d0R5eZEBuxjHNfRSzZcHxByiIEofKydBfTwCsw/exec";
 
     // Disable context menu (Right-Click)
 document.addEventListener('contextmenu', event => event.preventDefault());
@@ -4930,14 +4931,15 @@ async function initializeRegistrationMode(type) {
     
     showLoad();
     try {
-        const res = await fetch(API_URL, {
-            method: 'POST',
-            body: JSON.stringify({ action: "getRegStatus" })
-        }).then(r => r.json());
+        // Fetch registration status and active fee structures simultaneously in parallel
+        const [statusRes, feeRes] = await Promise.all([
+            fetch(API_URL, { method: 'POST', body: JSON.stringify({ action: "getRegStatus" }) }).then(r => r.json()),
+            fetch(API_URL, { method: 'POST', body: JSON.stringify({ action: "getFeeStructure" }) }).then(r => r.json())
+        ]);
         
         hideLoad();
         
-        if (res.success && !res.data[type]) {
+        if (statusRes.success && !statusRes.data[type]) {
             const container = document.getElementById('selfRegisterSection');
             container.classList.remove('hidden');
             container.innerHTML = `
@@ -4950,6 +4952,11 @@ async function initializeRegistrationMode(type) {
                 </div>
             `;
             return;
+        }
+        
+        // Cache the live fee map globally in the browser window context
+        if (feeRes.success) {
+            window.feeStructure = feeRes.data;
         }
     } catch (e) {
         hideLoad();
@@ -4968,19 +4975,15 @@ async function initializeRegistrationMode(type) {
 
     if (type === 'staff') {
         regFormTitle.innerText = "Staff Registration Portal";
-        
-        // Hide Student Specific Fields
         parentGroup.classList.add('hidden');
         classDivGroup.classList.add('hidden'); 
         busGroup.classList.add('hidden');
         stopsGroup.classList.add('hidden');
         statusGroup.classList.add('hidden');
         
-        // Show Staff Specific Fields
         tenureGroup.classList.remove('hidden');
         customAmountGroup.classList.remove('hidden');
         
-        // Set Required Validations
         document.getElementById('regClass').required = false;
         document.getElementById('regBus').required = false;
         document.getElementById('regEntry').required = false;
@@ -4993,19 +4996,15 @@ async function initializeRegistrationMode(type) {
         document.getElementById('regSchool').value = "TDEMNS-td1"; 
     } else {
         regFormTitle.innerText = "Student Registration Portal";
-        
-        // Show Student Specific Fields
         parentGroup.classList.remove('hidden');
         classDivGroup.classList.remove('hidden');
         busGroup.classList.remove('hidden');
         stopsGroup.classList.remove('hidden');
         statusGroup.classList.remove('hidden');
         
-        // Hide Staff Specific Fields
         tenureGroup.classList.add('hidden');
         customAmountGroup.classList.add('hidden');
         
-        // Set Required Validations
         document.getElementById('regClass').required = true;
         document.getElementById('regBus').required = true;
         document.getElementById('regEntry').required = true;
@@ -5015,8 +5014,9 @@ async function initializeRegistrationMode(type) {
         document.getElementById('regTenure').required = false;
         document.getElementById('regCustomAmount').required = false;
     }
-    // Place at the bottom of initializeRegistrationMode(type):
-calculateRegFee();
+
+    // Refresh display
+    calculateRegFee();
 }
 
 // Strictly populates select elements with values matching the predefined array
@@ -5978,9 +5978,10 @@ function printStaffLandscapeRoster() {
 }
 
 
-// Calculates and updates the registration portal fee display card instantly
+// Calculates and updates the registration portal fee display card instantly using the live sheet data
 function calculateRegFee() {
     const school = document.getElementById('regSchool').value;
+    const cls = document.getElementById('regClass').value;
     const status = document.getElementById('regStatus').value;
     const regType = new URLSearchParams(window.location.search).get('register');
 
@@ -5990,22 +5991,30 @@ function calculateRegFee() {
         return;
     }
 
-    // Otherwise, reveal the calculation card
     document.getElementById('regFeeDisplayGroup').classList.remove('hidden');
 
-    // Standard school fee mappings (identical to the backend schema)
-    const baseSchoolFees = {
-        "TDEMNS-td1": 1100,
-        "GTDLPS-34318": 1200,
-        "TDTTI-34347": 1300,
-        "TDHS-34028": 1400
-    };
+    let baseFee = 0;
+    const key = school + "|" + cls;
+    
+    // Check if we loaded the live fee mapping from the sheet, otherwise use fallback defaults
+    if (window.feeStructure && window.feeStructure[key]) {
+        baseFee = window.feeStructure[key];
+    } else {
+        // Fallback safety estimates if this specific class has no sheet entries yet
+        const baseSchoolFees = {
+            "TDEMNS-td1": 0,
+            "GTDLPS-34318": 0,
+            "TDTTI-34347": 0,
+            "TDHS-34028": 0
+        };
+        baseFee = baseSchoolFees[school] || 0;
+    }
 
-    let calculatedFee = baseSchoolFees[school] || 1200;
-
-    // Apply the 50% discount logic instantly on the screen
+    // Apply the 50% discount logic instantly
     if (status === "Morning Only" || status === "Evening Only") {
-        calculatedFee = Math.round(calculatedFee * 0.5);
+        calculatedFee = Math.round(baseFee * 0.5);
+    } else {
+        calculatedFee = baseFee;
     }
 
     // Display the calculated amount
