@@ -380,7 +380,7 @@ input, select, textarea, [contenteditable="true"] {
     </button>
 </form>
 <script>
-    const API_URL = "https://script.google.com/macros/s/AKfycbz-Zx5KXstvxwhIgT3wDyUZ6N8VDuvE1A3vJk8oJZp7kKTLfyYhNFBohQWzWaQOgAXNCQ/exec";
+    const API_URL = "https://script.google.com/macros/s/AKfycbykvRTF_zZr5qM04jz1bjK7_Jw7kBxQQAgMgVWEJdXgjZEiGvsq8hZTWa4ZqLEy2lJdpA/exec";
 
     // Disable context menu (Right-Click)
 document.addEventListener('contextmenu', event => event.preventDefault());
@@ -5036,8 +5036,8 @@ async function initializeRegistrationMode(type) {
         document.getElementById('regCustomAmount').required = false;
     }
 
-    // Refresh display
-    calculateRegFee();
+    // Refresh display based on selected Exit stop rate
+    fetchStopFee();
 }
 
 // Strictly populates select elements with values matching the predefined array
