@@ -6045,7 +6045,7 @@ async function fetchStopFee() {
         }
     } catch (e) {
         // Fallback calculations if network is slow/offline
-        let fallbackFee = 1200;
+        let fallbackFee = 0;
         const defaultFees = { "TDEMNS-td1": 0, "GTDLPS-34318": 0, "TDTTI-34347": 0, "TDHS-34028": 0 };
         if (defaultFees[school]) fallbackFee = defaultFees[school];
         
@@ -6064,19 +6064,12 @@ function localRecalculateRegFee() {
     const txtFee = document.getElementById('txtRegFee');
     if (!txtFee || !txtFee.dataset.baseFee) return;
 
-    let baseFee = parseFloat(txtFee.dataset.baseFee) || 1200;
+    let baseFee = parseFloat(txtFee.dataset.baseFee) || 0;
     if (status === "Morning Only" || status === "Evening Only") {
         baseFee = Math.round(baseFee * 0.5);
     }
     txtFee.innerText = '₹' + baseFee;
 }
-
-
-
-
-
-
-
 </script>
 </body>
 </html>
