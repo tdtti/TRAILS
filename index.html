@@ -21,75 +21,128 @@
 
   <main class="max-w-5xl mx-auto p-4 md:p-6 space-y-6">
 
-    <!-- Configuration block -->
-    <div class="grid grid-cols-1 md:grid-cols-3 gap-6">
-      
-      <!-- Box 1: Student Count -->
-      <div class="bg-white p-5 rounded-lg shadow-sm border border-gray-200">
-        <h2 class="text-lg font-bold text-gray-700 mb-3">1. Student Details</h2>
+    <!-- Step 1: Student Details -->
+    <div class="bg-white p-5 rounded-lg shadow-sm border border-gray-200">
+      <h2 class="text-lg font-bold text-gray-700 mb-2">1. Student Details</h2>
+      <div class="max-w-xs">
         <label class="block text-sm font-medium text-gray-600 mb-1">Number of Students (Pax)</label>
-        <input id="paxCount" type="number" value="100" min="1" class="w-full px-3 py-2 border rounded-md focus:ring-2 focus:ring-blue-500 focus:outline-none" oninput="onPaxOrMenuChange()" />
-      </div>
-
-      <!-- Box 2: Menu Selection -->
-      <div class="bg-white p-5 rounded-lg shadow-sm border border-gray-200 md:col-span-2">
-        <div class="flex justify-between items-center mb-3">
-          <h2 class="text-lg font-bold text-gray-700">2. Select Today's Menu</h2>
-          <button onclick="fetchMenuData()" class="text-xs text-blue-600 hover:underline flex items-center gap-1">
-            <span>🔄 Reload Menu from Sheet</span>
-          </button>
-        </div>
-        <div id="loadingIndicator" class="text-sm text-gray-500 hidden">Loading menu data...</div>
-        <div id="menuContainer" class="grid grid-cols-2 sm:grid-cols-4 gap-3">
-          <!-- Populated dynamically -->
-        </div>
+        <input id="paxCount" type="number" value="200" min="1" class="w-full px-3 py-2 border rounded-md focus:ring-2 focus:ring-blue-500 focus:outline-none font-semibold text-lg" oninput="onPaxOrMenuChange()" />
       </div>
     </div>
 
-    <!-- Box 3: Provisional List & Custom Editing -->
+    <!-- Step 2: Classified Menu Selection -->
+    <div class="bg-white p-5 rounded-lg shadow-sm border border-gray-200">
+      <div class="flex justify-between items-center mb-4">
+        <h2 class="text-lg font-bold text-gray-700">2. Select Today's Menu</h2>
+        <button onclick="fetchMenuData()" class="text-xs text-blue-600 hover:underline flex items-center gap-1">
+          <span>🔄 Reload Menu from Sheet</span>
+        </button>
+      </div>
+      <div id="loadingIndicator" class="text-sm text-gray-500 hidden mb-2">Loading data from Google Sheets...</div>
+      
+      <!-- Classification Grid -->
+      <div id="categoriesContainer" class="grid grid-cols-1 md:grid-cols-5 gap-4">
+        
+        <!-- Rice Items -->
+        <div class="bg-gray-50 p-4 rounded-lg border border-gray-200 flex flex-col">
+          <h3 class="text-xs font-bold tracking-wider text-blue-600 uppercase border-b pb-1 mb-2">RICE ITEMS</h3>
+          <div id="container-RICE-ITEMS" class="space-y-1.5 flex-1">
+            <p class="text-xs text-gray-400 italic">No items found</p>
+          </div>
+        </div>
+
+        <!-- Curry -->
+        <div class="bg-gray-50 p-4 rounded-lg border border-gray-200 flex flex-col">
+          <h3 class="text-xs font-bold tracking-wider text-blue-600 uppercase border-b pb-1 mb-2">CURRY</h3>
+          <div id="container-CURRY" class="space-y-1.5 flex-1">
+            <p class="text-xs text-gray-400 italic">No items found</p>
+          </div>
+        </div>
+
+        <!-- Dry Curry -->
+        <div class="bg-gray-50 p-4 rounded-lg border border-gray-200 flex flex-col">
+          <h3 class="text-xs font-bold tracking-wider text-blue-600 uppercase border-b pb-1 mb-2">DRY CURRY</h3>
+          <div id="container-DRY-CURRY" class="space-y-1.5 flex-1">
+            <p class="text-xs text-gray-400 italic">No items found</p>
+          </div>
+        </div>
+
+        <!-- Salad -->
+        <div class="bg-gray-50 p-4 rounded-lg border border-gray-200 flex flex-col">
+          <h3 class="text-xs font-bold tracking-wider text-blue-600 uppercase border-b pb-1 mb-2">SALAD</h3>
+          <div id="container-SALAD" class="space-y-1.5 flex-1">
+            <p class="text-xs text-gray-400 italic">No items found</p>
+          </div>
+        </div>
+
+        <!-- Pickle -->
+        <div class="bg-gray-50 p-4 rounded-lg border border-gray-200 flex flex-col">
+          <h3 class="text-xs font-bold tracking-wider text-blue-600 uppercase border-b pb-1 mb-2">PICKLE</h3>
+          <div id="container-PICKLE" class="space-y-1.5 flex-1">
+            <p class="text-xs text-gray-400 italic">No items found</p>
+          </div>
+        </div>
+
+      </div>
+    </div>
+
+    <!-- Step 3: Detailed Provisional List -->
+    <div class="bg-white p-5 rounded-lg shadow-sm border border-gray-200">
+      <h2 class="text-lg font-bold text-gray-700 mb-1">3. Detailed Provisional Requirement List</h2>
+      <p class="text-xs text-gray-500 mb-3">Itemized breakdown calculated directly from each selected menu recipe.</p>
+      
+      <div id="detailedContainer" class="space-y-4">
+        <p class="text-sm text-gray-400 italic">Select menu options above to view details.</p>
+      </div>
+    </div>
+
+    <!-- Step 4: Consolidated Requirement List -->
+    <div class="bg-white p-5 rounded-lg shadow-sm border border-gray-200 bg-blue-50/50">
+      <h2 class="text-lg font-bold text-blue-950 mb-1">4. CONSOLIDATED Provisional Requirement List</h2>
+      <p class="text-xs text-blue-700 mb-4">Combines identical items from different selected menus into unified totals (e.g. Onion required across multiple categories).</p>
+      
+      <div id="consolidationSummary" class="grid grid-cols-1 sm:grid-cols-2 md:grid-cols-3 gap-3">
+        <!-- Renders aggregated summary -->
+      </div>
+    </div>
+
+    <!-- Step 5: Final Retailer Checklist and Send -->
     <div class="bg-white p-5 rounded-lg shadow-sm border border-gray-200">
       <div class="flex flex-col sm:flex-row justify-between items-start sm:items-center gap-2 mb-4">
         <div>
-          <h2 class="text-lg font-bold text-gray-700">3. Provisional Requirement List</h2>
-          <p class="text-xs text-gray-500">The quantities below are auto-calculated. You can edit or add items before sending.</p>
+          <h2 class="text-lg font-bold text-gray-700">5. Send Order to Retailer</h2>
+          <p class="text-xs text-gray-500">Edit quantities, change unit names, or append custom items before sending.</p>
         </div>
         <button onclick="addCustomRow()" class="bg-emerald-600 hover:bg-emerald-700 text-white text-xs font-semibold px-3 py-1.5 rounded transition">
           + Add Custom Item
         </button>
       </div>
 
-      <!-- Editable Table -->
-      <div class="overflow-x-auto border rounded-lg">
+      <!-- Editable Order Table -->
+      <div class="overflow-x-auto border rounded-lg mb-6">
         <table class="min-w-full divide-y divide-gray-200">
           <thead class="bg-gray-50">
             <tr>
-              <th class="px-4 py-3 text-left text-xs font-semibold text-gray-600 uppercase">Provision Item Name</th>
-              <th class="px-4 py-3 text-left text-xs font-semibold text-gray-600 uppercase w-32">Qty Required</th>
+              <th class="px-4 py-3 text-left text-xs font-semibold text-gray-600 uppercase">Provision Item</th>
+              <th class="px-4 py-3 text-left text-xs font-semibold text-gray-600 uppercase w-32">Qty Needed</th>
               <th class="px-4 py-3 text-left text-xs font-semibold text-gray-600 uppercase w-28">Unit</th>
               <th class="px-4 py-3 text-center text-xs font-semibold text-gray-600 uppercase w-20">Action</th>
             </tr>
           </thead>
-          <tbody id="provisionsTableBody" class="bg-white divide-y divide-gray-100">
-            <!-- Dynamically calculated list will appear here -->
+          <tbody id="editableTableBody" class="bg-white divide-y divide-gray-100">
+            <!-- Populated from consolidated list -->
           </tbody>
         </table>
       </div>
-      <div id="emptyState" class="text-center py-8 text-gray-400 text-sm">
-        Select menu items above to populate the provisioning list automatically.
-      </div>
-    </div>
 
-    <!-- Box 4: WhatsApp Export Settings -->
-    <div class="bg-white p-5 rounded-lg shadow-sm border border-gray-200">
-      <h2 class="text-lg font-bold text-gray-700 mb-3">4. Send Order to Retailer</h2>
-      <div class="grid grid-cols-1 md:grid-cols-3 gap-4 items-end">
+      <!-- Retailer Details & WhatsApp Trigger -->
+      <div class="grid grid-cols-1 md:grid-cols-3 gap-4 items-end pt-4 border-t">
         <div>
-          <label class="block text-sm font-medium text-gray-600 mb-1">Retailer WhatsApp Number</label>
-          <input id="retailerPhone" type="text" class="w-full px-3 py-2 border rounded-md focus:ring-2 focus:ring-blue-500 focus:outline-none bg-gray-50 font-semibold" />
-          <p class="text-[10px] text-gray-400 mt-1">Default number set inside the script configuration.</p>
+          <label class="block text-sm font-medium text-gray-600 mb-1">Retailer Phone Number</label>
+          <input id="retailerPhone" type="text" class="w-full px-3 py-2 border rounded-md focus:ring-2 focus:ring-blue-500 focus:outline-none font-semibold text-lg" />
         </div>
         <div class="md:col-span-2">
-          <button onclick="sendWhatsApp()" class="w-full bg-green-600 hover:bg-green-700 text-white font-bold py-2.5 px-4 rounded-md transition flex items-center justify-center gap-2">
+          <button onclick="sendWhatsApp()" class="w-full bg-green-600 hover:bg-green-700 text-white font-bold py-3 px-4 rounded-md transition flex items-center justify-center gap-2">
             <svg class="w-5 h-5 fill-current" viewBox="0 0 24 24">
               <path d="M.057 24l1.687-6.163c-1.041-1.804-1.588-3.849-1.587-5.946C.06 5.348 5.397.01 12.008.01c3.202.001 6.212 1.246 8.477 3.514 2.266 2.268 3.507 5.28 3.505 8.484-.004 6.657-5.34 11.997-11.953 11.997-2.005-.001-3.973-.502-5.724-1.455L0 24zm6.59-4.846c1.6.95 3.188 1.449 4.825 1.451 5.436 0 9.86-4.42 9.864-9.864.002-2.637-1.03-5.115-2.903-6.989-1.873-1.873-4.354-2.904-6.993-2.905-5.438 0-9.87 4.421-9.873 9.863-.001 1.716.463 3.391 1.344 4.878l-.988 3.606 3.722-.975zm11.367-7.774c-.3-.15-1.771-.875-2.046-.975-.276-.1-.477-.15-.677.15-.199.3-.772.975-.946 1.174-.174.199-.349.224-.648.075-.3-.15-1.263-.465-2.403-1.485-.888-.792-1.488-1.77-1.663-2.07-.174-.3-.019-.462.13-.61.135-.133.3-.349.449-.524.149-.174.199-.3.299-.499.1-.199.05-.374-.025-.524-.075-.15-.677-1.633-.927-2.232-.243-.584-.49-.505-.677-.514-.174-.008-.374-.01-.573-.01s-.524.075-.798.374c-.274.299-1.047 1.022-1.047 2.492 0 1.47 1.072 2.89 1.221 3.09.149.199 2.11 3.221 5.11 4.516.714.308 1.272.492 1.707.63.717.228 1.37.196 1.885.119.574-.085 1.771-.724 2.021-1.42.249-.699.249-1.297.174-1.42-.075-.123-.274-.199-.574-.349z"/>
             </svg>
@@ -102,37 +155,28 @@
   </main>
 
   <footer class="text-center py-8 text-gray-400 text-xs border-t mt-12 bg-white">
-    Noonmeal Menu Portal. Built with Google Apps Script & GitHub.
+    Noonmeal Menu Web Portal System
   </footer>
 
   <script>
     // ==========================================
     // 🛠️ CONFIGURATION SECTION
     // ==========================================
-    // Paste your Google Web App URL between the quotation marks below:
-    const GOOGLE_SCRIPT_WEB_APP_URL = "https://script.google.com/macros/s/AKfycby5E46y2rW31FkvvyNXy5-eB1eCTaWdZ1C8buIGagPfWnAC3qkpUjTSHlegkkaUk4te/exec";
+    // Paste your Google Sheet Apps Script Web App URL between the quotes below:
+    const GOOGLE_SCRIPT_WEB_APP_URL = "https://script.google.com/macros/s/AKfycbwaod2cr6t7Y9JPxysEwGmPJ8zGzJ0j4NHzX5bXKZuHs79WI8vnUNtv8uo-QMG0Wwm9/exec";
     
-    // Default Retailer WhatsApp phone number (Default is set to 9497731772)
+    // Default Retailer Contact Number
     const DEFAULT_WHATSAPP_NUMBER = "9497731772";
+    
+    // Explicit list of categories for sorting
+    const CATEGORIES_LIST = ["RICE ITEMS", "CURRY", "DRY CURRY", "SALAD", "PICKLE"];
     // ==========================================
 
-    // Fallback static recipe metrics (used if GOOGLE_SCRIPT_WEB_APP_URL is empty or fails)
-    let baseRecipes = [
-      { "Menu Item": "Rice", "Provision Item": "Raw Rice", "Base Unit": "kg", "Base Qty per 100 Pax": 10 },
-      { "Menu Item": "Sambar", "Provision Item": "Toor Dal", "Base Unit": "kg", "Base Qty per 100 Pax": 2 },
-      { "Menu Item": "Sambar", "Provision Item": "Tamarind", "Base Unit": "kg", "Base Qty per 100 Pax": 0.5 },
-      { "Menu Item": "Sambar", "Provision Item": "Mixed Vegetables", "Base Unit": "kg", "Base Qty per 100 Pax": 5 },
-      { "Menu Item": "Curry", "Provision Item": "Potato", "Base Unit": "kg", "Base Qty per 100 Pax": 6 },
-      { "Menu Item": "Curry", "Provision Item": "Cooking Oil", "Base Unit": "litres", "Base Qty per 100 Pax": 0.5 },
-      { "Menu Item": "Chutney", "Provision Item": "Coconut", "Base Unit": "nos", "Base Qty per 100 Pax": 10 },
-      { "Menu Item": "Chutney", "Provision Item": "Bengal Gram", "Base Unit": "kg", "Base Qty per 100 Pax": 1 }
-    ];
+    let baseRecipes = [];
 
     document.addEventListener("DOMContentLoaded", () => {
-      // Set the default phone number in the input
       document.getElementById("retailerPhone").value = DEFAULT_WHATSAPP_NUMBER;
       
-      // Load menu data from script URL if configured, otherwise fallback to default list
       if (GOOGLE_SCRIPT_WEB_APP_URL && GOOGLE_SCRIPT_WEB_APP_URL !== "YOUR_GOOGLE_SCRIPT_WEB_APP_URL_HERE") {
         fetchMenuData();
       } else {
@@ -140,7 +184,6 @@
       }
     });
 
-    // Retrieve database schema from Google Sheet Web App
     async function fetchMenuData() {
       if (!GOOGLE_SCRIPT_WEB_APP_URL || GOOGLE_SCRIPT_WEB_APP_URL === "YOUR_GOOGLE_SCRIPT_WEB_APP_URL_HERE") {
         renderMenuCheckboxes();
@@ -149,152 +192,233 @@
 
       const loader = document.getElementById("loadingIndicator");
       loader.classList.remove("hidden");
-
       try {
         const response = await fetch(GOOGLE_SCRIPT_WEB_APP_URL);
         const data = await response.json();
-        if (Array.isArray(data) && data.length > 0) {
+        if (Array.isArray(data)) {
           baseRecipes = data;
         }
       } catch (error) {
-        console.error("Error connecting to Google Sheets Web App API:", error);
+        console.error("Connection to Google Sheet failed:", error);
       } finally {
         loader.classList.add("hidden");
         renderMenuCheckboxes();
       }
     }
 
-    // Generate dynamic checkboxes
+    // Distributes menu checkboxes dynamically under the five pre-defined columns
     function renderMenuCheckboxes() {
-      const container = document.getElementById("menuContainer");
-      container.innerHTML = "";
-      
-      const menuItemsSet = new Set();
-      baseRecipes.forEach(recipe => {
-        if (recipe["Menu Item"]) {
-          menuItemsSet.add(recipe["Menu Item"]);
+      // Clear containers and reset to placeholder state
+      CATEGORIES_LIST.forEach(cat => {
+        const id = "container-" + cat.replace(/\s+/g, "-");
+        const el = document.getElementById(id);
+        if (el) {
+          el.innerHTML = `<p class="text-xs text-gray-400 italic">No items found</p>`;
         }
       });
 
-      menuItemsSet.forEach(menuItem => {
-        const label = document.createElement("label");
-        label.className = "flex items-center gap-2 p-3 bg-gray-50 rounded-md border border-gray-200 hover:bg-blue-50 cursor-pointer transition select-none";
-        label.innerHTML = `
-          <input type="checkbox" value="${menuItem}" class="menu-checkbox h-4 w-4 text-blue-600 border-gray-300 rounded focus:ring-blue-500" onchange="onPaxOrMenuChange()" />
-          <span class="text-sm font-medium text-gray-700">${menuItem}</span>
-        `;
-        container.appendChild(label);
+      const menuItemsByCategory = {};
+      CATEGORIES_LIST.forEach(cat => {
+        menuItemsByCategory[cat] = new Set();
       });
 
-      calculateProvisions();
+      baseRecipes.forEach(recipe => {
+        const catStr = (recipe["Category"] || "").trim().toUpperCase();
+        const menuItem = recipe["Menu Item"];
+        
+        if (menuItem && CATEGORIES_LIST.includes(catStr)) {
+          menuItemsByCategory[catStr].add(menuItem);
+        }
+      });
+
+      // Populate elements inside corresponding category container
+      CATEGORIES_LIST.forEach(cat => {
+        const id = "container-" + cat.replace(/\s+/g, "-");
+        const el = document.getElementById(id);
+        const itemSet = menuItemsByCategory[cat];
+
+        if (el && itemSet && itemSet.size > 0) {
+          el.innerHTML = ""; // Clear placeholder
+          itemSet.forEach(menuItem => {
+            const div = document.createElement("div");
+            div.className = "flex items-start gap-2 py-1";
+            div.innerHTML = `
+              <input type="checkbox" value="${menuItem}" class="menu-checkbox h-4 w-4 mt-0.5 text-blue-600 border-gray-300 rounded focus:ring-blue-500 cursor-pointer" onchange="onPaxOrMenuChange()" />
+              <span class="text-xs font-semibold text-gray-700 leading-tight">${menuItem}</span>
+            `;
+            el.appendChild(div);
+          });
+        }
+      });
+
+      onPaxOrMenuChange();
     }
 
     function onPaxOrMenuChange() {
-      calculateProvisions();
-    }
-
-    // Aggregate ingredient sums dynamically based on pax
-    function calculateProvisions() {
       const pax = parseFloat(document.getElementById("paxCount").value) || 0;
       const checkedCheckboxes = document.querySelectorAll(".menu-checkbox:checked");
       const activeMenus = Array.from(checkedCheckboxes).map(cb => cb.value);
 
-      const tableBody = document.getElementById("provisionsTableBody");
-      const emptyState = document.getElementById("emptyState");
+      renderDetailedList(pax, activeMenus);
+      calculateAndRenderConsolidation(pax, activeMenus);
+    }
 
+    // Step 3: Detailed list breakdown
+    function renderDetailedList(pax, activeMenus) {
+      const container = document.getElementById("detailedContainer");
       if (activeMenus.length === 0 || pax <= 0) {
-        tableBody.innerHTML = "";
-        emptyState.classList.remove("hidden");
+        container.innerHTML = `<p class="text-sm text-gray-400 italic">Select menu options above to view details.</p>`;
         return;
       }
 
-      emptyState.classList.add("hidden");
+      container.innerHTML = "";
+      const menuBreakdown = {};
+      activeMenus.forEach(m => menuBreakdown[m] = []);
 
-      const aggregates = {};
+      baseRecipes.forEach(row => {
+        const m = row["Menu Item"];
+        if (activeMenus.includes(m)) {
+          const qty = (parseFloat(row["Base Qty per 200 Pax"]) || 0) / 200 * pax;
+          menuBreakdown[m].push({
+            item: row["Provision Item"],
+            qty: qty.toFixed(2),
+            unit: row["Base Unit"] || "units"
+          });
+        }
+      });
+
+      for (const [menuName, items] of Object.entries(menuBreakdown)) {
+        const section = document.createElement("div");
+        section.className = "bg-gray-100/60 p-3 rounded border border-gray-200/80";
+        
+        let listHTML = `<ul class="grid grid-cols-1 sm:grid-cols-2 md:grid-cols-3 gap-2 mt-2">`;
+        items.forEach(it => {
+          listHTML += `
+            <li class="text-xs text-gray-600 flex justify-between border-b pb-1">
+              <span class="font-medium">${it.item}</span>
+              <span class="bg-white px-2 py-0.5 rounded shadow-sm text-blue-700 font-bold">${it.qty} ${it.unit}</span>
+            </li>`;
+        });
+        listHTML += `</ul>`;
+
+        section.innerHTML = `
+          <h4 class="text-xs font-bold text-gray-700 uppercase flex justify-between">
+            <span>🍽️ ${menuName}</span>
+          </h4>
+          ${listHTML}
+        `;
+        container.appendChild(section);
+      }
+    }
+
+    // Step 4 & Step 5: Consolidated & Editable outputs
+    function calculateAndRenderConsolidation(pax, activeMenus) {
+      const summaryContainer = document.getElementById("consolidationSummary");
+      const tableBody = document.getElementById("editableTableBody");
+
+      if (activeMenus.length === 0 || pax <= 0) {
+        summaryContainer.innerHTML = `<p class="text-sm text-blue-400 italic col-span-full">A consolidated items list will be shown here once selection is active.</p>`;
+        tableBody.innerHTML = "";
+        return;
+      }
+
+      const consolidated = {};
+      
       baseRecipes.forEach(row => {
         const menu = row["Menu Item"];
         if (activeMenus.includes(menu)) {
           const item = row["Provision Item"];
           const unit = row["Base Unit"] || "units";
-          const baseQty = parseFloat(row["Base Qty per 100 Pax"]) || 0;
-          
-          const calculatedQty = (baseQty / 100) * pax;
+          const baseQty = parseFloat(row["Base Qty per 200 Pax"]) || 0;
+          const calculatedQty = (baseQty / 200) * pax;
           const key = `${item}_${unit}`.toLowerCase();
 
-          if (aggregates[key]) {
-            aggregates[key].qty += calculatedQty;
+          if (consolidated[key]) {
+            consolidated[key].qty += calculatedQty;
+            consolidated[key].breakdown.push({ menu: menu, qty: calculatedQty });
           } else {
-            aggregates[key] = {
+            consolidated[key] = {
               item: item,
               unit: unit,
-              qty: calculatedQty
+              qty: calculatedQty,
+              breakdown: [{ menu: menu, qty: calculatedQty }]
             };
           }
         }
       });
 
+      // Display Consolidated List Summary (Step 4)
+      summaryContainer.innerHTML = "";
+      Object.values(consolidated).forEach(obj => {
+        const itemBlock = document.createElement("div");
+        itemBlock.className = "bg-white p-3 rounded border border-blue-100 shadow-sm";
+        
+        let breakdownText = obj.breakdown.map(b => `${b.menu}: ${b.qty.toFixed(2)} ${obj.unit}`).join(" + ");
+        
+        itemBlock.innerHTML = `
+          <div class="flex justify-between items-start mb-1">
+            <span class="font-bold text-gray-800 text-sm">${obj.item}</span>
+            <span class="bg-blue-600 text-white font-mono text-xs px-2 py-0.5 rounded-full">${obj.qty.toFixed(2)} ${obj.unit}</span>
+          </div>
+          <div class="text-[10px] text-gray-500 italic leading-snug">${breakdownText}</div>
+        `;
+        summaryContainer.appendChild(itemBlock);
+      });
+
+      // Populate Editable List (Step 5)
       tableBody.innerHTML = "";
-      
-      Object.values(aggregates).forEach(prov => {
-        insertRow(prov.item, prov.qty.toFixed(2), prov.unit);
+      Object.values(consolidated).forEach(obj => {
+        insertEditableRow(obj.item, obj.qty.toFixed(2), obj.unit);
       });
     }
 
-    // Insert editable row inside DOM
-    function insertRow(item = "", qty = "0.00", unit = "") {
-      const tableBody = document.getElementById("provisionsTableBody");
+    function insertEditableRow(item = "", qty = "0.00", unit = "") {
+      const tableBody = document.getElementById("editableTableBody");
       const tr = document.createElement("tr");
       tr.className = "hover:bg-gray-50 transition duration-150";
       tr.innerHTML = `
         <td class="px-4 py-3">
-          <input type="text" value="${item}" class="item-name-input w-full bg-transparent border-b border-transparent hover:border-gray-300 focus:border-blue-500 focus:outline-none py-1 font-medium" />
+          <input type="text" value="${item}" class="item-name-input w-full bg-transparent border-b border-transparent hover:border-gray-300 focus:border-blue-500 focus:outline-none py-1 font-semibold text-gray-800" />
         </td>
         <td class="px-4 py-3">
-          <input type="number" step="any" value="${qty}" class="item-qty-input w-full bg-transparent border-b border-transparent hover:border-gray-300 focus:border-blue-500 focus:outline-none py-1" />
+          <input type="number" step="any" value="${qty}" class="item-qty-input w-full bg-transparent border-b border-transparent hover:border-gray-300 focus:border-blue-500 focus:outline-none py-1 font-mono text-blue-700" />
         </td>
         <td class="px-4 py-3">
           <input type="text" value="${unit}" class="item-unit-input w-full bg-transparent border-b border-transparent hover:border-gray-300 focus:border-blue-500 focus:outline-none py-1 text-gray-500" />
         </td>
         <td class="px-4 py-3 text-center">
-          <button onclick="deleteRow(this)" class="text-red-500 hover:text-red-700 text-sm font-semibold hover:underline">Delete</button>
+          <button onclick="deleteEditableRow(this)" class="text-red-500 hover:text-red-700 text-sm font-semibold hover:underline">Delete</button>
         </td>
       `;
       tableBody.appendChild(tr);
     }
 
     function addCustomRow() {
-      document.getElementById("emptyState").classList.add("hidden");
-      insertRow("New Item", "1.00", "kg");
+      insertEditableRow("New Custom Item", "1.00", "kg");
     }
 
-    function deleteRow(buttonElement) {
+    function deleteEditableRow(buttonElement) {
       const row = buttonElement.closest("tr");
       row.remove();
-      
-      const tableBody = document.getElementById("provisionsTableBody");
-      if (tableBody.children.length === 0) {
-        document.getElementById("emptyState").classList.remove("hidden");
-      }
     }
 
-    // Prepare structure and construct WhatsApp redirection Link
+    // Format consolidated items and generate WhatsApp redirection Link
     function sendWhatsApp() {
       const phoneInput = document.getElementById("retailerPhone").value.trim();
-      let cleanPhone = phoneInput.replace(/\D/g, ""); // strip characters except digits
+      let cleanPhone = phoneInput.replace(/\D/g, "");
       
       if (!cleanPhone) {
-        alert("Please enter a valid retailer telephone number.");
+        alert("Please enter a valid retailer phone number.");
         return;
       }
 
-      // Add India's country prefix (91) automatically if a 10-digit number is typed
       if (cleanPhone.length === 10) {
-        cleanPhone = "91" + cleanPhone;
+        cleanPhone = "91" + cleanPhone; // Standard Indian dialing code prefix
       }
 
-      const tableRows = document.querySelectorAll("#provisionsTableBody tr");
+      const tableRows = document.querySelectorAll("#editableTableBody tr");
       if (tableRows.length === 0) {
-        alert("No items are currently present in your requirements list.");
+        alert("The list is empty. Add items or check menu selections first.");
         return;
       }
 
@@ -308,22 +432,22 @@
       let hasItems = false;
       tableRows.forEach(row => {
         const item = row.querySelector(".item-name-input").value.trim();
-        const qty = row.querySelector(".item-qty-input").value.trim();
+        const qty = parseFloat(row.querySelector(".item-qty-input").value) || 0;
         const unit = row.querySelector(".item-unit-input").value.trim();
 
         if (item) {
-          message += `• *${item}*: ${qty} ${unit}\n`;
+          message += `• *${item}*: ${qty.toFixed(2)} ${unit}\n`;
           hasItems = true;
         }
       });
 
       if (!hasItems) {
-        alert("Verify your inputs; no valid items were found.");
+        alert("Verify inputs; no items were generated.");
         return;
       }
 
       message += `-------------------------------------------\n`;
-      message += `Please process this order. Thank you!`;
+      message += `Please supply the above items. Thank you!`;
 
       const encodedMsg = encodeURIComponent(message);
       const url = `https://wa.me/${cleanPhone}?text=${encodedMsg}`;
