@@ -380,7 +380,7 @@ input, select, textarea, [contenteditable="true"] {
     </button>
 </form>
 <script>
-    const API_URL = "https://script.google.com/macros/s/AKfycbwMuy87o-yRFzqS9ltuzJo2ANWTKn5YQXTzQtKRaLS4ozCQPAksbIem2QPy7wJMdOl9-A/exec";
+    const API_URL = "https://script.google.com/macros/s/AKfycbwiBeVm7U7F1Ph-_6TpXLu5jbggml4H9MOuLQXBiMBQny-gWgGJHAkhGzLAiMNgWS6Gmg/exec";
 
     // Disable context menu (Right-Click)
 document.addEventListener('contextmenu', event => event.preventDefault());
@@ -847,6 +847,7 @@ function cleanupLogoutUI() {
     }
 
     // MAP OF ICONS AND NAMES
+    // MAP OF ICONS AND NAMES
     const tabConfig = {
         1:  { name: "Students", icon: "🎓" },
         2:  { name: "Attendance", icon: "✅" },
@@ -861,7 +862,7 @@ function cleanupLogoutUI() {
         10: { name: "Live Map", icon: "📍" },
         13: { name: "Stops & Fees", icon: "🎟️" },
         12: { name: "Settings", icon: "⚙️" },
-        14: { name: "Cash Book", icon: "📘" } // Added Cash Book
+        14: { name: "Cash Book", icon: "📓" } // Added
     };
     
     curUser.access.forEach(id => {
@@ -909,7 +910,7 @@ function cleanupLogoutUI() {
         if(id === 11) renderTab11(c);
         if(id === 12) renderTab12(c);
         if(id === 13) renderTab13(c);
-        if(id === 14) renderTab14(c); // Added Cash Book routing
+        if(id === 14) renderTab14(c); // Added
     }
 
     // Handles user filtering correctly by resolving case-sensitive parameters safely
@@ -2529,7 +2530,7 @@ Contact Your Class Teacher !!!
     function searchT3() { const q=document.getElementById('dSearch').value.toLowerCase(); Array.from(document.getElementById('t3Body').rows).forEach(r=> r.style.display = r.innerText.toLowerCase().includes(q)?'':'none'); }
 
     // --- Tab 4: Fee ---
-   function renderTab4(c) {
+    function renderTab4(c) {
     currentFeeDB = getFilteredDB();
     currentFeeDB.sort((a, b) => String(a.StudentName).toLowerCase().localeCompare(String(b.StudentName).toLowerCase()));
     
@@ -2539,13 +2540,13 @@ Contact Your Class Teacher !!!
     const months = ["Jun","Jul","Aug","Sep","Oct","Nov","Dec","Jan","Feb","Mar"];
 
     c.innerHTML = `
-        <div id="feeMgmtHeader">
+        <div id="feeMgmtHeader" class="relative">
             <h2 class="text-2xl font-bold mb-4">Fee Management</h2>
-            <div class="flex gap-2 mb-6 relative w-1/2">
-                <input type="text" id="fSearch" autocomplete="off" placeholder="Phone or Name (To Pay Fee)" class="p-2 border-2 border-gray-300 rounded w-full focus:outline-none focus:border-blue-500">
-                <button onclick="findFeeStu()" class="bg-blue-600 text-white px-5 rounded font-bold shadow hover:bg-blue-700 transition">Find</button>
-                <!-- Popup Suggestions Box -->
-                <div id="fSearchSuggestions" class="absolute left-0 top-11 bg-white border border-gray-200 rounded-xl shadow-lg w-full max-h-60 overflow-y-auto hidden z-50"></div>
+            <div class="flex gap-2 mb-6 relative">
+                <div class="relative w-full md:w-1/2">
+                    <input type="text" id="fSearch" oninput="instantFeeSearch(this.value)" placeholder="Type Phone or Name to search instantly..." class="p-2 border-2 border-gray-300 rounded w-full focus:outline-none focus:border-blue-500">
+                    <div id="feeSuggestions" class="absolute z-50 w-full left-0 mt-1 bg-white border border-gray-300 rounded-lg shadow-lg hidden max-h-60 overflow-y-auto"></div>
+                </div>
             </div>
         </div>
         
@@ -2554,13 +2555,10 @@ Contact Your Class Teacher !!!
                 <h3 class="font-bold text-lg text-gray-800">Processing Payment</h3>
                 <button onclick="document.getElementById('feeArea').classList.add('hidden')" class="text-sm font-bold text-red-500 hover:bg-red-50 px-3 py-1 rounded">Close</button>
             </div>
-            
             <div class="bg-blue-50 p-4 rounded mb-4 shadow-sm border border-blue-200" id="feeDetails"></div>
             
             <div id="feeAddSection" class="flex gap-2 mb-4 bg-white p-4 rounded border shadow-sm items-center">
-                <select id="feeMon" class="p-2.5 border rounded outline-none focus:border-blue-500 font-bold text-sm">
-                    <option>Jun</option><option>Jul</option><option>Aug</option><option>Sep</option><option>Oct</option><option>Nov</option><option>Dec</option><option>Jan</option><option>Feb</option><option>Mar</option>
-                </select>
+                <select id="feeMon" class="p-2.5 border rounded outline-none focus:border-blue-500 font-bold text-sm"></select>
                 <input type="number" id="feeAmt" placeholder="Amount (₹)" class="p-2.5 border rounded outline-none focus:border-blue-500 font-bold text-sm flex-grow">
                 <button onclick="payFee()" class="bg-green-600 text-white px-8 py-2.5 rounded font-black hover:bg-green-700 shadow-md">ADD</button>
             </div>
@@ -2579,7 +2577,6 @@ Contact Your Class Teacher !!!
                     Share / Print Profile
                 </button>
                 <button onclick="shareFeeWA()" title="Share via WhatsApp" class="bg-green-600 text-white px-6 py-2.5 rounded-xl text-sm font-bold flex items-center gap-2 hover:bg-green-700 transition shadow-lg shadow-green-100 no-print">
-                    <svg xmlns="http://www.w3.org/2000/svg" class="w-5 h-5" fill="currentColor" viewBox="0 0 24 24"><path d="M20.52 3.48A11.91 11.91 0 0012 0C5.37 0 0 5.37 0 12a11.7 11.7 0 001.95 6L0 24l6-1.95a11.86 11.86 0 005.94 1.7c6.63 0 12-5.37 12-12a11.89 11.89 0 00-3.42-8.27zM12 21a9.25 9.25 0 01-4.77-1.35l-.34-.22-3.57 1.16 1.11-3.48-.22-.36A9.25 9.25 0 012.75 12 9.25 9.25 0 0112 2.75 9.25 9.25 0 0121.25 12 9.25 9.25 0 0112 21zm5.37-6.31l-1.5-.43a.51.51 0 00-.47.14l-.98 1.07a7.38 7.38 0 01-3.46-3.44l1.07-.98a.53.53 0 00.15-.46l-.43-1.51a.54.54 0 00-.66-.37l-2.22.56a.51.51 0 00-.41.64A7 7 0 0014 16a7 7 0 002.37-1.17.5.5 0 00.13-.69z"/></svg>
                     WhatsApp Report
                 </button>
             </div>
@@ -2612,10 +2609,41 @@ Contact Your Class Teacher !!!
             </div>
         </div>
     `;
-    setTimeout(() => {
-        updateFeeTotals(currentFeeDB);
-        setupAutocomplete('fSearch', 'fSearchSuggestions', findFeeStu);
-    }, 100);
+    setTimeout(() => updateFeeTotals(currentFeeDB), 100);
+}
+
+function instantFeeSearch(q) {
+    const suggestionsDiv = document.getElementById('feeSuggestions');
+    q = q.trim().toLowerCase();
+    if (!q) {
+        suggestionsDiv.classList.add('hidden');
+        return;
+    }
+    
+    const matches = getFilteredDB().filter(s => 
+        String(s.StudentName).toLowerCase().includes(q) || 
+        String(s.Phone).includes(q)
+    );
+    
+    if (matches.length === 0) {
+        suggestionsDiv.innerHTML = `<div class="p-3 text-sm text-gray-500 italic">No matches found</div>`;
+        suggestionsDiv.classList.remove('hidden');
+        return;
+    }
+    
+    suggestionsDiv.innerHTML = matches.map(s => `
+        <div onclick="selectFeeStudent('${s.StudentName}')" class="p-3 text-sm font-bold text-gray-800 hover:bg-blue-50 border-b cursor-pointer flex justify-between">
+            <span>${s.StudentName} (${s.Class}-${s.Div})</span>
+            <span class="text-xs text-gray-500 font-medium">${s.Phone}</span>
+        </div>
+    `).join('');
+    suggestionsDiv.classList.remove('hidden');
+}
+
+function selectFeeStudent(name) {
+    document.getElementById('fSearch').value = name;
+    document.getElementById('feeSuggestions').classList.add('hidden');
+    findFeeStu();
 }
 
 function updateFeeTotals(data) {
@@ -3076,11 +3104,11 @@ For queries contact: N VINOD - 9747849634
     c.innerHTML = `
         <div class="mb-8">
             <h2 class="text-2xl font-bold mb-4">Search & Generate Receipt</h2>
-            <div class="flex gap-2 mb-6 relative w-1/2">
-                <input type="text" id="rSearch" autocomplete="off" placeholder="Phone No or Name" class="p-2 border rounded w-full">
-                <button onclick="findReceiptStu()" class="bg-blue-600 text-white px-6 rounded font-bold">Search</button>
-                <!-- Autocomplete Popup suggestions container -->
-                <div id="rSearchSuggestions" class="absolute left-0 top-11 bg-white border border-gray-200 rounded-xl shadow-lg w-full max-h-60 overflow-y-auto hidden z-50"></div>
+            <div class="flex gap-2 mb-6 relative">
+                <div class="relative w-full md:w-1/2">
+                    <input type="text" id="rSearch" oninput="instantReceiptSearch(this.value)" placeholder="Type Phone No or Name to search instantly..." class="p-2 border rounded w-full focus:outline-none focus:ring-2 focus:ring-blue-500">
+                    <div id="receiptSuggestions" class="absolute z-50 w-full left-0 mt-1 bg-white border border-gray-300 rounded-lg shadow-lg hidden max-h-60 overflow-y-auto"></div>
+                </div>
             </div>
             
             <div id="receiptResult" class="hidden mb-8 border-b pb-8">
@@ -3126,11 +3154,41 @@ For queries contact: N VINOD - 9747849634
             <div id="receiptPrintArea" class=""></div>
         </div>
     `;
+    fetchAllReceipts();
+}
+
+function instantReceiptSearch(q) {
+    const suggestionsDiv = document.getElementById('receiptSuggestions');
+    q = q.trim().toLowerCase();
+    if (!q) {
+        suggestionsDiv.classList.add('hidden');
+        return;
+    }
     
-    setTimeout(() => {
-        fetchAllReceipts();
-        setupAutocomplete('rSearch', 'rSearchSuggestions', findReceiptStu);
-    }, 100);
+    const matches = getFilteredDB().filter(s => 
+        String(s.StudentName).toLowerCase().includes(q) || 
+        String(s.Phone).includes(q)
+    );
+    
+    if (matches.length === 0) {
+        suggestionsDiv.innerHTML = `<div class="p-3 text-sm text-gray-500 italic">No matches found</div>`;
+        suggestionsDiv.classList.remove('hidden');
+        return;
+    }
+    
+    suggestionsDiv.innerHTML = matches.map(s => `
+        <div onclick="selectReceiptStudent('${s.StudentName}')" class="p-3 text-sm font-bold text-gray-800 hover:bg-blue-50 border-b cursor-pointer flex justify-between">
+            <span>${s.StudentName} (${s.Class}-${s.Div})</span>
+            <span class="text-xs text-gray-500 font-medium">${s.Phone}</span>
+        </div>
+    `).join('');
+    suggestionsDiv.classList.remove('hidden');
+}
+
+function selectReceiptStudent(name) {
+    document.getElementById('rSearch').value = name;
+    document.getElementById('receiptSuggestions').classList.add('hidden');
+    findReceiptStu();
 }
 
     // --- Core Logic for 'All Fee' Section ---
@@ -4023,13 +4081,11 @@ function updateTab7Totals() {
 }
     
     
-  function renderTab8(c) {
+ function renderTab8(c) {
     c.innerHTML = `
         <h2 class="text-2xl font-bold mb-4 text-red-700">Expense Management</h2>
         
-        <!-- Expense Form (Keep as is) -->
         <form id="expForm" onsubmit="saveExp(event)" class="grid grid-cols-1 md:grid-cols-3 gap-4 mb-8 bg-red-50 p-6 rounded-2xl border border-red-100 shadow-sm">
-            <!-- ... form fields stay the same ... -->
             <div>
                 <label class="block text-xs font-bold text-red-400 mb-1 uppercase">Bus ID</label>
                 <select id="exBus" required class="w-full p-2.5 border rounded-xl focus:ring-2 focus:ring-red-500 outline-none">
@@ -4048,7 +4104,7 @@ function updateTab7Totals() {
             </div>
             <div>
                 <label class="block text-xs font-bold text-red-400 mb-1 uppercase">Voucher No</label>
-                <input type="text" id="exVoucher" readonly class="w-full p-2.5 border rounded-xl bg-gray-100 font-mono text-slate-500 outline-none" placeholder="Auto-Generating...">
+                <input type="text" id="exVoucher" readonly placeholder="Generating..." class="w-full p-2.5 border rounded-xl bg-gray-100 font-bold outline-none cursor-not-allowed">
             </div>
             <div class="md:col-span-2">
                 <label class="block text-xs font-bold text-red-400 mb-1 uppercase">Remarks / Description</label>
@@ -4089,6 +4145,35 @@ function updateTab7Totals() {
         </div>
     `;
     fetchExp();
+    generateNextVoucher(); // Added: Automatic calculation
+}
+
+async function generateNextVoucher() {
+    const el = document.getElementById('exVoucher');
+    if (!el) return;
+    
+    try {
+        const res = await fetch(API_URL, {method:'POST', body:JSON.stringify({action:"getExpenses"})}).then(r=>r.json());
+        let maxNum = 0;
+        const currentYear = new Date().getFullYear();
+        
+        if (res.success && res.data && res.data.length > 0) {
+            res.data.forEach(ex => {
+                const v = ex.voucherNo || "";
+                if (v.includes("/")) {
+                    const parts = v.split("/");
+                    const num = parseInt(parts[0], 10);
+                    if (!isNaN(num) && num > maxNum) {
+                        maxNum = num;
+                    }
+                }
+            });
+        }
+        const nextNum = maxNum + 1;
+        el.value = `${String(nextNum).padStart(3, '0')}/${currentYear}`;
+    } catch(e) {
+        el.value = `001/${new Date().getFullYear()}`;
+    }
 }
 
 async function saveExp(e) {
@@ -6100,336 +6185,312 @@ function localRecalculateRegFee() {
     txtFee.innerText = '₹' + baseFee;
 }
 
-function setupAutocomplete(inputId, suggestionsContainerId, onSelectCallback) {
-  const input = document.getElementById(inputId);
-  const container = document.getElementById(suggestionsContainerId);
-  if (!input || !container) return;
-  
-  input.addEventListener('input', () => {
-    const q = input.value.trim().toLowerCase();
-    if (q.length < 1) {
-      container.classList.add('hidden');
-      return;
-    }
-    
-    // Query accessible database matching Name or Phone
-    const matches = getFilteredDB().filter(s => 
-      String(s.StudentName).toLowerCase().includes(q) || 
-      String(s.Phone).includes(q)
-    ).slice(0, 5); // Display top 5 matches
-    
-    if (matches.length === 0) {
-      container.classList.add('hidden');
-      return;
-    }
-    
-    container.innerHTML = matches.map(s => `
-      <div class="p-3 hover:bg-blue-50 cursor-pointer border-b border-gray-100 last:border-0 transition text-sm font-semibold text-gray-700"
-           onclick="selectAutocompleteMatch('${inputId}', '${suggestionsContainerId}', '${s.Phone}', ${onSelectCallback})">
-        <span class="text-blue-500 font-bold">👤</span> ${s.StudentName} <span class="text-xs text-gray-400">(${s.Class}-${s.Div} • ${s.Phone})</span>
-      </div>
-    `).join('');
-    container.classList.remove('hidden');
-  });
-  
-  // Close the popup suggestions box when clicking outside
-  document.addEventListener('click', (e) => {
-    if (!input.contains(e.target) && !container.contains(e.target)) {
-      container.classList.add('hidden');
-    }
-  });
-}
 
-function selectAutocompleteMatch(inputId, containerId, value, callback) {
-  document.getElementById(inputId).value = value;
-  document.getElementById(containerId).classList.add('hidden');
-  callback();
-}
-
-function generateNextVoucher(expenses) {
-  const currentYear = new Date().getFullYear();
-  let maxNum = 0;
-  
-  if (expenses && expenses.length > 0) {
-    expenses.forEach(ex => {
-      const voucher = String(ex.voucherNo || "").trim();
-      if (voucher.includes('/' + currentYear)) {
-        const parts = voucher.split('/');
-        const num = parseInt(parts[0], 10);
-        if (!isNaN(num) && num > maxNum) {
-          maxNum = num;
-        }
-      }
-    });
-  }
-  
-  // Start from 17 as baseline if no database record overrides it yet
-  if (maxNum === 0) {
-    maxNum = 17;
-  }
-  
-  const nextNum = maxNum + 1;
-  const formattedNum = String(nextNum).padStart(3, '0');
-  return `${formattedNum}/${currentYear}`;
-}
-
-let cashBookCache = [];
-let cbSortCol = "timestamp";
-let cbSortAsc = false;
-let allReceiptsCache = [];
-
-function getPrefilledTimestamp() {
-  const now = new Date();
-  const dd = String(now.getDate()).padStart(2, '0');
-  const mm = String(now.getMonth() + 1).padStart(2, '0');
-  const yyyy = now.getFullYear();
-  const hh = String(now.getHours()).padStart(2, '0');
-  const min = String(now.getMinutes()).padStart(2, '0');
-  const ss = String(now.getSeconds()).padStart(2, '0');
-  return `${dd}/${mm}/${yyyy} ${hh}:${min}:${ss}`;
-}
+let currentCashBookDB = [];
+let cashBookSortCol = 'date';
+let cashBookSortAsc = false;
 
 function renderTab14(c) {
-  c.innerHTML = `
-    <div class="animate-fadeIn">
-        <h2 class="text-2xl font-black mb-6 text-slate-800 flex items-center gap-2">
-            <span class="bg-blue-600 text-white p-2 rounded-lg text-sm">📘</span>
-            Daily Cash Book Register
-        </h2>
-        
-        <form id="cbForm" onsubmit="saveCashBookUI(event)" class="grid grid-cols-2 md:grid-cols-4 gap-4 mb-10 bg-white p-6 rounded-3xl border border-slate-200 shadow-sm text-sm">
-            <div class="col-span-1">
-                <label class="block text-[10px] font-bold text-slate-400 uppercase mb-1 tracking-wider">Timestamp (DD/MM/YYYY HH:MM:SS)</label>
-                <input id="cbTimestamp" required class="w-full p-2.5 border border-slate-200 rounded-xl focus:ring-2 focus:ring-blue-500 outline-none">
-            </div>
-            <div class="col-span-1">
-                <label class="block text-[10px] font-bold text-slate-400 uppercase mb-1 tracking-wider">Linked Receipt No (If Any)</label>
-                <input list="cbReceiptsList" id="cbReceiptNo" placeholder="Type to search..." onchange="onCashBookReceiptChange(this.value)" class="w-full p-2.5 border border-slate-200 rounded-xl focus:ring-2 focus:ring-blue-500 outline-none font-bold">
-                <datalist id="cbReceiptsList"></datalist>
-            </div>
-            <div class="col-span-1">
-                <label class="block text-[10px] font-bold text-slate-400 uppercase mb-1 tracking-wider">To Whom Paid</label>
-                <input id="cbToWhomPaid" required placeholder="Vendor / Person / Office" oninput="this.value = this.value.toUpperCase()" class="w-full p-2.5 border border-slate-200 rounded-xl focus:ring-2 focus:ring-blue-500 outline-none uppercase">
-            </div>
-            <div class="col-span-1">
-                <label class="block text-[10px] font-bold text-slate-400 uppercase mb-1 tracking-wider">Who Paid / Payer</label>
-                <input id="cbWhoPaid" required placeholder="Payer Name" oninput="this.value = this.value.toUpperCase()" class="w-full p-2.5 border border-slate-200 rounded-xl focus:ring-2 focus:ring-blue-500 outline-none uppercase">
-            </div>
-            <div class="col-span-1">
-                <label class="block text-[10px] font-bold text-slate-400 uppercase mb-1 tracking-wider">Mode of Payment</label>
-                <select id="cbMode" required class="w-full p-2.5 border border-slate-200 rounded-xl focus:ring-2 focus:ring-blue-500 outline-none bg-white font-bold">
-                    <option value="">Select Mode</option>
-                    <option value="CASH">CASH</option>
-                    <option value="GPAY">GPAY</option>
-                </select>
-            </div>
-            <div class="col-span-1">
-                <label class="block text-[10px] font-bold text-slate-400 uppercase mb-1 tracking-wider">Amount (₹)</label>
-                <input id="cbAmount" type="number" step="0.01" required placeholder="0.00" class="w-full p-2.5 border border-slate-200 rounded-xl font-bold text-slate-800 focus:ring-2 focus:ring-blue-500 outline-none">
-            </div>
-            <div class="col-span-2">
-                <label class="block text-[10px] font-bold text-slate-400 uppercase mb-1 tracking-wider">Reference Note</label>
-                <input id="cbReference" required placeholder="Transaction description..." oninput="this.value = this.value.toUpperCase()" class="w-full p-2.5 border border-slate-200 rounded-xl focus:ring-2 focus:ring-blue-500 outline-none uppercase">
-            </div>
+    const today = new Date();
+    const formattedDate = today.toISOString().split('T')[0]; // YYYY-MM-DD format for form inputs
+    const formattedTime = today.toTimeString().split(' ')[0]; // HH:MM:SS format
+    
+    c.innerHTML = `
+        <div class="animate-fadeIn">
+            <h2 class="text-2xl font-black mb-6 text-slate-800 flex items-center gap-2">
+                <span class="bg-blue-600 text-white p-2 rounded-lg text-sm">📓</span>
+                Cash Book Handling
+            </h2>
             
-            <div class="col-span-2 md:col-span-4 flex gap-3 mt-2">
-                <button type="submit" class="bg-blue-600 hover:bg-blue-700 text-white px-10 py-3 rounded-2xl font-bold shadow-lg shadow-blue-100 transition-all active:scale-95">
-                    Save Transaction
-                </button>
-            </div>
-        </form>
+            <!-- Cash Book Log Form -->
+            <form id="cashBookForm" onsubmit="saveCashBookEntry(event)" class="grid grid-cols-2 md:grid-cols-4 gap-4 mb-8 bg-white p-6 rounded-3xl border border-slate-200 shadow-sm text-sm">
+                <div>
+                    <label class="block text-[10px] font-bold text-slate-400 uppercase mb-1 tracking-wider">Date</label>
+                    <input type="date" id="cbDate" required value="${formattedDate}" class="w-full p-2.5 border border-slate-200 rounded-xl focus:ring-2 focus:ring-blue-500 outline-none">
+                </div>
+                <div>
+                    <label class="block text-[10px] font-bold text-slate-400 uppercase mb-1 tracking-wider">Time</label>
+                    <input type="text" id="cbTime" required value="${formattedTime}" placeholder="HH:MM:SS" class="w-full p-2.5 border border-slate-200 rounded-xl focus:ring-2 focus:ring-blue-500 outline-none">
+                </div>
+                <div>
+                    <label class="block text-[10px] font-bold text-slate-400 uppercase mb-1 tracking-wider">To Whom Paid</label>
+                    <input type="text" id="cbToWhomPaid" required placeholder="Enter recipient name" class="w-full p-2.5 border border-slate-200 rounded-xl focus:ring-2 focus:ring-blue-500 outline-none">
+                </div>
+                <div>
+                    <label class="block text-[10px] font-bold text-slate-400 uppercase mb-1 tracking-wider">Who Paid</label>
+                    <input type="text" id="cbWhoPaid" required placeholder="Enter remitter name" class="w-full p-2.5 border border-slate-200 rounded-xl focus:ring-2 focus:ring-blue-500 outline-none">
+                </div>
+                <div>
+                    <label class="block text-[10px] font-bold text-slate-400 uppercase mb-1 tracking-wider">Mode of Payment</label>
+                    <select id="cbMode" required class="w-full p-2.5 border border-slate-200 rounded-xl focus:ring-2 focus:ring-blue-500 outline-none bg-white">
+                        <option value="">Select Mode</option>
+                        <option>CASH</option>
+                        <option>GPAY</option>
+                    </select>
+                </div>
+                <div>
+                    <label class="block text-[10px] font-bold text-slate-400 uppercase mb-1 tracking-wider">Amount (₹)</label>
+                    <input type="number" id="cbAmount" required placeholder="0.00" step="any" class="w-full p-2.5 border border-slate-200 rounded-xl focus:ring-2 focus:ring-blue-500 outline-none font-bold text-blue-700">
+                </div>
+                <div>
+    <label class="block text-[10px] font-bold text-slate-400 uppercase mb-1 tracking-wider">Receipt No (Single Use Only)</label>
+    <select id="cbReceiptNo" onchange="autoFillCashBookFromReceipt(this.value)" class="w-full p-2.5 border border-slate-200 rounded-xl focus:ring-2 focus:ring-blue-500 outline-none bg-white font-bold">
+        <option value="-">N/A (-)</option>
+    </select>
+</div>
+                <div>
+                    <label class="block text-[10px] font-bold text-slate-400 uppercase mb-1 tracking-wider">Reference</label>
+                    <input type="text" id="cbReference" required placeholder="Details/Reference No" class="w-full p-2.5 border border-slate-200 rounded-xl focus:ring-2 focus:ring-blue-500 outline-none">
+                </div>
+                
+                <div class="col-span-2 md:col-span-4 mt-2">
+                    <button type="submit" class="bg-blue-600 hover:bg-blue-700 text-white px-10 py-3 rounded-2xl font-bold shadow-lg transition-all active:scale-95">
+                        Save Cash Entry
+                    </button>
+                </div>
+            </form>
 
-        <!-- Dynamic Table View -->
-        <div class="bg-white rounded-3xl border border-slate-200 shadow-sm overflow-hidden">
-            <div class="bg-slate-800 p-4 flex flex-col md:flex-row justify-between items-center gap-3">
-                <h3 class="text-white font-bold text-sm uppercase tracking-widest">Cash Book Transactions</h3>
-                <input id="cbSearch" onkeyup="searchCashBook(this.value)" placeholder="Search all fields instantly..." class="px-4 py-2 border border-slate-600 rounded-xl text-xs bg-slate-700 text-white focus:outline-none focus:ring-2 focus:ring-blue-500 w-full md:w-1/3">
-            </div>
-            <div class="overflow-x-auto">
-                <table class="w-full text-left text-xs border-collapse whitespace-nowrap">
-                    <thead class="bg-slate-50 text-slate-500 font-bold uppercase border-b border-slate-200 select-none">
-                        <tr>
-                            <th onclick="sortCashBookTable('timestamp')" class="p-4 border-r cursor-pointer hover:bg-slate-100">Date & Time ↕</th>
-                            <th onclick="sortCashBookTable('receiptNo')" class="p-4 border-r cursor-pointer hover:bg-slate-100">Receipt No ↕</th>
-                            <th onclick="sortCashBookTable('toWhomPaid')" class="p-4 border-r cursor-pointer hover:bg-slate-100">To Whom Paid ↕</th>
-                            <th onclick="sortCashBookTable('whoPaid')" class="p-4 border-r cursor-pointer hover:bg-slate-100">Who Paid ↕</th>
-                            <th onclick="sortCashBookTable('mode')" class="p-4 border-r cursor-pointer hover:bg-slate-100 text-center">Mode ↕</th>
-                            <th onclick="sortCashBookTable('amount')" class="p-4 border-r cursor-pointer hover:bg-slate-100 text-right">Amount ↕</th>
-                            <th onclick="sortCashBookTable('reference')" class="p-4 border-r cursor-pointer hover:bg-slate-100">Reference ↕</th>
-                            <th onclick="sortCashBookTable('addedBy')" class="p-4 cursor-pointer hover:bg-slate-100">Added By ↕</th>
-                        </tr>
-                    </thead>
-                    <tbody id="cbTableBody">
-                        <tr><td colspan="8" class="p-20 text-center animate-pulse text-slate-400 font-medium text-sm">Syncing Cash Register...</td></tr>
-                    </tbody>
-                    <tfoot class="bg-slate-100 font-black border-t-2 border-slate-300">
-                        <tr>
-                            <td colspan="5" class="p-4 text-right uppercase tracking-wider font-extrabold text-slate-700 text-xs">Total Amount Displayed:</td>
-                            <td id="cbGrandTotalVal" class="p-4 text-right font-black text-blue-700 text-sm bg-blue-50">₹0</td>
-                            <td colspan="2"></td>
-                        </tr>
-                    </tfoot>
-                </table>
+            <!-- Table Logs -->
+            <div class="bg-white rounded-3xl border border-slate-200 shadow-sm overflow-hidden">
+                <div class="bg-slate-800 p-4 flex flex-col md:flex-row justify-between items-center gap-4">
+                    <h3 class="text-white font-bold text-sm uppercase tracking-widest">Daily Cash Book Register</h3>
+                    <input type="text" id="cbSearch" onkeyup="searchCashBook()" placeholder="Type to filter transactions..." class="p-2 border rounded-xl text-xs outline-none w-full md:w-1/3">
+                </div>
+                <div class="overflow-x-auto">
+                    <table class="w-full text-left text-xs border-collapse whitespace-nowrap">
+                        <thead class="bg-slate-50 text-slate-500 font-bold uppercase border-b border-slate-200 select-none">
+                            <tr>
+                                <th onclick="sortCashBook('date')" class="p-4 cursor-pointer hover:bg-slate-100">Date ↕</th>
+                                <th onclick="sortCashBook('time')" class="p-4 cursor-pointer hover:bg-slate-100 text-center">Time ↕</th>
+                                <th onclick="sortCashBook('toWhomPaid')" class="p-4 cursor-pointer hover:bg-slate-100">To Whom Paid ↕</th>
+                                <th onclick="sortCashBook('whoPaid')" class="p-4 cursor-pointer hover:bg-slate-100">Who Paid ↕</th>
+                                <th onclick="sortCashBook('mode')" class="p-4 cursor-pointer hover:bg-slate-100 text-center">Mode ↕</th>
+                                <th onclick="sortCashBook('amount')" class="p-4 cursor-pointer hover:bg-slate-100 text-center">Amount ↕</th>
+                                <th onclick="sortCashBook('receiptNo')" class="p-4 cursor-pointer hover:bg-slate-100 text-center">Receipt No ↕</th>
+                                <th onclick="sortCashBook('reference')" class="p-4 cursor-pointer hover:bg-slate-100">Reference ↕</th>
+                                <th onclick="sortCashBook('user')" class="p-4 cursor-pointer hover:bg-slate-100">Logged By ↕</th>
+                            </tr>
+                        </thead>
+                        <tbody id="cashBookTableBody">
+                            <tr><td colspan="9" class="p-10 text-center animate-pulse text-slate-400 font-bold">Syncing Cash Book...</td></tr>
+                        </tbody>
+                        <tfoot class="bg-slate-100 font-black border-t-2 border-slate-200">
+                            <tr>
+                                <td colspan="5" class="p-4 text-right uppercase text-gray-700">Grand Total Cash Flow:</td>
+                                <td id="cbGrandTotal" class="p-4 text-center text-blue-700 text-sm font-black bg-blue-50/50">₹0</td>
+                                <td colspan="3"></td>
+                            </tr>
+                        </tfoot>
+                    </table>
+                </div>
             </div>
         </div>
-    </div>
-  `;
-
-  document.getElementById('cbTimestamp').value = getPrefilledTimestamp();
-  loadCashBookReceipts();
-  fetchCashBook();
-}
-
-async function loadCashBookReceipts() {
-  try {
-    const res = await fetch(API_URL, {method:'POST', body:JSON.stringify({action:"getAllReceipts"})}).then(r=>r.json());
-    if (res.success && res.data) {
-      allReceiptsCache = res.data;
-      const datalist = document.getElementById('cbReceiptsList');
-      if (datalist) {
-        datalist.innerHTML = res.data.map(r => `
-          <option value="${r.ReceiptNo}">${r.Name} - ₹${r.Amount} (${r.Months})</option>
-        `).join('');
-      }
-    }
-  } catch(e) {}
-}
-
-function onCashBookReceiptChange(receiptNo) {
-  const match = allReceiptsCache.find(r => r.ReceiptNo === receiptNo);
-  if (match) {
-    document.getElementById('cbWhoPaid').value = match.Name.toUpperCase();
-    document.getElementById('cbAmount').value = match.Amount;
-    document.getElementById('cbReference').value = `BUS FEE: ${match.Months.toUpperCase()} (RECEIPT ${match.ReceiptNo})`;
-    document.getElementById('cbToWhomPaid').value = "SCHOOL TRANSPORT"; 
-    document.getElementById('cbMode').value = "CASH"; // Standard default
-  }
-}
-
-async function saveCashBookUI(e) {
-  e.preventDefault();
-  
-  // Resolve currently active login credentials safely
-  const activeOperator = (curUser ? (curUser.name || curUser.Name || curUser.id || "System") : "System").toUpperCase();
-
-  const data = {
-    timestamp: v('cbTimestamp'),
-    receiptNo: v('cbReceiptNo'),
-    toWhomPaid: v('cbToWhomPaid').toUpperCase(),
-    whoPaid: v('cbWhoPaid').toUpperCase(),
-    mode: v('cbMode'),
-    amount: v('cbAmount'),
-    reference: v('cbReference').toUpperCase(),
-    addedBy: activeOperator // Include who performed this transaction
-  };
-  
-  showLoad();
-  try {
-    const res = await fetch(API_URL, {method:'POST', body:JSON.stringify({action:"saveCashBook", data: data})}).then(r=>r.json());
-    if (res.success) {
-      msg("Success", "Cash Book transaction recorded", "success");
-      renderTab14(document.getElementById('tabContent')); // Refresh view
-    } else {
-      throw new Error(res.message);
-    }
-  } catch(e) {
-    msg("Error", "Could not save entry: " + e.toString(), "error");
-  }
-  hideLoad();
-}
-
-async function fetchCashBook() {
-  try {
-    const res = await fetch(API_URL, {method:'POST', body:JSON.stringify({action:"getCashBook"})}).then(r=>r.json());
-    if (res.success) {
-      cashBookCache = res.data;
-      sortCashBookTable('timestamp', false); // Initial sort by timestamp descending
-    }
-  } catch(e) {
-    document.getElementById('cbTableBody').innerHTML = '<tr><td colspan="7" class="p-4 text-center text-red-500">Error loading Cash Book.</td></tr>';
-  }
-}
-
-function sortCashBookTable(col, forceAsc = null) {
-  if (forceAsc !== null) {
-    cbSortCol = col;
-    cbSortAsc = forceAsc;
-  } else if (cbSortCol === col) {
-    cbSortAsc = !cbSortAsc;
-  } else {
-    cbSortCol = col;
-    cbSortAsc = true;
-  }
-  
-  cashBookCache.sort((a, b) => {
-    let valA = a[col] || '';
-    let valB = b[col] || '';
+    `;
     
-    if (col === 'amount') {
-      valA = parseFloat(valA) || 0;
-      valB = parseFloat(valB) || 0;
-    } else {
-      valA = String(valA).toLowerCase();
-      valB = String(valB).toLowerCase();
+    fetchCashBookData();
+}
+
+async function fetchCashBookData() {
+    showLoad();
+    try {
+        const [cbRes, recRes] = await Promise.all([
+            fetch(API_URL, {method:'POST', body:JSON.stringify({action:"getCashBook"})}).then(r=>r.json()),
+            fetch(API_URL, {method:'POST', body:JSON.stringify({action:"getAllReceipts"})}).then(r=>r.json())
+        ]);
+        
+        if (cbRes.success) {
+            currentCashBookDB = cbRes.data;
+            sortCashBook('date', false); // Sort descending by default
+        }
+        
+        // Cache receipts globally for instant client-side lookup
+        if (recRes.success) {
+            window.allReceiptsForCashBook = recRes.data;
+        }
+        
+        // Populate dropdown with unused receipts
+        if (recRes.success && cbRes.success) {
+            const usedReceipts = new Set(cbRes.data.map(item => item.receiptNo).filter(r => r && r !== "-"));
+            const selectEl = document.getElementById('cbReceiptNo');
+            if (selectEl) {
+                selectEl.innerHTML = '<option value="-">N/A (-)</option>';
+                recRes.data.forEach(r => {
+                    // Check if receipt hasn't been used yet
+                    if (r.ReceiptNo && !usedReceipts.has(r.ReceiptNo)) {
+                        const opt = document.createElement('option');
+                        opt.value = r.ReceiptNo;
+                        opt.text = `${r.ReceiptNo} - ${r.Name} (₹${r.Amount})`;
+                        selectEl.appendChild(opt);
+                    }
+                });
+            }
+        }
+    } catch(e) {
+        console.error("Error matching Cash Book database: ", e);
     }
-    
-    if (valA < valB) return cbSortAsc ? -1 : 1;
-    if (valA > valB) return cbSortAsc ? 1 : -1;
-    return 0;
-  });
-  
-  renderCashBookRows(cashBookCache);
+    hideLoad();
 }
 
 function renderCashBookRows(data) {
-  const tbody = document.getElementById('cbTableBody');
-  if (!tbody) return;
-  
-  if (!data || data.length === 0) {
-    tbody.innerHTML = '<tr><td colspan="8" class="p-4 text-center text-gray-500 italic">No cash book entries found.</td></tr>';
-    updateCashBookGrandTotal(0);
-    return;
-  }
-  
-  tbody.innerHTML = data.map(r => `
-    <tr class="hover:bg-blue-50/50 transition border-b">
-      <td class="p-3 border-r font-mono text-xs">${r.timestamp}</td>
-      <td class="p-3 border-r font-bold text-gray-700">${r.receiptNo || '-'}</td>
-      <td class="p-3 border-r font-medium text-gray-800">${r.toWhomPaid}</td>
-      <td class="p-3 border-r font-medium text-gray-800">${r.whoPaid}</td>
-      <td class="p-3 border-r text-center">
-        <span class="px-2 py-1 rounded text-[10px] font-black uppercase ${r.mode === 'GPAY' ? 'bg-indigo-100 text-indigo-700':'bg-green-100 text-green-700'}">${r.mode}</span>
-      </td>
-      <td class="p-3 border-r text-right font-black text-gray-950">₹${parseFloat(r.amount).toLocaleString('en-IN', {minimumFractionDigits: 2})}</td>
-      <td class="p-3 border-r text-slate-600 font-semibold">${r.reference}</td>
-      <td class="p-3 font-bold text-blue-600">${r.addedBy || '-'}</td>
-    </tr>
-  `).join('');
-  
-  const total = data.reduce((sum, r) => sum + (parseFloat(r.amount) || 0), 0);
-  updateCashBookGrandTotal(total);
+    const tbody = document.getElementById('cashBookTableBody');
+    if (!tbody) return;
+    
+    if (!data || data.length === 0) {
+        tbody.innerHTML = '<tr><td colspan="9" class="p-10 text-center text-slate-400 italic">No logged cash handling records in this scope.</td></tr>';
+        document.getElementById('cbGrandTotal').innerText = '₹0';
+        return;
+    }
+    
+    tbody.innerHTML = data.map(cb => {
+        let cleanDate = cb.date;
+        if (cb.date && cb.date.includes('-')) {
+            const dateParts = cb.date.split('-');
+            if (dateParts[0].length === 4) { // Convert native HTML ISO format to DD/MM/YYYY
+                cleanDate = `${dateParts[2]}/${dateParts[1]}/${dateParts[0]}`;
+            }
+        }
+        return `
+            <tr class="hover:bg-blue-50/30 border-b border-slate-100 transition-colors">
+                <td class="p-4 font-semibold text-slate-700">${cleanDate}</td>
+                <td class="p-4 text-center font-mono text-slate-600">${cb.time}</td>
+                <td class="p-4 font-bold text-slate-900">${cb.toWhomPaid}</td>
+                <td class="p-4 font-bold text-slate-900">${cb.whoPaid}</td>
+                <td class="p-4 text-center"><span class="px-2.5 py-1 rounded text-[10px] font-black ${cb.mode === 'GPAY' ? 'bg-purple-100 text-purple-700':'bg-amber-100 text-amber-700'}">${cb.mode}</span></td>
+                <td class="p-4 text-center font-black text-slate-800">₹${parseFloat(cb.amount).toLocaleString('en-IN')}</td>
+                <td class="p-4 text-center font-bold text-blue-600">${cb.receiptNo}</td>
+                <td class="p-4 text-slate-500 font-medium">${cb.reference}</td>
+                <td class="p-4 font-bold text-slate-600">${cb.user}</td>
+            </tr>
+        `;
+    }).join('');
+    
+    const total = data.reduce((acc, curr) => acc + (parseFloat(curr.amount) || 0), 0);
+    document.getElementById('cbGrandTotal').innerText = '₹' + total.toLocaleString('en-IN');
 }
 
-function updateCashBookGrandTotal(total) {
-  const el = document.getElementById('cbGrandTotalVal');
-  if (el) el.innerText = '₹' + total.toLocaleString('en-IN', {minimumFractionDigits: 2});
+function sortCashBook(col, toggle = true) {
+    if (toggle) {
+        if (cashBookSortCol === col) {
+            cashBookSortAsc = !cashBookSortAsc;
+        } else {
+            cashBookSortCol = col;
+            cashBookSortAsc = true;
+        }
+    } else {
+        cashBookSortCol = col;
+    }
+    
+    currentCashBookDB.sort((a, b) => {
+        let valA = a[col];
+        let valB = b[col];
+        
+        if (col === 'amount') {
+            valA = parseFloat(valA) || 0;
+            valB = parseFloat(valB) || 0;
+        } else {
+            valA = String(valA || "").toLowerCase();
+            valB = String(valB || "").toLowerCase();
+        }
+        
+        if (valA < valB) return cashBookSortAsc ? -1 : 1;
+        if (valA > valB) return cashBookSortAsc ? 1 : -1;
+        return 0;
+    });
+    
+    renderCashBookRows(currentCashBookDB);
 }
 
-function searchCashBook(q) {
-  const query = q.trim().toLowerCase();
-  const filtered = cashBookCache.filter(r => 
-    String(r.timestamp).toLowerCase().includes(query) ||
-    String(r.receiptNo).toLowerCase().includes(query) ||
-    String(r.toWhomPaid).toLowerCase().includes(query) ||
-    String(r.whoPaid).toLowerCase().includes(query) ||
-    String(r.mode).toLowerCase().includes(query) ||
-    String(r.reference).toLowerCase().includes(query) ||
-    String(r.addedBy).toLowerCase().includes(query) || // Added
-    String(r.amount).includes(query)
-  );
-  renderCashBookRows(filtered);
+function searchCashBook() {
+    const q = document.getElementById('cbSearch').value.toLowerCase();
+    const filtered = currentCashBookDB.filter(cb => 
+        String(cb.date).includes(q) || 
+        String(cb.toWhomPaid).toLowerCase().includes(q) || 
+        String(cb.whoPaid).toLowerCase().includes(q) || 
+        String(cb.mode).toLowerCase().includes(q) || 
+        String(cb.receiptNo).toLowerCase().includes(q) || 
+        String(cb.reference).toLowerCase().includes(q) || 
+        String(cb.user).toLowerCase().includes(q)
+    );
+    renderCashBookRows(filtered);
 }
 
+async function saveCashBookEntry(e) {
+    e.preventDefault();
+    const amountVal = parseFloat(document.getElementById('cbAmount').value);
+    if (isNaN(amountVal) || amountVal <= 0) {
+        return msg("Invalid Input", "Please enter a valid amount.", "warning");
+    }
+    
+    const rawDate = document.getElementById('cbDate').value;
+    let formattedDateString = rawDate;
+    if (rawDate && rawDate.includes('-')) {
+        const parts = rawDate.split('-');
+        formattedDateString = `${parts[2]}/${parts[1]}/${parts[0]}`;
+    }
+    
+    const payload = {
+        date: formattedDateString,
+        time: document.getElementById('cbTime').value.trim(),
+        toWhomPaid: document.getElementById('cbToWhomPaid').value.trim(),
+        whoPaid: document.getElementById('cbWhoPaid').value.trim(),
+        mode: document.getElementById('cbMode').value,
+        amount: amountVal,
+        receiptNo: document.getElementById('cbReceiptNo').value,
+        reference: document.getElementById('cbReference').value.trim()
+    };
+    
+    showLoad();
+    try {
+        const res = await fetch(API_URL, {
+            method: 'POST',
+            body: JSON.stringify({
+                action: "saveCashBook",
+                data: payload,
+                user: curUser.name || curUser.id
+            })
+        }).then(r => r.json());
+        
+        hideLoad();
+        if (res.success) {
+            msg("Success", "Cash entry recorded!", "success");
+            renderTab14(document.getElementById('tabContent'));
+        } else {
+            msg("Error", res.message || "Failed to log entries.", "error");
+        }
+    } catch(err) {
+        hideLoad();
+        msg("Error", "Network connection failed.", "error");
+    }
+}
+
+function autoFillCashBookFromReceipt(receiptNo) {
+    const amountInput = document.getElementById('cbAmount');
+    const refInput = document.getElementById('cbReference');
+    const whoPaidInput = document.getElementById('cbWhoPaid');
+
+    // If "N/A" is selected, clear the fields
+    if (receiptNo === "-") {
+        amountInput.value = "";
+        refInput.value = "";
+        return;
+    }
+
+    if (window.allReceiptsForCashBook) {
+        const match = window.allReceiptsForCashBook.find(r => r.ReceiptNo === receiptNo);
+        if (match) {
+            // Auto-fill Amount
+            amountInput.value = match.Amount || "";
+            
+            // Auto-fill Reference with informative metadata
+            refInput.value = `Mapped to Receipt No: ${match.ReceiptNo} for ${match.Name} (${match.Months})`;
+            
+            // Auto-fill the remitter name if empty
+            if (whoPaidInput && !whoPaidInput.value) {
+                whoPaidInput.value = match.Name || "";
+            }
+        }
+    }
+}
 
 </script>
 </body>
