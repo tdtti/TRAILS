@@ -126,7 +126,7 @@
         /* Fixed viewport for Map Zoom only */
         .map-area {
             position: relative;
-            height: auto;
+            height: 500px;
             overflow: auto;
             border: 1px solid #ddd;
             border-radius: 4px;
@@ -379,7 +379,7 @@
         .btn-zoom:hover { background-color: #475569; }
 
         /* ========================================================
-           PRINT STYLES
+           PRINT STYLES (LANDSCAPE ORIENTATION INJECTED)
            ======================================================== */
         @media print {
             body {
@@ -423,7 +423,7 @@
             }
             body.print-mode-a4 .map-panel {
                 width: 100% !important;
-                height: 95vh !important;  
+                height: 95vh !important;  /* Fills exactly Page 1 viewport height in Landscape */
                 page-break-after: always !important; 
                 page-break-inside: avoid !important;
                 box-sizing: border-box;
@@ -522,9 +522,9 @@
     <div id="options-modal" class="overlay" style="z-index: 9990; background: rgba(15, 23, 42, 0.75);">
         <div class="dialog-box" style="max-width: 320px;">
             <h3 id="options-title" style="margin-top:0; color:var(--primary);">Marker</h3>
-            <button id="options-view" class="options-menu-btn btn-load">View </button>
-            <button id="options-edit" class="options-menu-btn btn-save">Edit </button>
-            <button id="options-delete" class="options-menu-btn btn-clear">Delete </button>
+            <button id="options-view" class="options-menu-btn btn-load">View</button>
+            <button id="options-edit" class="options-menu-btn btn-save">Edit</button>
+            <button id="options-delete" class="options-menu-btn btn-clear">Delete</button>
             <button id="options-close" class="options-menu-btn" style="background:#64748b; color:white;">Close</button>
         </div>
     </div>
@@ -542,10 +542,10 @@
             <!-- Forces mobile device numeric keyboard strictly on select -->
             <div class="form-group">
                 <label>PHONE NO</label>
-                <input type="tel" id="form-phone" inputmode="numeric" pattern="[0-9]*" maxlength="10" placeholder="ENTER 10-DIGIT MOBILE NUMBER">
+                <input type="tel" id="form-phone" inputmode="numeric" pattern="[0-9]*" maxlength="10" placeholder="ENTER MOBILE NUMBER">
             </div>
             <div class="form-group">
-                <label>BLDING NO</label>
+                <label>BUILDING NO</label>
                 <input type="text" id="form-building-no" placeholder="BUILDING NUMBER">
             </div>
 
@@ -587,7 +587,7 @@
 
     <!-- Simplified Header with Print Options only -->
     <div class="header">
-        <h2>KK Map </h2>
+        <h2>KK MAPPER</h2>
         <div class="button-group">
             <button onclick="printA4()" class="btn-print">Print A4</button>
             <button onclick="printA3()" class="btn-print" style="background-color: var(--info-dark)">Print A3</button>
@@ -602,13 +602,13 @@
             <div class="tool-mode-box" style="display: flex; gap: 10px; align-items: center; justify-content: space-between; flex-wrap: wrap; margin-bottom: 12px; background: #f1f5f9; padding: 10px; border-radius: 6px; border: 1px solid #e2e8f0;">
                 <div style="display: flex; gap: 10px; align-items: center;">
                     <strong style="font-size: 13px; color: #475569;">Active Tool:</strong>
-                    <button id="btn-mode-building" onclick="setToolMode('building')" class="btn-save" style="padding: 5px 10px; font-size: 11px;">Register Buildings</button>
-                    <button id="btn-mode-road" onclick="setToolMode('road')" style="background-color: #64748b; color: white; padding: 5px 10px; font-size: 11px;">Draw Roads</button>
+                    <button id="btn-mode-building" onclick="setToolMode('building')" class="btn-save" style="padding: 5px 10px; font-size: 11px;">Register </button>
+                    <button id="btn-mode-road" onclick="setToolMode('road')" style="background-color: #64748b; color: white; padding: 5px 10px; font-size: 11px;">Draw</button>
                 </div>
                 <div id="road-tools" style="display: none; gap: 10px; align-items: center;">
-                    <button onclick="startNewRoad()" class="btn-load" style="padding: 5px 10px; font-size: 11px;">New Road</button>
-                    <button onclick="undoLastRoadNode()" style="background-color: #e67e22; color: white; padding: 5px 10px; font-size: 11px;">Undo Node</button>
-                    <button onclick="clearRoads()" class="btn-clear" style="padding: 5px 10px; font-size: 11px;">Reset Roads</button>
+                    <button onclick="startNewRoad()" class="btn-load" style="padding: 5px 10px; font-size: 11px;">New </button>
+                    <button onclick="undoLastRoadNode()" style="background-color: #e67e22; color: white; padding: 5px 10px; font-size: 11px;">Undo</button>
+                    <button onclick="clearRoads()" class="btn-clear" style="padding: 5px 10px; font-size: 11px;">Reset</button>
                 </div>
             </div>
 
@@ -660,11 +660,11 @@
                     <thead>
                         <tr>
                             <th style="width: 6%">Sl No</th>
-                            <th style="width: 20%">Name</span></th>
+                            <th style="width: 20%">Name</th>
                             <th style="width: 14%">Phone</th>
                             <th style="width: 10%">Bldg No</th>
                             <th style="width: 12%">CN No</th>
-                            <th style="width: 18%">Type</th>
+                            <th style="width: 18%">Pucca/Katcha/Others</th>
                             <th style="width: 20%">Remarks</th>
                         </tr>
                     </thead>
@@ -888,7 +888,7 @@
             });
         }
 
-        // BUSY PROGRESS
+        // BUSY PROGRESS (spinner removed, only bar and % animate)
         function showBusyProgress(title, onFinishedAction) {
             loadingOverlay.style.display = 'flex';
             statusText.innerText = title;
@@ -919,7 +919,7 @@
             });
         }
 
-        // SINGLE-PAGE PRINT UTILITY (Landscape mode enabled)
+        // SINGLE-PAGE PRINT UTILITY (Landscape layout size configured safely)
         function triggerPrint(sizeClass, pageSize) {
             const printStyle = document.createElement('style');
             printStyle.id = "print-page-style";
@@ -1173,17 +1173,7 @@
                     const name = formName.value.trim();
                     const phone = formPhone.value.trim();
 
-                    
-
-                    // Enforce that all listed Census Houses have a valid CN No
-                    for (let i = 0; i < modalHouses.length; i++) {
-                        if (!modalHouses[i].cnNo || modalHouses[i].cnNo.trim() === "") {
-                            await showCustomAlert(`Save Blocked: CN No is compulsory for all Census Houses (Row ${i+1}).`, "Form Error");
-                            return;
-                        }
-                    }
-
-                    // Map values back to object
+                    // Map values back to object (All constraints completely removed, blank saving allowed)
                     markerData.name = name;
                     markerData.phone = phone;
                     markerData.buildingNo = formBuildingNo.value.trim();
@@ -1191,7 +1181,7 @@
                     // Save back the serialized census houses array
                     markerData.censusHouses = JSON.parse(JSON.stringify(modalHouses));
 
-                    // Keep flat fields populated with first house value for compatibility checks
+                    // Keep flat fields populated with first house value for compatibility checks (Fixes FormCNNo reference error)
                     markerData.cnNo = modalHouses[0].cnNo;
                     markerData.note = modalHouses[0].type;
                     markerData.remarks = modalHouses[0].remarks;
@@ -1224,7 +1214,8 @@
 
             if (currentToolMode === "building") {
                 const nextIndex = markers.length + 1;
-                const formattedCN = String(nextIndex).padStart(4, '0');
+                const totalExisting = countTotalHousesInSession();
+                const formattedCN = String(totalExisting + 1).padStart(4, '0');
 
                 const draftMarker = {
                     id: markerCounter,
@@ -1246,6 +1237,7 @@
                     markers.push(draftMarker);
                     markerCounter++;
                     render();
+                    await saveToCloud(); // Automatically save to cloud on addition
                 }
             } else {
                 if (roads.length === 0) {
@@ -1257,34 +1249,16 @@
             }
         });
 
-        // VALIDATION CHECK FOR COMPULSORY FIELDS
+        // VALIDATION BYPASSED
         async function validateAllFields() {
-            if (markers.length === 0) {
-                await showCustomAlert("There are no registered buildings to validate.", "Validation Alert");
-                return false;
-            }
-
-            for (let i = 0; i < markers.length; i++) {
-                const m = markers[i];
-                const row = i + 1;
-
-                const nameVal = String(m.name || "").trim();
-                const phoneVal = String(m.phone || "").trim();
-
-                if (nameVal === "") {
-                    await showCustomAlert(`Save Blocked: Sl No ${row} is missing 'Owner Name'.`, "Validation Error");
-                    return false;
-                }
-                if (phoneVal === "") {
-                    await showCustomAlert(`Save Blocked: Sl No ${row} is missing 'Phone Number'.`, "Validation Error");
-                    return false;
-                }
-                if (phoneVal.length !== 10) {
-                    await showCustomAlert(`Save Blocked: Sl No ${row} has an invalid Phone Number. It must be exactly 10 digits.`, "Validation Error");
-                    return false;
-                }
-            }
             return true;
+        }
+
+        // HELPER TO REMOVE MARKER AND AUTO-SAVE TO SHEET
+        async function removeMarkerAndSave(index) {
+            markers.splice(index, 1);
+            render();
+            await saveToCloud(); // Auto-saves to Google Sheet
         }
 
         // OPTIONS MENU CONTROLLER (View / Edit / Delete)
@@ -1303,7 +1277,10 @@
                 optionsModal.style.display = 'none';
                 cleanup();
                 const saved = await openEntryModal(m, m.slNo, false);
-                if (saved) render();
+                if (saved) {
+                    render();
+                    await saveToCloud(); // Automatically save to cloud on edit save
+                }
             };
 
             const onDelete = async () => {
@@ -1311,7 +1288,7 @@
                 cleanup();
                 const confirmed = await showCustomConfirm(`Do you want to delete Sl No ${m.slNo}?`, "Confirm Delete");
                 if (confirmed) {
-                    removeMarker(index);
+                    await removeMarkerAndSave(index); // Auto-saves to Google Sheet
                 }
             };
 
@@ -1465,7 +1442,7 @@
             // Serialize 1-to-many censusHouses arrays into newline-separated flat columns to preserve Google Sheets schema compatibility
             payload.forEach(m => {
                 if (m.censusHouses && m.censusHouses.length > 0) {
-                    m.cnNo = m.censusHouses.map(ch => ch.cnNo).join("\n"); 
+                    m.cnNo = m.censusHouses.map(ch => ch.cnNo || m.cnNo).join("\n"); // Fallback check updated
                     m.note = m.censusHouses.map(ch => ch.type).join("\n");
                     m.remarks = m.censusHouses.map(ch => ch.remarks).join("\n");
                 }
@@ -1556,7 +1533,7 @@
                     });
             };
 
-            showBusyProgress("Loading...", fetchAction);
+            showBusyProgress("Fetching Data...", fetchAction);
         }
     </script>
 </body>
