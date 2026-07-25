@@ -2,13 +2,22 @@
 <html lang="en">
 <head>
   <meta charset="UTF-8">
-  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0, maximum-scale=1.0, minimum-scale=1.0, user-scalable=no, shrink-to-fit=no">
   <title>TDTTI USS TRAINING PORTAL 2026-27</title>
   <link rel="preconnect" href="https://fonts.googleapis.com">
   <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
   <link href="https://fonts.googleapis.com/css2?family=Inter:wght@300;400;500;600;700;800;900&family=Amiri:wght@400;700&display=swap" rel="stylesheet">
   
   <style>
+
+    /* DISABLE TOUCH ZOOM AND GESTURE SCALING */
+    html, body {
+    touch-action: pan-x pan-y;
+    -webkit-text-size-adjust: 100%;
+    -ms-text-size-adjust: 100%;
+    text-size-adjust: 100%;
+    }
+
     :root {
       --primary: #1e40af;
       --primary-hover: #1e3a8a;
@@ -396,6 +405,28 @@
       #printable-consolidated-area { position: absolute; left: 0; top: 0; width: 100%; background: #fff; padding: 20px; }
       .no-print { display: none !important; }
     }
+
+    .target-audience-pill {
+  width: 100%;
+  padding: 12px 16px;
+  border-radius: 12px;
+  border: 1.5px solid var(--border-color);
+  background: #ffffff;
+  font-weight: 700;
+  font-size: 13.5px;
+  color: var(--text-main);
+  cursor: pointer;
+  user-select: none;
+  text-align: left;
+  transition: all 0.2s ease;
+  box-sizing: border-box;
+}
+.target-audience-pill.active {
+  background: #dbeafe;
+  border-color: #2563eb;
+  color: #1e40af;
+  box-shadow: var(--shadow-sm);
+}
   </style>
 </head>
 <body>
@@ -509,7 +540,7 @@
       <svg viewBox="0 0 24 24" fill="none"><path d="M12 6.253v13m0-13C10.832 5.477 9.246 5 7.5 5S4.168 5.477 3 6.253v13C4.168 18.477 5.754 18 7.5 18s3.332.477 4.5 1.253m0-13C13.168 5.477 14.754 5 16.5 5c1.747 0 3.332.477 4.5 1.253v13C19.832 18.477 18.247 18 16.5 18c-1.746 0-3.332.477-4.5 1.253" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"/></svg>
     </button>
     <!-- Portfolio -->
-    <button class="icon-tab-btn" id="tab-portfolio" onclick="showSection('portfolio-sec')" title="My Performance Portfolio">
+    <button class="icon-tab-btn" id="tab-portfolio" onclick="showSection('portfolio-sec')" title="My Portfolio">
       <svg viewBox="0 0 24 24" fill="none"><path d="M18 20V10M12 20V4M6 20v-6" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"/></svg>
     </button>
     <!-- Notifications -->
@@ -699,7 +730,7 @@
 
     <!-- 2. My Performance Portfolio Section -->
     <section id="portfolio-sec" class="section" style="display:none;">
-      <h2>My Performance Portfolio</h2>
+      <h2>Portfolio</h2>
 
       <div class="stats-grid">
         <div class="card">
@@ -707,19 +738,19 @@
           <h3 id="stat-total">0</h3>
         </div>
         <div class="card">
-          <p style="margin:0; color:var(--text-muted); font-size:13px; font-weight:600;">Overall Accuracy Rate</p>
+          <p style="margin:0; color:var(--text-muted); font-size:13px; font-weight:600;">Overall </p>
           <h3 id="stat-accuracy">0%</h3>
         </div>
       </div>
 
       <div class="card">
-        <h3 style="margin-top:0; color:var(--primary);">Graphical Subject Performance Dashboard</h3>
-        <p style="font-size:13px; color:var(--text-muted); margin-bottom:20px;">Visual breakdown comparing mastered subjects against weak subjects requiring focus.</p>
+        <h3 style="margin-top:0; color:var(--primary);">Dashboard</h3>
+        
 
         <div class="grid-2">
           <div style="background:#f0fdf4; border:1px solid #bbf7d0; padding:18px; border-radius:12px;">
             <h4 style="margin:0 0 15px 0; color:#166534; display:flex; align-items:center; gap:8px;">
-              <span>🌟 Strong / Improved Subjects (≥70%)</span>
+              <span>🌟 Strength </span>
             </h4>
             <div id="strong-subjects-chart-container">
               <p style="font-size:13px; color:var(--text-muted);">No strong subjects recorded yet.</p>
@@ -728,7 +759,7 @@
 
           <div style="background:#fffbe0; border:1px solid #fef08a; padding:18px; border-radius:12px;">
             <h4 style="margin:0 0 15px 0; color:#92400e; display:flex; align-items:center; gap:8px;">
-              <span>⚠️ Focus Areas / Weak Subjects (<70%)</span>
+              <span>⚠️ Priorities </span>
             </h4>
             <div id="weak-subjects-chart-container">
               <p style="font-size:13px; color:var(--text-muted);">No weak subjects identified!</p>
@@ -738,16 +769,16 @@
       </div>
 
       <div class="card">
-        <h3>Subject Strength Overview</h3>
+        <h3>Overview</h3>
         <div class="table-responsive">
           <table class="data-table">
             <thead>
               <tr>
                 <th>Subject</th>
-                <th>Total Attempted</th>
-                <th>Correct Answers</th>
-                <th>Wrong Answers</th>
-                <th>Last Attempt Date</th>
+                <th>Total</th>
+                <th>Correct</th>
+                <th>Wrong</th>
+                <th>Last</th>
               </tr>
             </thead>
             <tbody id="portfolio-table-body"></tbody>
@@ -762,16 +793,16 @@
       </div>
 
       <div class="card">
-        <h3>Subjectwise Attempted Questions Log</h3>
+        <h3>Practice Audit</h3>
         <div class="table-responsive">
           <table class="data-table">
             <thead>
               <tr>
-                <th>Timestamp</th>
+                <th>DT</th>
                 <th>Subject</th>
                 <th>Question</th>
-                <th>Your Answer</th>
-                <th>Correct Answer</th>
+                <th>Answer</th>
+                <th>Correct</th>
                 <th>Status</th>
               </tr>
             </thead>
@@ -783,61 +814,72 @@
 
     <!-- 3. NOTIFICATION CENTER TAB -->
     <section id="notif-sec" class="section" style="display:none;">
-      <div class="card" style="width: 100%;">
-        <div style="display: flex; justify-content: space-between; align-items: center; margin-bottom: 20px;">
-          <h2 style="margin:0;">Notification Center</h2>
-          <button class="btn btn-outline" onclick="markAllNotifsAsRead()">Mark All Read ✓</button>
-        </div>
+  <div class="card" style="width: 100%; box-sizing: border-box;">
+    <div style="display: flex; justify-content: space-between; align-items: center; margin-bottom: 20px;">
+      <h2 style="margin:0;">Notification Center</h2>
+      <button class="btn btn-outline" onclick="markAllNotifsAsRead()">Mark All Read ✓</button>
+    </div>
+    
+    <!-- COMPOSE NOTIFICATION 100% WIDTH VERTICAL LAYOUT -->
+    <div id="admin-notif-composer" class="notif-composer-full admin-only" style="width:100%; box-sizing:border-box;">
+      
+      
+      <form id="send-notif-form" style="width:100%; display:flex; flex-direction:column; align-items:flex-start;">
         
-        <div id="admin-notif-composer" class="notif-composer-full admin-only">
-          <h3 style="margin-top:0; color:var(--primary); text-align:left;">Compose Notification</h3>
-          
-          <form id="send-notif-form">
-            <div class="form-group" style="margin-top:15px;">
-              <label>Target Audience</label>
-              <select id="notif-target-mode" onchange="toggleNotifTargetUI()" required>
-                <option value="ALL">📢 Broadcast to All Users</option>
-                <option value="CUSTOM">🎯 Select Student(s) (Tap or Touch & Hold to Select)</option>
-              </select>
-            </div>
-
-            <div class="form-group" id="student-picker-box" style="display:none;">
-              <label>Tap or Touch & Hold to Select Student(s):</label>
-              <div class="student-chips-container" id="student-chips-container"></div>
-            </div>
-
-            <div class="form-group">
-              <label>Notification Title</label>
-              <input type="text" id="notif-title" required placeholder="e.g. Special Trial Exam Announced">
-            </div>
-
-            <div class="form-group">
-              <label>Message Content</label>
-              <textarea id="notif-message" rows="3" required placeholder="Type notification message here..."></textarea>
-            </div>
-
-            <button type="submit" class="btn btn-primary">Send Notification</button>
-          </form>
+        <!-- Target Audience Label -->
+        <label style="font-weight:700; font-size:13px; margin-bottom:8px; display:block; width:100%; text-align:left;">Target Audience</label>
+        
+        <!-- Target Audience Tap Pills (100% Width) -->
+        <div style="display:flex; flex-direction:column; gap:10px; width:100%; margin-bottom:18px;">
+          <div id="target-pill-all" class="target-audience-pill active" onclick="selectNotifTarget('ALL')">
+            📢 Broadcast to All Users
+          </div>
+          <div id="target-pill-custom" class="target-audience-pill" onclick="selectNotifTarget('CUSTOM')">
+            🎯 Select Student
+          </div>
         </div>
 
-        <div style="display:flex; justify-content:space-between; align-items:center; margin-bottom:15px;">
-          <h3 style="margin:0;">Notifications Feed</h3>
-          <button id="admin-delete-selected-btn" class="btn btn-danger admin-only" onclick="deleteSelectedNotifs()" style="display:none;">
-            Delete Selected (<span id="selected-notif-count">0</span>)
-          </button>
+        <!-- Student Picker Container (100% Width) -->
+        <div id="student-picker-box" style="display:none; width:100%; margin-bottom:18px;">
+          <label style="font-weight:700; font-size:13px; margin-bottom:6px; display:block; text-align:left;">Tap or Touch & Hold to Select Student(s):</label>
+          <div class="student-chips-container" id="student-chips-container" style="width:100%; box-sizing:border-box;"></div>
         </div>
 
-        <div id="notifications-list-container">
-          <p style="color:var(--text-muted); font-size:14px;">Loading notifications...</p>
+        <!-- Notification Title (100% Width) -->
+        <div class="form-group" style="width:100%;">
+          <label style="font-weight:700; font-size:13px; display:block; text-align:left; margin-bottom:6px;">Notification Title</label>
+          <input type="text" id="notif-title" required placeholder="e.g. Special Trial Exam Announced" style="width:100%;">
         </div>
-      </div>
-    </section>
+
+        <!-- Message Content (100% Width) -->
+        <div class="form-group" style="width:100%;">
+          <label style="font-weight:700; font-size:13px; display:block; text-align:left; margin-bottom:6px;">Message Content</label>
+          <textarea id="notif-message" rows="3" required placeholder="Type notification message here..." style="width:100%;"></textarea>
+        </div>
+
+        <!-- Send Button (100% Width) -->
+        <button type="submit" class="btn btn-primary btn-block" style="width:100%; padding:12px; font-weight:800;">Send Notification</button>
+      </form>
+    </div>
+
+    <!-- NOTIFICATIONS FEED -->
+    <div style="display:flex; justify-content:space-between; align-items:center; margin-bottom:15px; margin-top:30px;">
+      <h3 style="margin:0;">Notifications Feed</h3>
+      <button id="admin-delete-selected-btn" class="btn btn-danger admin-only" onclick="deleteSelectedNotifs()" style="display:none;">
+        Delete Selected (<span id="selected-notif-count">0</span>)
+      </button>
+    </div>
+
+    <div id="notifications-list-container">
+      <p style="color:var(--text-muted); font-size:14px;">Loading notifications...</p>
+    </div>
+  </div>
+</section>
 
     <!-- 4. ADMIN TAB: Vertical Collapsible Student Reports -->
     <section id="admin-report-sec" class="section" style="display:none;">
       <div class="card">
-        <h2>Student Academic Evaluation Reports</h2>
-        <p style="color:var(--text-muted); font-size:13px; margin-bottom:20px;">Click any student to expand their evaluation profile, Trial Exam consolidations, send WhatsApp report, or print question log.</p>
+        <h2>Evaluation Reports</h2>
         <div id="admin-student-accordion-list"></div>
       </div>
     </section>
@@ -846,22 +888,22 @@
     <section id="admin-resets-sec" class="section" style="display:none;">
       <div class="card">
         <div style="display: flex; justify-content: space-between; align-items: center; margin-bottom: 15px;">
-          <h2 style="margin:0;">Subject Attempts Reset Requests</h2>
+          <h2 style="margin:0;">Reset Requests</h2>
           <button onclick="refreshResetRequests(this)" class="btn btn-outline" title="Refresh Requests">
             🔄 Refresh
           </button>
         </div>
-        <p style="color:var(--text-muted); font-size:13px; margin-bottom:20px;">Students who completed all questions for a subject can request a reset to practice again. Accept or reject below.</p>
+        
         <div class="table-responsive">
           <table class="data-table">
             <thead>
               <tr>
-                <th>Request ID</th>
-                <th>Timestamp</th>
-                <th>Student Name</th>
-                <th>Class/Div</th>
-                <th>Phone</th>
-                <th>Subject</th>
+                <th>ID</th>
+                <th>DT</th>
+                <th>NAME</th>
+                <th>CD</th>
+                <th>PH</th>
+                <th>SUB</th>
                 <th>Status</th>
                 <th>Action</th>
               </tr>
@@ -896,24 +938,35 @@
           </div>
 
           <!-- DIAGRAM ICONS PLACED DIRECTLY BELOW & RIGHT ALIGNED TO QUESTION TEXT -->
-          <div class="form-group">
-            <div style="display:flex; justify-content:space-between; align-items:center; margin-bottom:6px;">
-              <label style="margin:0;">Question Text</label>
-              <div style="display:flex; gap:8px;">
-                <label class="icon-action-btn-sm" title="Capture Camera Diagram">
-                  <input type="file" accept="image/*" capture="environment" onchange="uploadToImgBB(this)" hidden>
-                  📷
-                </label>
-                <label class="icon-action-btn-sm" title="Upload Image File">
-                  <input type="file" accept="image/*" onchange="uploadToImgBB(this)" hidden>
-                  🖼️
-                </label>
-              </div>
-            </div>
-            <textarea id="q-text" required rows="3" placeholder="Type question prompt here..."></textarea>
-            <input type="text" id="q-img-url" style="display:none;">
-            <div style="text-align:right;"><img id="q-img-preview" src="" style="display:none; max-height:120px; border-radius:8px; margin-top:10px; border:1px solid var(--border-color);"></div>
-          </div>
+          <!-- Question Text with Black & White SVG Diagram Action Icons -->
+<div class="form-group">
+  <div style="display:flex; justify-content:space-between; align-items:center; margin-bottom:6px;">
+    <label style="margin:0; font-weight:700;">Question Text</label>
+    <div style="display:flex; gap:8px;">
+      <!-- Monochrome Camera Icon -->
+      <label class="icon-action-btn-sm" title="Capture Camera Diagram" style="width:36px; height:34px; padding:0; display:inline-flex; align-items:center; justify-content:center; border:1px solid #cbd5e1; border-radius:8px; cursor:pointer;">
+        <input type="file" accept="image/*" capture="environment" onchange="uploadToImgBB(this)" hidden>
+        <svg width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="#0f172a" stroke-width="2" stroke-linecap="round" stroke-linejoin="round">
+          <path d="M23 19a2 2 0 0 1-2 2H3a2 2 0 0 1-2-2V8a2 2 0 0 1 2-2h4l2-3h6l2 3h4a2 2 0 0 1 2 2z"></path>
+          <circle cx="12" cy="13" r="4"></circle>
+        </svg>
+      </label>
+      
+      <!-- Monochrome Image Upload Icon -->
+      <label class="icon-action-btn-sm" title="Upload Image File" style="width:36px; height:34px; padding:0; display:inline-flex; align-items:center; justify-content:center; border:1px solid #cbd5e1; border-radius:8px; cursor:pointer;">
+        <input type="file" accept="image/*" onchange="uploadToImgBB(this)" hidden>
+        <svg width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="#0f172a" stroke-width="2" stroke-linecap="round" stroke-linejoin="round">
+          <rect x="3" y="3" width="18" height="18" rx="2" ry="2"></rect>
+          <circle cx="8.5" cy="8.5" r="1.5"></circle>
+          <polyline points="21 15 16 10 5 21"></polyline>
+        </svg>
+      </label>
+    </div>
+  </div>
+  <textarea id="q-text" required rows="3" placeholder="Type question prompt here..."></textarea>
+  <input type="text" id="q-img-url" style="display:none;">
+  <div style="text-align:right;"><img id="q-img-preview" src="" style="display:none; max-height:120px; border-radius:8px; margin-top:10px; border:1px solid var(--border-color);"></div>
+</div>
 
           <div class="grid-2">
             <div><label>Option A</label><input type="text" id="q-optA" required></div>
@@ -1009,14 +1062,14 @@
             <table class="data-table" id="consolidated-perf-table">
               <thead>
                 <tr>
-                  <th class="sortable" onclick="sortConsolidatedTable('sno')">S.No ↕</th>
-                  <th class="sortable" onclick="sortConsolidatedTable('name')">Name ↕</th>
-                  <th class="sortable" onclick="sortConsolidatedTable('gender')">Gender ↕</th>
-                  <th class="sortable" onclick="sortConsolidatedTable('class')">Class ↕</th>
-                  <th class="sortable" onclick="sortConsolidatedTable('div')">Div ↕</th>
-                  <th class="sortable" onclick="sortConsolidatedTable('firstLanguage')">First Language ↕</th>
-                  <th class="sortable" onclick="sortConsolidatedTable('phone')">Phone No ↕</th>
-                  <th class="sortable" onclick="sortConsolidatedTable('accuracy')">Overall Accuracy Rate ↕</th>
+                  <th class="sortable" onclick="sortConsolidatedTable('sno')">Sn</th>
+                  <th class="sortable" onclick="sortConsolidatedTable('name')">Name</th>
+                  <th class="sortable" onclick="sortConsolidatedTable('gender')">G</th>
+                  <th class="sortable" onclick="sortConsolidatedTable('class')">C</th>
+                  <th class="sortable" onclick="sortConsolidatedTable('div')">D</th>
+                  <th class="sortable" onclick="sortConsolidatedTable('firstLanguage')">Lan</th>
+                  <th class="sortable" onclick="sortConsolidatedTable('phone')">Ph</th>
+                  <th class="sortable" onclick="sortConsolidatedTable('accuracy')">Overall</th>
                 </tr>
               </thead>
               <tbody id="consolidated-table-body"></tbody>
@@ -1139,7 +1192,6 @@
       document.addEventListener('contextmenu', (e) => {
         if (!securityProtectionActive) return;
         e.preventDefault();
-        showToast('⚠️ Right click is restricted on this portal!', 'danger');
         return false;
       });
 
@@ -1270,38 +1322,74 @@
     }
 
     function formatDateStrict(dateStr) {
-      if (!dateStr) return 'N/A';
-      const d = new Date(dateStr);
-      if (isNaN(d.getTime())) return dateStr;
+  if (!dateStr || dateStr === '-' || dateStr === 'Active Now') return dateStr;
+  const d = new Date(dateStr);
+  if (isNaN(d.getTime())) return dateStr;
 
-      const dd = String(d.getDate()).padStart(2, '0');
-      const mm = String(d.getMonth() + 1).padStart(2, '0');
-      const yyyy = d.getFullYear();
+  const dd = String(d.getDate()).padStart(2, '0');
+  const mm = String(d.getMonth() + 1).padStart(2, '0');
+  const yyyy = d.getFullYear();
 
-      const hh = String(d.getHours()).padStart(2, '0');
-      const min = String(d.getMinutes()).padStart(2, '0');
-      const ss = String(d.getSeconds()).padStart(2, '0');
+  const hh = String(d.getHours()).padStart(2, '0');
+  const min = String(d.getMinutes()).padStart(2, '0');
+  const ss = String(d.getSeconds()).padStart(2, '0');
 
-      return `${dd}/${mm}/${yyyy}, ${hh}:${min}:${ss}`;
-    }
+  return `${dd}/${mm}/${yyyy}, ${hh}:${min}:${ss}`;
+}
 
-    function getDeviceInfo() {
-      const ua = navigator.userAgent;
-      let os = "Device";
-      if (ua.includes("Win")) os = "Windows";
-      else if (ua.includes("Mac")) os = "MacOS";
-      else if (ua.includes("Linux")) os = "Linux";
-      else if (ua.includes("Android")) os = "Android";
-      else if (ua.includes("iPhone") || ua.includes("iPad")) os = "iOS";
+    // ADVANCED FULL DEVICE & BROWSER EXTRACTION FOR AUDIT ACCESS LOGS
+function getDeviceInfo() {
+  const ua = navigator.userAgent;
+  
+  // 1. Detect Detailed OS
+  let os = "Unknown OS";
+  if (ua.indexOf("Win") !== -1) {
+    if (ua.indexOf("Windows NT 10.0") !== -1) os = "Windows 10/11";
+    else if (ua.indexOf("Windows NT 6.3") !== -1) os = "Windows 8.1";
+    else if (ua.indexOf("Windows NT 6.1") !== -1) os = "Windows 7";
+    else os = "Windows PC";
+  } else if (ua.indexOf("Android") !== -1) {
+    const androidVer = ua.match(/Android\s([0-9\.]+)/);
+    const modelMatch = ua.match(/;\s*([^;]+)\s+Build\//);
+    const model = modelMatch ? modelMatch[1].trim() : "Device";
+    os = `Android ${androidVer ? androidVer[1] : ''} (${model})`;
+  } else if (ua.indexOf("iPhone") !== -1) {
+    const iosVer = ua.match(/OS\s([0-9_]+)/);
+    const ver = iosVer ? iosVer[1].replace(/_/g, '.') : '';
+    os = `Apple iPhone (iOS ${ver})`;
+  } else if (ua.indexOf("iPad") !== -1) {
+    os = "Apple iPad";
+  } else if (ua.indexOf("Mac") !== -1) {
+    os = "macOS Desktop";
+  } else if (ua.indexOf("Linux") !== -1) {
+    os = "Linux Desktop";
+  }
 
-      let browser = "Browser";
-      if (ua.includes("Chrome")) browser = "Chrome";
-      else if (ua.includes("Safari")) browser = "Safari";
-      else if (ua.includes("Firefox")) browser = "Firefox";
-      else if (ua.includes("Edg")) browser = "Edge";
+  // 2. Detect Browser & Exact Version
+  let browser = "Browser";
+  if (ua.indexOf("Edg") !== -1) {
+    const edgMatch = ua.match(/Edg\/([0-9\.]+)/);
+    browser = `MS Edge ${edgMatch ? edgMatch[1] : ''}`;
+  } else if (ua.indexOf("OPR") !== -1 || ua.indexOf("Opera") !== -1) {
+    const oprMatch = ua.match(/OPR\/([0-9\.]+)/);
+    browser = `Opera ${oprMatch ? oprMatch[1] : ''}`;
+  } else if (ua.indexOf("Chrome") !== -1) {
+    const chromeMatch = ua.match(/Chrome\/([0-9\.]+)/);
+    browser = `Google Chrome ${chromeMatch ? chromeMatch[1] : ''}`;
+  } else if (ua.indexOf("Safari") !== -1) {
+    const safariMatch = ua.match(/Version\/([0-9\.]+)/);
+    browser = `Apple Safari ${safariMatch ? safariMatch[1] : ''}`;
+  } else if (ua.indexOf("Firefox") !== -1) {
+    const ffMatch = ua.match(/Firefox\/([0-9\.]+)/);
+    browser = `Mozilla Firefox ${ffMatch ? ffMatch[1] : ''}`;
+  }
 
-      return `${os} (${browser})`;
-    }
+  // 3. Screen Resolution & Touch Type
+  const screenRes = `${window.screen.width}x${window.screen.height}`;
+  const isTouchDevice = ('ontouchstart' in window || navigator.maxTouchPoints > 0) ? 'Touch Screen' : 'Desktop Non-Touch';
+
+  return `${os} | ${browser} | ${screenRes} (${isTouchDevice})`;
+}
 
     function setProgress(percent) {
       const bar = document.getElementById('progress-bar');
@@ -1913,8 +2001,8 @@
         else weakHTML += itemHTML;
       });
 
-      strongBox.innerHTML = strongHTML || '<p style="font-size:13px; color:var(--text-muted); margin:0;">No subjects mastered (≥70%) yet.</p>';
-      weakBox.innerHTML = weakHTML || '<p style="font-size:13px; color:var(--text-muted); margin:0;">Great job! All subjects are performing well (≥70%).</p>';
+      strongBox.innerHTML = strongHTML || '<p style="font-size:13px; color:var(--text-muted); margin:0;">No Subjects Mastered Yet.</p>';
+      weakBox.innerHTML = weakHTML || '<p style="font-size:13px; color:var(--text-muted); margin:0;">Great job! All Subjects are Performing Well.</p>';
     }
 
     // NOTIFICATIONS
@@ -1944,50 +2032,42 @@
       selectedNotifIds.clear();
       updateDeleteNotifBtnState();
 
-      res.notifications.forEach(n => {
-        const isRead = readSet.has(n.NotificationID);
-        if (!isRead) unreadCount++;
+      // Render Notification Cards without checkboxes (Touch & Hold or Tap to select)
+res.notifications.forEach(n => {
+  const isRead = readSet.has(n.NotificationID);
+  if (!isRead) unreadCount++;
 
-        let recipientBadge = '';
-        if (isAdmin) {
-          const rec = String(n.RecipientPhone).trim();
-          if (rec === 'ALL') recipientBadge = '<span class="badge" style="background:#e0e7ff; color:#3730a3; margin-bottom:8px; display:inline-block;">Sent To: All Users (Broadcast)</span>';
-          else if (rec === 'ADMIN') recipientBadge = '<span class="badge" style="background:#fef3c7; color:#92400e; margin-bottom:8px; display:inline-block;">Sent To: System Admin</span>';
-          else recipientBadge = `<span class="badge" style="background:#dcfce7; color:#166534; margin-bottom:8px; display:inline-block;">Sent To: ${userMap[rec] || rec}</span>`;
-        }
+  const card = document.createElement('div');
+  card.className = `notif-card ${isRead ? '' : 'unread'}`;
+  card.id = `notif-card-${n.NotificationID}`;
 
-        const card = document.createElement('div');
-        card.className = `notif-card ${isRead ? '' : 'unread'}`;
-        card.id = `notif-card-${n.NotificationID}`;
+  card.innerHTML = `
+    <div style="display:flex; justify-content:space-between; align-items:center; margin-bottom:8px;">
+      <strong style="font-size:15px; color:var(--text-main);">${n.Title}</strong>
+      <small style="color:var(--text-muted); font-weight:600;">${formatDateStrict(n.Timestamp)}</small>
+    </div>
+    <p style="margin:0 0 12px 0; font-size:14px; color:var(--text-main); line-height:1.4;">${n.Message}</p>
+    <div style="display:flex; justify-content:space-between; align-items:center;">
+      <small style="color:var(--text-muted); font-weight:600;">From: ${n.Sender}</small>
+      <div style="display:flex; gap:8px;">
+        <button onclick="event.stopPropagation(); toggleNotifRead('${n.NotificationID}')" class="btn btn-outline" style="padding:4px 12px; font-size:12px;">
+          ${isRead ? 'Mark Unread' : 'Mark as Read ✓'}
+        </button>
+        ${isAdmin ? `
+          <button onclick="event.stopPropagation(); deleteSingleNotif('${n.NotificationID}')" class="icon-action-btn delete-btn" style="width:32px; height:32px;" title="Delete Notification">
+            🗑️
+          </button>
+        ` : ''}
+      </div>
+    </div>
+  `;
 
-        card.innerHTML = `
-          ${recipientBadge ? `<div>${recipientBadge}</div>` : ''}
-          <div style="display:flex; justify-content:space-between; align-items:center; margin-bottom:8px;">
-            <strong style="font-size:15px; color:var(--text-main);">${n.Title}</strong>
-            <small style="color:var(--text-muted); font-weight:600;">${formatDateStrict(n.Timestamp)}</small>
-          </div>
-          <p style="margin:0 0 12px 0; font-size:14px; color:var(--text-main); line-height:1.4;">${n.Message}</p>
-          <div style="display:flex; justify-content:space-between; align-items:center;">
-            <small style="color:var(--text-muted); font-weight:600;">From: ${n.Sender}</small>
-            <div style="display:flex; gap:8px;">
-              <button onclick="event.stopPropagation(); toggleNotifRead('${n.NotificationID}')" class="btn btn-outline" style="padding:4px 12px; font-size:12px;">
-                ${isRead ? 'Mark Unread' : 'Mark as Read ✓'}
-              </button>
-              ${isAdmin ? `
-                <button onclick="event.stopPropagation(); deleteSingleNotif('${n.NotificationID}')" class="icon-action-btn delete-btn" style="width:32px; height:32px;" title="Delete Notification">
-                  🗑️
-                </button>
-              ` : ''}
-            </div>
-          </div>
-        `;
+  if (isAdmin) {
+    attachNotifTouchAndHold(card, n.NotificationID);
+  }
 
-        if (isAdmin) {
-          attachNotifTouchAndHold(card, n.NotificationID);
-        }
-
-        container.appendChild(card);
-      });
+  container.appendChild(card);
+});
 
       if (unreadCount > 0) {
         document.getElementById('notif-badge-dot').style.display = 'block';
@@ -2403,18 +2483,21 @@
         </tr>
       `).join('');
 
+      // Render Audit Access Logs with Strict Date & Time formatting
       const lBody = document.getElementById('admin-logs-body');
+      if (lBody && res.logs) {
       lBody.innerHTML = res.logs.map(l => `
-        <tr>
-          <td>${formatDateStrict(l.Timestamp)}</td>
-          <td><b>${l.Identifier}</b></td>
-          <td>${l.Role}</td>
-          <td><span class="badge ${l.LoginStatus === 'SUCCESS' ? 'badge-success' : 'badge-danger'}">${l.LoginStatus}</span></td>
-          <td>${l.LoginTime}</td>
-          <td><span class="badge ${l.LogoutTime === 'Active Now' ? 'badge-success' : ''}">${l.LogoutTime}</span></td>
-          <td>${l.Device}</td>
-        </tr>
+      <tr>
+      <td>${formatDateStrict(l.Timestamp)}</td>
+      <td><b>${l.Identifier}</b></td>
+      <td>${l.Role}</td>
+      <td><span class="badge ${l.LoginStatus === 'SUCCESS' ? 'badge-success' : 'badge-danger'}">${l.LoginStatus}</span></td>
+      <td>${formatDateStrict(l.LoginTime)}</td>
+      <td>${l.LogoutTime === 'Active Now' ? '<span class="badge badge-success">Active Now</span>' : formatDateStrict(l.LogoutTime)}</td>
+      <td>${l.Device}</td>
+      </tr>
       `).join('');
+      }
     }
 
     function sendSubjectAnalyticsWhatsapp(name, phone, encStrong, encWeak) {
@@ -2763,6 +2846,52 @@ async function handleFirstTimePassSubmit(e) {
     showToast('Failed to change password. Try again.', 'danger');
   }
 }
+
+let currentNotifTarget = 'ALL';
+
+function selectNotifTarget(mode) {
+  currentNotifTarget = mode;
+  const pillAll = document.getElementById('target-pill-all');
+  const pillCustom = document.getElementById('target-pill-custom');
+  const pickerBox = document.getElementById('student-picker-box');
+
+  if (mode === 'ALL') {
+    pillAll.className = 'target-audience-pill active';
+    pillCustom.className = 'target-audience-pill';
+    pickerBox.style.display = 'none';
+  } else {
+    pillAll.className = 'target-audience-pill';
+    pillCustom.className = 'target-audience-pill active';
+    pickerBox.style.display = 'block';
+  }
+}
+
+// COMPLETELY DISABLE PINCH & DOUBLE-TAP ZOOM FOR TOUCH DEVICES
+document.addEventListener('touchstart', function (event) {
+  if (event.touches.length > 1) {
+    event.preventDefault(); // Block multi-touch pinch-to-zoom
+  }
+}, { passive: false });
+
+let lastTouchEnd = 0;
+document.addEventListener('touchend', function (event) {
+  const now = new Date().getTime();
+  if (now - lastTouchEnd <= 300) {
+    event.preventDefault(); // Block double-tap zoom
+  }
+  lastTouchEnd = now;
+}, false);
+
+// Block Safari iOS Gesture Scaling
+document.addEventListener('gesturestart', function (e) {
+  e.preventDefault();
+});
+document.addEventListener('gesturechange', function (e) {
+  e.preventDefault();
+});
+document.addEventListener('gestureend', function (e) {
+  e.preventDefault();
+});
 
 
   </script>
