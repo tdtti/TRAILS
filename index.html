@@ -1,1540 +1,2770 @@
 <!DOCTYPE html>
 <html lang="en">
 <head>
-    <meta charset="UTF-8">
-    <meta name="viewport" content="width=device-width, initial-scale=1.0, maximum-scale=1.0, user-scalable=no">
-    <title>KK Mapper</title>
-    <style>
-        :root {
-            --primary: #2980b9;
-            --primary-dark: #1f618d;
-            --success: #2ecc71;
-            --success-dark: #27ae60;
-            --danger: #e74c3c;
-            --danger-dark: #c0392b;
-            --info: #8e44ad;
-            --info-dark: #732d91;
-            --bg-light: #f5f7fa;
-            --text-dark: #2c3e50;
-        }
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>TDTTI USS TRAINING PORTAL 2026-27</title>
+  <link rel="preconnect" href="https://fonts.googleapis.com">
+  <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+  <link href="https://fonts.googleapis.com/css2?family=Inter:wght@300;400;500;600;700;800;900&family=Amiri:wght@400;700&display=swap" rel="stylesheet">
+  
+  <style>
+    :root {
+      --primary: #1e40af;
+      --primary-hover: #1e3a8a;
+      --accent: #d97706;
+      --accent-light: #fef3c7;
+      --bg-main: #f1f5f9;
+      --card-bg: #ffffff;
+      --text-main: #0f172a;
+      --text-muted: #64748b;
+      --border-color: #cbd5e1;
+      --success: #10b981;
+      --danger: #ef4444;
+      --shadow-sm: 0 2px 4px rgba(15, 23, 42, 0.05);
+      --shadow-md: 0 10px 20px -5px rgba(30, 64, 175, 0.12);
+      --shadow-lg: 0 20px 30px -10px rgba(15, 23, 42, 0.18);
+    }
 
-        /* STRICT GLOBAL COPY PROTECTION */
-        * {
-            -webkit-user-select: none;
-            -moz-user-select: none;
-            -ms-user-select: none;
-            user-select: none;
-            -webkit-touch-callout: none; 
-        }
+    * { box-sizing: border-box; }
 
-        /* Allow typing/editing strictly inside form inputs */
-        input, select, textarea {
-            -webkit-user-select: auto !important;
-            -moz-user-select: auto !important;
-            -ms-user-select: auto !important;
-            user-select: auto !important;
-        }
+    body {
+      font-family: 'Inter', system-ui, -apple-system, sans-serif;
+      background: radial-gradient(circle at top, #e2e8f0, #f1f5f9);
+      color: var(--text-main);
+      margin: 0;
+      padding: 0;
+      min-height: 100vh;
+    }
 
-        body {
-            font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif;
-            margin: 0;
-            padding: 15px;
-            background-color: var(--bg-light);
-            color: var(--text-dark);
-            overscroll-behavior: contain; 
-        }
+    /* RED PROGRESS BAR */
+    #progress-bar-container { position: fixed; top: 0; left: 0; width: 100%; height: 5px; z-index: 9999; pointer-events: none; }
+    #progress-bar { height: 100%; width: 0%; background: var(--danger); box-shadow: 0 0 10px rgba(239, 68, 68, 0.9); transition: width 0.2s ease-out, opacity 0.3s; }
 
-        .header {
-            display: flex;
-            flex-direction: column;
-            gap: 15px;
-            margin-bottom: 20px;
-        }
+    #toast-container { position: fixed; top: 20px; right: 20px; z-index: 10000; display: flex; flex-direction: column; gap: 10px; }
+    .toast { min-width: 280px; padding: 14px 18px; border-radius: 12px; background: #ffffff; color: var(--text-main); box-shadow: var(--shadow-lg); border-left: 5px solid var(--primary); font-size: 14px; font-weight: 600; transform: translateX(120%); transition: transform 0.3s cubic-bezier(0.175, 0.885, 0.32, 1.275); }
+    .toast.show { transform: translateX(0); }
+    .toast-success { border-left-color: var(--success); }
+    .toast-danger { border-left-color: var(--danger); }
 
-        @media (min-width: 900px) {
-            .header {
-                flex-direction: row;
-                justify-content: space-between;
-                align-items: center;
-            }
-        }
+    .modal-overlay { position: fixed; top: 0; left: 0; width: 100%; height: 100%; background: rgba(15, 23, 42, 0.6); backdrop-filter: blur(6px); display: flex; align-items: center; justify-content: center; z-index: 9999; }
+    .modal-card { background: #ffffff; padding: 28px; border-radius: 18px; max-width: 500px; width: 92%; box-shadow: var(--shadow-lg); border: 1px solid var(--border-color); }
 
-        .header h2 {
-            margin: 0;
-            font-size: 1.6rem;
-            text-align: center;
-        }
+    .container { max-width: 1100px; margin: 25px auto; padding: 0 20px; }
 
-        .button-group {
-            display: flex;
-            gap: 10px;
-            justify-content: center;
-            flex-wrap: wrap;
-        }
+    /* Top Navbar */
+    .top-navbar { display: flex; justify-content: space-between; align-items: center; background: linear-gradient(135deg, #0f172a, #1e3a8a); color: #fff; padding: 14px 28px; box-shadow: var(--shadow-md); }
+    .brand-logo { display: flex; align-items: center; gap: 12px; font-weight: 800; font-size: 16px; letter-spacing: 0.5px; }
 
-        /* STACKED LAYOUT: MAP TOP, REGISTER BOTTOM */
-        .container {
-            display: flex;
-            flex-direction: column;
-            gap: 20px;
-            width: 100%;
-        }
+    .status-pill { display: inline-flex; align-items: center; gap: 8px; background: rgba(255, 255, 255, 0.12); padding: 6px 14px; border-radius: 20px; font-size: 12px; font-weight: 600; color: #fff; border: 1px solid rgba(255, 255, 255, 0.2); }
+    .led-dot { width: 10px; height: 10px; border-radius: 50%; display: inline-block; }
+    .led-green { background-color: #10b981; box-shadow: 0 0 8px #10b981; }
+    .led-red { background-color: #ef4444; box-shadow: 0 0 8px #ef4444; }
+    .led-blue { background-color: #3b82f6; box-shadow: 0 0 8px #3b82f6; animation: led-pulse 0.8s infinite alternate; }
 
-        .map-panel {
-            background: white;
-            padding: 15px;
-            border-radius: 8px;
-            box-shadow: 0 2px 8px rgba(0,0,0,0.06);
-            width: 100%;
-            box-sizing: border-box;
-        }
+    @keyframes led-pulse { 0% { opacity: 0.5; transform: scale(0.9); } 100% { opacity: 1; transform: scale(1.15); } }
+    
+    .icon-btn-header { background: rgba(255, 255, 255, 0.15); color: #fff; border: 1px solid rgba(255, 255, 255, 0.3); padding: 8px 12px; border-radius: 10px; cursor: pointer; display: flex; align-items: center; justify-content: center; transition: all 0.2s; }
+    .icon-btn-header:hover { background: #ffffff; color: #1e3a8a; }
 
-        .sidebar {
-            background: white;
-            padding: 15px;
-            border-radius: 8px;
-            box-shadow: 0 2px 8px rgba(0,0,0,0.06);
-            width: 100%;
-            box-sizing: border-box;
-        }
+    /* Modern Redesigned Tab Bar */
+    .tab-bar-container { background: #ffffff; border-bottom: 1px solid var(--border-color); padding: 10px 24px; display: flex; gap: 10px; overflow-x: auto; position: relative; box-shadow: var(--shadow-sm); }
+    .icon-tab-btn { position: relative; display: inline-flex; align-items: center; justify-content: center; background: #f8fafc; border: 1px solid var(--border-color); color: var(--text-muted); padding: 10px 16px; border-radius: 12px; cursor: pointer; transition: all 0.2s ease; }
+    .icon-tab-btn svg { stroke: currentColor; width: 22px; height: 22px; }
+    .icon-tab-btn:hover { background: #eff6ff; color: var(--primary); border-color: var(--primary); }
+    .icon-tab-btn.active { background: var(--primary); color: #ffffff; border-color: var(--primary); box-shadow: 0 4px 12px rgba(30, 64, 175, 0.25); }
 
-        .map-controls {
-            display: flex;
-            flex-direction: column;
-            gap: 10px;
-            margin-bottom: 12px;
-            background: #f8f9fa;
-            padding: 10px;
-            border-radius: 6px;
-        }
+    .tab-badge-dot { position: absolute; top: 4px; right: 4px; width: 10px; height: 10px; background-color: var(--danger); border-radius: 50%; border: 2px solid #ffffff; }
 
-        @media (min-width: 576px) {
-            .map-controls {
-                flex-direction: row;
-                justify-content: space-between;
-                align-items: center;
-            }
-        }
+    .mode-selector-group { display: flex; gap: 12px; margin-bottom: 20px; }
+    .mode-btn { flex: 1; padding: 14px; border: 1px solid var(--border-color); background: #ffffff; border-radius: 12px; font-weight: 700; font-size: 14px; color: var(--text-muted); cursor: pointer; text-align: center; transition: all 0.2s; }
+    .mode-btn:hover { background: #f8fafc; color: var(--primary); }
+    .mode-btn.active { background: var(--primary); color: #ffffff; border-color: var(--primary); }
 
-        .zoom-controls {
-            display: flex;
-            align-items: center;
-            gap: 8px;
-            justify-content: center;
-        }
+    .card { background: var(--card-bg); padding: 28px; border-radius: 18px; border: 1px solid var(--border-color); box-shadow: var(--shadow-sm); margin-bottom: 24px; }
 
-        /* Fixed viewport for Map Zoom only */
-        .map-area {
-            position: relative;
-            height: 500px;
-            overflow: auto;
-            border: 1px solid #ddd;
-            border-radius: 4px;
-            background: #e9ecef;
-            touch-action: pan-x pan-y; 
-            scroll-behavior: smooth;              
-            -webkit-overflow-scrolling: touch;    
-        }
+    /* ETHNIC MODERN STYLISH LOGIN PORTAL CARD */
+    .login-portal-card {
+      max-width: 440px;
+      margin: 50px auto;
+      background: #ffffff;
+      border-radius: 24px;
+      padding: 35px 30px;
+      box-shadow: var(--shadow-lg);
+      border: 1px solid #cbd5e1;
+      position: relative;
+      overflow: hidden;
+    }
+    .login-portal-card::before {
+      content: "";
+      position: absolute;
+      top: 0; left: 0; right: 0;
+      height: 8px;
+      background: linear-gradient(90deg, #1e3a8a, #d97706, #10b981);
+    }
+    .login-header-box {
+      text-align: center;
+      margin-bottom: 25px;
+    }
+    .school-logo-emblem {
+      width: 75px;
+      height: 75px;
+      margin: 0 auto 12px auto;
+      background: linear-gradient(135deg, #1e3a8a, #0f172a);
+      border-radius: 50%;
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      color: #f59e0b;
+      font-size: 32px;
+      box-shadow: 0 8px 16px rgba(30, 58, 138, 0.25);
+      border: 3px solid #fef3c7;
+    }
+    .school-name-title {
+      font-weight: 900;
+      font-size: 18px;
+      color: #1e3a8a;
+      margin: 0 0 4px 0;
+      letter-spacing: 0.5px;
+      text-transform: uppercase;
+    }
+    .portal-year-tag {
+      display: inline-block;
+      background: #fef3c7;
+      color: #b45309;
+      font-weight: 800;
+      font-size: 12px;
+      padding: 4px 12px;
+      border-radius: 20px;
+      border: 1px solid #fde68a;
+      margin-top: 4px;
+    }
 
-        .map-wrapper {
-            position: relative;
-            display: inline-block;
-            width: 100%;
-            transition: width 0.3s cubic-bezier(0.25, 1, 0.5, 1); 
-            will-change: width; 
-        }
+    /* 60% IMAGE HERO + 40% LOGIN MENU LAYOUT */
+#login-sec {
+  max-width: 460px;
+  margin: 30px auto;
+  padding: 0;
+  background: #ffffff;
+  border-radius: 24px;
+  overflow: hidden;
+  box-shadow: 0 20px 40px rgba(15, 23, 42, 0.2);
+  border: 1px solid var(--border-color);
+}
 
-        .no-transition {
-            transition: none !important;
-        }
+.login-hero-header {
+  height: 240px; /* ~60% Visual Header Area */
+  background: linear-gradient(180deg, rgba(15, 23, 42, 0.4) 0%, rgba(15, 23, 42, 0.85) 100%), 
+              url('https://images.unsplash.com/photo-1580582932707-520aed937b7b?q=80&w=1000&auto=format&fit=crop') center/cover no-repeat;
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  justify-content: center;
+  color: #ffffff;
+  text-align: center;
+  padding: 20px;
+  position: relative;
+}
 
-        #map-image {
-            width: 100%;
-            display: block;
-            user-select: none;
-            -webkit-user-drag: none;
-        }
+.school-logo-img {
+  width: 70px;
+  height: 70px;
+  border-radius: 50%;
+  background: #ffffff;
+  padding: 4px;
+  box-shadow: 0 8px 16px rgba(0,0,0,0.3);
+  margin-bottom: 8px;
+}
 
-        .table-container {
-            width: 100%;
-            overflow-x: auto;
-            margin-top: 15px;
-            border: 1px solid #e2e8f0;
-            border-radius: 6px;
-        }
+.login-hero-title {
+  font-size: 18px;
+  font-weight: 900;
+  color: #ffffff;
+  margin: 0;
+  letter-spacing: 0.5px;
+  text-shadow: 0 2px 4px rgba(0,0,0,0.6);
+}
 
-        table {
-            width: 100%;
-            border-collapse: collapse;
-            min-width: 850px; 
-        }
+.login-hero-subtitle {
+  font-size: 12px;
+  font-weight: 700;
+  color: #fde68a;
+  margin-top: 4px;
+}
 
-        th, td {
-            padding: 10px;
-            text-align: left;
-            border-bottom: 1px solid #e2e8f0;
-            font-size: 13px;
-        }
+.login-form-body {
+  padding: 28px 26px;
+  background: #ffffff;
+}
 
-        th {
-            background-color: #f8fafc;
-            font-weight: 600;
-        }
+/* TOUCH & TAP PILL FOR KEEP ME LOGGED IN */
+.keep-logged-pill {
+  display: flex;
+  align-items: center;
+  gap: 10px;
+  padding: 10px 16px;
+  border-radius: 20px;
+  background: #f1f5f9;
+  border: 1.5px solid var(--border-color);
+  cursor: pointer;
+  user-select: none;
+  font-size: 13px;
+  font-weight: 700;
+  margin: 14px 0 20px 0;
+  transition: all 0.2s ease;
+}
+.keep-logged-pill.active {
+  background: #dbeafe;
+  border-color: #3b82f6;
+  color: #1e40af;
+}
+.pill-indicator-dot {
+  width: 12px;
+  height: 12px;
+  border-radius: 50%;
+  background: #94a3b8;
+  transition: all 0.2s ease;
+}
+.keep-logged-pill.active .pill-indicator-dot {
+  background: #2563eb;
+  box-shadow: 0 0 8px #2563eb;
+}
+    .form-group { margin-bottom: 18px; text-align: left; width: 100%; }
+    .form-group label { display: block; margin-bottom: 6px; font-weight: 700; font-size: 13px; color: var(--text-main); }
+    input, select, textarea { width: 100%; padding: 12px 14px; border: 1px solid var(--border-color); border-radius: 10px; font-family: inherit; font-size: 14px; background: #f8fafc; }
 
-        .required-star {
-            color: var(--danger);
-            margin-left: 2px;
-        }
+    /* Action Buttons */
+    .icon-action-btn { display: inline-flex; align-items: center; justify-content: center; width: 44px; height: 44px; border-radius: 12px; border: 1px solid var(--border-color); background: #ffffff; color: var(--text-main); cursor: pointer; transition: all 0.2s; box-shadow: var(--shadow-sm); }
+    .icon-action-btn:hover { background: #eff6ff; border-color: var(--primary); color: var(--primary); transform: translateY(-2px); }
+    .icon-action-btn-sm { display: inline-flex; align-items: center; justify-content: center; width: 34px; height: 34px; border-radius: 8px; border: 1px solid var(--border-color); background: #ffffff; cursor: pointer; transition: all 0.2s; font-size: 16px; }
+    .icon-action-btn-sm:hover { background: #eff6ff; border-color: var(--primary); transform: scale(1.05); }
 
-        .input-cell {
-            width: 90%;
-            padding: 5px 8px;
-            border: 1px solid #cbd5e1;
-            border-radius: 4px;
-            font-size: 13px;
-            text-transform: uppercase; 
-            box-sizing: border-box;
-        }
+    .btn { display: inline-flex; align-items: center; justify-content: center; padding: 12px 22px; border: none; border-radius: 10px; font-weight: 700; font-size: 14px; cursor: pointer; transition: opacity 0.2s; }
+    .btn:hover { opacity: 0.9; }
+    .btn-primary { background: var(--primary); color: #fff; }
+    .btn-danger { background: var(--danger); color: #fff; }
+    .btn-outline { border: 1px solid var(--border-color); background: #fff; color: var(--text-main); }
+    .btn-block { width: 100%; }
 
-        .input-cell:focus {
-            outline: none;
-            border-color: var(--primary);
-        }
+    /* Security Tap Pill Toggle Switch */
+    .tap-toggle-pill {
+      display: inline-flex;
+      align-items: center;
+      gap: 10px;
+      padding: 10px 18px;
+      border-radius: 25px;
+      cursor: pointer;
+      font-weight: 800;
+      font-size: 13px;
+      user-select: none;
+      transition: all 0.25s ease;
+      border: 2px solid transparent;
+    }
+    .tap-toggle-pill.enabled {
+      background: #dcfce7;
+      color: #15803d;
+      border-color: #86efac;
+    }
+    .tap-toggle-pill.disabled {
+      background: #fee2e2;
+      color: #b91c1c;
+      border-color: #fca5a5;
+    }
 
-        /* Compact Map Marker Style */
-        .marker {
-            position: absolute;
-            width: 22px;       
-            height: 22px;
-            background-color: var(--primary);
-            color: white;
-            border-radius: 50%;
-            text-align: center;
-            line-height: 22px;
-            font-size: 11px;
-            font-weight: bold;
-            transform: translate(-50%, -50%);
-            cursor: pointer;
-            box-shadow: 0 1px 3px rgba(0,0,0,0.3);
-            border: 2px solid white;
-            user-select: none;
-            z-index: 5;
-        }
+    .timer-badge { display: inline-flex; align-items: center; gap: 6px; background: #dbeafe; color: #1e40af; font-weight: 800; padding: 6px 14px; border-radius: 20px; font-size: 14px; border: 1px solid #93c5fd; }
+    .timer-badge.danger { background: #fee2e2; color: #991b1b; border-color: #fca5a5; }
 
-        .marker:hover {
-            transform: translate(-50%, -50%) scale(1.1);
-            background-color: var(--danger);
-        }
+    .quiz-header { display: flex; justify-content: space-between; align-items: center; margin-bottom: 15px; }
+    .question-text { font-size: 19px; font-weight: 700; margin: 15px 0 20px 0; }
+    .question-img { max-width: 100%; max-height: 250px; border-radius: 10px; margin-bottom: 20px; border: 1px solid var(--border-color); }
+    
+    .options-grid { display: grid; grid-template-columns: 1fr 1fr; gap: 14px; }
+    .opt-btn { display: flex; align-items: center; gap: 12px; padding: 16px 20px; border: 1px solid var(--border-color); border-radius: 12px; background: #ffffff; text-align: left; font-size: 15px; font-weight: 500; cursor: pointer; }
+    .opt-btn.correct { background-color: var(--success) !important; color: white !important; }
+    .opt-btn.wrong { background-color: var(--danger) !important; color: white !important; }
 
-        /* Spinner & Dialog Overlays */
-        .overlay {
-            display: none;
-            position: fixed;
-            top: 0;
-            left: 0;
-            width: 100%;
-            height: 100%;
-            background: rgba(15, 23, 42, 0.85);
-            z-index: 9999;
-            justify-content: center;
-            align-items: center;
-            flex-direction: column;
-            color: white;
-        }
+    .spinner-box { display: flex; flex-direction: column; align-items: center; justify-content: center; padding: 40px 20px; text-align: center; }
+    .spinner-bar-pulse { width: 60px; height: 6px; background: var(--primary); border-radius: 3px; animation: bar-pulse 0.9s infinite ease-in-out alternate; }
+    @keyframes bar-pulse { 0% { width: 10px; opacity: 0.3; } 100% { width: 70px; opacity: 1; } }
 
-        .progress-container {
-            width: 250px;
-            background-color: rgba(255, 255, 255, 0.2);
-            border-radius: 10px;
-            overflow: hidden;
-            height: 8px;
-            margin-bottom: 10px;
-        }
+    .rtl-content { direction: rtl !important; text-align: right !important; font-family: 'Amiri', serif !important; }
+    .rtl-content .opt-btn { text-align: right !important; }
 
-        .progress-bar {
-            width: 0%;
-            height: 100%;
-            background-color: #3498db;
-            transition: width 0.1s ease-out;
-        }
+    .badge { background: #dbeafe; color: #1e40af; padding: 4px 10px; border-radius: 6px; font-size: 12px; font-weight: 700; }
+    .badge-success { background: #dcfce7; color: #166534; }
+    .badge-danger { background: #fee2e2; color: #991b1b; }
 
-        /* MODAL DIALOG BOXES */
-        .dialog-box {
-            background: white;
-            padding: 20px;
-            border-radius: 8px;
-            box-shadow: 0 4px 15px rgba(0, 0, 0, 0.2);
-            max-width: 400px;
-            width: 85%;
-            text-align: center;
-            color: var(--text-dark);
-            animation: modalFadeIn 0.25s cubic-bezier(0.25, 1, 0.5, 1);
-        }
+    .chart-item { margin-bottom: 16px; }
+    .chart-label-row { display: flex; justify-content: space-between; font-size: 13px; font-weight: 700; margin-bottom: 6px; }
+    .chart-track { height: 14px; background: #e2e8f0; border-radius: 7px; overflow: hidden; position: relative; }
+    .chart-fill { height: 100%; border-radius: 7px; transition: width 0.8s cubic-bezier(0.4, 0, 0.2, 1); }
+    .chart-fill-strong { background: linear-gradient(90deg, #10b981, #059669); }
+    .chart-fill-weak { background: linear-gradient(90deg, #f59e0b, #ef4444); }
 
-        @keyframes modalFadeIn {
-            from { transform: scale(0.9); opacity: 0; }
-            to { transform: scale(1); opacity: 1; }
-        }
+    .notif-composer-full {
+      width: 100% !important;
+      background: #f8fafc;
+      border: 1px solid var(--border-color);
+      padding: 24px;
+      border-radius: 14px;
+      margin-bottom: 24px;
+    }
 
-        #dialog-title {
-            margin-top: 0;
-            color: var(--primary);
-            font-size: 1.2rem;
-            font-weight: bold;
-        }
+    .student-chips-container {
+      display: flex;
+      flex-wrap: wrap;
+      gap: 10px;
+      max-height: 220px;
+      overflow-y: auto;
+      background: #ffffff;
+      padding: 14px;
+      border: 1px solid var(--border-color);
+      border-radius: 12px;
+      margin-top: 8px;
+    }
+    
+    .student-chip {
+      padding: 9px 18px;
+      border-radius: 20px;
+      border: 1px solid var(--border-color);
+      background: #f8fafc;
+      font-size: 13px;
+      font-weight: 600;
+      color: var(--text-main);
+      cursor: pointer;
+      user-select: none;
+      transition: all 0.2s;
+    }
+    .student-chip.selected { background: var(--primary); color: #ffffff; border-color: var(--primary); }
 
-        #dialog-message {
-            margin-bottom: 20px;
-            font-size: 14px;
-            line-height: 1.5;
-        }
+    .notif-card {
+      background: #ffffff;
+      border: 1px solid var(--border-color);
+      border-radius: 14px;
+      padding: 18px;
+      margin-bottom: 14px;
+      position: relative;
+      box-shadow: var(--shadow-sm);
+      transition: all 0.2s;
+    }
+    .notif-card.unread { background: #eff6ff; border-left: 5px solid var(--primary); }
+    .notif-card.selected { border: 2px solid var(--primary) !important; background: #eef2ff !important; }
 
-        .dialog-btn-group {
-            display: flex;
-            gap: 10px;
-            justify-content: center;
-            margin-top: 15px;
-        }
+    .accordion-item { border: 1px solid var(--border-color); border-radius: 12px; margin-bottom: 12px; overflow: hidden; background: #fff; }
+    .accordion-header { padding: 16px 20px; background: #f8fafc; cursor: pointer; display: flex; justify-content: space-between; align-items: center; font-weight: 700; }
+    .accordion-header:hover { background: #eff6ff; }
+    .accordion-body { padding: 20px; border-top: 1px solid var(--border-color); display: none; }
 
-        /* Custom Form Layout inside Modals */
-        .form-group {
-            margin-bottom: 12px;
-            text-align: left;
-            width: 100%;
-        }
-        .form-group label {
-            display: block;
-            font-size: 12px;
-            font-weight: bold;
-            margin-bottom: 4px;
-            color: #555;
-        }
-        .form-group input, .form-group select {
-            width: 100%;
-            padding: 8px;
-            border: 1px solid #cbd5e1;
-            border-radius: 4px;
-            font-size: 13px;
-            text-transform: uppercase;
-            box-sizing: border-box;
-        }
+    .table-responsive {
+      width: 100%;
+      overflow-x: auto;
+      border: 1px solid var(--border-color);
+      border-radius: 12px;
+      margin-top: 15px;
+      margin-bottom: 15px;
+    }
 
-        /* Dynamic Census Houses grid inside entry modal */
-        .houses-section {
-            border: 1px solid #cbd5e1;
-            border-radius: 6px;
-            padding: 10px;
-            margin-top: 15px;
-            background: #f8fafc;
-            max-height: 250px;
-            overflow-y: auto;
-        }
-        .house-row {
-            display: flex;
-            gap: 8px;
-            margin-bottom: 8px;
-            align-items: center;
-        }
-        .house-row input, .house-row select {
-            padding: 6px;
-            border: 1px solid #cbd5e1;
-            border-radius: 4px;
-            font-size: 12px;
-            text-transform: uppercase;
-            box-sizing: border-box;
-        }
+    .data-table {
+      width: 100%;
+      min-width: 650px;
+      border-collapse: collapse;
+    }
+    .data-table th, .data-table td {
+      border: 1px solid var(--border-color) !important;
+      padding: 12px 14px;
+      text-align: left;
+      font-size: 13px;
+    }
+    .data-table th { background: #eff6ff; font-weight: 700; color: var(--text-main); }
 
-        /* Options Menu Vertical Buttons */
-        .options-menu-btn {
-            width: 100%;
-            padding: 10px;
-            margin: 8px 0;
-            border-radius: 4px;
-            font-weight: bold;
-            text-align: center;
-            font-size: 13px;
-            border: none;
-            cursor: pointer;
-        }
+    .grid-2 { display: grid; grid-template-columns: 1fr 1fr; gap: 14px; }
+    .stats-grid { display: grid; grid-template-columns: 1fr 1fr; gap: 16px; margin-bottom: 24px; }
 
-        /* Buttons styles */
-        button {
-            padding: 8px 14px;
-            border-radius: 4px;
-            border: none;
-            cursor: pointer;
-            font-weight: 600;
-            font-size: 13px;
-            transition: background 0.2s ease;
-        }
-        .btn-save { background-color: var(--success); color: white; }
-        .btn-save:hover { background-color: var(--success-dark); }
-        .btn-load { background-color: var(--primary); color: white; }
-        .btn-load:hover { background-color: var(--primary-dark); }
-        .btn-clear { background-color: var(--danger); color: white; }
-        .btn-clear:hover { background-color: var(--danger-dark); }
-        .btn-print { background-color: var(--info); color: white; }
-        .btn-print:hover { background-color: var(--info-dark); }
-        .btn-zoom { background-color: #64748b; color: white; padding: 5px 10px; }
-        .btn-zoom:hover { background-color: #475569; }
+    .spinning { animation: spin 0.8s linear infinite; }
+    @keyframes spin { 100% { transform: rotate(360deg); } }
 
-        /* ========================================================
-           PRINT STYLES (LANDSCAPE ORIENTATION INJECTED)
-           ======================================================== */
-        @media print {
-            body {
-                background: white !important;
-                color: black !important;
-                padding: 0 !important;
-                margin: 0 !important;
-            }
-            .header, .map-controls, .button-group, .btn-clear, .zoom-controls, .btn-print, button, .tool-mode-box {
-                display: none !important;
-            }
-            .container {
-                display: block !important;
-                width: 100% !important;
-            }
-            .map-panel, .sidebar {
-                box-shadow: none !important;
-                border: none !important;
-                padding: 0 !important;
-                margin: 0 !important;
-                width: 100% !important;
-                background: transparent !important;
-            }
-            .map-area {
-                border: none !important;
-                background: transparent !important;
-            }
-            table {
-                min-width: 100% !important;
-            }
-            input, select {
-                border: none !important;
-                background: transparent !important;
-                padding: 2px !important;
-                appearance: none;
-            }
+    @media (max-width: 640px) {
+      .grid-2, .options-grid, .stats-grid { grid-template-columns: 1fr; }
+      .container { padding: 0 12px; margin: 15px auto; }
+      .top-navbar { padding: 12px 16px; }
+      .login-portal-card { padding: 25px 20px; margin: 25px auto; }
+    }
 
-            /* Compulsory Single-Page A4 Landscape Map, Register follows */
-            body.print-mode-a4 {
-                width: 100%;
-            }
-            body.print-mode-a4 .map-panel {
-                width: 100% !important;
-                height: 95vh !important;  /* Fills exactly Page 1 viewport height in Landscape */
-                page-break-after: always !important; 
-                page-break-inside: avoid !important;
-                box-sizing: border-box;
-                display: flex !important;
-                justify-content: center;
-                align-items: center;
-            }
-            body.print-mode-a4 .map-area {
-                width: 100% !important;
-                height: 85vh !important;  
-                overflow: hidden !important; 
-                display: flex !important;
-                justify-content: center;
-                align-items: center;
-            }
-            body.print-mode-a4 .map-wrapper {
-                width: auto !important;
-                height: 100% !important; 
-                max-width: 100% !important;
-                display: inline-block;
-            }
-            body.print-mode-a4 #map-image {
-                width: auto !important;
-                height: 100% !important;
-                max-width: 100% !important;
-            }
-            body.print-mode-a4 .sidebar {
-                page-break-before: always !important; 
-                display: block !important;
-                width: 100% !important;
-                margin-top: 20px !important;
-            }
-
-            /* Compulsory Single-Page A3 Landscape Map Only (No Register) */
-            body.print-mode-a3 {
-                width: 100%;
-            }
-            body.print-mode-a3 .sidebar {
-                display: none !important; 
-            }
-            body.print-mode-a3 .map-panel {
-                width: 100% !important;
-                height: 95vh !important;  
-                page-break-inside: avoid !important;
-                box-sizing: border-box;
-                display: flex !important;
-                justify-content: center;
-                align-items: center;
-            }
-            body.print-mode-a3 .map-area {
-                width: 100% !important;
-                height: 85vh !important;
-                overflow: hidden !important;
-                display: flex !important;
-                justify-content: center;
-                align-items: center;
-            }
-            body.print-mode-a3 .map-wrapper {
-                width: auto !important;
-                height: 100% !important;
-                max-width: 100% !important;
-                display: inline-block;
-            }
-            body.print-mode-a3 #map-image {
-                width: auto !important;
-                height: 100% !important;
-                max-width: 100% !important;
-            }
-        }
-    </style>
+    @media print {
+      body * { visibility: hidden; }
+      #printable-consolidated-area, #printable-consolidated-area * { visibility: visible; }
+      #printable-consolidated-area { position: absolute; left: 0; top: 0; width: 100%; background: #fff; padding: 20px; }
+      .no-print { display: none !important; }
+    }
+  </style>
 </head>
 <body>
 
-    <!-- Busy Progress Overlay -->
-    <div id="loading-overlay" class="overlay">
-        <div id="status-text" style="font-weight: 600; margin-bottom: 15px; font-size: 15px; letter-spacing: 0.5px;">Saving Changes...</div>
-        <div class="progress-container">
-            <div id="progress-bar" class="progress-bar"></div>
+  <div id="progress-bar-container"><div id="progress-bar"></div></div>
+  <div id="toast-container"></div>
+
+  <!-- Confirmation Modal -->
+  <div id="confirm-modal" class="modal-overlay" style="display: none;">
+    <div class="modal-card">
+      <h3 id="modal-title" style="margin-top:0;">Confirm Action</h3>
+      <p id="modal-msg" style="color: var(--text-muted); font-size:14px;"></p>
+      <div style="display: flex; justify-content: flex-end; gap: 10px; margin-top: 20px;">
+        <button class="btn btn-outline" onclick="closeConfirmModal(false)">Cancel</button>
+        <button class="btn btn-primary" id="modal-confirm-btn">Confirm</button>
+      </div>
+    </div>
+  </div>
+
+  <!-- REDESIGNED PROFILE & SETTINGS MODAL -->
+  <div id="settings-modal" class="modal-overlay" style="display: none;">
+    <div class="modal-card">
+      <div style="display: flex; justify-content: space-between; align-items: center; margin-bottom: 20px;">
+        <h3 style="margin:0; font-weight:800; color:var(--primary);">Profile & Settings</h3>
+        <button class="icon-action-btn" onclick="document.getElementById('settings-modal').style.display='none'">✕</button>
+      </div>
+
+      <div style="background: linear-gradient(135deg, #eff6ff, #dbeafe); padding: 20px; border-radius: 14px; margin-bottom: 20px; border: 1px solid var(--border-color);">
+        <div style="display:flex; align-items:center; gap:14px; margin-bottom:12px;">
+          <div style="width:50px; height:50px; background:var(--primary); color:#fff; border-radius:50%; display:flex; align-items:center; justify-content:center; font-weight:900; font-size:20px;">
+            👤
+          </div>
+          <div>
+            <h4 id="set-name" style="margin:0; font-size:16px; color:#1e3a8a;">-</h4>
+            <span id="set-first-lang" class="badge badge-success" style="margin-top:4px; display:inline-block;">-</span>
+          </div>
         </div>
-        <div id="percentage-text" style="font-size: 14px; font-weight: bold;">0%</div>
+        <div style="display:grid; grid-template-columns:1fr 1fr; gap:10px; font-size:13px; background:#fff; padding:12px; border-radius:10px; border:1px solid var(--border-color);">
+          <div><strong>Gender:</strong> <span id="set-gender">-</span></div>
+          <div><strong>Class/Div:</strong> <span id="set-class">-</span>-<span id="set-div">-</span></div>
+          <div style="grid-column: span 2;"><strong>Phone:</strong> <span id="set-phone">-</span></div>
+        </div>
+      </div>
+
+      <form id="change-pass-form">
+        <h4 style="margin:0 0 6px 0;">Modify Password</h4>
+        <div style="font-size: 13px; color: var(--text-muted); margin-bottom: 12px; background: #f8fafc; padding: 8px 12px; border-radius: 8px; border: 1px solid var(--border-color);">
+          Username: <strong id="set-username-display" style="color: var(--text-main); font-size: 14px;">-</strong>
+        </div>
+        <div class="form-group">
+          <input type="password" id="new-password" required placeholder="Enter new password">
+        </div>
+        <button type="submit" class="btn btn-primary btn-block">Update Password</button>
+      </form>
+
+      <!-- TOUCH & TAP TAP-TOGGLE PILL FOR SECURITY MODE -->
+      <div class="admin-only" style="margin-top:20px; border-top: 1px solid var(--border-color); padding-top:15px;">
+        <h4 style="margin:0 0 10px 0; color:var(--danger);">Security & Anti-Hacking Protection</h4>
+        <div id="security-pill-btn" class="tap-toggle-pill enabled" onclick="toggleSecurityModePill()">
+          <span id="security-pill-icon">🛡️</span>
+          <span id="security-pill-status">Security Active (Tap to Disable)</span>
+        </div>
+      </div>
+
+      <hr style="margin: 20px 0; border: none; border-top: 1px solid var(--border-color);">
+      <button class="btn btn-danger btn-block" onclick="logout()">Logout</button>
+    </div>
+  </div>
+
+  <!-- Printable Modal View -->
+  <div id="print-modal" class="modal-overlay" style="display: none;">
+    <div class="modal-card" style="max-width: 850px; width: 95%; max-height: 90vh; overflow-y: auto;">
+      <div class="no-print" style="display: flex; justify-content: space-between; align-items: center; margin-bottom: 15px;">
+        <h3 style="margin:0;">Report Print Preview</h3>
+        <div style="display: flex; gap: 10px;">
+          <button class="btn btn-primary" onclick="window.print()">Print / Save PDF</button>
+          <button class="btn btn-outline" onclick="document.getElementById('print-modal').style.display='none'">Close</button>
+        </div>
+      </div>
+      <div id="print-modal-content"></div>
+    </div>
+  </div>
+
+  <!-- Top Navbar -->
+  <nav class="top-navbar" id="top-navbar" style="display: none;">
+    <div class="brand-logo">
+      <span>🎓 TDTTI USS PORTAL</span>
     </div>
 
-    <!-- Custom Alert/Confirm HTML Dialog Box -->
-    <div id="custom-dialog" class="overlay" style="z-index: 10000; background: rgba(15, 23, 42, 0.75);">
-        <div class="dialog-box">
-            <h3 id="dialog-title">Notification</h3>
-            <p id="dialog-message">Message text...</p>
-            <div class="dialog-btn-group">
-                <button id="dialog-ok" class="btn-save">OK</button>
-                <button id="dialog-cancel" class="btn-clear" style="display: none;">Cancel</button>
-            </div>
-        </div>
+    <div style="display: flex; align-items: center; gap: 12px;">
+      <div class="status-pill">
+        <span id="network-led" class="led-dot led-green"></span>
+        <span id="network-status-text">Online</span>
+      </div>
+
+      <div style="text-align: right; font-size: 13px;">
+        <div id="user-display-name" style="font-weight: 700;">User</div>
+        <div style="color: #93c5fd; font-size: 11px;">Class <span id="user-display-class">10</span>-<span id="user-display-div">A</span></div>
+      </div>
+
+      <button class="icon-btn-header" onclick="openSettingsModal()" title="Profile & Settings">
+        ⚙️
+      </button>
     </div>
+  </nav>
 
-    <!-- Custom Options Menu Modal (Long Press on Marker) -->
-    <div id="options-modal" class="overlay" style="z-index: 9990; background: rgba(15, 23, 42, 0.75);">
-        <div class="dialog-box" style="max-width: 320px;">
-            <h3 id="options-title" style="margin-top:0; color:var(--primary);">Marker</h3>
-            <button id="options-view" class="options-menu-btn btn-load">View</button>
-            <button id="options-edit" class="options-menu-btn btn-save">Edit</button>
-            <button id="options-delete" class="options-menu-btn btn-clear">Delete</button>
-            <button id="options-close" class="options-menu-btn" style="background:#64748b; color:white;">Close</button>
+  <!-- REPLACED NEW MODERN TAB ICONS -->
+  <div class="tab-bar-container" id="tab-bar-container" style="display: none;">
+    <!-- Practice -->
+    <button class="icon-tab-btn active" id="tab-practice" onclick="showSection('practice-sec')" title="Practice Center">
+      <svg viewBox="0 0 24 24" fill="none"><path d="M12 6.253v13m0-13C10.832 5.477 9.246 5 7.5 5S4.168 5.477 3 6.253v13C4.168 18.477 5.754 18 7.5 18s3.332.477 4.5 1.253m0-13C13.168 5.477 14.754 5 16.5 5c1.747 0 3.332.477 4.5 1.253v13C19.832 18.477 18.247 18 16.5 18c-1.746 0-3.332.477-4.5 1.253" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"/></svg>
+    </button>
+    <!-- Portfolio -->
+    <button class="icon-tab-btn" id="tab-portfolio" onclick="showSection('portfolio-sec')" title="My Performance Portfolio">
+      <svg viewBox="0 0 24 24" fill="none"><path d="M18 20V10M12 20V4M6 20v-6" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"/></svg>
+    </button>
+    <!-- Notifications -->
+    <button class="icon-tab-btn" id="tab-notif" onclick="showSection('notif-sec')" title="Notification Center">
+      <svg viewBox="0 0 24 24" fill="none"><path d="M15 17h5l-1.405-1.405A2.032 2.032 0 0118 14.158V11a6.002 6.002 0 00-4-5.659V5a2 2 0 10-4 0v.341C7.67 6.165 6 8.388 6 11v3.159c0 .538-.214 1.055-.595 1.436L4 17h5m6 0v1a3 3 0 11-6 0v-1m6 0H9" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"/></svg>
+      <span class="tab-badge-dot" id="notif-badge-dot" style="display:none;"></span>
+    </button>
+    <!-- Refresh -->
+    <button class="icon-tab-btn" id="tab-refresh" onclick="refreshCurrentView()" title="Refresh Data">
+      <svg id="global-refresh-icon" viewBox="0 0 24 24" fill="none"><path d="M4 4v5h.582m15.356 2A8.001 8.001 0 004.582 9m0 0H9m11 11v-5h-.581m0 0a8.003 8.003 0 01-15.357-2m15.357 2H15" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"/></svg>
+    </button>
+    
+    <!-- ADMIN TABS -->
+    <!-- Student Reports -->
+    <button class="icon-tab-btn admin-only" id="tab-student-reports" onclick="showSection('admin-report-sec')" title="Student Reports">
+      <svg viewBox="0 0 24 24" fill="none"><path d="M9 12h6m-6 4h6m2 5H7a2 2 0 01-2-2V5a2 2 0 012-2h5.586a1 1 0 01.707.293l5.414 5.414a1 1 0 01.293.707V19a2 2 0 01-2 2z" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"/></svg>
+    </button>
+    <!-- Resets -->
+    <button class="icon-tab-btn admin-only" id="tab-resets" onclick="showSection('admin-resets-sec')" title="Reset Requests">
+      <svg viewBox="0 0 24 24" fill="none"><path d="M4 4v5h.582m15.356 2A8.001 8.001 0 004.582 9m0 0H9m11 11v-5h-.581m0 0a8.003 8.003 0 01-15.357-2m15.357 2H15" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"/></svg>
+      <span class="tab-badge-dot" id="reset-badge-dot" style="display:none;"></span>
+    </button>
+    <!-- Question Bank -->
+    <button class="icon-tab-btn admin-only" id="tab-manage-qs" onclick="showSection('manage-qs-sec')" title="Manage Questions">
+      <svg viewBox="0 0 24 24" fill="none"><path d="M8.228 9c.549-1.165 2.03-2 3.772-2 2.21 0 4 1.343 4 3 0 1.4-1.278 2.575-3.006 2.907-.542.104-.994.54-.994 1.093m0 3h.01M21 12a9 9 0 11-18 0 9 9 0 0118 0z" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"/></svg>
+    </button>
+    <!-- Manage Users -->
+    <button class="icon-tab-btn admin-only" id="tab-manage-users" onclick="showSection('manage-users-sec')" title="Manage Users">
+      <svg viewBox="0 0 24 24" fill="none"><path d="M12 4.354a4 4 0 110 5.292M15 21H3v-1a6 6 0 0112 0v1zm0 0h6v-1a6 6 0 00-9-5.197M13 7a4 4 0 11-8 0 4 4 0 018 0z" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"/></svg>
+    </button>
+    <!-- Logs -->
+    <button class="icon-tab-btn admin-only" id="tab-logs" onclick="showSection('admin-logs-sec')" title="Audit Access Logs">
+      <svg viewBox="0 0 24 24" fill="none"><path d="M9 12l2 2 4-4m5.618-4.016A11.955 11.955 0 0112 2.944a11.955 11.955 0 01-8.618 3.04A12.02 12.02 0 003 9c0 5.591 3.824 10.29 9 11.622 5.176-1.332 9-6.03 9-11.622 0-1.042-.133-2.052-.382-3.016z" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"/></svg>
+    </button>
+  </div>
+
+  <div class="container">
+
+    <!-- RESTRUCTURED MODERN ETHNIC LOGIN PORTAL -->
+    <!-- REBUILT LOGIN SCREEN: 60% IMAGE HERO + LOGIN FORM BELOW -->
+<section id="login-sec">
+  <div class="login-hero-header">
+    <!-- Replace src below with your School Logo URL -->
+    <img src="https://cdn-icons-png.flaticon.com/512/2991/2991148.png" alt="School Logo" class="school-logo-img">
+    <h2 class="login-hero-title">TDTTI USS TRAINING PORTAL</h2>
+    <span class="login-hero-subtitle">ACADEMIC SESSION 2026-27</span>
+  </div>
+
+  <div class="login-form-body">
+    <form id="login-form">
+      <div class="form-group">
+        <label>Username</label>
+        <input type="text" id="login-username" required placeholder="Enter username">
+      </div>
+
+      <div class="form-group">
+        <label>Password</label>
+        <input type="password" id="login-password" required placeholder="Enter password">
+      </div>
+      
+      <!-- TOUCH & TAP KEEP ME LOGGED IN PILL -->
+      <div id="keep-logged-pill" class="keep-logged-pill active" onclick="toggleKeepLoggedPill()">
+        <span class="pill-indicator-dot"></span>
+        <span id="keep-logged-text">Keep Me Logged In: ON</span>
+      </div>
+
+      <button type="submit" class="btn btn-primary btn-block" style="padding:14px; font-weight:800;">Sign In →</button>
+    </form>
+  </div>
+</section>
+
+    <!-- 1. Practice Tab -->
+    <section id="practice-sec" class="section" style="display:none;">
+      <h2>Practice Center</h2>
+
+      <div class="mode-selector-group">
+        <button class="mode-btn active" id="btn-mode-practice" onclick="switchPracticeMode('PRACTICE')">📖 Subject Practice</button>
+        <button class="mode-btn" id="btn-mode-trial" onclick="switchPracticeMode('TRIAL')">⭐ Trial Exam Mode</button>
+      </div>
+
+      <div id="subject-practice-box" class="card">
+        <label style="font-weight: 600; font-size: 14px; display:block; margin-bottom:8px;">Choose Subject:</label>
+        <select id="subject-select" onchange="loadPracticeSubject()">
+          <option value="">-- Choose Subject --</option>
+          <option value="MI" data-firstlang="true">Malayalam I (MI)</option>
+          <option value="AR" data-firstlang="true">Arabic - العربية (AR)</option>
+          <option value="SK" data-firstlang="true">Sanskrit - संस्कृतम् (SK)</option>
+          <option value="MII">Malayalam II (MII)</option>
+          <option value="EN">English (EN)</option>
+          <option value="MM">Mathematics (MM)</option>
+          <option value="BS">Basic Science (BS)</option>
+          <option value="SS">Social Science (SS)</option>
+        </select>
+      </div>
+
+      <div id="trial-exam-box" class="card" style="display:none; text-align:center; padding:35px 20px;">
+        <h3 style="margin-top:0; color:var(--primary);">Comprehensive Trial Exam</h3>
+        <p style="color:var(--text-muted); font-size:14px; max-width:550px; margin:0 auto 20px auto; line-height:1.5;">
+          Includes up to 5 unseen questions from each subject (1 score per question, 30s timer). Questions matching your selected First Language and standard subjects are included!
+        </p>
+        <button class="btn btn-primary" onclick="startTrialExam()">Start Trial Exam Now →</button>
+      </div>
+
+      <div id="practice-spinner" class="card spinner-box" style="display:none;">
+        <div class="spinner-bar-pulse"></div>
+        <p style="color:var(--text-muted); font-size:14px; margin:15px 0 0 0; font-weight:600;">Loading Questions...</p>
+      </div>
+
+      <div id="no-trial-card" class="card" style="display:none; text-align:center; padding:45px 20px;">
+        <div style="font-size:52px; margin-bottom:12px;">ℹ️</div>
+        <h3 style="color:var(--text-main); margin:0 0 10px 0;">Notice</h3>
+        <p style="color:var(--text-muted); font-size:16px; margin:0 0 24px 0; font-weight:600;">
+          There is no Trial Exam available for you right now.
+        </p>
+        <button class="btn btn-primary" onclick="closeNoTrialCard()">Close</button>
+      </div>
+
+      <div id="no-questions-card" class="card" style="display:none; text-align:center; padding:40px 20px;">
+        <div style="font-size:48px; margin-bottom:10px;">📂</div>
+        <h3 style="color:var(--text-main); margin:0 0 8px 0;">No Questions Found</h3>
+        <p style="color:var(--text-muted); font-size:14px; margin:0;">No questions found to attend for this subject yet.</p>
+      </div>
+
+      <div id="completion-card" class="card" style="display:none; text-align:center; padding:45px 20px;">
+        <div style="font-size:52px; margin-bottom:10px;">🏆</div>
+        <h2 style="color:var(--primary); margin:0 0 10px 0;">Subject Mastered!</h2>
+        <p style="font-size:15px; color:var(--text-muted); max-width:500px; margin:0 auto 24px auto;">
+          You have answered all available questions for this subject!
+        </p>
+        <div style="display:flex; justify-content:center; gap:12px; flex-wrap:wrap;">
+          <button class="btn btn-primary" onclick="resetPracticeSubject()">Choose Another Subject</button>
+          <button class="btn btn-outline" onclick="requestResetFromAdmin()">Request Attempt Reset</button>
         </div>
-    </div>
+      </div>
 
-    <!-- Custom Data Entry/Edit Form Modal -->
-    <div id="entry-modal" class="overlay" style="z-index: 9980; background: rgba(15, 23, 42, 0.75);">
-        <div class="dialog-box" style="max-width: 480px;">
-            <h3 id="entry-title" style="margin-top:0; color:var(--primary);">Add Building Details</h3>
-            
-            <div class="form-group">
-                <label>OWNER NAME</label>
-                <input type="text" id="form-name" placeholder="ENTER OWNER NAME">
-            </div>
-            
-            <!-- Forces mobile device numeric keyboard strictly on select -->
-            <div class="form-group">
-                <label>PHONE NO</label>
-                <input type="tel" id="form-phone" inputmode="numeric" pattern="[0-9]*" maxlength="10" placeholder="ENTER MOBILE NUMBER">
-            </div>
-            <div class="form-group">
-                <label>BUILDING NO</label>
-                <input type="text" id="form-building-no" placeholder="BUILDING NUMBER">
-            </div>
-
-            <!-- Dynamic Multiple Census Houses Area (CN No, Type, Remarks) -->
-            <div style="text-align: left; font-size: 13px; font-weight: bold; color: var(--primary); margin-top: 15px;">
-                Census Houses inside this Building:
-            </div>
-            
-            <div class="houses-section" id="houses-section">
-                <!-- Dynamically generated rows sit here -->
-            </div>
-
-            <div style="text-align: left; margin-top: 10px;">
-                <button type="button" id="btn-add-house" class="btn-load" style="padding: 5px 10px; font-size: 11px;">+ Add Census House</button>
-            </div>
-
-            <!-- Remarks Datalist lookup helper -->
-            <datalist id="remarks-options">
-                <option value="HOME"></option>
-                <option value="HOME-SHOP"></option>
-                <option value="HOME-INSTITUTION"></option>
-                <option value="INSTITUTION"></option>
-                <option value="SHOP"></option>
-                <option value="GROUND"></option>
-                <option value="CLOSED HOME"></option>
-                <option value="CLOSED SHOP"></option>
-                <option value="CHURCH"></option>
-                <option value="TEMPLE"></option>
-                <option value="MOSQUE"></option>
-                <option value="FACTORY"></option>
-            </datalist>
-
-            <div class="dialog-btn-group">
-                <button id="entry-save" class="btn-save">Save</button>
-                <button id="entry-cancel" class="btn-clear">Cancel</button>
-            </div>
+      <div id="quiz-card" class="card" style="display:none;">
+        <div class="quiz-header">
+          <span id="quiz-subject" class="badge">Subject</span>
+          <div id="timer-badge" class="timer-badge">⏱️ <span id="timer-count">30</span>s</div>
+          <span id="quiz-progress" style="font-size: 13px; color: var(--text-muted); font-weight:600;">Question 1</span>
         </div>
-    </div>
-
-    <!-- Simplified Header with Print Options only -->
-    <div class="header">
-        <h2>KK MAPPER</h2>
-        <div class="button-group">
-            <button onclick="printA4()" class="btn-print">Print A4</button>
-            <button onclick="printA3()" class="btn-print" style="background-color: var(--info-dark)">Print A3</button>
-        </div>
-    </div>
-
-    <div class="container">
-        <!-- Map Panel (TOP) -->
-        <div class="map-panel">
-            
-            <!-- Interactive Tool Mode Box -->
-            <div class="tool-mode-box" style="display: flex; gap: 10px; align-items: center; justify-content: space-between; flex-wrap: wrap; margin-bottom: 12px; background: #f1f5f9; padding: 10px; border-radius: 6px; border: 1px solid #e2e8f0;">
-                <div style="display: flex; gap: 10px; align-items: center;">
-                    <strong style="font-size: 13px; color: #475569;">Active Tool:</strong>
-                    <button id="btn-mode-building" onclick="setToolMode('building')" class="btn-save" style="padding: 5px 10px; font-size: 11px;">Register </button>
-                    <button id="btn-mode-road" onclick="setToolMode('road')" style="background-color: #64748b; color: white; padding: 5px 10px; font-size: 11px;">Draw</button>
-                </div>
-                <div id="road-tools" style="display: none; gap: 10px; align-items: center;">
-                    <button onclick="startNewRoad()" class="btn-load" style="padding: 5px 10px; font-size: 11px;">New </button>
-                    <button onclick="undoLastRoadNode()" style="background-color: #e67e22; color: white; padding: 5px 10px; font-size: 11px;">Undo</button>
-                    <button onclick="clearRoads()" class="btn-clear" style="padding: 5px 10px; font-size: 11px;">Reset</button>
-                </div>
-            </div>
-
-            <div class="map-controls">
-                <span id="instruction-hint" style="font-size: 11px; font-weight: 600; color: #64748b; text-align: center;">
-                    Click map to register a building. Use two-finger pinch to zoom (Up to 1000%). Press-and-hold marker for options.
-                </span>
-                <div class="zoom-controls">
-                    <strong>Zoom Map:</strong>
-                    <button onclick="zoomOut()" class="btn-zoom">-</button>
-                    <span id="zoom-text" style="font-size: 13px; font-weight: bold; min-width: 45px; text-align: center;">100%</span>
-                    <button onclick="zoomIn()" class="btn-zoom">+</button>
-                    <button onclick="zoomReset()" class="btn-zoom" style="background-color: #475569;">Reset</button>
-                </div>
-            </div>
-            
-            <div class="map-area" id="map-scroll-container">
-                <div class="map-wrapper" id="map-wrapper">
-                    <img id="map-image" src="https://blogger.googleusercontent.com/img/b/R29vZ2xl/AVvXsEhux8wshxVfoQLNzXhpHLg6EKi_rHu2mfD54Z_eJbGBKmSPw4sehLtpvgTFfpW3Avvp07QIec0xdF4pAdGYxqQfuKVENZ7zz4ZbLRhUR86aYSiYkPv4RgxU0YDXlvHFM4k3gk-UJBU6H1Mj8xGH4oC4oocINGgKSnn4nOqdXxuW2XSC3mo8Rh2wFZJXapMI/s1600/KK.png" alt="HLB Map Boundary" onerror="this.src='https://via.placeholder.com/800x500.png?text=Please+upload+your+map.png+to+GitHub'">
-                    
-                    <svg id="arrow-svg" style="position: absolute; top:0; left:0; width:100%; height:100%; pointer-events:none; z-index:1;" viewBox="0 0 100 100" preserveAspectRatio="none">
-                        <defs>
-                            <marker id="arrow" viewBox="0 0 10 10" refX="11" refY="5" markerWidth="4" markerHeight="4" orient="auto-start-reverse">
-                                <path d="M 0 1.5 L 10 5 L 0 8.5 z" fill="#e74c3c" />
-                            </marker>
-                        </defs>
-                        <g id="svg-roads"></g>
-                        <g id="svg-paths"></g>
-                    </svg>
-
-                    <div id="marker-layer"></div>
-                </div>
-            </div>
-        </div>
-
-        <!-- Building Register Form (BOTTOM - with Repositioned Sync & Save Actions) -->
-        <div class="sidebar">
-            <div style="display: flex; justify-content: space-between; align-items: center; flex-wrap: wrap; gap: 10px;">
-                <h3 style="margin: 0; font-size: 1.2rem;">Building Register</h3>
-                <div class="button-group">
-                    <button onclick="loadFromCloud()" class="btn-load">Sync</button>
-                    <button onclick="saveToCloud()" class="btn-save">Save</button>
-                    <button onclick="clearAll()" class="btn-clear">Reset</button>
-                </div>
-            </div>
-            
-            <div class="table-container">
-                <table>
-                    <thead>
-                        <tr>
-                            <th style="width: 6%">Sl No</th>
-                            <th style="width: 20%">Name</th>
-                            <th style="width: 14%">Phone</th>
-                            <th style="width: 10%">Bldg No</th>
-                            <th style="width: 12%">CN No</th>
-                            <th style="width: 18%">Pucca/Katcha/Others</th>
-                            <th style="width: 20%">Remarks</th>
-                        </tr>
-                    </thead>
-                    <tbody id="register-body">
-                        <!-- Rows generated dynamically -->
-                    </tbody>
-                </table>
-            </div>
-        </div>
-    </div>
-
-    <script>
-        // ==========================================
-        // PASTE YOUR GOOGLE APPS SCRIPT WEB APP URL HERE:
-        const GOOGLE_SCRIPT_URL = "https://script.google.com/macros/s/AKfycbwiFQbOOUnAw48syJN0Im-g7-hvI-0wuf0L9dBE_-iAg4XHErpmahtaI7n9DTWq4Pit/exec";
-        // ==========================================
-
-        const mapImage = document.getElementById('map-image');
-        const mapWrapper = document.getElementById('map-wrapper');
-        const mapScrollContainer = document.getElementById('map-scroll-container');
-        const markerLayer = document.getElementById('marker-layer');
-        const registerBody = document.getElementById('register-body');
-        const zoomText = document.getElementById('zoom-text');
-        const svgPaths = document.getElementById('svg-paths');
-        const svgRoads = document.getElementById('svg-roads');
         
-        const loadingOverlay = document.getElementById('loading-overlay');
-        const statusText = document.getElementById('status-text');
-        const progressBar = document.getElementById('progress-bar');
-        const percentageText = document.getElementById('percentage-text');
+        <div id="quiz-question" class="question-text">Question prompt?</div>
+        <img id="quiz-image" class="question-img" style="display:none;" src="" alt="Question Diagram">
 
-        // Custom modal elements
-        const customDialog = document.getElementById('custom-dialog');
-        const dialogTitle = document.getElementById('dialog-title');
-        const dialogMessage = document.getElementById('dialog-message');
-        const dialogOk = document.getElementById('dialog-ok');
-        const dialogCancel = document.getElementById('dialog-cancel');
+        <div class="options-grid">
+          <button class="opt-btn" onclick="submitAnswer('A')"><span class="badge">A</span> <span id="optA"></span></button>
+          <button class="opt-btn" onclick="submitAnswer('B')"><span class="badge">B</span> <span id="optB"></span></button>
+          <button class="opt-btn" onclick="submitAnswer('C')"><span class="badge">C</span> <span id="optC"></span></button>
+          <button class="opt-btn" onclick="submitAnswer('D')"><span class="badge">D</span> <span id="optD"></span></button>
+        </div>
 
-        // Options modal elements
-        const optionsModal = document.getElementById('options-modal');
-        const optionsTitle = document.getElementById('options-title');
-        const optionsView = document.getElementById('options-view');
-        const optionsEdit = document.getElementById('options-edit');
-        const optionsDelete = document.getElementById('options-delete');
-        const optionsClose = document.getElementById('options-close');
+        <div id="feedback-msg" style="margin-top:20px; font-weight:700;"></div>
+        <button id="next-btn" class="btn btn-primary" onclick="nextQuestion()" style="display:none; margin-top:20px;">Next Question →</button>
+      </div>
 
-        // Entry Form modal elements
-        const entryModal = document.getElementById('entry-modal');
-        const entryTitle = document.getElementById('entry-title');
-        const formName = document.getElementById('form-name');
-        const formPhone = document.getElementById('form-phone');
-        const formBuildingNo = document.getElementById('form-building-no');
-        const housesSection = document.getElementById('houses-section');
-        const entrySave = document.getElementById('entry-save');
-        const entryCancel = document.getElementById('entry-cancel');
+      <div id="trial-consolidation-card" class="card" style="display:none;">
+        <h2 style="margin-top:0; color:var(--primary);">Trial Exam Report Consolidation</h2>
+        <div class="stats-grid">
+          <div class="card" style="margin:0;">
+            <p style="margin:0; color:var(--text-muted);">Trial Score</p>
+            <h3 id="trial-score-val">0 / 0</h3>
+          </div>
+          <div class="card" style="margin:0;">
+            <p style="margin:0; color:var(--text-muted);">Accuracy Rate</p>
+            <h3 id="trial-acc-val">0%</h3>
+          </div>
+        </div>
 
-        // Mode elements
-        const btnModeBuilding = document.getElementById('btn-mode-building');
-        const btnModeRoad = document.getElementById('btn-mode-road');
-        const roadTools = document.getElementById('road-tools');
-        const instructionHint = document.getElementById('instruction-hint');
+        <h3 style="margin-top:25px;">Trial Question Breakdown</h3>
+        <div class="table-responsive">
+          <table class="data-table">
+            <thead>
+              <tr>
+                <th>Subject</th>
+                <th>Question</th>
+                <th>Options</th>
+                <th>Your Choice</th>
+                <th>Correct Choice</th>
+              </tr>
+            </thead>
+            <tbody id="trial-consolidation-body"></tbody>
+          </table>
+        </div>
+      </div>
+    </section>
 
-        let markers = [];
-        let roads = []; 
-        let markerCounter = 1;
-        let currentZoom = 100;
-        let currentToolMode = "building"; 
+    <!-- 2. My Performance Portfolio Section -->
+    <section id="portfolio-sec" class="section" style="display:none;">
+      <h2>My Performance Portfolio</h2>
 
-        // Local array to hold census houses in active popup session
-        let modalHouses = [];
+      <div class="stats-grid">
+        <div class="card">
+          <p style="margin:0; color:var(--text-muted); font-size:13px; font-weight:600;">Total Answered Questions</p>
+          <h3 id="stat-total">0</h3>
+        </div>
+        <div class="card">
+          <p style="margin:0; color:var(--text-muted); font-size:13px; font-weight:600;">Overall Accuracy Rate</p>
+          <h3 id="stat-accuracy">0%</h3>
+        </div>
+      </div>
 
-        window.onload = function() {
-            if (GOOGLE_SCRIPT_URL !== "YOUR_DEPLOYED_WEB_APP_URL_HERE") {
-                loadFromCloud();
-            }
-        };
+      <div class="card">
+        <h3 style="margin-top:0; color:var(--primary);">Graphical Subject Performance Dashboard</h3>
+        <p style="font-size:13px; color:var(--text-muted); margin-bottom:20px;">Visual breakdown comparing mastered subjects against weak subjects requiring focus.</p>
 
-        // GLOBAL GESTURE BLOCKING (Strictly blocks document-level viewport pinch/stretch zoom)
-        document.addEventListener('touchmove', function (event) {
-            if (event.scale !== undefined && event.scale !== 1) { 
-                event.preventDefault(); 
-            }
-        }, { passive: false });
+        <div class="grid-2">
+          <div style="background:#f0fdf4; border:1px solid #bbf7d0; padding:18px; border-radius:12px;">
+            <h4 style="margin:0 0 15px 0; color:#166534; display:flex; align-items:center; gap:8px;">
+              <span>🌟 Strong / Improved Subjects (≥70%)</span>
+            </h4>
+            <div id="strong-subjects-chart-container">
+              <p style="font-size:13px; color:var(--text-muted);">No strong subjects recorded yet.</p>
+            </div>
+          </div>
 
-        let lastTouchEnd = 0;
-        document.addEventListener('touchend', function (event) {
-            const now = (new Date()).getTime();
-            if (now - lastTouchEnd <= 300) {
-                event.preventDefault(); // Blocks rapid double-tap webpage zoom
-            }
-            lastTouchEnd = now;
-        }, false);
+          <div style="background:#fffbe0; border:1px solid #fef08a; padding:18px; border-radius:12px;">
+            <h4 style="margin:0 0 15px 0; color:#92400e; display:flex; align-items:center; gap:8px;">
+              <span>⚠️ Focus Areas / Weak Subjects (<70%)</span>
+            </h4>
+            <div id="weak-subjects-chart-container">
+              <p style="font-size:13px; color:var(--text-muted);">No weak subjects identified!</p>
+            </div>
+          </div>
+        </div>
+      </div>
 
-        // DISABLE CONTEXT MENU GLOBALLY (Right Click & Mobile long-press menus)
-        document.addEventListener('contextmenu', function (e) {
-            e.preventDefault();
-        });
+      <div class="card">
+        <h3>Subject Strength Overview</h3>
+        <div class="table-responsive">
+          <table class="data-table">
+            <thead>
+              <tr>
+                <th>Subject</th>
+                <th>Total Attempted</th>
+                <th>Correct Answers</th>
+                <th>Wrong Answers</th>
+                <th>Last Attempt Date</th>
+              </tr>
+            </thead>
+            <tbody id="portfolio-table-body"></tbody>
+          </table>
+        </div>
+      </div>
 
-        // DISABLE INSPECT / SOURCE KEY SHORTCUTS
-        document.addEventListener('keydown', function (e) {
-            if (e.keyCode === 123) {
-                e.preventDefault();
-                return false;
-            }
-            if (e.ctrlKey && e.shiftKey && (e.keyCode === 73 || e.keyCode === 74 || e.keyCode === 67)) {
-                e.preventDefault();
-                return false;
-            }
-            if (e.ctrlKey && e.keyCode === 85) {
-                e.preventDefault();
-                return false;
-            }
-        });
+      <div class="card" id="portfolio-trial-history-box" style="display:none;">
+        <h3 style="margin-top:0; color:var(--primary);">Trial Exam Consolidations</h3>
+        <p style="font-size:13px; color:var(--text-muted); margin-bottom:15px;">Historical performance and detailed consolidation of all completed Trial Exams.</p>
+        <div id="portfolio-trial-history-container"></div>
+      </div>
 
-        // NATIVE PINCH-TO-ZOOM GESTURE LISTENER (Strictly bound to map area)
-        let startDistance = 0;
-        let startZoom = 100;
-        let isPinching = false;
+      <div class="card">
+        <h3>Subjectwise Attempted Questions Log</h3>
+        <div class="table-responsive">
+          <table class="data-table">
+            <thead>
+              <tr>
+                <th>Timestamp</th>
+                <th>Subject</th>
+                <th>Question</th>
+                <th>Your Answer</th>
+                <th>Correct Answer</th>
+                <th>Status</th>
+              </tr>
+            </thead>
+            <tbody id="portfolio-detailed-body"></tbody>
+          </table>
+        </div>
+      </div>
+    </section>
 
-        mapScrollContainer.addEventListener('touchstart', function (e) {
-            if (e.touches.length === 2) {
-                isPinching = true;
-                mapWrapper.classList.add('no-transition'); 
-                startDistance = getTouchDistance(e.touches[0], e.touches[1]);
-                startZoom = currentZoom;
-            }
-        }, { passive: true });
-
-        mapScrollContainer.addEventListener('touchmove', function (e) {
-            if (isPinching && e.touches.length === 2) {
-                e.preventDefault(); // Lock viewport scrolling while pinching map
-                
-                const currentDistance = getTouchDistance(e.touches[0], e.touches[1]);
-                const scale = currentDistance / startDistance;
-                
-                let targetZoom = Math.round(startZoom * scale);
-                
-                if (targetZoom < 50) targetZoom = 50;
-                if (targetZoom > 1000) targetZoom = 1000; 
-                
-                currentZoom = targetZoom;
-                updateZoom();
-            }
-        }, { passive: false });
-
-        mapScrollContainer.addEventListener('touchend', function (e) {
-            if (e.touches.length < 2) {
-                isPinching = false;
-                mapWrapper.classList.remove('no-transition'); 
-            }
-        });
-
-        function getTouchDistance(touch1, touch2) {
-            const dx = touch1.clientX - touch2.clientX;
-            const dy = touch1.clientY - touch2.clientY;
-            return Math.sqrt(dx * dx + dy * dy);
-        }
-
-        // ZOOM BUTTON CONTROLS 
-        function zoomIn() {
-            if (currentZoom < 1000) { 
-                currentZoom += 25;
-                updateZoom();
-            }
-        }
-        function zoomOut() {
-            if (currentZoom > 50) {
-                currentZoom -= 25;
-                updateZoom();
-            }
-        }
-        function zoomReset() {
-            currentZoom = 100;
-            updateZoom();
-        }
-        function updateZoom() {
-            mapWrapper.style.width = `${currentZoom}%`;
-            zoomText.innerText = `${currentZoom}%`;
-        }
-
-        // CUSTOM ASYNCHRONOUS HTML DIALOG HANDLERS
-        function showCustomAlert(message, title = "Notification") {
-            return new Promise((resolve) => {
-                dialogTitle.innerText = title;
-                dialogMessage.innerText = message;
-                dialogCancel.style.display = 'none'; 
-                customDialog.style.display = 'flex';
-
-                const onOk = () => {
-                    customDialog.style.display = 'none';
-                    dialogOk.removeEventListener('click', onOk);
-                    resolve(true);
-                };
-                dialogOk.addEventListener('click', onOk);
-            });
-        }
-
-        function showCustomConfirm(message, title = "Confirmation") {
-            return new Promise((resolve) => {
-                dialogTitle.innerText = title;
-                dialogMessage.innerText = message;
-                dialogCancel.style.display = 'inline-block'; 
-                customDialog.style.display = 'flex';
-
-                const onOk = () => {
-                    cleanup();
-                    resolve(true);
-                };
-                const onCancel = () => {
-                    cleanup();
-                    resolve(false);
-                };
-                function cleanup() {
-                    customDialog.style.display = 'none';
-                    dialogOk.removeEventListener('click', onOk);
-                    dialogCancel.removeEventListener('click', onCancel);
-                }
-
-                dialogOk.addEventListener('click', onOk);
-                dialogCancel.addEventListener('click', onCancel);
-            });
-        }
-
-        // BUSY PROGRESS (spinner removed, only bar and % animate)
-        function showBusyProgress(title, onFinishedAction) {
-            loadingOverlay.style.display = 'flex';
-            statusText.innerText = title;
-            progressBar.style.width = '0%';
-            percentageText.innerText = '0%';
-            
-            let percent = 0;
-            const interval = setInterval(() => {
-                if (percent < 90) {
-                    percent += Math.floor(Math.random() * 8) + 2; 
-                    if (percent > 90) percent = 90;
-                    progressBar.style.width = `${percent}%`;
-                    percentageText.innerText = `${percent}%`;
-                }
-            }, 100);
-
-            onFinishedAction().then(() => {
-                clearInterval(interval);
-                progressBar.style.width = '100%';
-                percentageText.innerText = '100%';
-                setTimeout(() => {
-                    loadingOverlay.style.display = 'none';
-                }, 400);
-            }).catch((err) => {
-                clearInterval(interval);
-                loadingOverlay.style.display = 'none';
-                showCustomAlert("Operation failed: " + err, "Error");
-            });
-        }
-
-        // SINGLE-PAGE PRINT UTILITY (Landscape layout size configured safely)
-        function triggerPrint(sizeClass, pageSize) {
-            const printStyle = document.createElement('style');
-            printStyle.id = "print-page-style";
-            printStyle.innerHTML = `@media print { @page { size: ${pageSize} landscape; margin: 5mm; } }`;
-            document.head.appendChild(printStyle);
-
-            document.body.classList.add(sizeClass);
-
-            setTimeout(() => {
-                window.print();
-                document.body.classList.remove(sizeClass);
-                const styleToRemove = document.getElementById("print-page-style");
-                if (styleToRemove) styleToRemove.remove();
-            }, 250);
-        }
-
-        async function printA4() {
-            const isValid = await validateAllFields();
-            if (!isValid) return;
-            triggerPrint('print-mode-a4', 'A4');
-        }
-
-        function printA3() {
-            triggerPrint('print-mode-a3', 'A3');
-        }
-
-        // FORCE UPPERCASE INPUT FIELDS AT CODE LEVEL
-        formName.addEventListener('input', (e) => e.target.value = e.target.value.toUpperCase());
-        formBuildingNo.addEventListener('input', (e) => e.target.value = e.target.value.toUpperCase());
+    <!-- 3. NOTIFICATION CENTER TAB -->
+    <section id="notif-sec" class="section" style="display:none;">
+      <div class="card" style="width: 100%;">
+        <div style="display: flex; justify-content: space-between; align-items: center; margin-bottom: 20px;">
+          <h2 style="margin:0;">Notification Center</h2>
+          <button class="btn btn-outline" onclick="markAllNotifsAsRead()">Mark All Read ✓</button>
+        </div>
         
-        // Strict Numeric filter for Phone Number input
-        formPhone.addEventListener('input', (e) => {
-            e.target.value = e.target.value.replace(/[^0-9]/g, '');
-        });
+        <div id="admin-notif-composer" class="notif-composer-full admin-only">
+          <h3 style="margin-top:0; color:var(--primary); text-align:left;">Compose Notification</h3>
+          
+          <form id="send-notif-form">
+            <div class="form-group" style="margin-top:15px;">
+              <label>Target Audience</label>
+              <select id="notif-target-mode" onchange="toggleNotifTargetUI()" required>
+                <option value="ALL">📢 Broadcast to All Users</option>
+                <option value="CUSTOM">🎯 Select Student(s) (Tap or Touch & Hold to Select)</option>
+              </select>
+            </div>
+
+            <div class="form-group" id="student-picker-box" style="display:none;">
+              <label>Tap or Touch & Hold to Select Student(s):</label>
+              <div class="student-chips-container" id="student-chips-container"></div>
+            </div>
+
+            <div class="form-group">
+              <label>Notification Title</label>
+              <input type="text" id="notif-title" required placeholder="e.g. Special Trial Exam Announced">
+            </div>
+
+            <div class="form-group">
+              <label>Message Content</label>
+              <textarea id="notif-message" rows="3" required placeholder="Type notification message here..."></textarea>
+            </div>
+
+            <button type="submit" class="btn btn-primary">Send Notification</button>
+          </form>
+        </div>
+
+        <div style="display:flex; justify-content:space-between; align-items:center; margin-bottom:15px;">
+          <h3 style="margin:0;">Notifications Feed</h3>
+          <button id="admin-delete-selected-btn" class="btn btn-danger admin-only" onclick="deleteSelectedNotifs()" style="display:none;">
+            Delete Selected (<span id="selected-notif-count">0</span>)
+          </button>
+        </div>
+
+        <div id="notifications-list-container">
+          <p style="color:var(--text-muted); font-size:14px;">Loading notifications...</p>
+        </div>
+      </div>
+    </section>
+
+    <!-- 4. ADMIN TAB: Vertical Collapsible Student Reports -->
+    <section id="admin-report-sec" class="section" style="display:none;">
+      <div class="card">
+        <h2>Student Academic Evaluation Reports</h2>
+        <p style="color:var(--text-muted); font-size:13px; margin-bottom:20px;">Click any student to expand their evaluation profile, Trial Exam consolidations, send WhatsApp report, or print question log.</p>
+        <div id="admin-student-accordion-list"></div>
+      </div>
+    </section>
+
+    <!-- 5. ADMIN TAB: Reset Requests -->
+    <section id="admin-resets-sec" class="section" style="display:none;">
+      <div class="card">
+        <div style="display: flex; justify-content: space-between; align-items: center; margin-bottom: 15px;">
+          <h2 style="margin:0;">Subject Attempts Reset Requests</h2>
+          <button onclick="refreshResetRequests(this)" class="btn btn-outline" title="Refresh Requests">
+            🔄 Refresh
+          </button>
+        </div>
+        <p style="color:var(--text-muted); font-size:13px; margin-bottom:20px;">Students who completed all questions for a subject can request a reset to practice again. Accept or reject below.</p>
+        <div class="table-responsive">
+          <table class="data-table">
+            <thead>
+              <tr>
+                <th>Request ID</th>
+                <th>Timestamp</th>
+                <th>Student Name</th>
+                <th>Class/Div</th>
+                <th>Phone</th>
+                <th>Subject</th>
+                <th>Status</th>
+                <th>Action</th>
+              </tr>
+            </thead>
+            <tbody id="admin-resets-body"></tbody>
+          </table>
+        </div>
+      </div>
+    </section>
+
+    <!-- 6. Manage Questions (DIAGRAM ATTACHMENT ICONS ALIGNED RIGHT BELOW QUESTION TEXT LABEL) -->
+    <section id="manage-qs-sec" class="section" style="display:none;">
+      <div class="card">
+        <div style="display: flex; justify-content: space-between; align-items: center; margin-bottom: 20px;">
+          <h2 style="margin:0;">Manage Questions</h2>
+          <button onclick="triggerDbSetup()" class="btn btn-outline">Initialize Sheet Tabs</button>
+        </div>
+        <form id="question-form">
+          <input type="hidden" id="q-id">
+          <div class="form-group">
+            <label>Subject</label>
+            <select id="q-subject" required>
+              <option value="MI">Malayalam I (MI)</option>
+              <option value="AR">Arabic - العربية (AR)</option>
+              <option value="SK">Sanskrit - संस्कृतम् (SK)</option>
+              <option value="MII">Malayalam II (MII)</option>
+              <option value="EN">English (EN)</option>
+              <option value="MM">Mathematics (MM)</option>
+              <option value="BS">Basic Science (BS)</option>
+              <option value="SS">Social Science (SS)</option>
+            </select>
+          </div>
+
+          <!-- DIAGRAM ICONS PLACED DIRECTLY BELOW & RIGHT ALIGNED TO QUESTION TEXT -->
+          <div class="form-group">
+            <div style="display:flex; justify-content:space-between; align-items:center; margin-bottom:6px;">
+              <label style="margin:0;">Question Text</label>
+              <div style="display:flex; gap:8px;">
+                <label class="icon-action-btn-sm" title="Capture Camera Diagram">
+                  <input type="file" accept="image/*" capture="environment" onchange="uploadToImgBB(this)" hidden>
+                  📷
+                </label>
+                <label class="icon-action-btn-sm" title="Upload Image File">
+                  <input type="file" accept="image/*" onchange="uploadToImgBB(this)" hidden>
+                  🖼️
+                </label>
+              </div>
+            </div>
+            <textarea id="q-text" required rows="3" placeholder="Type question prompt here..."></textarea>
+            <input type="text" id="q-img-url" style="display:none;">
+            <div style="text-align:right;"><img id="q-img-preview" src="" style="display:none; max-height:120px; border-radius:8px; margin-top:10px; border:1px solid var(--border-color);"></div>
+          </div>
+
+          <div class="grid-2">
+            <div><label>Option A</label><input type="text" id="q-optA" required></div>
+            <div><label>Option B</label><input type="text" id="q-optB" required></div>
+            <div><label>Option C</label><input type="text" id="q-optC" required></div>
+            <div><label>Option D</label><input type="text" id="q-optD" required></div>
+          </div>
+          <div class="form-group" style="margin-top:12px;">
+            <label>Correct Choice</label>
+            <select id="q-correct" required>
+              <option value="A">Option A</option>
+              <option value="B">Option B</option>
+              <option value="C">Option C</option>
+              <option value="D">Option D</option>
+            </select>
+          </div>
+          <button type="submit" class="btn btn-primary">Save Question</button>
+        </form>
+
+        <h3 style="margin-top: 35px;">Question Bank</h3>
+        <div class="table-responsive">
+          <table class="data-table">
+            <thead>
+              <tr><th>Subject</th><th>Question</th><th>Answer</th><th>Actions</th></tr>
+            </thead>
+            <tbody id="admin-questions-body"></tbody>
+          </table>
+        </div>
+      </div>
+    </section>
+
+    <!-- 7. Manage Users -->
+    <section id="manage-users-sec" class="section" style="display:none;">
+      <div class="card">
+        <h2>Manage Users</h2>
+        <form id="user-form">
+          <div class="grid-2">
+            <div><label>Full Name</label><input type="text" id="u-name" required></div>
+            <div>
+              <label>Gender</label>
+              <select id="u-gender" required>
+                <option value="Male">Male</option>
+                <option value="Female">Female</option>
+                <option value="Other">Other</option>
+              </select>
+            </div>
+            <div><label>Class</label><input type="text" id="u-class" placeholder="e.g. 10" required></div>
+            <div><label>Division</label><input type="text" id="u-div" placeholder="e.g. A" required></div>
+            <div>
+              <label>First Language Choice</label>
+              <select id="u-first-lang" required>
+                <option value="MI">MI (Malayalam I)</option>
+                <option value="AR">AR (Arabic)</option>
+                <option value="SK">SK (Sanskrit)</option>
+              </select>
+            </div>
+            <div><label>Phone Number</label><input type="text" id="u-phone" required></div>
+            <div><label>Username</label><input type="text" id="u-username" required></div>
+            <div><label>Password</label><input type="password" id="u-password" required></div>
+            <div>
+              <label>Role</label>
+              <select id="u-role">
+                <option value="Student">Student</option>
+                <option value="Admin">Admin</option>
+              </select>
+            </div>
+            <div>
+              <label>Status</label>
+              <select id="u-status">
+                <option value="Active">Active</option>
+                <option value="Blocked">Blocked</option>
+              </select>
+            </div>
+          </div>
+          <button type="submit" class="btn btn-primary" style="margin-top:15px;">Save User Credentials</button>
+        </form>
+
+        <div style="margin-top:40px;">
+          <h3 style="margin-bottom:15px;">Student Subject Performance & Improvement Analytics</h3>
+          <p style="font-size:13px; color:var(--text-muted); margin-bottom:15px;">Click any student to view their improved subjects vs weak subjects needing attention, with WhatsApp reporting.</p>
+          <div id="manage-users-analytics-accordion"></div>
+        </div>
+
+        <div style="margin-top:40px;" id="printable-consolidated-area">
+          <div style="display:flex; justify-content:space-between; align-items:center; margin-bottom:15px;">
+            <h3 style="margin:0;">Consolidated Student Performance Table</h3>
+            <button class="btn btn-outline print-icon-btn no-print" onclick="printConsolidatedTable()">
+              🖨️ Print / Save Table
+            </button>
+          </div>
+
+          <div class="table-responsive">
+            <table class="data-table" id="consolidated-perf-table">
+              <thead>
+                <tr>
+                  <th class="sortable" onclick="sortConsolidatedTable('sno')">S.No ↕</th>
+                  <th class="sortable" onclick="sortConsolidatedTable('name')">Name ↕</th>
+                  <th class="sortable" onclick="sortConsolidatedTable('gender')">Gender ↕</th>
+                  <th class="sortable" onclick="sortConsolidatedTable('class')">Class ↕</th>
+                  <th class="sortable" onclick="sortConsolidatedTable('div')">Div ↕</th>
+                  <th class="sortable" onclick="sortConsolidatedTable('firstLanguage')">First Language ↕</th>
+                  <th class="sortable" onclick="sortConsolidatedTable('phone')">Phone No ↕</th>
+                  <th class="sortable" onclick="sortConsolidatedTable('accuracy')">Overall Accuracy Rate ↕</th>
+                </tr>
+              </thead>
+              <tbody id="consolidated-table-body"></tbody>
+            </table>
+          </div>
+        </div>
+
+        <h3 style="margin-top:40px;">Enrolled Users List</h3>
+        <div class="table-responsive">
+          <table class="data-table">
+            <thead>
+              <tr><th>Name</th><th>Gender</th><th>Class</th><th>Div</th><th>First Language</th><th>Phone</th><th>Username</th><th>Role</th><th>Status</th><th>Action</th></tr>
+            </thead>
+            <tbody id="admin-users-body"></tbody>
+          </table>
+        </div>
+      </div>
+    </section>
+
+    <!-- 8. AUDIT ACCESS LOGS -->
+    <section id="admin-logs-sec" class="section" style="display:none;">
+      <div class="card">
+        <h2>Audit Access Logs</h2>
+        <div class="table-responsive">
+          <table class="data-table">
+            <thead>
+              <tr>
+                <th>Timestamp</th>
+                <th>Identifier</th>
+                <th>Role</th>
+                <th>Status</th>
+                <th>Login Time</th>
+                <th>Logout Time</th>
+                <th>Device</th>
+              </tr>
+            </thead>
+            <tbody id="admin-logs-body"></tbody>
+          </table>
+        </div>
+      </div>
+    </section>
+
+  </div>
+<!-- MANDATORY FIRST-TIME PASSWORD CHANGE MODAL -->
+<div id="first-time-pass-modal" class="modal-overlay" style="display: none;">
+  <div class="modal-card">
+    <h3 style="margin-top:0; color:var(--danger);">⚠️ Password Change Required</h3>
+    <p style="font-size:13px; color:var(--text-muted); line-height:1.5;">
+      Welcome! Since this is your first login or you are using a default password, you <strong>must update your password</strong> to continue.
+    </p>
+
+    <form id="first-time-pass-form" onsubmit="handleFirstTimePassSubmit(event)">
+      <div class="form-group">
+        <label>New Password</label>
+        <input type="password" id="first-new-pass" required minlength="4" placeholder="Enter new password">
+      </div>
+      <div class="form-group">
+        <label>Confirm New Password</label>
+        <input type="password" id="first-confirm-pass" required minlength="4" placeholder="Re-enter new password">
+      </div>
+      <button type="submit" class="btn btn-primary btn-block">Save Password & Access Portal</button>
+    </form>
+  </div>
+</div>
 
-        // INTERACTIVE TOOL MODE CONTROLLER
-        function setToolMode(mode) {
-            currentToolMode = mode;
-            if (mode === "building") {
-                btnModeBuilding.style.backgroundColor = "var(--success)";
-                btnModeRoad.style.backgroundColor = "#64748b";
-                roadTools.style.display = "none";
-                instructionHint.innerText = "Click map to register a building. Use two-finger pinch to zoom (Up to 1000%). Press-and-hold marker for options.";
-            } else {
-                btnModeBuilding.style.backgroundColor = "#64748b";
-                btnModeRoad.style.backgroundColor = "var(--danger)";
-                roadTools.style.display = "flex";
-                instructionHint.innerText = "Click sequential points on the map to draw roads/paths. Click 'New Road' to draw separate segments.";
-            }
-            renderRoads(); 
-        }
-
-        // ROAD DRAWING UTILITIES
-        function startNewRoad() {
-            if (roads.length === 0 || roads[roads.length - 1].length > 0) {
-                roads.push([]); 
-            }
-        }
-
-        function undoLastRoadNode() {
-            if (roads.length > 0) {
-                const active = roads[roads.length - 1];
-                if (active.length > 0) {
-                    active.pop();
-                } else {
-                    roads.pop(); 
-                    undoLastRoadNode(); 
-                }
-                renderRoads();
-            }
-        }
-
-        async function clearRoads() {
-            const confirmed = await showCustomConfirm("Are you sure you want to clear all drawn roads?", "Reset Roads");
-            if (confirmed) {
-                roads = [];
-                renderRoads();
-            }
-        }
-
-        function renderRoads() {
-            svgRoads.innerHTML = '';
-            roads.forEach(road => {
-                if (road.length >= 2) {
-                    const polyline = document.createElementNS("http://www.w3.org/2000/svg", "polyline");
-                    const pointsStr = road.map(pt => `${pt.x},${pt.y}`).join(' ');
-                    polyline.setAttribute("points", pointsStr);
-                    polyline.setAttribute("stroke", "#34495e"); 
-                    polyline.setAttribute("stroke-width", "0.35");
-                    polyline.setAttribute("fill", "none");
-                    polyline.setAttribute("stroke-linejoin", "round");
-                    polyline.setAttribute("stroke-linecap", "round");
-                    svgRoads.appendChild(polyline); 
-                }
-
-                if (currentToolMode === "road") {
-                    road.forEach(pt => {
-                        const circle = document.createElementNS("http://www.w3.org/2000/svg", "circle");
-                        circle.setAttribute("cx", pt.x);
-                        circle.setAttribute("cy", pt.y);
-                        circle.setAttribute("r", "0.4");
-                        circle.setAttribute("fill", "#7f8c8d");
-                        svgRoads.appendChild(circle);
-                    });
-                }
-            });
-        }
-
-        // CALCULATE TOTAL HOUSES IN THE ACTIVE SESSION
-        function countTotalHousesInSession(excludeId = -1) {
-            let count = 0;
-            markers.forEach(m => {
-                if (m.id !== excludeId) {
-                    count += (m.censusHouses ? m.censusHouses.length : 1);
-                }
-            });
-            return count;
-        }
-
-        // RENDER INTERACTIVE CENSUS HOUSE ROWS INSIDE POPUP MODAL
-        function renderModalHouses(isViewOnly) {
-            housesSection.innerHTML = '';
-            
-            modalHouses.forEach((house, index) => {
-                const row = document.createElement('div');
-                row.className = 'house-row';
-
-                // CN No input
-                const inputCN = document.createElement('input');
-                inputCN.type = 'text';
-                inputCN.style.width = "22%";
-                inputCN.placeholder = '0001';
-                inputCN.value = house.cnNo || '';
-                inputCN.disabled = isViewOnly;
-                inputCN.addEventListener('input', (e) => {
-                    e.target.value = e.target.value.toUpperCase();
-                    house.cnNo = e.target.value;
-                });
-
-                // Type select dropdown
-                const selectType = document.createElement('select');
-                selectType.style.width = "30%";
-                selectType.disabled = isViewOnly;
-                
-                const optDefault = document.createElement('option');
-                optDefault.value = '';
-                optDefault.innerText = '-- TYPE --';
-                selectType.appendChild(optDefault);
-
-                ['PUCCA', 'KATCHA', 'OTHERS'].forEach(val => {
-                    const opt = document.createElement('option');
-                    opt.value = val;
-                    opt.innerText = val;
-                    if (house.type === val) opt.selected = true;
-                    selectType.appendChild(opt);
-                });
-                selectType.addEventListener('change', (e) => {
-                    house.type = e.target.value;
-                });
-
-                // Remarks text datalist lookup
-                const inputRemarks = document.createElement('input');
-                inputRemarks.type = 'text';
-                inputRemarks.style.width = "38%";
-                inputRemarks.setAttribute('list', 'remarks-options');
-                inputRemarks.placeholder = 'REMARKS / OTHER';
-                inputRemarks.value = house.remarks || '';
-                inputRemarks.disabled = isViewOnly;
-                inputRemarks.addEventListener('input', (e) => {
-                    e.target.value = e.target.value.toUpperCase();
-                    house.remarks = e.target.value;
-                });
-
-                row.appendChild(inputCN);
-                row.appendChild(selectType);
-                row.appendChild(inputRemarks);
-
-                // Add Delete button only if there is more than 1 house row and not in View mode
-                if (modalHouses.length > 1 && !isViewOnly) {
-                    const btnDelete = document.createElement('button');
-                    btnDelete.type = 'button';
-                    btnDelete.className = 'btn-clear';
-                    btnDelete.style.padding = '4px 8px';
-                    btnDelete.style.fontSize = '11px';
-                    btnDelete.innerText = 'X';
-                    btnDelete.addEventListener('click', () => {
-                        modalHouses.splice(index, 1);
-                        renderModalHouses(isViewOnly);
-                    });
-                    row.appendChild(btnDelete);
-                }
-
-                housesSection.appendChild(row);
-            });
-        }
-
-        // POPUP FORM DIALOG CONTROLLER (Handles creating and editing building objects)
-        function openEntryModal(markerData, slNo, isViewOnly = false) {
-            return new Promise((resolve) => {
-                entryTitle.innerText = isViewOnly ? `Sl No ${slNo} Details` : `Register Building Sl No ${slNo}`;
-                
-                // Populate inputs
-                formName.value = markerData.name || '';
-                formPhone.value = markerData.phone || '';
-                formBuildingNo.value = markerData.buildingNo || '';
-
-                // Load existing dynamic census houses or fallback to default
-                if (markerData.censusHouses && markerData.censusHouses.length > 0) {
-                    modalHouses = JSON.parse(JSON.stringify(markerData.censusHouses));
-                } else {
-                    modalHouses = [{
-                        cnNo: markerData.cnNo || '0001',
-                        type: markerData.note || '',
-                        remarks: markerData.remarks || ''
-                    }];
-                }
-
-                // Render dynamic houses rows
-                renderModalHouses(isViewOnly);
-
-                // DYNAMIC QUERY RESOLVES DETACHMENT BUG COMPULSORILY
-                const btnAddHouseElement = document.getElementById('btn-add-house');
-                btnAddHouseElement.style.display = isViewOnly ? 'none' : 'inline-block';
-                
-                // Clone the active element currently inside the DOM
-                const newBtnAddHouse = btnAddHouseElement.cloneNode(true);
-                btnAddHouseElement.parentNode.replaceChild(newBtnAddHouse, btnAddHouseElement);
-                
-                newBtnAddHouse.addEventListener('click', () => {
-                    const totalExisting = countTotalHousesInSession(markerData.id);
-                    const formattedCN = String(totalExisting + modalHouses.length + 1).padStart(4, '0');
-                    modalHouses.push({
-                        cnNo: formattedCN,
-                        type: '',
-                        remarks: ''
-                    });
-                    renderModalHouses(isViewOnly);
-                });
-
-                // Toggle Read-Only State for View mode
-                formName.disabled = isViewOnly;
-                formPhone.disabled = isViewOnly;
-                formBuildingNo.disabled = isViewOnly;
-
-                entrySave.style.display = isViewOnly ? 'none' : 'inline-block';
-                entryCancel.innerText = isViewOnly ? 'Close' : 'Cancel';
-
-                entryModal.style.display = 'flex';
-
-                const onSave = async () => {
-                    const name = formName.value.trim();
-                    const phone = formPhone.value.trim();
-
-                    // Map values back to object (All constraints completely removed, blank saving allowed)
-                    markerData.name = name;
-                    markerData.phone = phone;
-                    markerData.buildingNo = formBuildingNo.value.trim();
-                    
-                    // Save back the serialized census houses array
-                    markerData.censusHouses = JSON.parse(JSON.stringify(modalHouses));
-
-                    // Keep flat fields populated with first house value for compatibility checks (Fixes FormCNNo reference error)
-                    markerData.cnNo = modalHouses[0].cnNo;
-                    markerData.note = modalHouses[0].type;
-                    markerData.remarks = modalHouses[0].remarks;
-
-                    cleanup();
-                    resolve(true);
-                };
-
-                const onCancel = () => {
-                    cleanup();
-                    resolve(false);
-                };
-
-                function cleanup() {
-                    entryModal.style.display = 'none';
-                    entrySave.removeEventListener('click', onSave);
-                    entryCancel.removeEventListener('click', onCancel);
-                }
-
-                entrySave.addEventListener('click', onSave);
-                entryCancel.addEventListener('click', onCancel);
-            });
-        }
-
-        // INTERACTIVE MAP CLICK DISTRIBUTOR
-        mapImage.addEventListener('click', async function(e) {
-            const rect = mapImage.getBoundingClientRect();
-            const xPercent = ((e.clientX - rect.left) / rect.width) * 100;
-            const yPercent = ((e.clientY - rect.top) / rect.height) * 100;
-
-            if (currentToolMode === "building") {
-                const nextIndex = markers.length + 1;
-                const totalExisting = countTotalHousesInSession();
-                const formattedCN = String(totalExisting + 1).padStart(4, '0');
-
-                const draftMarker = {
-                    id: markerCounter,
-                    x: xPercent,
-                    y: yPercent,
-                    slNo: nextIndex,
-                    name: '',
-                    phone: '',
-                    buildingNo: `${nextIndex}`,
-                    censusHouses: [{
-                        cnNo: formattedCN,
-                        type: '',
-                        remarks: ''
-                    }]
-                };
-
-                const saved = await openEntryModal(draftMarker, nextIndex, false);
-                if (saved) {
-                    markers.push(draftMarker);
-                    markerCounter++;
-                    render();
-                    await saveToCloud(); // Automatically save to cloud on addition
-                }
-            } else {
-                if (roads.length === 0) {
-                    roads.push([]); 
-                }
-                const active = roads[roads.length - 1];
-                active.push({ x: xPercent, y: yPercent });
-                renderRoads();
-            }
-        });
-
-        // VALIDATION BYPASSED
-        async function validateAllFields() {
-            return true;
-        }
-
-        // HELPER TO REMOVE MARKER AND AUTO-SAVE TO SHEET
-        async function removeMarkerAndSave(index) {
-            markers.splice(index, 1);
-            render();
-            await saveToCloud(); // Auto-saves to Google Sheet
-        }
-
-        // OPTIONS MENU CONTROLLER (View / Edit / Delete)
-        function openOptionsMenu(index) {
-            const m = markers[index];
-            optionsTitle.innerText = `Building Sl No ${m.slNo} Options`;
-            optionsModal.style.display = 'flex';
-
-            const onView = async () => {
-                optionsModal.style.display = 'none';
-                cleanup();
-                await openEntryModal(m, m.slNo, true);
-            };
-
-            const onEdit = async () => {
-                optionsModal.style.display = 'none';
-                cleanup();
-                const saved = await openEntryModal(m, m.slNo, false);
-                if (saved) {
-                    render();
-                    await saveToCloud(); // Automatically save to cloud on edit save
-                }
-            };
-
-            const onDelete = async () => {
-                optionsModal.style.display = 'none';
-                cleanup();
-                const confirmed = await showCustomConfirm(`Do you want to delete Sl No ${m.slNo}?`, "Confirm Delete");
-                if (confirmed) {
-                    await removeMarkerAndSave(index); // Auto-saves to Google Sheet
-                }
-            };
-
-            const onClose = () => {
-                optionsModal.style.display = 'none';
-                cleanup();
-            };
-
-            function cleanup() {
-                optionsView.removeEventListener('click', onView);
-                optionsEdit.removeEventListener('click', onEdit);
-                optionsDelete.removeEventListener('click', onDelete);
-                optionsClose.removeEventListener('click', onClose);
-            }
-
-            optionsView.addEventListener('click', onView);
-            optionsEdit.addEventListener('click', onEdit);
-            optionsDelete.addEventListener('click', onDelete);
-            optionsClose.addEventListener('click', onClose);
-        }
-
-        // RENDER REGISTER DATA IN SCREEN TABLE
-        function render() {
-            markerLayer.innerHTML = '';
-            registerBody.innerHTML = '';
-            svgPaths.innerHTML = ''; 
-
-            markers.forEach((marker, index) => {
-                marker.slNo = index + 1;
-
-                // 1. Draw Map Marker Element (22px sized)
-                const markerEl = document.createElement('div');
-                markerEl.className = 'marker';
-                markerEl.style.left = `${marker.x}%`;
-                markerEl.style.top = `${marker.y}%`;
-                markerEl.innerText = marker.slNo;
-                markerEl.title = `Press and hold for options`;
-                
-                // PRESS-AND-HOLD DETECTOR (Triggers Options Menu after 600ms)
-                let pressTimer;
-
-                const startPress = (e) => {
-                    e.stopPropagation(); 
-                    pressTimer = setTimeout(() => {
-                        openOptionsMenu(index);
-                    }, 600); 
-                };
-
-                const cancelPress = () => {
-                    clearTimeout(pressTimer);
-                };
-
-                // Mouse inputs
-                markerEl.addEventListener('mousedown', startPress);
-                markerEl.addEventListener('mouseup', cancelPress);
-                markerEl.addEventListener('mouseleave', cancelPress);
-
-                // Touch inputs
-                markerEl.addEventListener('touchstart', startPress);
-                markerEl.addEventListener('touchend', cancelPress);
-                markerEl.addEventListener('touchcancel', cancelPress);
-
-                markerLayer.appendChild(markerEl);
-
-                // 2. Draw SVG Route Line (Narrow stroke: 0.2 viewBox scale)
-                if (index < markers.length - 1) {
-                    const nextMarker = markers[index + 1];
-                    const line = document.createElementNS("http://www.w3.org/2000/svg", "line");
-                    line.setAttribute("x1", marker.x);
-                    line.setAttribute("y1", marker.y);
-                    line.setAttribute("x2", nextMarker.x);
-                    line.setAttribute("y2", nextMarker.y);
-                    line.setAttribute("stroke", "#e74c3c");
-                    line.setAttribute("stroke-width", "0.2");
-                    line.setAttribute("marker-end", "url(#arrow)");
-                    svgPaths.appendChild(line);
-                }
-
-                // 3. Create Table Row (Census House details are vertically aligned under one row)
-                const row = document.createElement('tr');
-
-                const cellSl = document.createElement('td');
-                cellSl.style.fontWeight = "bold";
-                cellSl.innerText = marker.slNo;
-
-                const cellName = document.createElement('td');
-                cellName.innerText = marker.name || '-';
-
-                const cellPhone = document.createElement('td');
-                cellPhone.innerText = marker.phone || '-';
-
-                const cellBldg = document.createElement('td');
-                cellBldg.innerText = marker.buildingNo || '-';
-
-                // Display multiple Census Houses split cleanly by line-breaks (same row)
-                const cellCN = document.createElement('td');
-                const cellNote = document.createElement('td');
-                const cellRemarks = document.createElement('td');
-
-                if (marker.censusHouses && marker.censusHouses.length > 0) {
-                    cellCN.innerHTML = marker.censusHouses.map(ch => ch.cnNo || '-').join('<br>');
-                    cellNote.innerHTML = marker.censusHouses.map(ch => ch.type || '-').join('<br>');
-                    cellRemarks.innerHTML = marker.censusHouses.map(ch => ch.remarks || '-').join('<br>');
-                } else {
-                    cellCN.innerText = marker.cnNo || '-';
-                    cellNote.innerText = marker.note || '-';
-                    cellRemarks.innerText = marker.remarks || '-';
-                }
-
-                row.appendChild(cellSl);
-                row.appendChild(cellName);
-                row.appendChild(cellPhone);
-                row.appendChild(cellBldg);
-                row.appendChild(cellCN);
-                row.appendChild(cellNote);
-                row.appendChild(cellRemarks);
-
-                registerBody.appendChild(row);
-            });
-        }
-
-        function removeMarker(index) {
-            markers.splice(index, 1);
-            render();
-        }
-
-        async function clearAll() {
-            const confirmed = await showCustomConfirm("Reset local modifications? This clears your screen. Database remains unchanged unless you push to save.", "Reset Progress");
-            if (confirmed) {
-                markers = [];
-                markerCounter = 1;
-                roads = []; 
-                renderRoads();
-                render();
-            }
-        }
-
-        // SAVE DATA (POST)
-        async function saveToCloud() {
-            if (GOOGLE_SCRIPT_URL === "YOUR_DEPLOYED_WEB_APP_URL_HERE") {
-                await showCustomAlert("Please write your Apps Script URL into the constant variable first.", "Setup Required");
-                return;
-            }
-
-            const isValid = await validateAllFields();
-            if (!isValid) return; 
-
-            // Create a deep copy of the save payload
-            const payload = JSON.parse(JSON.stringify(markers));
-
-            // Serialize 1-to-many censusHouses arrays into newline-separated flat columns to preserve Google Sheets schema compatibility
-            payload.forEach(m => {
-                if (m.censusHouses && m.censusHouses.length > 0) {
-                    m.cnNo = m.censusHouses.map(ch => ch.cnNo || m.cnNo).join("\n"); // Fallback check updated
-                    m.note = m.censusHouses.map(ch => ch.type).join("\n");
-                    m.remarks = m.censusHouses.map(ch => ch.remarks).join("\n");
-                }
-            });
-
-            // Append roads data block as a serialized config record inside Remarks field
-            if (roads.length > 0) {
-                payload.push({
-                    id: "ROADS_DATA",
-                    x: 0,
-                    y: 0,
-                    slNo: 0,
-                    name: "",
-                    phone: "",
-                    buildingNo: "",
-                    cnNo: "",
-                    note: "",
-                    remarks: JSON.stringify(roads) 
-                });
-            }
-
-            const sendAction = () => {
-                return fetch(GOOGLE_SCRIPT_URL, {
-                    method: "POST",
-                    mode: "no-cors",
-                    headers: {
-                        "Content-Type": "application/json"
-                    },
-                    body: JSON.stringify(payload)
-                });
-            };
-
-            showBusyProgress("Saving Changes to Google Sheets...", sendAction);
-        }
-
-        // LOAD DATA (GET)
-        async function loadFromCloud() {
-            if (GOOGLE_SCRIPT_URL === "YOUR_DEPLOYED_WEB_APP_URL_HERE") return;
-
-            const fetchAction = () => {
-                return fetch(GOOGLE_SCRIPT_URL)
-                    .then(response => response.json())
-                    .then(data => {
-                        if (data && data.length > 0) {
-                            // Filter out serialised roads metadata row and reconstruct roads layout
-                            const roadsRecord = data.find(m => m.id === "ROADS_DATA");
-                            if (roadsRecord) {
-                                try {
-                                    roads = JSON.parse(roadsRecord.remarks);
-                                } catch(e) {
-                                    console.error("Failed to parse loaded roads layout:", e);
-                                    roads = [];
-                                }
-                            } else {
-                                roads = [];
-                            }
-
-                            // Reconstruct flat data array
-                            const cleanMarkers = data.filter(m => m.id !== "ROADS_DATA");
-
-                            // Re-deserialize newline-separated strings back into dynamic censusHouses arrays
-                            cleanMarkers.forEach(m => {
-                                const cns = String(m.cnNo || "").split("\n");
-                                const types = String(m.note || "").split("\n");
-                                const remarks = String(m.remarks || "").split("\n");
-
-                                const count = Math.max(cns.length, types.length, remarks.length, 1);
-                                m.censusHouses = [];
-                                for (let j = 0; j < count; j++) {
-                                    m.censusHouses.push({
-                                        cnNo: cns[j] || "",
-                                        type: types[j] || "",
-                                        remarks: remarks[j] || ""
-                                    });
-                                }
-
-                                // Maintain flat references
-                                m.cnNo = cns[0] || "";
-                                m.note = types[0] || "";
-                                m.remarks = remarks[0] || "";
-                            });
-
-                            markers = cleanMarkers;
-                            markerCounter = Math.max(...markers.map(m => parseInt(m.id) || 0)) + 1;
-                            renderRoads();
-                            render();
-                        }
-                    });
-            };
-
-            showBusyProgress("Fetching Data...", fetchAction);
-        }
-    </script>
 </body>
+  <script>
+    // =========================================================================
+    // CONFIGURATION
+    // =========================================================================
+    const API_URL = "https://script.google.com/macros/s/AKfycbxqqqubpivhjDWFp2xmRTEv1isDr9Mjop7se-xqXEcARutIkRT1Sdo_R6Q_OWxy9ExhDw/exec";
+    const IMGBB_API_KEY = "YOUR_IMGBB_API_KEY_HERE";
+    // =========================================================================
+
+    let currentUser = JSON.parse(localStorage.getItem('USS_USER')) || JSON.parse(sessionStorage.getItem('USS_USER')) || null;
+    
+    let currentQuestions = [];
+    let qIndex = 0;
+    let timerInterval = null;
+    let timeLeft = 30;
+    let confirmCallback = null;
+    let cachedAdminData = null;
+    let isTrialMode = false;
+    let trialAnswersLog = [];
+    
+    let sortColumn = 'name';
+    let sortAscending = true;
+    let consolidatedStudentsList = [];
+    let selectedStudentPhones = new Set();
+    let selectedNotifIds = new Set();
+    let securityProtectionActive = true;
+
+    document.addEventListener('DOMContentLoaded', () => {
+      if (currentUser) initializeSession();
+
+      document.getElementById('login-form').addEventListener('submit', handleLogin);
+      document.getElementById('question-form').addEventListener('submit', handleSaveQuestion);
+      document.getElementById('user-form').addEventListener('submit', handleSaveUser);
+      document.getElementById('change-pass-form').addEventListener('submit', handleChangePassword);
+      document.getElementById('send-notif-form').addEventListener('submit', handleSendNotification);
+
+      enableSecurityProtection();
+
+      window.addEventListener('online', () => {
+        showToast('⚡ You are Online. Syncing latest data...', 'success');
+        updateNetworkStatus();
+        triggerBackgroundSync();
+      });
+
+      window.addEventListener('offline', () => {
+        showToast('⚠️ You are Offline. Working in offline mode.', 'danger');
+        updateNetworkStatus();
+      });
+
+      updateNetworkStatus();
+      triggerBackgroundSync();
+    });
+
+    function enableSecurityProtection() {
+      document.addEventListener('contextmenu', (e) => {
+        if (!securityProtectionActive) return;
+        e.preventDefault();
+        showToast('⚠️ Right click is restricted on this portal!', 'danger');
+        return false;
+      });
+
+      document.addEventListener('copy', (e) => {
+        if (!securityProtectionActive) return;
+        e.preventDefault();
+        showToast('⚠️ Copying content is restricted!', 'danger');
+      });
+
+      document.addEventListener('cut', (e) => {
+        if (!securityProtectionActive) return;
+        e.preventDefault();
+      });
+
+      document.addEventListener('selectstart', (e) => {
+        if (!securityProtectionActive) return;
+        if (!['INPUT', 'TEXTAREA'].includes(e.target.tagName)) {
+          e.preventDefault();
+        }
+      });
+
+      document.addEventListener('keydown', (e) => {
+        if (!securityProtectionActive) return;
+        const isCtrl = e.ctrlKey || e.metaKey;
+        
+        if (e.keyCode === 123) { // F12
+          e.preventDefault();
+          showToast('⚠️ Developer tools inspection is restricted!', 'danger');
+          return false;
+        }
+
+        if (isCtrl) {
+          const key = e.key.toLowerCase();
+          if (['u', 's', 'p'].includes(key)) {
+            e.preventDefault();
+            showToast(`⚠️ Action (Ctrl+${key.toUpperCase()}) is restricted!`, 'danger');
+            return false;
+          }
+
+          if (e.shiftKey && ['i', 'j', 'c'].includes(key)) {
+            e.preventDefault();
+            showToast('⚠️ Inspect element shortcut is blocked!', 'danger');
+            return false;
+          }
+        }
+      });
+
+      document.addEventListener('dragstart', (e) => {
+        if (securityProtectionActive && e.target.tagName === 'IMG') {
+          e.preventDefault();
+        }
+      });
+    }
+
+    // TOUCH AND TAP TOGGLE PILL FOR SECURITY MODE
+    function toggleSecurityModePill() {
+      securityProtectionActive = !securityProtectionActive;
+      const pill = document.getElementById('security-pill-btn');
+      const statusText = document.getElementById('security-pill-status');
+
+      if (securityProtectionActive) {
+        pill.className = 'tap-toggle-pill enabled';
+        statusText.innerText = 'Security Active (Tap to Disable)';
+        showToast('Security protection ENABLED', 'success');
+      } else {
+        pill.className = 'tap-toggle-pill disabled';
+        statusText.innerText = 'Security Disabled (Tap to Enable)';
+        showToast('Security protection DISABLED', 'warning');
+      }
+    }
+
+    function updateNetworkStatus(isSyncing = false) {
+      const led = document.getElementById('network-led');
+      const text = document.getElementById('network-status-text');
+
+      if (!navigator.onLine) {
+        led.className = 'led-dot led-red';
+        text.innerText = 'Offline';
+      } else if (isSyncing) {
+        led.className = 'led-dot led-blue';
+        text.innerText = 'Updating...';
+      } else {
+        led.className = 'led-dot led-green';
+        text.innerText = 'Online';
+      }
+    }
+
+    function showToast(message, type = 'info') {
+      const container = document.getElementById('toast-container');
+      const toast = document.createElement('div');
+      toast.className = `toast toast-${type}`;
+      toast.innerHTML = `<span>${message}</span>`;
+      container.appendChild(toast);
+
+      setTimeout(() => toast.classList.add('show'), 10);
+      setTimeout(() => {
+        toast.classList.remove('show');
+        setTimeout(() => toast.remove(), 300);
+      }, 3500);
+    }
+
+    function showConfirmModal(title, msg, onConfirm) {
+      document.getElementById('modal-title').innerText = title;
+      document.getElementById('modal-msg').innerText = msg;
+      confirmCallback = onConfirm;
+      document.getElementById('confirm-modal').style.display = 'flex';
+      
+      document.getElementById('modal-confirm-btn').onclick = () => {
+        closeConfirmModal(true);
+      };
+    }
+
+    function closeConfirmModal(isConfirmed) {
+      document.getElementById('confirm-modal').style.display = 'none';
+      if (isConfirmed && confirmCallback) confirmCallback();
+      confirmCallback = null;
+    }
+
+    function openSettingsModal() {
+      document.getElementById('set-name').innerText = currentUser.name || currentUser.username;
+      document.getElementById('set-gender').innerText = currentUser.gender || 'Male';
+      document.getElementById('set-class').innerText = currentUser.userClass || '10';
+      document.getElementById('set-div').innerText = currentUser.division || 'A';
+      document.getElementById('set-first-lang').innerText = currentUser.firstLanguage || 'MI';
+      document.getElementById('set-phone').innerText = currentUser.phone;
+      document.getElementById('set-username-display').innerText = currentUser.username;
+      document.getElementById('settings-modal').style.display = 'flex';
+    }
+
+    function formatDateStrict(dateStr) {
+      if (!dateStr) return 'N/A';
+      const d = new Date(dateStr);
+      if (isNaN(d.getTime())) return dateStr;
+
+      const dd = String(d.getDate()).padStart(2, '0');
+      const mm = String(d.getMonth() + 1).padStart(2, '0');
+      const yyyy = d.getFullYear();
+
+      const hh = String(d.getHours()).padStart(2, '0');
+      const min = String(d.getMinutes()).padStart(2, '0');
+      const ss = String(d.getSeconds()).padStart(2, '0');
+
+      return `${dd}/${mm}/${yyyy}, ${hh}:${min}:${ss}`;
+    }
+
+    function getDeviceInfo() {
+      const ua = navigator.userAgent;
+      let os = "Device";
+      if (ua.includes("Win")) os = "Windows";
+      else if (ua.includes("Mac")) os = "MacOS";
+      else if (ua.includes("Linux")) os = "Linux";
+      else if (ua.includes("Android")) os = "Android";
+      else if (ua.includes("iPhone") || ua.includes("iPad")) os = "iOS";
+
+      let browser = "Browser";
+      if (ua.includes("Chrome")) browser = "Chrome";
+      else if (ua.includes("Safari")) browser = "Safari";
+      else if (ua.includes("Firefox")) browser = "Firefox";
+      else if (ua.includes("Edg")) browser = "Edge";
+
+      return `${os} (${browser})`;
+    }
+
+    function setProgress(percent) {
+      const bar = document.getElementById('progress-bar');
+      if (!bar) return;
+      bar.style.width = percent + '%';
+      if (percent >= 100) {
+        setTimeout(() => {
+          bar.style.opacity = '0';
+          setTimeout(() => { bar.style.width = '0%'; bar.style.opacity = '1'; }, 250);
+        }, 300);
+      } else {
+        bar.style.opacity = '1';
+      }
+    }
+
+    async function apiRequest(payload) {
+      if (!API_URL || API_URL.includes("YOUR_DEPLOYMENT_ID_HERE")) {
+        showToast('Please configure API_URL in index.html!', 'danger');
+        return { success: false };
+      }
+      
+      setProgress(35);
+      try {
+        setProgress(70);
+        const response = await fetch(API_URL, {
+          method: 'POST',
+          body: JSON.stringify(payload)
+        });
+        const json = await response.json();
+        setProgress(100);
+
+        if (json.success) {
+          localStorage.setItem('cache_' + payload.action, JSON.stringify(json));
+        }
+
+        return json;
+      } catch (err) {
+        setProgress(100);
+        showToast('⚠️ You are Offline. Displaying cached data.', 'danger');
+
+        const cached = localStorage.getItem('cache_' + payload.action);
+        if (cached) return JSON.parse(cached);
+
+        return { success: false };
+      }
+    }
+
+    function queueLocalProgress(record) {
+      let queue = JSON.parse(localStorage.getItem('uss_offline_queue') || '[]');
+      queue.push(record);
+      localStorage.setItem('uss_offline_queue', JSON.stringify(queue));
+      triggerBackgroundSync();
+    }
+
+    async function triggerBackgroundSync() {
+      if (!navigator.onLine) {
+        updateNetworkStatus();
+        return;
+      }
+
+      let queue = JSON.parse(localStorage.getItem('uss_offline_queue') || '[]');
+      if (queue.length === 0) {
+        updateNetworkStatus();
+        return;
+      }
+
+      updateNetworkStatus(true);
+      const currentItem = queue[0];
+      const res = await apiRequest({ action: 'recordProgress', ...currentItem });
+      if (res && res.success) {
+        queue.shift();
+        localStorage.setItem('uss_offline_queue', JSON.stringify(queue));
+        if (queue.length > 0) triggerBackgroundSync();
+        else updateNetworkStatus();
+      } else {
+        updateNetworkStatus();
+      }
+    }
+
+    async function triggerDbSetup() {
+      const res = await apiRequest({ action: 'setupDatabase' });
+      showToast(res.message || 'Database Setup Done', 'success');
+    }
+
+    async function refreshCurrentView() {
+      const icon = document.getElementById('global-refresh-icon');
+      if (icon) icon.classList.add('spinning');
+
+      showToast('Syncing latest data...', 'info');
+
+      const activeSec = document.querySelector('.section[style*="display: block"]');
+      const activeId = activeSec ? activeSec.id : 'practice-sec';
+
+      if (activeId === 'portfolio-sec') await loadPortfolio();
+      else if (activeId === 'notif-sec') await loadNotifications();
+      else if (['admin-report-sec', 'admin-resets-sec', 'manage-qs-sec', 'manage-users-sec', 'admin-logs-sec'].includes(activeId)) await loadAdminData();
+      else if (activeId === 'practice-sec') {
+        const subject = document.getElementById('subject-select').value;
+        if (subject) await loadPracticeSubject();
+      }
+
+      setTimeout(() => {
+        if (icon) icon.classList.remove('spinning');
+        showToast('Data refreshed successfully!', 'success');
+      }, 500);
+    }
+
+    // AUTHENTICATION & KEEP ME LOGGED IN
+    async function handleLogin(e) {
+      e.preventDefault();
+      const username = document.getElementById('login-username').value.trim();
+      const password = document.getElementById('login-password').value.trim();
+      const keepLoggedIn = document.getElementById('keep-logged-in').checked;
+
+      const res = await apiRequest({ action: 'login', username, password, ipDevice: getDeviceInfo() });
+      if (res.success) {
+        currentUser = res.user;
+
+        if (keepLoggedIn) {
+          localStorage.setItem('USS_USER', JSON.stringify(currentUser));
+        } else {
+          sessionStorage.setItem('USS_USER', JSON.stringify(currentUser));
+        }
+
+        initializeSession();
+        showToast('Logged in successfully!', 'success');
+      } else {
+        showToast(res.message, 'danger');
+      }
+    }
+
+    function filterPracticeSubjectDropdown() {
+      if (!currentUser) return;
+      const select = document.getElementById('subject-select');
+      const userLang = (currentUser.firstLanguage || 'MI').trim().toUpperCase();
+
+      Array.from(select.options).forEach(opt => {
+        if (opt.getAttribute('data-firstlang') === 'true') {
+          if (opt.value.toUpperCase() === userLang) {
+            opt.style.display = '';
+            opt.disabled = false;
+          } else {
+            opt.style.display = 'none';
+            opt.disabled = true;
+          }
+        }
+      });
+    }
+
+    function initializeSession() {
+      document.getElementById('login-sec').style.display = 'none';
+      document.getElementById('top-navbar').style.display = 'flex';
+      document.getElementById('tab-bar-container').style.display = 'flex';
+
+      document.getElementById('user-display-name').innerText = currentUser.name || currentUser.username;
+      document.getElementById('user-display-class').innerText = currentUser.userClass || '10';
+      document.getElementById('user-display-div').innerText = currentUser.division || 'A';
+
+      filterPracticeSubjectDropdown();
+
+      const adminNavButtons = document.querySelectorAll('.admin-only');
+      const role = String(currentUser.role).trim().toLowerCase();
+
+      if (role === 'admin') {
+        adminNavButtons.forEach(btn => btn.style.display = 'inline-flex');
+        showSection('practice-sec');
+        checkAdminPendingAlerts();
+      } else {
+        adminNavButtons.forEach(btn => btn.style.display = 'none');
+        showSection('practice-sec');
+      }
+
+      loadNotifications();
+    }
+
+    async function checkAdminPendingAlerts() {
+      const res = await apiRequest({ action: 'getAdminData' });
+      if (res.success && res.resetRequests) {
+        const pending = res.resetRequests.filter(r => r.Status === 'Pending');
+        if (pending.length > 0) {
+          showToast(`🔔 You have ${pending.length} pending reset request(s) waiting for action!`, 'danger');
+          document.getElementById('reset-badge-dot').style.display = 'block';
+        } else {
+          document.getElementById('reset-badge-dot').style.display = 'none';
+        }
+      }
+    }
+
+    async function handleChangePassword(e) {
+      e.preventDefault();
+      const newPass = document.getElementById('new-password').value.trim();
+      if (!newPass) return;
+
+      const res = await apiRequest({ action: 'changePassword', username: currentUser.username, newPassword: newPass });
+      if (res.success) {
+        showToast('Password updated successfully!', 'success');
+        document.getElementById('change-pass-form').reset();
+        document.getElementById('settings-modal').style.display = 'none';
+      } else {
+        showToast('Failed to update password.', 'danger');
+      }
+    }
+
+    async function logout() {
+      if (currentUser && currentUser.logId) {
+        await apiRequest({ action: 'recordLogout', logId: currentUser.logId, username: currentUser.username });
+      }
+      localStorage.removeItem('USS_USER');
+      sessionStorage.clear();
+      location.reload();
+    }
+
+    function showSection(sectionId) {
+      clearInterval(timerInterval);
+      document.querySelectorAll('.section').forEach(s => s.style.display = 'none');
+      document.querySelectorAll('.icon-tab-btn').forEach(b => b.classList.remove('active'));
+
+      document.getElementById(sectionId).style.display = 'block';
+
+      const tabMap = {
+        'practice-sec': 'tab-practice',
+        'portfolio-sec': 'tab-portfolio',
+        'notif-sec': 'tab-notif',
+        'admin-report-sec': 'tab-student-reports',
+        'admin-resets-sec': 'tab-resets',
+        'manage-qs-sec': 'tab-manage-qs',
+        'manage-users-sec': 'tab-manage-users',
+        'admin-logs-sec': 'tab-logs'
+      };
+      if (tabMap[sectionId]) document.getElementById(tabMap[sectionId]).classList.add('active');
+
+      if (sectionId === 'portfolio-sec') loadPortfolio();
+      else if (sectionId === 'notif-sec') loadNotifications();
+      else if (['admin-report-sec', 'admin-resets-sec', 'manage-qs-sec', 'manage-users-sec', 'admin-logs-sec'].includes(sectionId)) loadAdminData();
+    }
+
+    function switchPracticeMode(mode) {
+      document.getElementById('btn-mode-practice').className = mode === 'PRACTICE' ? 'mode-btn active' : 'mode-btn';
+      document.getElementById('btn-mode-trial').className = mode === 'TRIAL' ? 'mode-btn active' : 'mode-btn';
+
+      document.getElementById('quiz-card').style.display = 'none';
+      document.getElementById('no-questions-card').style.display = 'none';
+      document.getElementById('no-trial-card').style.display = 'none';
+      document.getElementById('completion-card').style.display = 'none';
+      document.getElementById('trial-consolidation-card').style.display = 'none';
+
+      if (mode === 'PRACTICE') {
+        document.getElementById('subject-practice-box').style.display = 'block';
+        document.getElementById('trial-exam-box').style.display = 'none';
+      } else {
+        document.getElementById('subject-practice-box').style.display = 'none';
+        document.getElementById('trial-exam-box').style.display = 'block';
+      }
+    }
+
+    async function loadPracticeSubject() {
+      const subject = document.getElementById('subject-select').value;
+      if (!subject) return;
+
+      document.getElementById('no-questions-card').style.display = 'none';
+      document.getElementById('no-trial-card').style.display = 'none';
+      document.getElementById('completion-card').style.display = 'none';
+      document.getElementById('quiz-card').style.display = 'none';
+      document.getElementById('trial-consolidation-card').style.display = 'none';
+
+      document.getElementById('practice-spinner').style.display = 'flex';
+      isTrialMode = false;
+
+      const res = await apiRequest({ action: 'getQuestions', subject, phone: currentUser.phone });
+      document.getElementById('practice-spinner').style.display = 'none';
+
+      if (res.success) {
+        if (res.status === 'NO_QUESTIONS') {
+          document.getElementById('no-questions-card').style.display = 'block';
+        } else if (res.status === 'ALL_ANSWERED') {
+          document.getElementById('completion-card').style.display = 'block';
+        } else if (res.questions.length > 0) {
+          currentQuestions = res.questions;
+          qIndex = 0;
+          renderQuestion();
+          document.getElementById('quiz-card').style.display = 'block';
+        }
+      }
+    }
+
+    async function startTrialExam() {
+      document.getElementById('trial-exam-box').style.display = 'none';
+      document.getElementById('no-trial-card').style.display = 'none';
+      document.getElementById('practice-spinner').style.display = 'flex';
+      
+      isTrialMode = true;
+      trialAnswersLog = [];
+
+      const res = await apiRequest({ action: 'getTrialQuestions', phone: currentUser.phone });
+      document.getElementById('practice-spinner').style.display = 'none';
+
+      if (res.success) {
+        if (res.status === 'ALL_ANSWERED' || res.questions.length === 0) {
+          document.getElementById('no-trial-card').style.display = 'block';
+        } else {
+          currentQuestions = res.questions;
+          qIndex = 0;
+          renderQuestion();
+          document.getElementById('quiz-card').style.display = 'block';
+        }
+      }
+    }
+
+    function closeNoTrialCard() {
+      document.getElementById('no-trial-card').style.display = 'none';
+      document.getElementById('trial-exam-box').style.display = 'block';
+    }
+
+    function resetPracticeSubject() {
+      document.getElementById('subject-select').value = '';
+      document.getElementById('completion-card').style.display = 'none';
+    }
+
+    async function requestResetFromAdmin() {
+      const subject = document.getElementById('subject-select').value;
+      if (!subject) return;
+
+      const res = await apiRequest({
+        action: 'requestSubjectReset',
+        phone: currentUser.phone,
+        studentName: currentUser.name || currentUser.username,
+        userClass: currentUser.userClass || '10',
+        division: currentUser.division || 'A',
+        subject: subject
+      });
+
+      if (res.success) {
+        showToast('Request sent to admin, please wait for action.', 'success');
+      }
+    }
+
+    function startTimer() {
+      clearInterval(timerInterval);
+      timeLeft = 30;
+      const timerCount = document.getElementById('timer-count');
+      const timerBadge = document.getElementById('timer-badge');
+      timerCount.innerText = timeLeft;
+      timerBadge.classList.remove('danger');
+
+      timerInterval = setInterval(() => {
+        timeLeft--;
+        timerCount.innerText = timeLeft;
+        if (timeLeft <= 10) timerBadge.classList.add('danger');
+        if (timeLeft <= 0) {
+          clearInterval(timerInterval);
+          submitAnswer('TIMEOUT');
+        }
+      }, 1000);
+    }
+
+    function renderQuestion() {
+      const q = currentQuestions[qIndex];
+      const quizCard = document.getElementById('quiz-card');
+
+      if (q.Subject === 'AR' || q.Subject === 'Arabic') {
+        quizCard.classList.add('rtl-content');
+      } else {
+        quizCard.classList.remove('rtl-content');
+      }
+
+      document.getElementById('quiz-subject').innerText = isTrialMode ? `TRIAL: ${q.Subject}` : q.Subject;
+      document.getElementById('quiz-progress').innerText = `Question ${qIndex + 1} of ${currentQuestions.length}`;
+      document.getElementById('quiz-question').innerText = q.Question;
+      
+      const imgEl = document.getElementById('quiz-image');
+      if (q.ImageUrl) {
+        imgEl.src = q.ImageUrl;
+        imgEl.style.display = 'block';
+      } else {
+        imgEl.style.display = 'none';
+      }
+
+      document.getElementById('optA').innerText = q.OptionA;
+      document.getElementById('optB').innerText = q.OptionB;
+      document.getElementById('optC').innerText = q.OptionC;
+      document.getElementById('optD').innerText = q.OptionD;
+
+      const buttons = document.querySelectorAll('.opt-btn');
+      buttons.forEach(btn => {
+        btn.className = 'opt-btn';
+        btn.disabled = false;
+      });
+      document.getElementById('feedback-msg').innerText = '';
+      document.getElementById('next-btn').style.display = 'none';
+
+      startTimer();
+    }
+
+    function submitAnswer(selectedOpt) {
+      clearInterval(timerInterval);
+      const q = currentQuestions[qIndex];
+      const isCorrect = selectedOpt === q.CorrectAnswer;
+      const buttons = document.querySelectorAll('.opt-btn');
+
+      buttons.forEach(btn => btn.disabled = true);
+
+      const optionMap = { 'A': 0, 'B': 1, 'C': 2, 'D': 3 };
+      if (selectedOpt !== 'TIMEOUT') {
+        buttons[optionMap[selectedOpt]].classList.add(isCorrect ? 'correct' : 'wrong');
+      }
+      if (!isCorrect) {
+        buttons[optionMap[q.CorrectAnswer]].classList.add('correct');
+      }
+
+      const feedback = document.getElementById('feedback-msg');
+      if (selectedOpt === 'TIMEOUT') {
+        feedback.innerText = `⏳ Time Expired! Correct choice was Option ${q.CorrectAnswer}`;
+        feedback.style.color = 'var(--danger)';
+      } else {
+        feedback.innerText = isCorrect 
+          ? '✅ Correct Answer!' 
+          : `❌ Incorrect! Correct choice was Option ${q.CorrectAnswer}`;
+        feedback.style.color = isCorrect ? 'var(--success)' : 'var(--danger)';
+      }
+
+      document.getElementById('next-btn').style.display = 'inline-flex';
+
+      if (isTrialMode) {
+        trialAnswersLog.push({
+          Subject: q.Subject,
+          QuestionText: q.Question,
+          OptionA: q.OptionA,
+          OptionB: q.OptionB,
+          OptionC: q.OptionC,
+          OptionD: q.OptionD,
+          UserAnswer: selectedOpt === 'TIMEOUT' ? 'Timed Out' : selectedOpt,
+          CorrectAnswer: q.CorrectAnswer,
+          IsCorrect: isCorrect
+        });
+      } else {
+        queueLocalProgress({
+          phone: currentUser.phone,
+          studentName: currentUser.name || currentUser.username,
+          userClass: currentUser.userClass || '10',
+          division: currentUser.division || 'A',
+          subject: q.Subject,
+          questionId: q.ID,
+          questionText: q.Question,
+          userAnswer: selectedOpt === 'TIMEOUT' ? 'Timed Out' : selectedOpt,
+          correctAnswer: q.CorrectAnswer,
+          isCorrect: isCorrect
+        });
+      }
+    }
+
+    async function nextQuestion() {
+      if (qIndex + 1 < currentQuestions.length) {
+        qIndex++;
+        renderQuestion();
+      } else {
+        document.getElementById('quiz-card').style.display = 'none';
+
+        if (isTrialMode) {
+          renderTrialConsolidation();
+        } else {
+          document.getElementById('completion-card').style.display = 'block';
+        }
+      }
+    }
+
+    async function renderTrialConsolidation() {
+      let score = trialAnswersLog.filter(a => a.IsCorrect).length;
+      let total = trialAnswersLog.length;
+      let acc = total ? Math.round((score / total) * 100) : 0;
+
+      document.getElementById('trial-score-val').innerText = `${score} / ${total}`;
+      document.getElementById('trial-acc-val').innerText = `${acc}%`;
+
+      const tbody = document.getElementById('trial-consolidation-body');
+      tbody.innerHTML = trialAnswersLog.map(item => `
+        <tr>
+          <td><span class="badge">${item.Subject}</span></td>
+          <td>${item.QuestionText}</td>
+          <td><small>A:${item.OptionA} | B:${item.OptionB} | C:${item.OptionC} | D:${item.OptionD}</small></td>
+          <td><b>${item.UserAnswer}</b></td>
+          <td><b style="color:var(--success);">${item.CorrectAnswer}</b></td>
+        </tr>
+      `).join('');
+
+      document.getElementById('trial-consolidation-card').style.display = 'block';
+
+      await apiRequest({
+        action: 'saveTrialExam',
+        phone: currentUser.phone,
+        studentName: currentUser.name || currentUser.username,
+        userClass: currentUser.userClass || '10',
+        division: currentUser.division || 'A',
+        score: score,
+        total: total,
+        answersJson: trialAnswersLog
+      });
+    }
+
+    // PORTFOLIO
+    async function loadPortfolio() {
+      const res = await apiRequest({ action: 'getPortfolio', phone: currentUser.phone });
+      if (!res.success) return;
+
+      const tbody = document.getElementById('portfolio-table-body');
+      tbody.innerHTML = '';
+      
+      let totalAttempted = 0;
+      let totalCorrect = 0;
+
+      res.progress.forEach(row => {
+        totalAttempted += Number(row.TotalAttempted);
+        totalCorrect += Number(row.CorrectAnswers);
+
+        tbody.innerHTML += `
+          <tr>
+            <td><b>${row.Subject}</b></td>
+            <td>${row.TotalAttempted}</td>
+            <td>${row.CorrectAnswers}</td>
+            <td>${row.WrongAnswers}</td>
+            <td>${formatDateStrict(row.LastAttemptDate)}</td>
+          </tr>
+        `;
+      });
+
+      const accuracy = totalAttempted ? Math.round((totalCorrect / totalAttempted) * 100) : 0;
+      document.getElementById('stat-total').innerText = totalAttempted;
+      document.getElementById('stat-accuracy').innerText = `${accuracy}%`;
+
+      renderSubjectGraphicalDashboard(res.progress, 'strong-subjects-chart-container', 'weak-subjects-chart-container');
+
+      const trialBox = document.getElementById('portfolio-trial-history-box');
+      const trialContainer = document.getElementById('portfolio-trial-history-container');
+
+      if (res.trialExams && res.trialExams.length > 0) {
+        trialBox.style.display = 'block';
+        trialContainer.innerHTML = res.trialExams.map((t, idx) => {
+          let answers = [];
+          try { answers = JSON.parse(t.AnswersJson || '[]'); } catch(e){}
+
+          return `
+            <div style="background:#f8fafc; border:1px solid var(--border-color); border-radius:10px; padding:16px; margin-bottom:15px;">
+              <div style="display:flex; justify-content:space-between; align-items:center; font-weight:700; margin-bottom:10px;">
+                <span>Trial Exam (${formatDateStrict(t.Timestamp)})</span>
+                <span class="badge badge-success">Score: ${t.Score} / ${t.TotalQuestions}</span>
+              </div>
+              <div class="table-responsive">
+                <table class="data-table">
+                  <thead>
+                    <tr><th>Subject</th><th>Question</th><th>Options</th><th>Your Choice</th><th>Correct</th></tr>
+                  </thead>
+                  <tbody>
+                    ${answers.map(a => `
+                      <tr>
+                        <td><span class="badge">${a.Subject}</span></td>
+                        <td>${a.QuestionText}</td>
+                        <td><small>A:${a.OptionA} | B:${a.OptionB} | C:${a.OptionC} | D:${a.OptionD}</small></td>
+                        <td><b>${a.UserAnswer}</b></td>
+                        <td><b style="color:var(--success);">${a.CorrectAnswer}</b></td>
+                      </tr>
+                    `).join('')}
+                  </tbody>
+                </table>
+              </div>
+            </div>
+          `;
+        }).join('');
+      } else {
+        trialBox.style.display = 'none';
+      }
+
+      const detailedBody = document.getElementById('portfolio-detailed-body');
+      detailedBody.innerHTML = res.detailedAnswers.map(item => `
+        <tr>
+          <td>${formatDateStrict(item.Timestamp)}</td>
+          <td><span class="badge">${item.Subject}</span></td>
+          <td>${item.QuestionText}</td>
+          <td><b>${item.UserAnswer}</b></td>
+          <td><b>${item.CorrectAnswer}</b></td>
+          <td><span class="badge ${item.IsCorrect === 'YES' ? 'badge-success' : 'badge-danger'}">${item.IsCorrect === 'YES' ? 'Correct' : 'Wrong'}</span></td>
+        </tr>
+      `).join('');
+    }
+
+    function renderSubjectGraphicalDashboard(progressList, strongContainerId, weakContainerId) {
+      const strongBox = document.getElementById(strongContainerId);
+      const weakBox = document.getElementById(weakContainerId);
+
+      let strongHTML = '';
+      let weakHTML = '';
+
+      progressList.forEach(p => {
+        const attempted = Number(p.TotalAttempted);
+        const correct = Number(p.CorrectAnswers);
+        const acc = attempted > 0 ? Math.round((correct / attempted) * 100) : 0;
+
+        const itemHTML = `
+          <div class="chart-item">
+            <div class="chart-label-row">
+              <span>${p.Subject}</span>
+              <span>${acc}% (${correct}/${attempted})</span>
+            </div>
+            <div class="chart-track">
+              <div class="chart-fill ${acc >= 70 ? 'chart-fill-strong' : 'chart-fill-weak'}" style="width: ${acc}%;"></div>
+            </div>
+          </div>
+        `;
+
+        if (acc >= 70) strongHTML += itemHTML;
+        else weakHTML += itemHTML;
+      });
+
+      strongBox.innerHTML = strongHTML || '<p style="font-size:13px; color:var(--text-muted); margin:0;">No subjects mastered (≥70%) yet.</p>';
+      weakBox.innerHTML = weakHTML || '<p style="font-size:13px; color:var(--text-muted); margin:0;">Great job! All subjects are performing well (≥70%).</p>';
+    }
+
+    // NOTIFICATIONS
+    async function loadNotifications() {
+      const res = await apiRequest({ action: 'getNotifications', phone: currentUser.phone, role: currentUser.role });
+      if (!res.success) return;
+
+      const container = document.getElementById('notifications-list-container');
+      const readSet = new Set(JSON.parse(localStorage.getItem('read_notifs_' + currentUser.username) || '[]'));
+      const isAdmin = String(currentUser.role).trim().toLowerCase() === 'admin';
+
+      let userMap = {};
+      if (isAdmin && cachedAdminData && cachedAdminData.users) {
+        cachedAdminData.users.forEach(u => {
+          userMap[String(u.Phone).trim()] = `${u.Name} (${u.Class || '10'}-${u.Division || 'A'})`;
+        });
+      }
+
+      if (res.notifications.length === 0) {
+        container.innerHTML = `<p style="color:var(--text-muted); font-size:14px;">No notifications yet.</p>`;
+        document.getElementById('notif-badge-dot').style.display = 'none';
+        return;
+      }
+
+      let unreadCount = 0;
+      container.innerHTML = '';
+      selectedNotifIds.clear();
+      updateDeleteNotifBtnState();
+
+      res.notifications.forEach(n => {
+        const isRead = readSet.has(n.NotificationID);
+        if (!isRead) unreadCount++;
+
+        let recipientBadge = '';
+        if (isAdmin) {
+          const rec = String(n.RecipientPhone).trim();
+          if (rec === 'ALL') recipientBadge = '<span class="badge" style="background:#e0e7ff; color:#3730a3; margin-bottom:8px; display:inline-block;">Sent To: All Users (Broadcast)</span>';
+          else if (rec === 'ADMIN') recipientBadge = '<span class="badge" style="background:#fef3c7; color:#92400e; margin-bottom:8px; display:inline-block;">Sent To: System Admin</span>';
+          else recipientBadge = `<span class="badge" style="background:#dcfce7; color:#166534; margin-bottom:8px; display:inline-block;">Sent To: ${userMap[rec] || rec}</span>`;
+        }
+
+        const card = document.createElement('div');
+        card.className = `notif-card ${isRead ? '' : 'unread'}`;
+        card.id = `notif-card-${n.NotificationID}`;
+
+        card.innerHTML = `
+          ${recipientBadge ? `<div>${recipientBadge}</div>` : ''}
+          <div style="display:flex; justify-content:space-between; align-items:center; margin-bottom:8px;">
+            <strong style="font-size:15px; color:var(--text-main);">${n.Title}</strong>
+            <small style="color:var(--text-muted); font-weight:600;">${formatDateStrict(n.Timestamp)}</small>
+          </div>
+          <p style="margin:0 0 12px 0; font-size:14px; color:var(--text-main); line-height:1.4;">${n.Message}</p>
+          <div style="display:flex; justify-content:space-between; align-items:center;">
+            <small style="color:var(--text-muted); font-weight:600;">From: ${n.Sender}</small>
+            <div style="display:flex; gap:8px;">
+              <button onclick="event.stopPropagation(); toggleNotifRead('${n.NotificationID}')" class="btn btn-outline" style="padding:4px 12px; font-size:12px;">
+                ${isRead ? 'Mark Unread' : 'Mark as Read ✓'}
+              </button>
+              ${isAdmin ? `
+                <button onclick="event.stopPropagation(); deleteSingleNotif('${n.NotificationID}')" class="icon-action-btn delete-btn" style="width:32px; height:32px;" title="Delete Notification">
+                  🗑️
+                </button>
+              ` : ''}
+            </div>
+          </div>
+        `;
+
+        if (isAdmin) {
+          attachNotifTouchAndHold(card, n.NotificationID);
+        }
+
+        container.appendChild(card);
+      });
+
+      if (unreadCount > 0) {
+        document.getElementById('notif-badge-dot').style.display = 'block';
+      } else {
+        document.getElementById('notif-badge-dot').style.display = 'none';
+      }
+    }
+
+    function attachNotifTouchAndHold(cardEl, notifId) {
+      let timer = null;
+      let isLongPress = false;
+
+      cardEl.addEventListener('touchstart', (e) => {
+        isLongPress = false;
+        timer = setTimeout(() => {
+          isLongPress = true;
+          toggleNotifCardSelection(cardEl, notifId);
+          showToast(`Notification ${selectedNotifIds.has(notifId) ? 'selected' : 'deselected'}`, 'info');
+        }, 350);
+      }, { passive: true });
+
+      cardEl.addEventListener('touchend', () => clearTimeout(timer));
+      cardEl.addEventListener('touchmove', () => clearTimeout(timer));
+
+      cardEl.addEventListener('click', (e) => {
+        if (e.target.closest('button')) return;
+        e.preventDefault();
+        if (!isLongPress) {
+          toggleNotifCardSelection(cardEl, notifId);
+        }
+      });
+    }
+
+    function toggleNotifCardSelection(cardEl, notifId) {
+      if (selectedNotifIds.has(notifId)) {
+        selectedNotifIds.delete(notifId);
+        cardEl.classList.remove('selected');
+      } else {
+        selectedNotifIds.add(notifId);
+        cardEl.classList.add('selected');
+      }
+      updateDeleteNotifBtnState();
+    }
+
+    function updateDeleteNotifBtnState() {
+      const delBtn = document.getElementById('admin-delete-selected-btn');
+      const countEl = document.getElementById('selected-notif-count');
+      if (delBtn) {
+        delBtn.style.display = selectedNotifIds.size > 0 ? 'inline-flex' : 'none';
+        if (countEl) countEl.innerText = selectedNotifIds.size;
+      }
+    }
+
+    function toggleNotifRead(notifId) {
+      let readSet = new Set(JSON.parse(localStorage.getItem('read_notifs_' + currentUser.username) || '[]'));
+      if (readSet.has(notifId)) readSet.delete(notifId);
+      else readSet.add(notifId);
+      localStorage.setItem('read_notifs_' + currentUser.username, JSON.stringify(Array.from(readSet)));
+      loadNotifications();
+    }
+
+    function markAllNotifsAsRead() {
+      const cards = document.querySelectorAll('.notif-card');
+      let readSet = new Set(JSON.parse(localStorage.getItem('read_notifs_' + currentUser.username) || '[]'));
+      cards.forEach(c => {
+        const id = c.id.replace('notif-card-', '');
+        if (id) readSet.add(id);
+      });
+      localStorage.setItem('read_notifs_' + currentUser.username, JSON.stringify(Array.from(readSet)));
+      showToast('All notifications marked as read', 'success');
+      loadNotifications();
+    }
+
+    function toggleNotifTargetUI() {
+      const mode = document.getElementById('notif-target-mode').value;
+      document.getElementById('student-picker-box').style.display = mode === 'CUSTOM' ? 'block' : 'none';
+    }
+
+    function toggleStudentChip(chipEl, phone) {
+      if (selectedStudentPhones.has(phone)) {
+        selectedStudentPhones.delete(phone);
+        chipEl.classList.remove('selected');
+      } else {
+        selectedStudentPhones.add(phone);
+        chipEl.classList.add('selected');
+      }
+    }
+
+    function attachTouchAndHold(element, phone) {
+      let timer = null;
+      let isLongPress = false;
+
+      element.addEventListener('touchstart', (e) => {
+        isLongPress = false;
+        timer = setTimeout(() => {
+          isLongPress = true;
+          toggleStudentChip(element, phone);
+          showToast(`Student ${selectedStudentPhones.has(phone) ? 'selected' : 'deselected'}`, 'info');
+        }, 350);
+      }, { passive: true });
+
+      element.addEventListener('touchend', () => clearTimeout(timer));
+      element.addEventListener('touchmove', () => clearTimeout(timer));
+
+      element.addEventListener('click', (e) => {
+        e.preventDefault();
+        if (!isLongPress) {
+          toggleStudentChip(element, phone);
+        }
+      });
+    }
+
+    async function handleSendNotification(e) {
+      e.preventDefault();
+      const targetMode = document.getElementById('notif-target-mode').value;
+      let recipients = [];
+
+      if (targetMode === 'ALL') {
+        recipients = ['ALL'];
+      } else {
+        recipients = Array.from(selectedStudentPhones);
+        if (recipients.length === 0) {
+          showToast('Please select at least one student by tapping their pill card!', 'danger');
+          return;
+        }
+      }
+
+      const title = document.getElementById('notif-title').value.trim();
+      const message = document.getElementById('notif-message').value.trim();
+
+      const res = await apiRequest({
+        action: 'sendNotification',
+        recipientPhones: recipients,
+        title,
+        message,
+        sender: currentUser.name || 'System Admin'
+      });
+
+      if (res.success) {
+        showToast('Notification sent successfully!', 'success');
+        document.getElementById('send-notif-form').reset();
+        selectedStudentPhones.clear();
+        toggleNotifTargetUI();
+        loadNotifications();
+      }
+    }
+
+    async function deleteSingleNotif(notifId) {
+      showConfirmModal('Delete Notification', 'Permanently delete this notification?', async () => {
+        await apiRequest({ action: 'deleteNotifications', notificationIds: [notifId] });
+        showToast('Notification deleted', 'info');
+        loadNotifications();
+      });
+    }
+
+    async function deleteSelectedNotifs() {
+      const ids = Array.from(selectedNotifIds);
+      if (ids.length === 0) return;
+
+      showConfirmModal('Delete Notifications', `Permanently delete ${ids.length} selected notification(s)?`, async () => {
+        await apiRequest({ action: 'deleteNotifications', notificationIds: ids });
+        showToast(`${ids.length} notification(s) deleted`, 'info');
+        selectedNotifIds.clear();
+        loadNotifications();
+      });
+    }
+
+    // ADMIN DATA & AUDIT ACCESS LOGS
+    async function loadAdminData() {
+      const res = await apiRequest({ action: 'getAdminData' });
+      if (!res.success) return;
+      cachedAdminData = res;
+
+      const studentChipsContainer = document.getElementById('student-chips-container');
+      const students = res.users.filter(u => String(u.Role).trim().toLowerCase() === 'student');
+
+      studentChipsContainer.innerHTML = '';
+      students.forEach(s => {
+        const chip = document.createElement('div');
+        chip.className = 'student-chip';
+        chip.innerText = `${s.Name} (${s.Class || '10'}-${s.Division || 'A'}) [FL: ${s.FirstLanguage || 'MI'}]`;
+        attachTouchAndHold(chip, String(s.Phone).trim());
+        studentChipsContainer.appendChild(chip);
+      });
+
+      consolidatedStudentsList = students.map((st, index) => {
+        const studentPhone = String(st.Phone).trim();
+        const studentProgress = res.allProgress.filter(p => String(p.Phone).trim() === studentPhone);
+        
+        let totalAttempted = 0;
+        let totalCorrect = 0;
+
+        studentProgress.forEach(sp => {
+          totalAttempted += Number(sp.TotalAttempted);
+          totalCorrect += Number(sp.CorrectAnswers);
+        });
+
+        const accuracy = totalAttempted ? Math.round((totalCorrect / totalAttempted) * 100) : 0;
+
+        return {
+          sno: index + 1,
+          name: st.Name,
+          gender: st.Gender || 'Male',
+          userClass: st.Class || '10',
+          div: st.Division || 'A',
+          firstLanguage: st.FirstLanguage || 'MI',
+          phone: st.Phone,
+          accuracy: accuracy,
+          totalAttempted: totalAttempted
+        };
+      });
+
+      renderConsolidatedTable();
+
+      const analyticsAccordionBox = document.getElementById('manage-users-analytics-accordion');
+      analyticsAccordionBox.innerHTML = students.map((st, idx) => {
+        const studentPhone = String(st.Phone).trim();
+        const studentProgress = res.allProgress.filter(p => String(p.Phone).trim() === studentPhone);
+
+        let strongList = [];
+        let weakList = [];
+
+        studentProgress.forEach(sp => {
+          const att = Number(sp.TotalAttempted);
+          const cor = Number(sp.CorrectAnswers);
+          const acc = att > 0 ? Math.round((cor / att) * 100) : 0;
+          const itemText = `• *${sp.Subject}:* ${acc}% Accuracy (${cor}/${att} Correct)`;
+          
+          if (acc >= 70) strongList.push(itemText);
+          else weakList.push(itemText);
+        });
+
+        const strongStr = strongList.join('\n');
+        const weakStr = weakList.join('\n');
+
+        return `
+          <div class="accordion-item">
+            <div class="accordion-header" onclick="toggleAccordion('user-acc-${idx}')">
+              <div>
+                <strong>${st.Name}</strong> (${st.Gender || 'Male'}) — Class ${st.Class || '10'}-${st.Division || 'A'} [FL: ${st.FirstLanguage || 'MI'}] [${st.Phone}]
+              </div>
+              <button onclick="event.stopPropagation(); sendSubjectAnalyticsWhatsapp('${st.Name}', '${st.Phone}', '${encodeURIComponent(strongStr)}', '${encodeURIComponent(weakStr)}')" class="btn btn-outline whatsapp-icon-btn" style="padding:4px 10px; font-size:12px;">
+                WhatsApp Subject Report
+              </button>
+            </div>
+            <div class="accordion-body" id="user-acc-${idx}">
+              <div class="grid-2">
+                <div style="background:#f0fdf4; border:1px solid #bbf7d0; padding:14px; border-radius:10px;">
+                  <h5 style="margin:0 0 10px 0; color:#166534;">🌟 Improved / Strong Subjects (≥70%)</h5>
+                  <div id="user-strong-chart-${idx}"></div>
+                </div>
+                <div style="background:#fffbe0; border:1px solid #fef08a; padding:14px; border-radius:10px;">
+                  <h5 style="margin:0 0 10px 0; color:#92400e;">⚠️ Focus Areas / Weak Subjects (<70%)</h5>
+                  <div id="user-weak-chart-${idx}"></div>
+                </div>
+              </div>
+            </div>
+          </div>
+        `;
+      }).join('');
+
+      students.forEach((st, idx) => {
+        const studentPhone = String(st.Phone).trim();
+        const studentProgress = res.allProgress.filter(p => String(p.Phone).trim() === studentPhone);
+        renderSubjectGraphicalDashboard(studentProgress, `user-strong-chart-${idx}`, `user-weak-chart-${idx}`);
+      });
+
+      const accordionContainer = document.getElementById('admin-student-accordion-list');
+      accordionContainer.innerHTML = students.map((st, idx) => {
+        const studentPhone = String(st.Phone).trim();
+        const studentProgress = res.allProgress.filter(p => String(p.Phone).trim() === studentPhone);
+        const studentTrials = res.allTrialExams.filter(t => String(t.Phone).trim() === studentPhone);
+        
+        let totalAttempted = 0;
+        let totalCorrect = 0;
+        let lastDate = 'N/A';
+
+        studentProgress.forEach(sp => {
+          totalAttempted += Number(sp.TotalAttempted);
+          totalCorrect += Number(sp.CorrectAnswers);
+          if (sp.LastAttemptDate && sp.LastAttemptDate > lastDate) lastDate = sp.LastAttemptDate;
+        });
+
+        const accuracy = totalAttempted ? Math.round((totalCorrect / totalAttempted) * 100) : 0;
+
+        return `
+          <div class="accordion-item">
+            <div class="accordion-header" onclick="toggleAccordion('acc-${idx}')">
+              <div>
+                <strong>${st.Name}</strong> (${st.Gender || 'Male'}) — Class ${st.Class || '10'}-${st.Division || 'A'} [FL: ${st.FirstLanguage || 'MI'}] [${st.Phone}]
+              </div>
+              <div>
+                <span class="badge ${accuracy >= 60 ? 'badge-success' : 'badge-danger'}">${accuracy}% Accuracy</span> ▾
+              </div>
+            </div>
+            <div class="accordion-body" id="acc-${idx}">
+              <div style="display:flex; justify-content:space-between; align-items:center; margin-bottom:15px; flex-wrap:wrap; gap:10px;">
+                <div>
+                  <strong>Total Answered:</strong> ${totalAttempted} | <strong>Correct:</strong> ${totalCorrect} | <strong>Last Date:</strong> ${formatDateStrict(lastDate)}
+                </div>
+                <div style="display:flex; gap:8px;">
+                  <button onclick="sendIndividualWhatsapp('${st.Name}', '${st.Phone}', ${totalAttempted}, '${accuracy}%')" class="btn btn-outline whatsapp-icon-btn">
+                    WhatsApp Report
+                  </button>
+                  <button onclick="printStudentQuestions('${st.Name}', '${st.Phone}')" class="btn btn-outline print-icon-btn">
+                    Print Questions Log
+                  </button>
+                </div>
+              </div>
+
+              ${studentTrials.length > 0 ? `
+                <h4 style="margin:15px 0 8px 0; color:var(--primary);">Trial Exam History & Consolidations</h4>
+                ${studentTrials.map(tr => {
+                  let tAns = [];
+                  try { tAns = JSON.parse(tr.AnswersJson || '[]'); } catch(e){}
+                  return `
+                    <div style="background:#f8fafc; border:1px solid var(--border-color); padding:12px; border-radius:8px; margin-bottom:12px;">
+                      <div style="font-weight:700; font-size:13px; margin-bottom:6px;">Date: ${formatDateStrict(tr.Timestamp)} | Score: ${tr.Score} / ${tr.TotalQuestions}</div>
+                      <div class="table-responsive">
+                        <table class="data-table">
+                          <thead><tr><th>Subject</th><th>Question</th><th>User Choice</th><th>Correct Answer</th></tr></thead>
+                          <tbody>
+                            ${tAns.map(ta => `
+                              <tr>
+                                <td>${ta.Subject}</td>
+                                <td>${ta.QuestionText}</td>
+                                <td><b>${ta.UserAnswer}</b></td>
+                                <td><b style="color:var(--success);">${ta.CorrectAnswer}</b></td>
+                              </tr>
+                            `).join('')}
+                          </tbody>
+                        </table>
+                      </div>
+                    </div>
+                  `;
+                }).join('')}
+              ` : ''}
+
+              <h4 style="margin:15px 0 8px 0;">Subjectwise Summary</h4>
+              <div class="table-responsive">
+                <table class="data-table">
+                  <thead><tr><th>Subject</th><th>Attempted</th><th>Correct</th><th>Wrong</th></tr></thead>
+                  <tbody>
+                    ${studentProgress.map(sp => `
+                      <tr>
+                        <td>${sp.Subject}</td>
+                        <td>${sp.TotalAttempted}</td>
+                        <td>${sp.CorrectAnswers}</td>
+                        <td>${sp.WrongAnswers}</td>
+                      </tr>
+                    `).join('')}
+                  </tbody>
+                </table>
+              </div>
+            </div>
+          </div>
+        `;
+      }).join('');
+
+      const resetBody = document.getElementById('admin-resets-body');
+      resetBody.innerHTML = res.resetRequests.map(r => `
+        <tr>
+          <td><small>${r.RequestID}</small></td>
+          <td>${formatDateStrict(r.Timestamp)}</td>
+          <td><b>${r.StudentName}</b></td>
+          <td>${r.Class || '10'}-${r.Division || 'A'}</td>
+          <td>${r.Phone}</td>
+          <td><span class="badge">${r.Subject}</span></td>
+          <td><b>${r.Status}</b></td>
+          <td>
+            ${r.Status === 'Pending' ? `
+              <button onclick="handleReset('${r.RequestID}', 'Accepted', '${r.Phone}', '${r.Subject}')" class="btn btn-primary" style="padding:4px 8px; font-size:12px;">Accept</button>
+              <button onclick="handleReset('${r.RequestID}', 'Rejected', '${r.Phone}', '${r.Subject}')" class="btn btn-danger" style="padding:4px 8px; font-size:12px;">Reject</button>
+            ` : '-'}
+          </td>
+        </tr>
+      `).join('');
+
+      const qBody = document.getElementById('admin-questions-body');
+      qBody.innerHTML = res.questions.map(q => `
+        <tr>
+          <td><span class="badge">${q.Subject}</span></td>
+          <td>${q.Question} ${q.ImageUrl ? '📷' : ''}</td>
+          <td><b>${q.CorrectAnswer}</b></td>
+          <td style="display:flex; gap:8px;">
+            <button onclick="editQuestion('${q.ID}','${encodeURIComponent(q.Subject)}','${encodeURIComponent(q.Question)}','${encodeURIComponent(q.OptionA)}','${encodeURIComponent(q.OptionB)}','${encodeURIComponent(q.OptionC)}','${encodeURIComponent(q.OptionD)}','${q.CorrectAnswer}','${encodeURIComponent(q.ImageUrl || '')}')" class="icon-action-btn edit-btn" style="width:34px; height:34px;" title="Edit">
+              ✏️
+            </button>
+            <button onclick="confirmDeleteQuestion('${q.ID}')" class="icon-action-btn delete-btn" style="width:34px; height:34px;" title="Delete">
+              🗑️
+            </button>
+          </td>
+        </tr>
+      `).join('');
+
+      const uBody = document.getElementById('admin-users-body');
+      uBody.innerHTML = res.users.map(u => `
+        <tr>
+          <td><b>${u.Name}</b></td>
+          <td>${u.Gender || 'Male'}</td>
+          <td>${u.Class || '10'}</td>
+          <td>${u.Division || 'A'}</td>
+          <td><span class="badge badge-success">${u.FirstLanguage || 'MI'}</span></td>
+          <td>${u.Phone}</td>
+          <td>${u.Username}</td>
+          <td>${u.Role}</td>
+          <td><span class="badge ${u.Status === 'Active' ? 'badge-success' : ''}">${u.Status}</span></td>
+          <td>
+            <button onclick="editUser('${u.Name}','${u.Gender || 'Male'}','${u.Phone}','${u.Username}','${u.Password}','${u.Role}','${u.Status}','${u.Class || '10'}','${u.Division || 'A'}','${u.FirstLanguage || 'MI'}')" class="icon-action-btn edit-btn" style="width:34px; height:34px;" title="Edit">
+              ✏️
+            </button>
+          </td>
+        </tr>
+      `).join('');
+
+      const lBody = document.getElementById('admin-logs-body');
+      lBody.innerHTML = res.logs.map(l => `
+        <tr>
+          <td>${formatDateStrict(l.Timestamp)}</td>
+          <td><b>${l.Identifier}</b></td>
+          <td>${l.Role}</td>
+          <td><span class="badge ${l.LoginStatus === 'SUCCESS' ? 'badge-success' : 'badge-danger'}">${l.LoginStatus}</span></td>
+          <td>${l.LoginTime}</td>
+          <td><span class="badge ${l.LogoutTime === 'Active Now' ? 'badge-success' : ''}">${l.LogoutTime}</span></td>
+          <td>${l.Device}</td>
+        </tr>
+      `).join('');
+    }
+
+    function sendSubjectAnalyticsWhatsapp(name, phone, encStrong, encWeak) {
+      if (!phone || phone === '0000000000') {
+        showToast('Valid student phone number not found!', 'danger');
+        return;
+      }
+
+      let cleanPhone = phone.replace(/\D/g, '');
+      if (cleanPhone.length === 10) cleanPhone = '91' + cleanPhone;
+
+      const strongStr = decodeURIComponent(encStrong);
+      const weakStr = decodeURIComponent(encWeak);
+
+      let msg = `*TDTTI USS SUBJECT PERFORMANCE ANALYSIS*\n`;
+      msg += `------------------------------------\n`;
+      msg += `*Student Name:* ${name}\n`;
+      msg += `*Phone:* ${phone}\n\n`;
+      msg += `🌟 *Improved / Strong Subjects (≥70%):*\n${strongStr || '• None yet'}\n\n`;
+      msg += `⚠️ *Subjects Needing Improvement (<70%):*\n${weakStr || '• All subjects are well performing!'}\n`;
+      msg += `------------------------------------\n`;
+      msg += `_Generated via TDTTI USS Training Portal 2026-27_`;
+
+      window.open(`https://api.whatsapp.com/send?phone=${cleanPhone}&text=${encodeURIComponent(msg)}`, '_blank');
+    }
+
+    function sortConsolidatedTable(key) {
+      if (sortColumn === key) {
+        sortAscending = !sortAscending;
+      } else {
+        sortColumn = key;
+        sortAscending = true;
+      }
+      renderConsolidatedTable();
+    }
+
+    function renderConsolidatedTable() {
+      const tbody = document.getElementById('consolidated-table-body');
+      if (!tbody) return;
+
+      consolidatedStudentsList.sort((a, b) => {
+        let valA = a[sortColumn];
+        let valB = b[sortColumn];
+
+        if (typeof valA === 'string') valA = valA.toLowerCase();
+        if (typeof valB === 'string') valB = valB.toLowerCase();
+
+        if (valA < valB) return sortAscending ? -1 : 1;
+        if (valA > valB) return sortAscending ? 1 : -1;
+        return 0;
+      });
+
+      tbody.innerHTML = consolidatedStudentsList.map((item, idx) => `
+        <tr>
+          <td>${idx + 1}</td>
+          <td><b>${item.name}</b></td>
+          <td>${item.gender}</td>
+          <td>${item.userClass}</td>
+          <td>${item.div}</td>
+          <td><span class="badge badge-success">${item.firstLanguage}</span></td>
+          <td>${item.phone}</td>
+          <td><b>${item.accuracy}%</b> (${item.totalAttempted} Attempted)</td>
+        </tr>
+      `).join('');
+    }
+
+    function printConsolidatedTable() {
+      const printableContent = document.getElementById('printable-consolidated-area').outerHTML;
+      const modalContent = document.getElementById('print-modal-content');
+      modalContent.innerHTML = printableContent;
+      document.getElementById('print-modal').style.display = 'flex';
+    }
+
+    function refreshResetRequests(btn) {
+      loadAdminData().then(() => {
+        showToast('Reset requests refreshed!', 'info');
+      });
+    }
+
+    function toggleAccordion(id) {
+      const el = document.getElementById(id);
+      el.style.display = el.style.display === 'block' ? 'none' : 'block';
+    }
+
+    async function handleReset(requestId, decision, phone, subject) {
+      await apiRequest({ action: 'handleResetRequest', requestId, decision, phone, subject });
+      showToast(`Request ${decision}! Notification sent to user.`, 'info');
+      loadAdminData();
+    }
+
+    function sendIndividualWhatsapp(name, phone, total, accuracy) {
+      if (!phone || phone === '0000000000') {
+        showToast('Valid student phone number not found!', 'danger');
+        return;
+      }
+
+      let cleanPhone = phone.replace(/\D/g, '');
+      if (cleanPhone.length === 10) cleanPhone = '91' + cleanPhone;
+
+      let text = `*TDTTI USS ACADEMIC EVALUATION REPORT*\n`;
+      text += `------------------------------------\n`;
+      text += `*Student Name:* ${name}\n`;
+      text += `*Phone:* ${phone}\n`;
+      text += `*Total Answered:* ${total}\n`;
+      text += `*Overall Accuracy:* ${accuracy}\n`;
+      text += `------------------------------------\n`;
+      text += `_Generated by Admin via TDTTI USS Training Portal 2026-27_`;
+
+      window.open(`https://api.whatsapp.com/send?phone=${cleanPhone}&text=${encodeURIComponent(text)}`, '_blank');
+    }
+
+    function printStudentQuestions(name, phone) {
+      if (!cachedAdminData) return;
+      const studentAnswers = cachedAdminData.allAnswers.filter(a => String(a.Phone).trim() === String(phone).trim());
+
+      const modalContent = document.getElementById('print-modal-content');
+      modalContent.innerHTML = `
+        <div style="border-bottom:2px solid #1e3a8a; padding-bottom:10px; margin-bottom:15px;">
+          <h2 style="margin:0; color:#1e3a8a;">TDTTI USS Question Attempt Log</h2>
+          <p style="margin:5px 0 0 0;"><strong>Student Name:</strong> ${name} | <strong>Phone:</strong> ${phone} | <strong>Printed:</strong> ${formatDateStrict(new Date().toISOString())}</p>
+        </div>
+        <div class="table-responsive">
+          <table class="data-table">
+            <thead>
+              <tr>
+                <th>Timestamp</th>
+                <th>Subject</th>
+                <th>Question</th>
+                <th>Choice</th>
+                <th>Correct Answer</th>
+                <th>Status</th>
+              </tr>
+            </thead>
+            <tbody>
+              ${studentAnswers.length > 0 ? studentAnswers.map(ans => `
+                <tr>
+                  <td>${formatDateStrict(ans.Timestamp)}</td>
+                  <td>${ans.Subject}</td>
+                  <td>${ans.QuestionText}</td>
+                  <td><b>${ans.UserAnswer}</b></td>
+                  <td><b>${ans.CorrectAnswer}</b></td>
+                  <td>${ans.IsCorrect === 'YES' ? '✅ Correct' : '❌ Wrong'}</td>
+                </tr>
+              `).join('') : '<tr><td colspan="6">No attempted questions recorded.</td></tr>'}
+            </tbody>
+          </table>
+        </div>
+      `;
+
+      document.getElementById('print-modal').style.display = 'flex';
+    }
+
+    // IMGBB UPLOAD
+    async function uploadToImgBB(input) {
+      if (!input.files || !input.files[0]) return;
+
+      if (!IMGBB_API_KEY || IMGBB_API_KEY.includes("YOUR_IMGBB_API_KEY")) {
+        showToast('Please insert your ImgBB API Key in index.html!', 'danger');
+        return;
+      }
+
+      const file = input.files[0];
+      showToast('Uploading image to ImgBB...', 'info');
+
+      const formData = new FormData();
+      formData.append('image', file);
+
+      try {
+        const res = await fetch(`https://api.imgbb.com/1/upload?key=${IMGBB_API_KEY}`, {
+          method: 'POST',
+          body: formData
+        });
+        const data = await res.json();
+        if (data.success) {
+          document.getElementById('q-img-url').value = data.data.url;
+          const preview = document.getElementById('q-img-preview');
+          preview.src = data.data.url;
+          preview.style.display = 'block';
+          showToast('Image uploaded successfully!', 'success');
+        } else {
+          showToast('ImgBB Upload Failed', 'danger');
+        }
+      } catch (e) {
+        showToast('Cloud upload failed.', 'danger');
+      }
+    }
+
+    // ADMIN FORMS
+    async function handleSaveQuestion(e) {
+      e.preventDefault();
+      const questionData = {
+        ID: document.getElementById('q-id').value,
+        Subject: document.getElementById('q-subject').value,
+        Question: document.getElementById('q-text').value,
+        ImageUrl: document.getElementById('q-img-url').value,
+        OptionA: document.getElementById('q-optA').value,
+        OptionB: document.getElementById('q-optB').value,
+        OptionC: document.getElementById('q-optC').value,
+        OptionD: document.getElementById('q-optD').value,
+        CorrectAnswer: document.getElementById('q-correct').value,
+      };
+
+      await apiRequest({ action: 'saveQuestion', questionData });
+      showToast('Question saved!', 'success');
+      document.getElementById('question-form').reset();
+      document.getElementById('q-id').value = '';
+      document.getElementById('q-img-preview').style.display = 'none';
+      loadAdminData();
+    }
+
+    function editQuestion(id, subject, text, optA, optB, optC, optD, correct, imgUrl) {
+      showSection('manage-qs-sec');
+      document.getElementById('q-id').value = id;
+      document.getElementById('q-subject').value = decodeURIComponent(subject);
+      document.getElementById('q-text').value = decodeURIComponent(text);
+      document.getElementById('q-optA').value = decodeURIComponent(optA);
+      document.getElementById('q-optB').value = decodeURIComponent(optB);
+      document.getElementById('q-optC').value = decodeURIComponent(optC);
+      document.getElementById('q-optD').value = decodeURIComponent(optD);
+      document.getElementById('q-correct').value = correct;
+
+      const img = decodeURIComponent(imgUrl);
+      document.getElementById('q-img-url').value = img;
+      const preview = document.getElementById('q-img-preview');
+      if (img) {
+        preview.src = img;
+        preview.style.display = 'block';
+      } else {
+        preview.style.display = 'none';
+      }
+    }
+
+    function confirmDeleteQuestion(id) {
+      showConfirmModal('Delete Question', 'Permanently delete this question?', async () => {
+        await apiRequest({ action: 'deleteQuestion', id });
+        showToast('Question deleted', 'info');
+        loadAdminData();
+      });
+    }
+
+    async function handleSaveUser(e) {
+      e.preventDefault();
+      const userData = {
+        Name: document.getElementById('u-name').value,
+        Gender: document.getElementById('u-gender').value,
+        Phone: document.getElementById('u-phone').value,
+        Class: document.getElementById('u-class').value,
+        Division: document.getElementById('u-div').value,
+        FirstLanguage: document.getElementById('u-first-lang').value,
+        Username: document.getElementById('u-username').value,
+        Password: document.getElementById('u-password').value,
+        Role: document.getElementById('u-role').value,
+        Status: document.getElementById('u-status').value
+      };
+
+      await apiRequest({ action: 'updateUser', userData });
+      showToast('User credentials updated!', 'success');
+      document.getElementById('user-form').reset();
+      loadAdminData();
+    }
+
+    function editUser(name, gender, phone, username, password, role, status, userClass, div, firstLang) {
+      showSection('manage-users-sec');
+      document.getElementById('u-name').value = name;
+      document.getElementById('u-gender').value = gender || 'Male';
+      document.getElementById('u-phone').value = phone;
+      document.getElementById('u-class').value = userClass;
+      document.getElementById('u-div').value = div;
+      document.getElementById('u-first-lang').value = firstLang || 'MI';
+      document.getElementById('u-username').value = username;
+      document.getElementById('u-password').value = password;
+      document.getElementById('u-role').value = role;
+      document.getElementById('u-status').value = status;
+    }
+
+    let keepLoggedInState = true;
+
+// Touch/Tap Toggle for Keep Me Logged In
+function toggleKeepLoggedPill() {
+  keepLoggedInState = !keepLoggedInState;
+  const pill = document.getElementById('keep-logged-pill');
+  const text = document.getElementById('keep-logged-text');
+
+  if (keepLoggedInState) {
+    pill.className = 'keep-logged-pill active';
+    text.innerText = 'Keep Me Logged In: ON';
+  } else {
+    pill.className = 'keep-logged-pill';
+    text.innerText = 'Keep Me Logged In: OFF';
+  }
+}
+
+// Updated Login Handler inside index.html
+async function handleLogin(e) {
+  e.preventDefault();
+  const username = document.getElementById('login-username').value.trim();
+  const password = document.getElementById('login-password').value.trim();
+
+  const res = await apiRequest({ action: 'login', username, password, ipDevice: getDeviceInfo() });
+  if (res.success) {
+    currentUser = res.user;
+
+    // Check if mandatory first time password change is needed
+    if (res.user.isDefaultPass) {
+      document.getElementById('first-time-pass-modal').style.display = 'flex';
+      return; // Hold dashboard loading until password is changed
+    }
+
+    if (keepLoggedInState) {
+      localStorage.setItem('USS_USER', JSON.stringify(currentUser));
+    } else {
+      sessionStorage.setItem('USS_USER', JSON.stringify(currentUser));
+    }
+
+    initializeSession();
+    showToast('Logged in successfully!', 'success');
+  } else {
+    showToast(res.message, 'danger');
+  }
+}
+
+// Handler for mandatory first-time password submission
+async function handleFirstTimePassSubmit(e) {
+  e.preventDefault();
+  const pass1 = document.getElementById('first-new-pass').value.trim();
+  const pass2 = document.getElementById('first-confirm-pass').value.trim();
+
+  if (pass1 !== pass2) {
+    showToast('Passwords do not match!', 'danger');
+    return;
+  }
+
+  const res = await apiRequest({ action: 'changePassword', username: currentUser.username, newPassword: pass1 });
+  if (res.success) {
+    showToast('Password updated! Redirecting to portal...', 'success');
+    document.getElementById('first-time-pass-modal').style.display = 'none';
+
+    if (keepLoggedInState) {
+      localStorage.setItem('USS_USER', JSON.stringify(currentUser));
+    } else {
+      sessionStorage.setItem('USS_USER', JSON.stringify(currentUser));
+    }
+
+    initializeSession();
+  } else {
+    showToast('Failed to change password. Try again.', 'danger');
+  }
+}
+
+
+  </script>
+
 </html>
