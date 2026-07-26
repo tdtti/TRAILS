@@ -39,7 +39,6 @@
 
     body {
       font-family: 'Inter', system-ui, -apple-system, sans-serif;
-      background: radial-gradient(circle at top, #e2e8f0, #f1f5f9);
       color: var(--text-main);
       margin: 0;
       padding: 0;
@@ -47,7 +46,7 @@
     }
 
     /* RED PROGRESS BAR */
-    #progress-bar-container { position: fixed; top: 0; left: 0; width: 100%; height: 5px; z-index: 9999; pointer-events: none; }
+    #progress-bar-container { position: fixed; top: 0; left: 0; width: 100%; height: 10px; z-index: 9999; pointer-events: none; }
     #progress-bar { height: 100%; width: 0%; background: var(--danger); box-shadow: 0 0 10px rgba(239, 68, 68, 0.9); transition: width 0.2s ease-out, opacity 0.3s; }
 
     #toast-container { position: fixed; top: 20px; right: 20px; z-index: 10000; display: flex; flex-direction: column; gap: 10px; }
@@ -94,7 +93,7 @@
 
     /* ETHNIC MODERN STYLISH LOGIN PORTAL CARD */
     .login-portal-card {
-      max-width: 440px;
+      max-width: 100%;
       margin: 50px auto;
       background: #ffffff;
       border-radius: 24px;
@@ -151,7 +150,7 @@
 
     /* 60% IMAGE HERO + 40% LOGIN MENU LAYOUT */
 #login-sec {
-  max-width: 460px;
+  max-width: 100%;
   margin: 30px auto;
   padding: 0;
   background: #ffffff;
@@ -164,7 +163,7 @@
 .login-hero-header {
   height: 240px; /* ~60% Visual Header Area */
   background: linear-gradient(180deg, rgba(15, 23, 42, 0.4) 0%, rgba(15, 23, 42, 0.85) 100%), 
-              url('https://images.unsplash.com/photo-1580582932707-520aed937b7b?q=80&w=1000&auto=format&fit=crop') center/cover no-repeat;
+              url('https://blogger.googleusercontent.com/img/b/R29vZ2xl/AVvXsEiJDRmD-1uwtSzqTkbIEhBWAuIpDIfKh-PH0KPn241KNSrg4UumjKqKbedmLdWFuQWElyHUUAuuepQW6J_om1lDT2yeFBE6JAFMGqLbf8fe2ueqI_NHjE0IOBlV9RlgbsmHgxKysW5b_jrsE7Kjx5oZTnbnyF6RKSWGSk8OjtBlcqNS3To/s1600/School_Photo.jpeg') center/cover no-repeat;
   display: flex;
   flex-direction: column;
   align-items: center;
@@ -176,9 +175,9 @@
 }
 
 .school-logo-img {
-  width: 70px;
-  height: 70px;
-  border-radius: 50%;
+  width: 100PX;
+  height: 100px;
+  border-radius: 8%;
   background: #ffffff;
   padding: 4px;
   box-shadow: 0 8px 16px rgba(0,0,0,0.3);
@@ -261,7 +260,7 @@
       align-items: center;
       gap: 10px;
       padding: 10px 18px;
-      border-radius: 25px;
+      border-radius: 0px;
       cursor: pointer;
       font-weight: 800;
       font-size: 13px;
@@ -483,13 +482,12 @@
       </form>
 
       <!-- TOUCH & TAP TAP-TOGGLE PILL FOR SECURITY MODE -->
-      <div class="admin-only" style="margin-top:20px; border-top: 1px solid var(--border-color); padding-top:15px;">
-        <h4 style="margin:0 0 10px 0; color:var(--danger);">Security & Anti-Hacking Protection</h4>
-        <div id="security-pill-btn" class="tap-toggle-pill enabled" onclick="toggleSecurityModePill()">
+      <center><div class="admin-only" style="margin-top:20px; padding-top:15px;">
+          <div id="security-pill-btn" class="tap-toggle-pill enabled" onclick="toggleSecurityModePill()">
           <span id="security-pill-icon">🛡️</span>
-          <span id="security-pill-status">Security Active (Tap to Disable)</span>
+          <span id="security-pill-status">Security Enabled</span>
         </div>
-      </div>
+      </div></center>
 
       <hr style="margin: 20px 0; border: none; border-top: 1px solid var(--border-color);">
       <button class="btn btn-danger btn-block" onclick="logout()">Logout</button>
@@ -584,7 +582,7 @@
 <section id="login-sec">
   <div class="login-hero-header">
     <!-- Replace src below with your School Logo URL -->
-    <img src="https://cdn-icons-png.flaticon.com/512/2991/2991148.png" alt="School Logo" class="school-logo-img">
+    <img src="https://encrypted-tbn0.gstatic.com/images?q=tbn:ANd9GcS6dWKvrSQKybNS-C8s5KIFwaCI7GbTTMt1QavDq1yKrA&s=10" alt="School Logo" class="school-logo-img">
     <h2 class="login-hero-title">TDTTI USS TRAINING PORTAL</h2>
     <span class="login-hero-subtitle">ACADEMIC SESSION 2026-27</span>
   </div>
@@ -613,120 +611,137 @@
 </section>
 
     <!-- 1. Practice Tab -->
-    <section id="practice-sec" class="section" style="display:none;">
-      <h2>Practice Center</h2>
+    <!-- 1. Practice Tab -->
+<section id="practice-sec" class="section" style="display:none;">
+  <h2>Practice Center</h2>
 
-      <div class="mode-selector-group">
-        <button class="mode-btn active" id="btn-mode-practice" onclick="switchPracticeMode('PRACTICE')">📖 Subject Practice</button>
-        <button class="mode-btn" id="btn-mode-trial" onclick="switchPracticeMode('TRIAL')">⭐ Trial Exam Mode</button>
+  <!-- Initial Mode Selector Group -->
+  <div class="mode-selector-group" id="practice-mode-selector">
+    <button class="mode-btn" onclick="switchPracticeMode('PRACTICE')">📖 Subject Practice</button>
+    <button class="mode-btn" onclick="switchPracticeMode('TRIAL')">⭐ Trial Exam Mode</button>
+  </div>
+
+  <!-- SUBJECT PRACTICE BOX (Only Choose Subject + Exit Button) -->
+  <div id="subject-practice-box" class="card" style="display:none;">
+    <div style="display:flex; justify-content:space-between; align-items:center; margin-bottom:12px;">
+      <label style="font-weight: 700; font-size: 14px; margin:0;">Choose Subject:</label>
+      <button class="btn btn-outline" style="padding:6px 12px; font-size:12px;" onclick="exitPracticeMode()">✕ Exit Practice</button>
+    </div>
+    <select id="subject-select" onchange="loadPracticeSubject()">
+      <option value="">-- Choose Subject --</option>
+      <option value="MI" data-firstlang="true">Malayalam I (MI)</option>
+      <option value="AR" data-firstlang="true">Arabic - العربية (AR)</option>
+      <option value="SK" data-firstlang="true">Sanskrit - संस्कृतम् (SK)</option>
+      <option value="MII">Malayalam II (MII)</option>
+      <option value="EN">English (EN)</option>
+      <option value="MM">Mathematics (MM)</option>
+      <option value="BS">Basic Science (BS)</option>
+      <option value="SS">Social Science (SS)</option>
+    </select>
+  </div>
+
+  <!-- TRIAL EXAM BOX WITH CLOSE / EXIT BUTTON -->
+  <div id="trial-exam-box" class="card" style="display:none; text-align:center; padding:35px 20px; position:relative;">
+    <button class="btn btn-outline" style="position:absolute; top:15px; right:15px; padding:6px 12px; font-size:12px;" onclick="exitPracticeMode()">✕ Close Trial Mode</button>
+    <h3 style="margin-top:10px; color:var(--primary);">Comprehensive Trial Exam</h3>
+    <p style="color:var(--text-muted); font-size:14px; max-width:550px; margin:0 auto 20px auto; line-height:1.5;">
+      Includes up to 5 unseen questions from each subject (1 score per question, 30s timer). Questions matching your selected First Language and standard subjects are included!
+    </p>
+    <button class="btn btn-primary" onclick="startTrialExam()">Start Trial Exam Now →</button>
+  </div>
+
+  <div id="practice-spinner" class="card spinner-box" style="display:none;">
+    <div class="spinner-bar-pulse"></div>
+    <p style="color:var(--text-muted); font-size:14px; margin:15px 0 0 0; font-weight:600;">Loading Questions...</p>
+  </div>
+
+  <div id="no-trial-card" class="card" style="display:none; text-align:center; padding:45px 20px;">
+    <div style="font-size:52px; margin-bottom:12px;">ℹ️</div>
+    <h3 style="color:var(--text-main); margin:0 0 10px 0;">Notice</h3>
+    <p style="color:var(--text-muted); font-size:16px; margin:0 0 24px 0; font-weight:600;">
+      There is no Trial Exam available for you right now.
+    </p>
+    <button class="btn btn-primary" onclick="closeNoTrialCard()">Close</button>
+  </div>
+
+  <div id="no-questions-card" class="card" style="display:none; text-align:center; padding:40px 20px;">
+    <div style="font-size:48px; margin-bottom:10px;">📂</div>
+    <h3 style="color:var(--text-main); margin:0 0 8px 0;">No Questions Found</h3>
+    <p style="color:var(--text-muted); font-size:14px; margin:0;">No questions found to attend for this subject yet.</p>
+  </div>
+
+  <div id="completion-card" class="card" style="display:none; text-align:center; padding:45px 20px;">
+    <div style="font-size:52px; margin-bottom:10px;">🏆</div>
+    <h2 style="color:var(--primary); margin:0 0 10px 0;">Subject Mastered!</h2>
+    <p style="font-size:15px; color:var(--text-muted); max-width:500px; margin:0 auto 24px auto;">
+      You have answered all available questions for this subject!
+    </p>
+    <div style="display:flex; justify-content:center; gap:12px; flex-wrap:wrap;">
+      <button class="btn btn-primary" onclick="resetPracticeSubject()">Choose Another Subject</button>
+      <button class="btn btn-outline" onclick="requestResetFromAdmin()">Request Attempt Reset</button>
+    </div>
+  </div>
+
+  <!-- QUIZ CARD WITH TOP EXIT BUTTON -->
+  <div id="quiz-card" class="card" style="display:none;">
+    <div style="display:flex; justify-content:flex-end; margin-bottom:10px;">
+      <button class="btn btn-outline" style="padding:4px 10px; font-size:12px;" onclick="exitPracticeMode()">✕ Exit Exam</button>
+    </div>
+
+    <div class="quiz-header">
+      <span id="quiz-subject" class="badge">Subject</span>
+      <div id="timer-badge" class="timer-badge">⏱️ <span id="timer-count">30</span>s</div>
+      <span id="quiz-progress" style="font-size: 13px; color: var(--text-muted); font-weight:600;">Question 1</span>
+    </div>
+    
+    <div id="quiz-question" class="question-text">Question prompt?</div>
+    <img id="quiz-image" class="question-img" style="display:none;" src="" alt="Question Diagram">
+
+    <div class="options-grid">
+      <button class="opt-btn" onclick="submitAnswer('A')"><span class="badge">A</span> <span id="optA"></span></button>
+      <button class="opt-btn" onclick="submitAnswer('B')"><span class="badge">B</span> <span id="optB"></span></button>
+      <button class="opt-btn" onclick="submitAnswer('C')"><span class="badge">C</span> <span id="optC"></span></button>
+      <button class="opt-btn" onclick="submitAnswer('D')"><span class="badge">D</span> <span id="optD"></span></button>
+    </div>
+
+    <div id="feedback-msg" style="margin-top:20px; font-weight:700;"></div>
+    <button id="next-btn" class="btn btn-primary" onclick="nextQuestion()" style="display:none; margin-top:20px;">Next Question →</button>
+  </div>
+
+  <div id="trial-consolidation-card" class="card" style="display:none;">
+    <div style="display:flex; justify-content:space-between; align-items:center; margin-bottom:15px;">
+      <h2 style="margin:0; color:var(--primary);">Trial Exam Report Consolidation</h2>
+      <button class="btn btn-outline" onclick="exitPracticeMode()">✕ Exit Trial Consolidation</button>
+    </div>
+    
+    <div class="stats-grid">
+      <div class="card" style="margin:0;">
+        <p style="margin:0; color:var(--text-muted);">Trial Score</p>
+        <h3 id="trial-score-val">0 / 0</h3>
       </div>
-
-      <div id="subject-practice-box" class="card">
-        <label style="font-weight: 600; font-size: 14px; display:block; margin-bottom:8px;">Choose Subject:</label>
-        <select id="subject-select" onchange="loadPracticeSubject()">
-          <option value="">-- Choose Subject --</option>
-          <option value="MI" data-firstlang="true">Malayalam I (MI)</option>
-          <option value="AR" data-firstlang="true">Arabic - العربية (AR)</option>
-          <option value="SK" data-firstlang="true">Sanskrit - संस्कृतम् (SK)</option>
-          <option value="MII">Malayalam II (MII)</option>
-          <option value="EN">English (EN)</option>
-          <option value="MM">Mathematics (MM)</option>
-          <option value="BS">Basic Science (BS)</option>
-          <option value="SS">Social Science (SS)</option>
-        </select>
+      <div class="card" style="margin:0;">
+        <p style="margin:0; color:var(--text-muted);">Accuracy Rate</p>
+        <h3 id="trial-acc-val">0%</h3>
       </div>
+    </div>
 
-      <div id="trial-exam-box" class="card" style="display:none; text-align:center; padding:35px 20px;">
-        <h3 style="margin-top:0; color:var(--primary);">Comprehensive Trial Exam</h3>
-        <p style="color:var(--text-muted); font-size:14px; max-width:550px; margin:0 auto 20px auto; line-height:1.5;">
-          Includes up to 5 unseen questions from each subject (1 score per question, 30s timer). Questions matching your selected First Language and standard subjects are included!
-        </p>
-        <button class="btn btn-primary" onclick="startTrialExam()">Start Trial Exam Now →</button>
-      </div>
-
-      <div id="practice-spinner" class="card spinner-box" style="display:none;">
-        <div class="spinner-bar-pulse"></div>
-        <p style="color:var(--text-muted); font-size:14px; margin:15px 0 0 0; font-weight:600;">Loading Questions...</p>
-      </div>
-
-      <div id="no-trial-card" class="card" style="display:none; text-align:center; padding:45px 20px;">
-        <div style="font-size:52px; margin-bottom:12px;">ℹ️</div>
-        <h3 style="color:var(--text-main); margin:0 0 10px 0;">Notice</h3>
-        <p style="color:var(--text-muted); font-size:16px; margin:0 0 24px 0; font-weight:600;">
-          There is no Trial Exam available for you right now.
-        </p>
-        <button class="btn btn-primary" onclick="closeNoTrialCard()">Close</button>
-      </div>
-
-      <div id="no-questions-card" class="card" style="display:none; text-align:center; padding:40px 20px;">
-        <div style="font-size:48px; margin-bottom:10px;">📂</div>
-        <h3 style="color:var(--text-main); margin:0 0 8px 0;">No Questions Found</h3>
-        <p style="color:var(--text-muted); font-size:14px; margin:0;">No questions found to attend for this subject yet.</p>
-      </div>
-
-      <div id="completion-card" class="card" style="display:none; text-align:center; padding:45px 20px;">
-        <div style="font-size:52px; margin-bottom:10px;">🏆</div>
-        <h2 style="color:var(--primary); margin:0 0 10px 0;">Subject Mastered!</h2>
-        <p style="font-size:15px; color:var(--text-muted); max-width:500px; margin:0 auto 24px auto;">
-          You have answered all available questions for this subject!
-        </p>
-        <div style="display:flex; justify-content:center; gap:12px; flex-wrap:wrap;">
-          <button class="btn btn-primary" onclick="resetPracticeSubject()">Choose Another Subject</button>
-          <button class="btn btn-outline" onclick="requestResetFromAdmin()">Request Attempt Reset</button>
-        </div>
-      </div>
-
-      <div id="quiz-card" class="card" style="display:none;">
-        <div class="quiz-header">
-          <span id="quiz-subject" class="badge">Subject</span>
-          <div id="timer-badge" class="timer-badge">⏱️ <span id="timer-count">30</span>s</div>
-          <span id="quiz-progress" style="font-size: 13px; color: var(--text-muted); font-weight:600;">Question 1</span>
-        </div>
-        
-        <div id="quiz-question" class="question-text">Question prompt?</div>
-        <img id="quiz-image" class="question-img" style="display:none;" src="" alt="Question Diagram">
-
-        <div class="options-grid">
-          <button class="opt-btn" onclick="submitAnswer('A')"><span class="badge">A</span> <span id="optA"></span></button>
-          <button class="opt-btn" onclick="submitAnswer('B')"><span class="badge">B</span> <span id="optB"></span></button>
-          <button class="opt-btn" onclick="submitAnswer('C')"><span class="badge">C</span> <span id="optC"></span></button>
-          <button class="opt-btn" onclick="submitAnswer('D')"><span class="badge">D</span> <span id="optD"></span></button>
-        </div>
-
-        <div id="feedback-msg" style="margin-top:20px; font-weight:700;"></div>
-        <button id="next-btn" class="btn btn-primary" onclick="nextQuestion()" style="display:none; margin-top:20px;">Next Question →</button>
-      </div>
-
-      <div id="trial-consolidation-card" class="card" style="display:none;">
-        <h2 style="margin-top:0; color:var(--primary);">Trial Exam Report Consolidation</h2>
-        <div class="stats-grid">
-          <div class="card" style="margin:0;">
-            <p style="margin:0; color:var(--text-muted);">Trial Score</p>
-            <h3 id="trial-score-val">0 / 0</h3>
-          </div>
-          <div class="card" style="margin:0;">
-            <p style="margin:0; color:var(--text-muted);">Accuracy Rate</p>
-            <h3 id="trial-acc-val">0%</h3>
-          </div>
-        </div>
-
-        <h3 style="margin-top:25px;">Trial Question Breakdown</h3>
-        <div class="table-responsive">
-          <table class="data-table">
-            <thead>
-              <tr>
-                <th>Subject</th>
-                <th>Question</th>
-                <th>Options</th>
-                <th>Your Choice</th>
-                <th>Correct Choice</th>
-              </tr>
-            </thead>
-            <tbody id="trial-consolidation-body"></tbody>
-          </table>
-        </div>
-      </div>
-    </section>
+    <h3 style="margin-top:25px;">Trial Question Breakdown</h3>
+    <div class="table-responsive">
+      <table class="data-table">
+        <thead>
+          <tr>
+            <th>Subject</th>
+            <th>Question</th>
+            <th>Options</th>
+            <th>Your Choice</th>
+            <th>Correct Choice</th>
+          </tr>
+        </thead>
+        <tbody id="trial-consolidation-body"></tbody>
+      </table>
+    </div>
+  </div>
+</section>
 
     <!-- 2. My Performance Portfolio Section -->
     <section id="portfolio-sec" class="section" style="display:none;">
@@ -814,9 +829,9 @@
 
     <!-- 3. NOTIFICATION CENTER TAB -->
     <section id="notif-sec" class="section" style="display:none;">
-  <div class="card" style="width: 100%; box-sizing: border-box;">
+  
     <div style="display: flex; justify-content: space-between; align-items: center; margin-bottom: 20px;">
-      <h2 style="margin:0;">Notification Center</h2>
+      <h2 style="margin:0;margin-top:0px;color: #1B257D;">Notification Center</h2>
       <button class="btn btn-outline" onclick="markAllNotifsAsRead()">Mark All Read ✓</button>
     </div>
     
@@ -873,22 +888,20 @@
     <div id="notifications-list-container">
       <p style="color:var(--text-muted); font-size:14px;">Loading notifications...</p>
     </div>
-  </div>
+  
 </section>
 
     <!-- 4. ADMIN TAB: Vertical Collapsible Student Reports -->
     <section id="admin-report-sec" class="section" style="display:none;">
-      <div class="card">
-        <h2>Evaluation Reports</h2>
+      <h2 style="margin-top:0px;color: #1B257D;">Evaluation Reports</h2>
         <div id="admin-student-accordion-list"></div>
       </div>
     </section>
 
     <!-- 5. ADMIN TAB: Reset Requests -->
     <section id="admin-resets-sec" class="section" style="display:none;">
-      <div class="card">
-        <div style="display: flex; justify-content: space-between; align-items: center; margin-bottom: 15px;">
-          <h2 style="margin:0;">Reset Requests</h2>
+      <div style="display: flex; justify-content: space-between; align-items: center; margin-bottom: 15px;">
+          <h2 style="margin:10px;margin-top:0px;color: #1B257D;">Reset Requests</h2>
           <button onclick="refreshResetRequests(this)" class="btn btn-outline" title="Refresh Requests">
             🔄 Refresh
           </button>
@@ -910,21 +923,19 @@
             </thead>
             <tbody id="admin-resets-body"></tbody>
           </table>
-        </div>
-      </div>
-    </section>
+        </section>
 
     <!-- 6. Manage Questions (DIAGRAM ATTACHMENT ICONS ALIGNED RIGHT BELOW QUESTION TEXT LABEL) -->
     <section id="manage-qs-sec" class="section" style="display:none;">
-      <div class="card">
+      
         <div style="display: flex; justify-content: space-between; align-items: center; margin-bottom: 20px;">
-          <h2 style="margin:0;">Manage Questions</h2>
-          <button onclick="triggerDbSetup()" class="btn btn-outline">Initialize Sheet Tabs</button>
+          <h2 style="margin-top:0px;margin:10px;color: #1B257D;">Questions</h2>
+          <button onclick="triggerDbSetup()" class="btn btn-outline">Initialize Tabs</button>
         </div>
         <form id="question-form">
           <input type="hidden" id="q-id">
           <div class="form-group">
-            <label>Subject</label>
+            
             <select id="q-subject" required>
               <option value="MI">Malayalam I (MI)</option>
               <option value="AR">Arabic - العربية (AR)</option>
@@ -941,7 +952,11 @@
           <!-- Question Text with Black & White SVG Diagram Action Icons -->
 <div class="form-group">
   <div style="display:flex; justify-content:space-between; align-items:center; margin-bottom:6px;">
-    <label style="margin:0; font-weight:700;">Question Text</label>
+    <textarea id="q-text" required rows="3" placeholder="Type Question Here..."></textarea>
+  <input type="text" id="q-img-url" style="display:none;">
+  <div style="text-align:right;"><img id="q-img-preview" src="" style="display:none; max-height:120px; border-radius:8px; margin-top:10px; border:1px solid var(--border-color);"></div>
+</div>
+    <label style="margin:0; font-weight:700;"></label>
     <div style="display:flex; gap:8px;">
       <!-- Monochrome Camera Icon -->
       <label class="icon-action-btn-sm" title="Capture Camera Diagram" style="width:36px; height:34px; padding:0; display:inline-flex; align-items:center; justify-content:center; border:1px solid #cbd5e1; border-radius:8px; cursor:pointer;">
@@ -961,22 +976,20 @@
           <polyline points="21 15 16 10 5 21"></polyline>
         </svg>
       </label>
-    </div>
+    
   </div>
-  <textarea id="q-text" required rows="3" placeholder="Type question prompt here..."></textarea>
-  <input type="text" id="q-img-url" style="display:none;">
-  <div style="text-align:right;"><img id="q-img-preview" src="" style="display:none; max-height:120px; border-radius:8px; margin-top:10px; border:1px solid var(--border-color);"></div>
-</div>
+  
 
           <div class="grid-2">
-            <div><label>Option A</label><input type="text" id="q-optA" required></div>
-            <div><label>Option B</label><input type="text" id="q-optB" required></div>
-            <div><label>Option C</label><input type="text" id="q-optC" required></div>
-            <div><label>Option D</label><input type="text" id="q-optD" required></div>
+            <div><input type="text" placeholder="Option A"required id="q-optA" required></div>
+            <div><input type="text" placeholder="Option B"requiredid="q-optB" required></div>
+            <div><input type="text" placeholder="Option C"requiredid="q-optC" required></div>
+            <div><input type="text" placeholder="Option D"requiredid="q-optD" required></div>
           </div>
           <div class="form-group" style="margin-top:12px;">
-            <label>Correct Choice</label>
+            
             <select id="q-correct" required>
+              <option>Answer Option</option>
               <option value="A">Option A</option>
               <option value="B">Option B</option>
               <option value="C">Option C</option>
@@ -986,7 +999,7 @@
           <button type="submit" class="btn btn-primary">Save Question</button>
         </form>
 
-        <h3 style="margin-top: 35px;">Question Bank</h3>
+        <h2 style="margin-top:35px;color: #1B257D;">Question Bank</h2>
         <div class="table-responsive">
           <table class="data-table">
             <thead>
@@ -1000,62 +1013,17 @@
 
     <!-- 7. Manage Users -->
     <section id="manage-users-sec" class="section" style="display:none;">
-      <div class="card">
-        <h2>Manage Users</h2>
-        <form id="user-form">
-          <div class="grid-2">
-            <div><label>Full Name</label><input type="text" id="u-name" required></div>
-            <div>
-              <label>Gender</label>
-              <select id="u-gender" required>
-                <option value="Male">Male</option>
-                <option value="Female">Female</option>
-                <option value="Other">Other</option>
-              </select>
-            </div>
-            <div><label>Class</label><input type="text" id="u-class" placeholder="e.g. 10" required></div>
-            <div><label>Division</label><input type="text" id="u-div" placeholder="e.g. A" required></div>
-            <div>
-              <label>First Language Choice</label>
-              <select id="u-first-lang" required>
-                <option value="MI">MI (Malayalam I)</option>
-                <option value="AR">AR (Arabic)</option>
-                <option value="SK">SK (Sanskrit)</option>
-              </select>
-            </div>
-            <div><label>Phone Number</label><input type="text" id="u-phone" required></div>
-            <div><label>Username</label><input type="text" id="u-username" required></div>
-            <div><label>Password</label><input type="password" id="u-password" required></div>
-            <div>
-              <label>Role</label>
-              <select id="u-role">
-                <option value="Student">Student</option>
-                <option value="Admin">Admin</option>
-              </select>
-            </div>
-            <div>
-              <label>Status</label>
-              <select id="u-status">
-                <option value="Active">Active</option>
-                <option value="Blocked">Blocked</option>
-              </select>
-            </div>
-          </div>
-          <button type="submit" class="btn btn-primary" style="margin-top:15px;">Save User Credentials</button>
-        </form>
-
-        <div style="margin-top:40px;">
-          <h3 style="margin-bottom:15px;">Student Subject Performance & Improvement Analytics</h3>
-          <p style="font-size:13px; color:var(--text-muted); margin-bottom:15px;">Click any student to view their improved subjects vs weak subjects needing attention, with WhatsApp reporting.</p>
+      
+        <div style="margin-top:40px;color: #1B257D;">
+          <h3 style="margin-bottom:15px;">Optimization</h3>
           <div id="manage-users-analytics-accordion"></div>
-        </div>
+        </div><br><hr>
 
         <div style="margin-top:40px;" id="printable-consolidated-area">
           <div style="display:flex; justify-content:space-between; align-items:center; margin-bottom:15px;">
-            <h3 style="margin:0;">Consolidated Student Performance Table</h3>
+            <h3 style="margin:0;color: #1B257D;">Performance</h3>
             <button class="btn btn-outline print-icon-btn no-print" onclick="printConsolidatedTable()">
-              🖨️ Print / Save Table
-            </button>
+              🖨️ </button>
           </div>
 
           <div class="table-responsive">
@@ -1068,16 +1036,58 @@
                   <th class="sortable" onclick="sortConsolidatedTable('class')">C</th>
                   <th class="sortable" onclick="sortConsolidatedTable('div')">D</th>
                   <th class="sortable" onclick="sortConsolidatedTable('firstLanguage')">Lan</th>
-                  <th class="sortable" onclick="sortConsolidatedTable('phone')">Ph</th>
+                  <th class="sortable" onclick="sortConsolidatedTable('phone')">Phone</th>
                   <th class="sortable" onclick="sortConsolidatedTable('accuracy')">Overall</th>
                 </tr>
               </thead>
               <tbody id="consolidated-table-body"></tbody>
             </table>
           </div>
-        </div>
+        </div><br><hr>
 
-        <h3 style="margin-top:40px;">Enrolled Users List</h3>
+        <h3 style="margin-top:40px;;color: #1B257D;">Manage Users</h3>
+        <form id="user-form">
+          <div class="grid-2">
+            <div><input type="text" placeholder="Name"required id="u-name" required ></div>
+            <div>
+              <select id="u-gender" required>
+                <option value="Male">Male</option>
+                <option value="Female">Female</option>
+              </select>
+            </div>
+            <div><input type="text" placeholder="Class"required id="u-class" placeholder="e.g. 10" required></div>
+            <div><input type="text" placeholder="Division"requiredid="u-div" placeholder="e.g. A" required></div>
+            <div>
+              
+              <select id="u-first-lang" required>
+                <option value="MI">MI (Malayalam I)</option>
+                <option value="AR">AR (Arabic)</option>
+                <option value="SK">SK (Sanskrit)</option>
+              </select>
+            </div>
+            <div><input type="text" placeholder="Phone No"required id="u-phone" required></div>
+            <div><input type="text" placeholder="Username"requiredid="u-username" required></div>
+            <div><input type="password" placeholder="Password"required id="u-password" required></div>
+            <div>
+              
+              <select id="u-role">
+                <option value="Student">Student</option>
+                <option value="Admin">Admin</option>
+              </select>
+            </div>
+            <div>
+              
+              <select id="u-status">
+                <option value="Active">Active</option>
+                <option value="Blocked">Blocked</option>
+              </select>
+            </div>
+          </div>
+          <button type="submit" class="btn btn-primary" style="margin-top:15px;">Save User Credentials</button>
+        </form><br><hr>
+
+        
+        <h3 style="margin-top:40px;;color: #1B257D;">Enrolled Users List</h3>
         <div class="table-responsive">
           <table class="data-table">
             <thead>
@@ -1086,14 +1096,12 @@
             <tbody id="admin-users-body"></tbody>
           </table>
         </div>
-      </div>
+      
     </section>
 
     <!-- 8. AUDIT ACCESS LOGS -->
     <section id="admin-logs-sec" class="section" style="display:none;">
-      <div class="card">
-        <h2>Audit Access Logs</h2>
-        <div class="table-responsive">
+      <div class="table-responsive">
           <table class="data-table">
             <thead>
               <tr>
@@ -1108,11 +1116,10 @@
             </thead>
             <tbody id="admin-logs-body"></tbody>
           </table>
-        </div>
       </div>
     </section>
 
-  </div>
+  
 <!-- MANDATORY FIRST-TIME PASSWORD CHANGE MODAL -->
 <div id="first-time-pass-modal" class="modal-overlay" style="display: none;">
   <div class="modal-card">
@@ -1140,7 +1147,7 @@
     // =========================================================================
     // CONFIGURATION
     // =========================================================================
-    const API_URL = "https://script.google.com/macros/s/AKfycbxIaIJhLTO3Lyj3lzyGGHq9u1AEufILxJaGEpV7vmZz0RQmX2zkMXHExr_9nQcB3_AaVA/exec";
+    const API_URL = "https://script.google.com/macros/s/AKfycbyM4ZFWXT7zUI14Y1_AKtI5aqfeam1zQ-MB8DAUiRvBq8f_CnlXANFCiffAeKouHc12-A/exec";
     const IMGBB_API_KEY = "YOUR_IMGBB_API_KEY_HERE";
     // =========================================================================
 
@@ -1254,11 +1261,11 @@
 
       if (securityProtectionActive) {
         pill.className = 'tap-toggle-pill enabled';
-        statusText.innerText = 'Security Active (Tap to Disable)';
+        statusText.innerText = 'Security Enabled';
         showToast('Security protection ENABLED', 'success');
       } else {
         pill.className = 'tap-toggle-pill disabled';
-        statusText.innerText = 'Security Disabled (Tap to Enable)';
+        statusText.innerText = 'Security Disabled';
         showToast('Security protection DISABLED', 'warning');
       }
     }
@@ -1626,24 +1633,79 @@ function getDeviceInfo() {
       else if (['admin-report-sec', 'admin-resets-sec', 'manage-qs-sec', 'manage-users-sec', 'admin-logs-sec'].includes(sectionId)) loadAdminData();
     }
 
-    function switchPracticeMode(mode) {
-      document.getElementById('btn-mode-practice').className = mode === 'PRACTICE' ? 'mode-btn active' : 'mode-btn';
-      document.getElementById('btn-mode-trial').className = mode === 'TRIAL' ? 'mode-btn active' : 'mode-btn';
+    // SWITCH TO SUBJECT PRACTICE OR TRIAL EXAM & HIDE OTHER TABS
+function switchPracticeMode(mode) {
+  // Hide main navigation tabs & mode selector group
+  document.getElementById('tab-bar-container').style.display = 'none';
+  document.getElementById('practice-mode-selector').style.display = 'none';
 
-      document.getElementById('quiz-card').style.display = 'none';
-      document.getElementById('no-questions-card').style.display = 'none';
-      document.getElementById('no-trial-card').style.display = 'none';
-      document.getElementById('completion-card').style.display = 'none';
-      document.getElementById('trial-consolidation-card').style.display = 'none';
+  document.getElementById('quiz-card').style.display = 'none';
+  document.getElementById('no-questions-card').style.display = 'none';
+  document.getElementById('no-trial-card').style.display = 'none';
+  document.getElementById('completion-card').style.display = 'none';
+  document.getElementById('trial-consolidation-card').style.display = 'none';
 
-      if (mode === 'PRACTICE') {
-        document.getElementById('subject-practice-box').style.display = 'block';
-        document.getElementById('trial-exam-box').style.display = 'none';
-      } else {
-        document.getElementById('subject-practice-box').style.display = 'none';
-        document.getElementById('trial-exam-box').style.display = 'block';
-      }
-    }
+  if (mode === 'PRACTICE') {
+    document.getElementById('subject-practice-box').style.display = 'block';
+    document.getElementById('trial-exam-box').style.display = 'none';
+  } else {
+    document.getElementById('subject-practice-box').style.display = 'none';
+    document.getElementById('trial-exam-box').style.display = 'block';
+  }
+}
+
+// EXIT / CLOSE PRACTICE OR TRIAL EXAM & RESTORE TAB BAR
+function exitPracticeMode() {
+  clearInterval(timerInterval);
+
+  // Restore main navigation tabs & mode selector group
+  document.getElementById('tab-bar-container').style.display = 'flex';
+  document.getElementById('practice-mode-selector').style.display = 'flex';
+
+  document.getElementById('subject-practice-box').style.display = 'none';
+  document.getElementById('trial-exam-box').style.display = 'none';
+  document.getElementById('quiz-card').style.display = 'none';
+  document.getElementById('no-questions-card').style.display = 'none';
+  document.getElementById('no-trial-card').style.display = 'none';
+  document.getElementById('completion-card').style.display = 'none';
+  document.getElementById('trial-consolidation-card').style.display = 'none';
+
+  document.getElementById('subject-select').value = '';
+}
+
+// UPDATE showSection TO RESTORE MODES WHEN TAB IS CHANGED
+function showSection(sectionId) {
+  clearInterval(timerInterval);
+  document.querySelectorAll('.section').forEach(s => s.style.display = 'none');
+  document.querySelectorAll('.icon-tab-btn').forEach(b => b.classList.remove('active'));
+
+  document.getElementById(sectionId).style.display = 'block';
+
+  // Restore top tab bar
+  document.getElementById('tab-bar-container').style.display = 'flex';
+
+  if (sectionId === 'practice-sec') {
+    document.getElementById('practice-mode-selector').style.display = 'flex';
+    document.getElementById('subject-practice-box').style.display = 'none';
+    document.getElementById('trial-exam-box').style.display = 'none';
+  }
+
+  const tabMap = {
+    'practice-sec': 'tab-practice',
+    'portfolio-sec': 'tab-portfolio',
+    'notif-sec': 'tab-notif',
+    'admin-report-sec': 'tab-student-reports',
+    'admin-resets-sec': 'tab-resets',
+    'manage-qs-sec': 'tab-manage-qs',
+    'manage-users-sec': 'tab-manage-users',
+    'admin-logs-sec': 'tab-logs'
+  };
+  if (tabMap[sectionId]) document.getElementById(tabMap[sectionId]).classList.add('active');
+
+  if (sectionId === 'portfolio-sec') loadPortfolio();
+  else if (sectionId === 'notif-sec') loadNotifications();
+  else if (['admin-report-sec', 'admin-resets-sec', 'manage-qs-sec', 'manage-users-sec', 'admin-logs-sec'].includes(sectionId)) loadAdminData();
+}
 
     async function loadPracticeSubject() {
       const subject = document.getElementById('subject-select').value;
