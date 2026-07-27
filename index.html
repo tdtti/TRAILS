@@ -613,7 +613,7 @@
     <!-- 1. Practice Tab -->
     <!-- 1. Practice Tab -->
 <section id="practice-sec" class="section" style="display:none;">
-  <h2>Practice Center</h2>
+  <h3 style="margin-top:0; color:var(--primary);">Practice Center</h3>
 
   <!-- Initial Mode Selector Group -->
   <div class="mode-selector-group" id="practice-mode-selector">
@@ -757,11 +757,7 @@
         <div class="card">
           <p style="margin:0; color:var(--text-muted); font-size:13px; font-weight:600;">Overall </p>
           <h3 id="stat-accuracy">0%</h3>
-        </div><hr><br>
-      
-
-      
-        <h3 style="margin-top:0; color:var(--primary);">Dashboard</h3>
+        </div>
           <div class="grid-2">
           <div style="background:#f0fdf4; border:1px solid #bbf7d0; padding:18px; border-radius:12px;">
             <h4 style="margin:0 0 15px 0; color:#166534; display:flex; align-items:center; gap:8px;">
@@ -1707,45 +1703,105 @@ function showSection(sectionId) {
   else if (['admin-report-sec', 'admin-resets-sec', 'manage-qs-sec', 'manage-users-sec', 'admin-logs-sec'].includes(sectionId)) loadAdminData();
 }
 
-    // ENTER FOCUS MODE: HIDE TABS, MODE SELECTOR, & SUBJECT PICKER
-function enterExamFocusMode() {
-  document.getElementById('tab-bar-container').style.display = 'none'; // Hide top tabs
-  const modeGroup = document.querySelector('.mode-selector-group');
-  if (modeGroup) modeGroup.style.display = 'none'; // Hide mode buttons
-  
-  document.getElementById('subject-practice-box').style.display = 'none'; // Hide choose subject box
-  document.getElementById('trial-exam-box').style.display = 'none'; // Hide trial box
-}
 
-// EXIT FOCUS MODE: RESTORE TABS, MODE SELECTOR, & MENU
-function exitExamFocusMode() {
-  clearInterval(timerInterval);
-  
-  // Restore Top Navigation Tabs & Mode Selector Group
+
+
+// RETURN TO CHOOSE SUBJECT SECTION + SEND NOTIFICATION
+async function resetPracticeSubject() {
+  await sendSessionSummaryNotification(); // Notify Admin and Student
+
+  // Restore Navigation Tabs & Mode Selector
   document.getElementById('tab-bar-container').style.display = 'flex';
   const modeGroup = document.querySelector('.mode-selector-group');
   if (modeGroup) modeGroup.style.display = 'flex';
 
-  // Hide active quiz & messages
+  // Reset dropdown & return to Choose Subject Box
+  document.getElementById('subject-select').value = '';
+  document.getElementById('completion-card').style.display = 'none';
+  document.getElementById('subject-practice-box').style.display = 'block';
+}
+
+// ENTER FULL FOCUS EXAM MODE (HIDES TOP-NAVBAR, TAB BAR, MODE BUTTONS & SELECTORS)
+function enterExamFocusMode() {
+  // 1. Hide Top Navbar
+  const topNav = document.getElementById('top-navbar');
+  if (topNav) topNav.style.display = 'none';
+
+  // 2. Hide Navigation Tab Bar
+  const tabBar = document.getElementById('tab-bar-container');
+  if (tabBar) tabBar.style.display = 'none';
+
+  // 3. Hide Mode Selector Buttons (Subject Practice vs Trial Exam mode buttons)
+  const modeGroup = document.querySelector('.mode-selector-group');
+  if (modeGroup) modeGroup.style.display = 'none';
+
+  // 4. Hide Selector Boxes when Quiz Starts
+  document.getElementById('subject-practice-box').style.display = 'none';
+  document.getElementById('trial-exam-box').style.display = 'none';
+}
+
+// EXIT FULL FOCUS EXAM MODE (RESTORES TOP-NAVBAR, TAB BAR, MODE BUTTONS & MENU)
+async function exitExamFocusMode() {
+  clearInterval(timerInterval);
+  
+  // Send activity summary notification to BOTH Admin & Student
+  await sendSessionSummaryNotification();
+
+  // 1. Restore Top Navbar
+  const topNav = document.getElementById('top-navbar');
+  if (topNav) topNav.style.display = 'flex';
+
+  // 2. Restore Navigation Tab Bar
+  const tabBar = document.getElementById('tab-bar-container');
+  if (tabBar) tabBar.style.display = 'flex';
+
+  // 3. Restore Mode Selector Group
+  const modeGroup = document.querySelector('.mode-selector-group');
+  if (modeGroup) modeGroup.style.display = 'flex';
+
+  // 4. Hide Quiz & Completion Cards
   document.getElementById('quiz-card').style.display = 'none';
   document.getElementById('no-questions-card').style.display = 'none';
   document.getElementById('completion-card').style.display = 'none';
   document.getElementById('no-trial-card').style.display = 'none';
   document.getElementById('trial-consolidation-card').style.display = 'none';
 
-  // Restore active menu screen based on mode
+  // 5. Restore Active Section View
   if (isTrialMode) {
+    document.getElementById('subject-practice-box').style.display = 'none';
     document.getElementById('trial-exam-box').style.display = 'block';
   } else {
     document.getElementById('subject-select').value = '';
     document.getElementById('subject-practice-box').style.display = 'block';
+    document.getElementById('trial-exam-box').style.display = 'none';
   }
 }
 
-// UPDATED: Load Practice Subject with Focus Mode
+// NEXT QUESTION HANDLER (TRIGGERS SUBJECT MASTERED)
+async function nextQuestion() {
+  if (qIndex + 1 < currentQuestions.length) {
+    qIndex++;
+    renderQuestion();
+  } else {
+    document.getElementById('quiz-card').style.display = 'none';
+
+    if (isTrialMode) {
+      renderTrialConsolidation();
+      await sendSessionSummaryNotification(); // Dual notification
+    } else {
+      document.getElementById('completion-card').style.display = 'block';
+      await sendSessionSummaryNotification(); // Dual notification
+    }
+  }
+}
+
+// START PRACTICE & INITIALIZE SESSION COUNTER
 async function loadPracticeSubject() {
   const subject = document.getElementById('subject-select').value;
   if (!subject) return;
+
+  // Initialize Session Counter
+  sessionStats = { subject: subject, mode: 'PRACTICE', total: 0, correct: 0, incorrect: 0 };
 
   document.getElementById('no-questions-card').style.display = 'none';
   document.getElementById('no-trial-card').style.display = 'none';
@@ -1767,22 +1823,22 @@ async function loadPracticeSubject() {
     } else if (res.questions.length > 0) {
       currentQuestions = res.questions;
       qIndex = 0;
-      
-      // HIDE TABS AND ENTER FOCUS EXAM MODE
       enterExamFocusMode();
-      
       renderQuestion();
       document.getElementById('quiz-card').style.display = 'block';
     }
   }
 }
 
-// UPDATED: Start Trial Exam with Focus Mode
+// START TRIAL EXAM & INITIALIZE SESSION COUNTER
 async function startTrialExam() {
   document.getElementById('trial-exam-box').style.display = 'none';
   document.getElementById('no-trial-card').style.display = 'none';
   document.getElementById('practice-spinner').style.display = 'flex';
   
+  // Initialize Session Counter
+  sessionStats = { subject: 'Trial Comprehensive', mode: 'TRIAL', total: 0, correct: 0, incorrect: 0 };
+
   isTrialMode = true;
   trialAnswersLog = [];
 
@@ -1795,15 +1851,15 @@ async function startTrialExam() {
     } else {
       currentQuestions = res.questions;
       qIndex = 0;
-      
-      // HIDE TABS AND ENTER FOCUS EXAM MODE
       enterExamFocusMode();
-      
       renderQuestion();
       document.getElementById('quiz-card').style.display = 'block';
     }
   }
 }
+
+
+
 
     
 
@@ -1812,10 +1868,7 @@ async function startTrialExam() {
       document.getElementById('trial-exam-box').style.display = 'block';
     }
 
-    function resetPracticeSubject() {
-      document.getElementById('subject-select').value = '';
-      document.getElementById('completion-card').style.display = 'none';
-    }
+    
 
     async function requestResetFromAdmin() {
       const subject = document.getElementById('subject-select').value;
@@ -1892,77 +1945,107 @@ async function startTrialExam() {
       startTimer();
     }
 
-    function submitAnswer(selectedOpt) {
-      clearInterval(timerInterval);
-      const q = currentQuestions[qIndex];
-      const isCorrect = selectedOpt === q.CorrectAnswer;
-      const buttons = document.querySelectorAll('.opt-btn');
+  
+  // SESSION COUNTER STATS
+let sessionStats = {
+  subject: '',
+  mode: 'PRACTICE',
+  total: 0,
+  correct: 0,
+  incorrect: 0
+};
 
-      buttons.forEach(btn => btn.disabled = true);
+// SEND DUAL SUMMARY NOTIFICATION TO BOTH ADMIN & STUDENT ITSELF
+async function sendSessionSummaryNotification() {
+  if (sessionStats.total === 0) return; // Skip if exited before answering any question
 
-      const optionMap = { 'A': 0, 'B': 1, 'C': 2, 'D': 3 };
-      if (selectedOpt !== 'TIMEOUT') {
-        buttons[optionMap[selectedOpt]].classList.add(isCorrect ? 'correct' : 'wrong');
-      }
-      if (!isCorrect) {
-        buttons[optionMap[q.CorrectAnswer]].classList.add('correct');
-      }
+  const studentName = currentUser.name || currentUser.username;
+  const phone = currentUser.phone;
+  const userClass = currentUser.userClass || '10';
+  const division = currentUser.division || 'A';
+  const modeLabel = sessionStats.mode === 'TRIAL' ? 'Trial Exam' : `Subject Practice (${sessionStats.subject})`;
 
-      const feedback = document.getElementById('feedback-msg');
-      if (selectedOpt === 'TIMEOUT') {
-        feedback.innerText = `⏳ Time Expired! Correct choice was Option ${q.CorrectAnswer}`;
-        feedback.style.color = 'var(--danger)';
-      } else {
-        feedback.innerText = isCorrect 
-          ? '✅ Correct Answer ! ' 
-          : ` ❌ Incorrect ! Correct Option ${q.CorrectAnswer}`;
-        feedback.style.color = isCorrect ? 'var(--success)' : 'var(--danger)';
-      }
+  const title = `${modeLabel} Activity Summary`;
+  const message = `Student ${studentName} (Class ${userClass}-${division}, Phone: ${phone}) completed a ${modeLabel} session.\n• Total Questions Practiced: ${sessionStats.total}\n• Correct: ${sessionStats.correct}\n• Incorrect: ${sessionStats.incorrect}\n• Date: ${formatDateStrict(new Date().toISOString())}`;
 
-      document.getElementById('next-btn').style.display = 'inline-flex';
+  // Send to BOTH ['ADMIN'] and student's own [phone] ALWAYS
+  await apiRequest({
+    action: 'sendNotification',
+    recipientPhones: ['ADMIN', phone],
+    title: title,
+    message: message,
+    sender: 'Practice Monitor'
+  });
 
-      if (isTrialMode) {
-        trialAnswersLog.push({
-          Subject: q.Subject,
-          QuestionText: q.Question,
-          OptionA: q.OptionA,
-          OptionB: q.OptionB,
-          OptionC: q.OptionC,
-          OptionD: q.OptionD,
-          UserAnswer: selectedOpt === 'TIMEOUT' ? 'Timed Out' : selectedOpt,
-          CorrectAnswer: q.CorrectAnswer,
-          IsCorrect: isCorrect
-        });
-      } else {
-        queueLocalProgress({
-          phone: currentUser.phone,
-          studentName: currentUser.name || currentUser.username,
-          userClass: currentUser.userClass || '10',
-          division: currentUser.division || 'A',
-          subject: q.Subject,
-          questionId: q.ID,
-          questionText: q.Question,
-          userAnswer: selectedOpt === 'TIMEOUT' ? 'Timed Out' : selectedOpt,
-          correctAnswer: q.CorrectAnswer,
-          isCorrect: isCorrect
-        });
-      }
-    }
+  // Reset session counter
+  sessionStats.total = 0;
+  sessionStats.correct = 0;
+  sessionStats.incorrect = 0;
+}
 
-    async function nextQuestion() {
-      if (qIndex + 1 < currentQuestions.length) {
-        qIndex++;
-        renderQuestion();
-      } else {
-        document.getElementById('quiz-card').style.display = 'none';
+  function submitAnswer(selectedOpt) {
+  clearInterval(timerInterval);
+  const q = currentQuestions[qIndex];
+  const isCorrect = selectedOpt === q.CorrectAnswer;
+  
+  // UPDATE RUNNING SESSION COUNTERS
+  sessionStats.total++;
+  if (isCorrect) sessionStats.correct++;
+  else sessionStats.incorrect++;
 
-        if (isTrialMode) {
-          renderTrialConsolidation();
-        } else {
-          document.getElementById('completion-card').style.display = 'block';
-        }
-      }
-    }
+  const buttons = document.querySelectorAll('.opt-btn');
+  buttons.forEach(btn => btn.disabled = true);
+
+  const optionMap = { 'A': 0, 'B': 1, 'C': 2, 'D': 3 };
+  if (selectedOpt !== 'TIMEOUT') {
+    buttons[optionMap[selectedOpt]].classList.add(isCorrect ? 'correct' : 'wrong');
+  }
+  if (!isCorrect) {
+    buttons[optionMap[q.CorrectAnswer]].classList.add('correct');
+  }
+
+  const feedback = document.getElementById('feedback-msg');
+  if (selectedOpt === 'TIMEOUT') {
+    feedback.innerText = `⏳ Time Expired! Correct choice was Option ${q.CorrectAnswer}`;
+    feedback.style.color = 'var(--danger)';
+  } else {
+    feedback.innerText = isCorrect 
+      ? '✅ Correct Answer ! ' 
+      : ` ❌ Incorrect ! Correct Option : ${q.CorrectAnswer}`;
+    feedback.style.color = isCorrect ? 'var(--success)' : 'var(--danger)';
+  }
+
+  document.getElementById('next-btn').style.display = 'inline-flex';
+
+  if (isTrialMode) {
+    trialAnswersLog.push({
+      Subject: q.Subject,
+      QuestionText: q.Question,
+      OptionA: q.OptionA,
+      OptionB: q.OptionB,
+      OptionC: q.OptionC,
+      OptionD: q.OptionD,
+      UserAnswer: selectedOpt === 'TIMEOUT' ? 'Timed Out' : selectedOpt,
+      CorrectAnswer: q.CorrectAnswer,
+      IsCorrect: isCorrect
+    });
+  } else {
+    queueLocalProgress({
+      phone: currentUser.phone,
+      studentName: currentUser.name || currentUser.username,
+      userClass: currentUser.userClass || '10',
+      division: currentUser.division || 'A',
+      subject: q.Subject,
+      questionId: q.ID,
+      questionText: q.Question,
+      userAnswer: selectedOpt === 'TIMEOUT' ? 'Timed Out' : selectedOpt,
+      correctAnswer: q.CorrectAnswer,
+      isCorrect: isCorrect
+    });
+  }
+}
+
+    
 
     async function renderTrialConsolidation() {
       let score = trialAnswersLog.filter(a => a.IsCorrect).length;
