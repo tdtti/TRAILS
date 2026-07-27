@@ -684,29 +684,31 @@
 
   <!-- QUIZ CARD WITH TOP EXIT BUTTON -->
   <div id="quiz-card" class="card" style="display:none;">
-    <div style="display:flex; justify-content:flex-end; margin-bottom:10px;">
-      <button class="btn btn-outline" style="padding:4px 10px; font-size:12px;" onclick="exitPracticeMode()">✕ Exit Exam</button>
-    </div>
-
-    <div class="quiz-header">
-      <span id="quiz-subject" class="badge">Subject</span>
-      <div id="timer-badge" class="timer-badge">⏱️ <span id="timer-count">30</span>s</div>
-      <span id="quiz-progress" style="font-size: 13px; color: var(--text-muted); font-weight:600;">Question 1</span>
-    </div>
+  <!-- QUIZ HEADER WITH EXIT / CLOSE BUTTON -->
+  <div class="quiz-header" style="display:flex; justify-content:space-between; align-items:center; flex-wrap:wrap; gap:10px;">
+    <span id="quiz-subject" class="badge">Subject</span>
+    <div id="timer-badge" class="timer-badge">⏱️ <span id="timer-count">30</span>s</div>
+    <span id="quiz-progress" style="font-size: 13px; color: var(--text-muted); font-weight:600;">Question 1</span>
     
-    <div id="quiz-question" class="question-text">Question prompt?</div>
-    <img id="quiz-image" class="question-img" style="display:none;" src="" alt="Question Diagram">
-
-    <div class="options-grid">
-      <button class="opt-btn" onclick="submitAnswer('A')"><span class="badge">A</span> <span id="optA"></span></button>
-      <button class="opt-btn" onclick="submitAnswer('B')"><span class="badge">B</span> <span id="optB"></span></button>
-      <button class="opt-btn" onclick="submitAnswer('C')"><span class="badge">C</span> <span id="optC"></span></button>
-      <button class="opt-btn" onclick="submitAnswer('D')"><span class="badge">D</span> <span id="optD"></span></button>
-    </div>
-
-    <div id="feedback-msg" style="margin-top:20px; font-weight:700;"></div>
-    <button id="next-btn" class="btn btn-primary" onclick="nextQuestion()" style="display:none; margin-top:20px;">Next Question →</button>
+    <!-- EXIT FOCUS MODE BUTTON -->
+    <button onclick="exitExamFocusMode()" class="btn btn-outline" style="padding:6px 14px; font-size:12px; color:var(--danger); border-color:#fca5a5; background:#fee2e2; font-weight:800;" title="Exit Focus Mode">
+      Exit ✕
+    </button>
   </div>
+  
+  <div id="quiz-question" class="question-text">Question prompt?</div>
+  <img id="quiz-image" class="question-img" style="display:none;" src="" alt="Question Diagram">
+
+  <div class="options-grid">
+    <button class="opt-btn" onclick="submitAnswer('A')"><span class="badge">A</span> <span id="optA"></span></button>
+    <button class="opt-btn" onclick="submitAnswer('B')"><span class="badge">B</span> <span id="optB"></span></button>
+    <button class="opt-btn" onclick="submitAnswer('C')"><span class="badge">C</span> <span id="optC"></span></button>
+    <button class="opt-btn" onclick="submitAnswer('D')"><span class="badge">D</span> <span id="optD"></span></button>
+  </div>
+
+  <div id="feedback-msg" style="margin-top:20px; font-weight:700;"></div>
+  <button id="next-btn" class="btn btn-primary" onclick="nextQuestion()" style="display:none; margin-top:20px;">Next Question →</button>
+</div>
 
   <div id="trial-consolidation-card" class="card" style="display:none;">
     <div style="display:flex; justify-content:space-between; align-items:center; margin-bottom:15px;">
@@ -1707,58 +1709,105 @@ function showSection(sectionId) {
   else if (['admin-report-sec', 'admin-resets-sec', 'manage-qs-sec', 'manage-users-sec', 'admin-logs-sec'].includes(sectionId)) loadAdminData();
 }
 
-    async function loadPracticeSubject() {
-      const subject = document.getElementById('subject-select').value;
-      if (!subject) return;
+    // ENTER FOCUS MODE: HIDE TABS, MODE SELECTOR, & SUBJECT PICKER
+function enterExamFocusMode() {
+  document.getElementById('tab-bar-container').style.display = 'none'; // Hide top tabs
+  const modeGroup = document.querySelector('.mode-selector-group');
+  if (modeGroup) modeGroup.style.display = 'none'; // Hide mode buttons
+  
+  document.getElementById('subject-practice-box').style.display = 'none'; // Hide choose subject box
+  document.getElementById('trial-exam-box').style.display = 'none'; // Hide trial box
+}
 
-      document.getElementById('no-questions-card').style.display = 'none';
-      document.getElementById('no-trial-card').style.display = 'none';
-      document.getElementById('completion-card').style.display = 'none';
-      document.getElementById('quiz-card').style.display = 'none';
-      document.getElementById('trial-consolidation-card').style.display = 'none';
+// EXIT FOCUS MODE: RESTORE TABS, MODE SELECTOR, & MENU
+function exitExamFocusMode() {
+  clearInterval(timerInterval);
+  
+  // Restore Top Navigation Tabs & Mode Selector Group
+  document.getElementById('tab-bar-container').style.display = 'flex';
+  const modeGroup = document.querySelector('.mode-selector-group');
+  if (modeGroup) modeGroup.style.display = 'flex';
 
-      document.getElementById('practice-spinner').style.display = 'flex';
-      isTrialMode = false;
+  // Hide active quiz & messages
+  document.getElementById('quiz-card').style.display = 'none';
+  document.getElementById('no-questions-card').style.display = 'none';
+  document.getElementById('completion-card').style.display = 'none';
+  document.getElementById('no-trial-card').style.display = 'none';
+  document.getElementById('trial-consolidation-card').style.display = 'none';
 
-      const res = await apiRequest({ action: 'getQuestions', subject, phone: currentUser.phone });
-      document.getElementById('practice-spinner').style.display = 'none';
+  // Restore active menu screen based on mode
+  if (isTrialMode) {
+    document.getElementById('trial-exam-box').style.display = 'block';
+  } else {
+    document.getElementById('subject-select').value = '';
+    document.getElementById('subject-practice-box').style.display = 'block';
+  }
+}
 
-      if (res.success) {
-        if (res.status === 'NO_QUESTIONS') {
-          document.getElementById('no-questions-card').style.display = 'block';
-        } else if (res.status === 'ALL_ANSWERED') {
-          document.getElementById('completion-card').style.display = 'block';
-        } else if (res.questions.length > 0) {
-          currentQuestions = res.questions;
-          qIndex = 0;
-          renderQuestion();
-          document.getElementById('quiz-card').style.display = 'block';
-        }
-      }
-    }
+// UPDATED: Load Practice Subject with Focus Mode
+async function loadPracticeSubject() {
+  const subject = document.getElementById('subject-select').value;
+  if (!subject) return;
 
-    async function startTrialExam() {
-      document.getElementById('trial-exam-box').style.display = 'none';
-      document.getElementById('no-trial-card').style.display = 'none';
-      document.getElementById('practice-spinner').style.display = 'flex';
+  document.getElementById('no-questions-card').style.display = 'none';
+  document.getElementById('no-trial-card').style.display = 'none';
+  document.getElementById('completion-card').style.display = 'none';
+  document.getElementById('quiz-card').style.display = 'none';
+  document.getElementById('trial-consolidation-card').style.display = 'none';
+
+  document.getElementById('practice-spinner').style.display = 'flex';
+  isTrialMode = false;
+
+  const res = await apiRequest({ action: 'getQuestions', subject, phone: currentUser.phone });
+  document.getElementById('practice-spinner').style.display = 'none';
+
+  if (res.success) {
+    if (res.status === 'NO_QUESTIONS') {
+      document.getElementById('no-questions-card').style.display = 'block';
+    } else if (res.status === 'ALL_ANSWERED') {
+      document.getElementById('completion-card').style.display = 'block';
+    } else if (res.questions.length > 0) {
+      currentQuestions = res.questions;
+      qIndex = 0;
       
-      isTrialMode = true;
-      trialAnswersLog = [];
-
-      const res = await apiRequest({ action: 'getTrialQuestions', phone: currentUser.phone });
-      document.getElementById('practice-spinner').style.display = 'none';
-
-      if (res.success) {
-        if (res.status === 'ALL_ANSWERED' || res.questions.length === 0) {
-          document.getElementById('no-trial-card').style.display = 'block';
-        } else {
-          currentQuestions = res.questions;
-          qIndex = 0;
-          renderQuestion();
-          document.getElementById('quiz-card').style.display = 'block';
-        }
-      }
+      // HIDE TABS AND ENTER FOCUS EXAM MODE
+      enterExamFocusMode();
+      
+      renderQuestion();
+      document.getElementById('quiz-card').style.display = 'block';
     }
+  }
+}
+
+// UPDATED: Start Trial Exam with Focus Mode
+async function startTrialExam() {
+  document.getElementById('trial-exam-box').style.display = 'none';
+  document.getElementById('no-trial-card').style.display = 'none';
+  document.getElementById('practice-spinner').style.display = 'flex';
+  
+  isTrialMode = true;
+  trialAnswersLog = [];
+
+  const res = await apiRequest({ action: 'getTrialQuestions', phone: currentUser.phone });
+  document.getElementById('practice-spinner').style.display = 'none';
+
+  if (res.success) {
+    if (res.status === 'ALL_ANSWERED' || res.questions.length === 0) {
+      document.getElementById('no-trial-card').style.display = 'block';
+    } else {
+      currentQuestions = res.questions;
+      qIndex = 0;
+      
+      // HIDE TABS AND ENTER FOCUS EXAM MODE
+      enterExamFocusMode();
+      
+      renderQuestion();
+      document.getElementById('quiz-card').style.display = 'block';
+    }
+  }
+}
+
+    
 
     function closeNoTrialCard() {
       document.getElementById('no-trial-card').style.display = 'none';
