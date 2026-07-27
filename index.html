@@ -426,6 +426,98 @@
   color: #1e40af;
   box-shadow: var(--shadow-sm);
 }
+
+/* STYLISH MESSAGE CARD FOR NOTIFICATIONS FEED */
+.notif-card-stylish {
+  background: #ffffff;
+  border: 1px solid #cbd5e1;
+  border-left: 5px solid #2563eb;
+  border-radius: 14px;
+  padding: 20px;
+  margin-bottom: 16px;
+  box-shadow: 0 4px 12px rgba(15, 23, 42, 0.05);
+  transition: all 0.2s ease;
+  text-align: left;
+}
+.notif-card-stylish.unread {
+  background: #f0f7ff;
+  border-left-color: #1d4ed8;
+}
+.notif-card-stylish.selected {
+  border: 2px solid #2563eb !important;
+  background: #e0e7ff !important;
+}
+
+.notif-header-row {
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+  flex-wrap: wrap;
+  gap: 8px;
+  border-bottom: 1px solid #f1f5f9;
+  padding-bottom: 10px;
+  margin-bottom: 12px;
+}
+.notif-main-title {
+  font-size: 16px;
+  font-weight: 800;
+  color: #1e3a8a;
+  margin: 0;
+}
+.notif-timestamp-tag {
+  font-size: 12px;
+  font-weight: 700;
+  color: #475569;
+  background: #f1f5f9;
+  padding: 4px 10px;
+  border-radius: 20px;
+  border: 1px solid #cbd5e1;
+}
+.notif-message-body {
+  font-size: 14px;
+  color: #1e293b;
+  line-height: 1.6;
+  white-space: pre-wrap; /* Preserves newlines and spaces */
+  margin-bottom: 12px;
+}
+
+/* OPTION BUTTON SELECTED STATE (NO INSTANT CORRECTION) */
+.opt-btn.selected-choice {
+  border: 2px solid #2563eb !important;
+  background: #dbeafe !important;
+  color: #1e40af !important;
+  font-weight: 700 !important;
+  box-shadow: 0 4px 10px rgba(37, 99, 235, 0.15);
+}
+
+/* FULL-WIDTH TOUCH & TAP TOGGLE BUTTONS */
+.tap-toggle-pill {
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  gap: 10px;
+  width: 100%; /* 100% FULL WIDTH */
+  box-sizing: border-box;
+  padding: 12px 18px;
+  border-radius: 12px;
+  cursor: pointer;
+  font-weight: 800;
+  font-size: 13px;
+  user-select: none;
+  transition: all 0.25s ease;
+  border: 2px solid transparent;
+  text-align: center;
+}
+.tap-toggle-pill.enabled {
+  background: #dcfce7;
+  color: #15803d;
+  border-color: #86efac;
+}
+.tap-toggle-pill.disabled {
+  background: #fee2e2;
+  color: #b91c1c;
+  border-color: #fca5a5;
+}
   </style>
 </head>
 <body>
@@ -445,54 +537,96 @@
     </div>
   </div>
 
-  <!-- REDESIGNED PROFILE & SETTINGS MODAL -->
-  <div id="settings-modal" class="modal-overlay" style="display: none;">
-    <div class="modal-card">
-      <div style="display: flex; justify-content: space-between; align-items: center; margin-bottom: 20px;">
-        <h3 style="margin:0; font-weight:800; color:var(--primary);">Profile & Settings</h3>
-        <button class="icon-action-btn" onclick="document.getElementById('settings-modal').style.display='none'">✕</button>
+  <!-- RESTRUCTURED PROFILE & SETTINGS MODAL -->
+<div id="settings-modal" class="modal-overlay" style="display: none;">
+  <div class="modal-card">
+    
+    <!-- MODAL HEADER WITH NEW REPLACED SVG LOGOUT ICON BUTTON -->
+    <div style="display: flex; justify-content: space-between; align-items: center; margin-bottom: 20px;">
+      <h3 style="margin:0; font-weight:800; color:var(--primary);">Profile & Settings</h3>
+      <div style="display: flex; gap: 8px; align-items: center;">
+        
+        <!-- NEW REPLACED VECTOR LOGOUT ICON BUTTON -->
+        <button class="icon-action-btn delete-btn" onclick="logout()" title="Logout" style="width:38px; height:38px; padding:0; display:inline-flex; align-items:center; justify-content:center; background:#fee2e2; border-color:#fca5a5;">
+          <svg width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="#ef4444" stroke-width="2.2" stroke-linecap="round" stroke-linejoin="round">
+            <path d="M9 21H5a2 2 0 0 1-2-2V5a2 2 0 0 1 2-2h4"></path>
+            <polyline points="16 17 21 12 16 7"></polyline>
+            <line x1="21" y1="12" x2="9" y2="12"></line>
+          </svg>
+        </button>
+
+        <!-- Close Icon Button -->
+        <button class="icon-action-btn" onclick="document.getElementById('settings-modal').style.display='none'" title="Close" style="width:38px; height:38px;">
+          ✕
+        </button>
       </div>
-
-      <div style="background: linear-gradient(135deg, #eff6ff, #dbeafe); padding: 20px; border-radius: 14px; margin-bottom: 20px; border: 1px solid var(--border-color);">
-        <div style="display:flex; align-items:center; gap:14px; margin-bottom:12px;">
-          <div style="width:50px; height:50px; background:var(--primary); color:#fff; border-radius:50%; display:flex; align-items:center; justify-content:center; font-weight:900; font-size:20px;">
-            👤
-          </div>
-          <div>
-            <h4 id="set-name" style="margin:0; font-size:16px; color:#1e3a8a;">-</h4>
-            <span id="set-first-lang" class="badge badge-success" style="margin-top:4px; display:inline-block;">-</span>
-          </div>
-        </div>
-        <div style="display:grid; grid-template-columns:1fr 1fr; gap:10px; font-size:13px; background:#fff; padding:12px; border-radius:10px; border:1px solid var(--border-color);">
-          <div><strong>Gender:</strong> <span id="set-gender">-</span></div>
-          <div><strong>Class/Div:</strong> <span id="set-class">-</span>-<span id="set-div">-</span></div>
-          <div style="grid-column: span 2;"><strong>Phone:</strong> <span id="set-phone">-</span></div>
-        </div>
-      </div>
-
-      <form id="change-pass-form">
-        <h4 style="margin:0 0 6px 0;">Modify Password</h4>
-        <div style="font-size: 13px; color: var(--text-muted); margin-bottom: 12px; background: #f8fafc; padding: 8px 12px; border-radius: 8px; border: 1px solid var(--border-color);">
-          Username: <strong id="set-username-display" style="color: var(--text-main); font-size: 14px;">-</strong>
-        </div>
-        <div class="form-group">
-          <input type="password" id="new-password" required placeholder="Enter new password">
-        </div>
-        <button type="submit" class="btn btn-primary btn-block">Update Password</button>
-      </form>
-
-      <!-- TOUCH & TAP TAP-TOGGLE PILL FOR SECURITY MODE -->
-      <center><div class="admin-only" style="margin-top:20px; padding-top:15px;">
-          <div id="security-pill-btn" class="tap-toggle-pill enabled" onclick="toggleSecurityModePill()">
-          <span id="security-pill-icon">🛡️</span>
-          <span id="security-pill-status">Security Enabled</span>
-        </div>
-      </div></center>
-
-      <hr style="margin: 20px 0; border: none; border-top: 1px solid var(--border-color);">
-      <button class="btn btn-danger btn-block" onclick="logout()">Logout</button>
     </div>
+
+    <!-- USER INFO SUMMARY CARD -->
+    <div style="background: linear-gradient(135deg, #eff6ff, #dbeafe); padding: 18px; border-radius: 14px; margin-bottom: 16px; border: 1px solid var(--border-color);">
+      <div style="display:flex; align-items:center; gap:12px; margin-bottom:10px;">
+        <div style="width:44px; height:44px; background:var(--primary); color:#fff; border-radius:50%; display:flex; align-items:center; justify-content:center; font-weight:900; font-size:18px;">
+          👤
+        </div>
+        <div>
+          <h4 id="set-name" style="margin:0; font-size:15px; color:#1e3a8a;">-</h4>
+          <span id="set-first-lang" class="badge badge-success" style="margin-top:2px; display:inline-block;">-</span>
+        </div>
+      </div>
+      <div style="display:grid; grid-template-columns:1fr 1fr; gap:8px; font-size:12.5px; background:#fff; padding:10px; border-radius:8px; border:1px solid var(--border-color);">
+        <div><strong>Gender:</strong> <span id="set-gender">-</span></div>
+        <div><strong>Class/Div:</strong> <span id="set-class">-</span>-<span id="set-div">-</span></div>
+        <div style="grid-column: span 2;"><strong>Phone:</strong> <span id="set-phone">-</span></div>
+      </div>
+    </div>
+
+    <!-- 1. COLLAPSIBLE MODIFY PASSWORD ACCORDION -->
+    <div class="accordion-item" style="margin-bottom:12px;">
+      <div class="accordion-header" onclick="toggleAccordion('modify-pass-acc')">
+        <span>🔑 Modify Password</span>
+        <span>▾</span>
+      </div>
+      <div class="accordion-body" id="modify-pass-acc">
+        <form id="change-pass-form">
+          <div style="font-size: 12px; color: var(--text-muted); margin-bottom: 10px;">
+            Username: <strong id="set-username-display" style="color: var(--text-main);">-</strong>
+          </div>
+          <div class="form-group">
+            <input type="password" id="new-password" required placeholder="Enter new password">
+          </div>
+          <button type="submit" class="btn btn-primary btn-block" style="padding:10px;">Update Password</button>
+        </form>
+      </div>
+    </div>
+
+    <!-- 2. COLLAPSIBLE SYSTEM SETTINGS ACCORDION (FULL-WIDTH TAP BUTTONS) -->
+    
+      <div class="accordion-header" onclick="toggleAccordion('system-settings-acc')">
+        <span>⚙️ System Settings</span>
+        <span>▾</span>
+      </div>
+      <div class="accordion-body" id="system-settings-acc">
+        
+        <!-- Security Active Full-Width Tap Button -->
+        <div style="margin-bottom:14px; width:100%;">
+          <div id="security-pill-btn" class="tap-toggle-pill enabled" onclick="toggleSecurityModePill()">
+            <span id="security-pill-icon">🛡️</span>
+            <span id="security-pill-status">Security Active</span>
+          </div>
+        </div>
+
+        <!-- Tab Visibility Full-Width Tap Button (Placed directly below) -->
+        <div style="width:100%;">
+            <div id="admin-tabs-pill-btn" class="tap-toggle-pill disabled" onclick="toggleAdminTabsVisibilityPill()">
+            <span id="admin-tabs-status">Tabs Visible</span>
+          </div>
+        </div>
+
+      </div>
+    </div>
+
   </div>
+</div>
 
   <!-- Printable Modal View -->
   <div id="print-modal" class="modal-overlay" style="display: none;">
@@ -700,15 +834,16 @@
   <img id="quiz-image" class="question-img" style="display:none;" src="" alt="Question Diagram">
 
   <div class="options-grid">
-    <button class="opt-btn" onclick="submitAnswer('A')"><span class="badge">A</span> <span id="optA"></span></button>
-    <button class="opt-btn" onclick="submitAnswer('B')"><span class="badge">B</span> <span id="optB"></span></button>
-    <button class="opt-btn" onclick="submitAnswer('C')"><span class="badge">C</span> <span id="optC"></span></button>
-    <button class="opt-btn" onclick="submitAnswer('D')"><span class="badge">D</span> <span id="optD"></span></button>
-  </div>
-
-  <div id="feedback-msg" style="margin-top:20px; font-weight:700;"></div>
-  <button id="next-btn" class="btn btn-primary" onclick="nextQuestion()" style="display:none; margin-top:20px;">Next Question →</button>
+  <button class="opt-btn" id="opt-btn-A" onclick="selectOption('A')"><span class="badge">A</span> <span id="optA"></span></button>
+  <button class="opt-btn" id="opt-btn-B" onclick="selectOption('B')"><span class="badge">B</span> <span id="optB"></span></button>
+  <button class="opt-btn" id="opt-btn-C" onclick="selectOption('C')"><span class="badge">C</span> <span id="optC"></span></button>
+  <button class="opt-btn" id="opt-btn-D" onclick="selectOption('D')"><span class="badge">D</span> <span id="optD"></span></button>
 </div>
+
+<!-- NEXT QUESTION BUTTON (ALWAYS AVAILABLE FOR RETHINKING) -->
+<button id="next-btn" class="btn btn-primary" onclick="confirmAndNextQuestion()" style="display:inline-flex; margin-top:22px; width:100%; padding:14px; font-weight:800;">
+  Next Question →
+</button>
 
   <div id="trial-consolidation-card" class="card" style="display:none;">
     <div style="display:flex; justify-content:space-between; align-items:center; margin-bottom:15px;">
@@ -1143,7 +1278,7 @@
     // =========================================================================
     // CONFIGURATION
     // =========================================================================
-    const API_URL = "https://script.google.com/macros/s/AKfycbyM4ZFWXT7zUI14Y1_AKtI5aqfeam1zQ-MB8DAUiRvBq8f_CnlXANFCiffAeKouHc12-A/exec";
+    const API_URL = "https://script.google.com/macros/s/AKfycbxxglndxxmNqZ1we6jfZA3rG6YuV4x_yF-_jUfa6Qg4ey7tLKo0tN73x8HgCXnA0rOSwA/exec";
     const IMGBB_API_KEY = "YOUR_IMGBB_API_KEY_HERE";
     // =========================================================================
 
@@ -1888,62 +2023,140 @@ async function startTrialExam() {
       }
     }
 
-    function startTimer() {
+    let currentSelectedOpt = null;
+
+function renderQuestion() {
+  const q = currentQuestions[qIndex];
+  const quizCard = document.getElementById('quiz-card');
+
+  currentSelectedOpt = null; // Reset selection for rethink
+
+  if (q.Subject === 'AR' || q.Subject === 'Arabic') {
+    quizCard.classList.add('rtl-content');
+  } else {
+    quizCard.classList.remove('rtl-content');
+  }
+
+  document.getElementById('quiz-subject').innerText = isTrialMode ? `TRIAL: ${q.Subject}` : q.Subject;
+  document.getElementById('quiz-progress').innerText = `Question ${qIndex + 1} of ${currentQuestions.length}`;
+  document.getElementById('quiz-question').innerText = q.Question;
+  
+  const imgEl = document.getElementById('quiz-image');
+  if (q.ImageUrl) {
+    imgEl.src = q.ImageUrl;
+    imgEl.style.display = 'block';
+  } else {
+    imgEl.style.display = 'none';
+  }
+
+  document.getElementById('optA').innerText = q.OptionA;
+  document.getElementById('optB').innerText = q.OptionB;
+  document.getElementById('optC').innerText = q.OptionC;
+  document.getElementById('optD').innerText = q.OptionD;
+
+  // Reset button styles
+  ['A', 'B', 'C', 'D'].forEach(opt => {
+    const btn = document.getElementById(`opt-btn-${opt}`);
+    btn.className = 'opt-btn';
+    btn.disabled = false;
+  });
+
+  startTimer();
+}
+
+// ALLOW STUDENT TO TAP & FREELY CHANGE SELECTION BEFORE NEXT
+function selectOption(opt) {
+  currentSelectedOpt = opt;
+
+  ['A', 'B', 'C', 'D'].forEach(o => {
+    const btn = document.getElementById(`opt-btn-${o}`);
+    if (o === opt) {
+      btn.className = 'opt-btn selected-choice';
+    } else {
+      btn.className = 'opt-btn';
+    }
+  });
+}
+
+// CONFIRM SELECTION & PROCEED TO NEXT QUESTION (OR TIMED OUT)
+async function confirmAndNextQuestion(isTimeout = false) {
+  clearInterval(timerInterval);
+
+  const q = currentQuestions[qIndex];
+  const chosen = isTimeout ? 'TIMEOUT' : (currentSelectedOpt || 'Unanswered');
+  const isCorrect = chosen === q.CorrectAnswer;
+
+  // Update session counters
+  sessionStats.total++;
+  if (isCorrect) sessionStats.correct++;
+  else sessionStats.incorrect++;
+
+  // Save Progress silently without revealing answer
+  if (isTrialMode) {
+    trialAnswersLog.push({
+      Subject: q.Subject,
+      QuestionText: q.Question,
+      OptionA: q.OptionA,
+      OptionB: q.OptionB,
+      OptionC: q.OptionC,
+      OptionD: q.OptionD,
+      UserAnswer: chosen,
+      CorrectAnswer: q.CorrectAnswer,
+      IsCorrect: isCorrect
+    });
+  } else {
+    queueLocalProgress({
+      phone: currentUser.phone,
+      studentName: currentUser.name || currentUser.username,
+      userClass: currentUser.userClass || '10',
+      division: currentUser.division || 'A',
+      subject: q.Subject,
+      questionId: q.ID,
+      questionText: q.Question,
+      userAnswer: chosen,
+      correctAnswer: q.CorrectAnswer,
+      isCorrect: isCorrect
+    });
+  }
+
+  // Move to Next Question or Show Final Results
+  if (qIndex + 1 < currentQuestions.length) {
+    qIndex++;
+    renderQuestion();
+  } else {
+    document.getElementById('quiz-card').style.display = 'none';
+
+    if (isTrialMode) {
+      renderTrialConsolidation(); // Show final breakdown at the end
+      await sendSessionSummaryNotification();
+    } else {
+      document.getElementById('completion-card').style.display = 'block'; // Subject Mastered!
+      await sendSessionSummaryNotification();
+    }
+  }
+}
+
+// Update Timer to call confirmAndNextQuestion(true) on timeout
+function startTimer() {
+  clearInterval(timerInterval);
+  timeLeft = 30;
+  const timerCount = document.getElementById('timer-count');
+  const timerBadge = document.getElementById('timer-badge');
+  timerCount.innerText = timeLeft;
+  timerBadge.classList.remove('danger');
+
+  timerInterval = setInterval(() => {
+    timeLeft--;
+    timerCount.innerText = timeLeft;
+    if (timeLeft <= 10) timerBadge.classList.add('danger');
+    if (timeLeft <= 0) {
       clearInterval(timerInterval);
-      timeLeft = 30;
-      const timerCount = document.getElementById('timer-count');
-      const timerBadge = document.getElementById('timer-badge');
-      timerCount.innerText = timeLeft;
-      timerBadge.classList.remove('danger');
-
-      timerInterval = setInterval(() => {
-        timeLeft--;
-        timerCount.innerText = timeLeft;
-        if (timeLeft <= 10) timerBadge.classList.add('danger');
-        if (timeLeft <= 0) {
-          clearInterval(timerInterval);
-          submitAnswer('TIMEOUT');
-        }
-      }, 1000);
+      confirmAndNextQuestion(true); // Timed Out
     }
+  }, 1000);
+}
 
-    function renderQuestion() {
-      const q = currentQuestions[qIndex];
-      const quizCard = document.getElementById('quiz-card');
-
-      if (q.Subject === 'AR' || q.Subject === 'Arabic') {
-        quizCard.classList.add('rtl-content');
-      } else {
-        quizCard.classList.remove('rtl-content');
-      }
-
-      document.getElementById('quiz-subject').innerText = isTrialMode ? `TRIAL: ${q.Subject}` : q.Subject;
-      document.getElementById('quiz-progress').innerText = `Question ${qIndex + 1} of ${currentQuestions.length}`;
-      document.getElementById('quiz-question').innerText = q.Question;
-      
-      const imgEl = document.getElementById('quiz-image');
-      if (q.ImageUrl) {
-        imgEl.src = q.ImageUrl;
-        imgEl.style.display = 'block';
-      } else {
-        imgEl.style.display = 'none';
-      }
-
-      document.getElementById('optA').innerText = q.OptionA;
-      document.getElementById('optB').innerText = q.OptionB;
-      document.getElementById('optC').innerText = q.OptionC;
-      document.getElementById('optD').innerText = q.OptionD;
-
-      const buttons = document.querySelectorAll('.opt-btn');
-      buttons.forEach(btn => {
-        btn.className = 'opt-btn';
-        btn.disabled = false;
-      });
-      document.getElementById('feedback-msg').innerText = '';
-      document.getElementById('next-btn').style.display = 'none';
-
-      startTimer();
-    }
+    
 
   
   // SESSION COUNTER STATS
@@ -1955,29 +2168,59 @@ let sessionStats = {
   incorrect: 0
 };
 
-// SEND DUAL SUMMARY NOTIFICATION TO BOTH ADMIN & STUDENT ITSELF
-async function sendSessionSummaryNotification() {
-  if (sessionStats.total === 0) return; // Skip if exited before answering any question
+// FORMAT DATE & TIME IN 12-HOUR FORMAT WITH AM/PM
+function format12HourDateTime(dStr) {
+  const d = dStr ? new Date(dStr) : new Date();
+  if (isNaN(d.getTime())) return dStr;
 
-  const studentName = currentUser.name || currentUser.username;
-  const phone = currentUser.phone;
+  const dd = String(d.getDate()).padStart(2, '0');
+  const mm = String(d.getMonth() + 1).padStart(2, '0');
+  const yyyy = d.getFullYear();
+
+  let hours = d.getHours();
+  const mins = String(d.getMinutes()).padStart(2, '0');
+  const secs = String(d.getSeconds()).padStart(2, '0');
+  const ampm = hours >= 12 ? 'PM' : 'AM';
+  
+  hours = hours % 12;
+  hours = hours ? hours : 12; // 0 hour should be 12
+  const hh = String(hours).padStart(2, '0');
+
+  return {
+    full: `${dd}/${mm}/${yyyy} ${hh}:${mins}:${secs} ${ampm}`,
+    date: `${dd}/${mm}/${yyyy}`,
+    time: `${hh}:${mins}:${secs} (${ampm})`
+  };
+}
+
+// SEND NOTIFICATION WITH EXACT MESSAGE STRUCTURE
+async function sendSessionSummaryNotification() {
+  if (sessionStats.total === 0) return;
+
+  const studentName = (currentUser.name || currentUser.username).toUpperCase();
   const userClass = currentUser.userClass || '10';
   const division = currentUser.division || 'A';
+  const phone = currentUser.phone;
+
+  const timeData = format12HourDateTime(new Date().toISOString());
   const modeLabel = sessionStats.mode === 'TRIAL' ? 'Trial Exam' : `Subject Practice (${sessionStats.subject})`;
+  
+  // MAIN HEAD
+  const mainHead = `${modeLabel} Activity Summary`;
 
-  const title = `${modeLabel} Activity Summary`;
-  const message = `Student ${studentName} (Class ${userClass}-${division}, Phone: ${phone}) completed a ${modeLabel} session.\n• Total Questions Practiced: ${sessionStats.total}\n• Correct: ${sessionStats.correct}\n• Incorrect: ${sessionStats.incorrect}\n• Date: ${formatDateStrict(new Date().toISOString())}`;
+  // EXACT FORMATTED MESSAGE
+  const messageBody = `<b>${studentName} ${userClass}${division}</b> completed a ${modeLabel} session ON ${timeData.date} AT ${timeData.time}\n\nTotal Questions Practiced: ${sessionStats.total}\nCorrect: ${sessionStats.correct} • Incorrect: ${sessionStats.incorrect}`;
 
-  // Send to BOTH ['ADMIN'] and student's own [phone] ALWAYS
+  // Send to BOTH Admin and Student
   await apiRequest({
     action: 'sendNotification',
     recipientPhones: ['ADMIN', phone],
-    title: title,
-    message: message,
-    sender: 'Practice Monitor'
+    title: mainHead,
+    message: messageBody,
+    sender: 'Practice Center'
   });
 
-  // Reset session counter
+  // Reset Session Counter
   sessionStats.total = 0;
   sessionStats.correct = 0;
   sessionStats.incorrect = 0;
@@ -2224,23 +2467,30 @@ async function sendSessionSummaryNotification() {
       selectedNotifIds.clear();
       updateDeleteNotifBtnState();
 
-      // Render Notification Cards without checkboxes (Touch & Hold or Tap to select)
+     // RENDER NOTIFICATIONS FEED WITH STYLISH MESSAGE CARDS
 res.notifications.forEach(n => {
   const isRead = readSet.has(n.NotificationID);
   if (!isRead) unreadCount++;
 
+  const timeData = format12HourDateTime(n.Timestamp);
+
   const card = document.createElement('div');
-  card.className = `notif-card ${isRead ? '' : 'unread'}`;
+  card.className = `notif-card-stylish ${isRead ? '' : 'unread'}`;
   card.id = `notif-card-${n.NotificationID}`;
 
   card.innerHTML = `
-    <div style="display:flex; justify-content:space-between; align-items:center; margin-bottom:8px;">
-      <strong style="font-size:15px; color:var(--text-main);">${n.Title}</strong>
-      <small style="color:var(--text-muted); font-weight:600;">${formatDateStrict(n.Timestamp)}</small>
+    <!-- MAIN HEAD & DATE/TIME -->
+    <div class="notif-header-row">
+      <h4 class="notif-main-title"> ${n.Title}</h4>
+      <span class="notif-timestamp-tag">${timeData.full}</span>
     </div>
-    <p style="margin:0 0 12px 0; font-size:14px; color:var(--text-main); line-height:1.4;">${n.Message}</p>
-    <div style="display:flex; justify-content:space-between; align-items:center;">
-      <small style="color:var(--text-muted); font-weight:600;">From: ${n.Sender}</small>
+
+    <!-- MESSAGE CONTENT WITH BOLD NAME & NEWLINES -->
+    <div class="notif-message-body">${n.Message}</div>
+
+    <!-- FOOTER ACTIONS -->
+    <div style="display:flex; justify-content:space-between; align-items:center; border-top:1px solid #f1f5f9; padding-top:10px; margin-top:10px;">
+      <small style="color:var(--text-muted); font-weight:700;">Sender: ${n.Sender}</small>
       <div style="display:flex; gap:8px;">
         <button onclick="event.stopPropagation(); toggleNotifRead('${n.NotificationID}')" class="btn btn-outline" style="padding:4px 12px; font-size:12px;">
           ${isRead ? 'Mark Unread' : 'Mark as Read ✓'}
@@ -3085,6 +3335,45 @@ document.addEventListener('gestureend', function (e) {
   e.preventDefault();
 });
 
+
+let hideAdminPracticeTabs = localStorage.getItem('hide_admin_practice_tabs') === 'true';
+
+function applyAdminTabsVisibility() {
+  if (!currentUser || String(currentUser.role).toLowerCase() !== 'admin') return;
+
+  const tabPractice = document.getElementById('tab-practice');
+  const tabPortfolio = document.getElementById('tab-portfolio');
+
+  if (hideAdminPracticeTabs) {
+    if (tabPractice) tabPractice.style.display = 'none';
+    if (tabPortfolio) tabPortfolio.style.display = 'none';
+  } else {
+    if (tabPractice) tabPractice.style.display = 'inline-flex';
+    if (tabPortfolio) tabPortfolio.style.display = 'inline-flex';
+  }
+}
+
+function toggleAdminTabsVisibilityPill() {
+  hideAdminPracticeTabs = !hideAdminPracticeTabs;
+  localStorage.setItem('hide_admin_practice_tabs', hideAdminPracticeTabs);
+
+  const pill = document.getElementById('admin-tabs-pill-btn');
+  const text = document.getElementById('admin-tabs-status');
+
+  if (hideAdminPracticeTabs) {
+    pill.className = 'tap-toggle-pill enabled';
+    text.innerText = 'Practice Tabs Hidden (Tap to Show)';
+    showToast('Practice & Portfolio tabs hidden for Admin', 'warning');
+  } else {
+    pill.className = 'tap-toggle-pill disabled';
+    text.innerText = 'Tabs Visible (Tap to Hide)';
+    showToast('Practice & Portfolio tabs visible for Admin', 'success');
+  }
+
+  applyAdminTabsVisibility();
+}
+
+// Call applyAdminTabsVisibility() inside initializeSession()
 
   </script>
 
