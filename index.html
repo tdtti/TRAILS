@@ -349,13 +349,13 @@
       background: #ffffff;
       border: 1px solid var(--border-color);
       border-radius: 14px;
-      padding: 18px;
-      margin-bottom: 14px;
+      padding: 5px;
+      margin-bottom: 5px;
       position: relative;
       box-shadow: var(--shadow-sm);
       transition: all 0.2s;
     }
-    .notif-card.unread { background: #eff6ff; border-left: 5px solid var(--primary); }
+    .notif-card.unread { background: #eff6ff; border-left: 2px solid var(--primary); }
     .notif-card.selected { border: 2px solid var(--primary) !important; background: #eef2ff !important; }
 
     .accordion-item { border: 1px solid var(--border-color); border-radius: 12px; margin-bottom: 12px; overflow: hidden; background: #fff; }
@@ -747,9 +747,9 @@
 
     <!-- 2. My Performance Portfolio Section -->
     <section id="portfolio-sec" class="section" style="display:none;">
-      <h2>Portfolio</h2>
+        <h3 style="margin-top:0; color:var(--primary);">Dashboard</h3>
 
-      <div class="stats-grid">
+      
         <div class="card">
           <p style="margin:0; color:var(--text-muted); font-size:13px; font-weight:600;">Total Answered Questions</p>
           <h3 id="stat-total">0</h3>
@@ -757,14 +757,12 @@
         <div class="card">
           <p style="margin:0; color:var(--text-muted); font-size:13px; font-weight:600;">Overall </p>
           <h3 id="stat-accuracy">0%</h3>
-        </div>
-      </div>
+        </div><hr><br>
+      
 
-      <div class="card">
+      
         <h3 style="margin-top:0; color:var(--primary);">Dashboard</h3>
-        
-
-        <div class="grid-2">
+          <div class="grid-2">
           <div style="background:#f0fdf4; border:1px solid #bbf7d0; padding:18px; border-radius:12px;">
             <h4 style="margin:0 0 15px 0; color:#166534; display:flex; align-items:center; gap:8px;">
               <span>🌟 Strength </span>
@@ -782,11 +780,11 @@
               <p style="font-size:13px; color:var(--text-muted);">No weak subjects identified!</p>
             </div>
           </div>
-        </div>
-      </div>
+        </div><br><hr><br>
+      
 
-      <div class="card">
-        <h3>Overview</h3>
+      
+        <h3 style="margin-top:0; color:var(--primary);">Overview</h3> 
         <div class="table-responsive">
           <table class="data-table">
             <thead>
@@ -801,16 +799,16 @@
             <tbody id="portfolio-table-body"></tbody>
           </table>
         </div>
-      </div>
+      
 
       <div class="card" id="portfolio-trial-history-box" style="display:none;">
         <h3 style="margin-top:0; color:var(--primary);">Trial Exam Consolidations</h3>
         <p style="font-size:13px; color:var(--text-muted); margin-bottom:15px;">Historical performance and detailed consolidation of all completed Trial Exams.</p>
         <div id="portfolio-trial-history-container"></div>
-      </div>
+      </div> <br><hr><br>
 
-      <div class="card">
-        <h3>Practice Audit</h3>
+      
+        <h3 style="margin-top:0; color:var(--primary);">Practice Audit</h3> 
         <div class="table-responsive">
           <table class="data-table">
             <thead>
@@ -826,7 +824,7 @@
             <tbody id="portfolio-detailed-body"></tbody>
           </table>
         </div>
-      </div>
+      
     </section>
 
     <!-- 3. NOTIFICATION CENTER TAB -->
@@ -1916,8 +1914,8 @@ async function startTrialExam() {
         feedback.style.color = 'var(--danger)';
       } else {
         feedback.innerText = isCorrect 
-          ? '✅ Correct Answer!' 
-          : `❌ Incorrect! Correct choice was Option ${q.CorrectAnswer}`;
+          ? '✅ Correct Answer ! ' 
+          : ` ❌ Incorrect ! Correct Option ${q.CorrectAnswer}`;
         feedback.style.color = isCorrect ? 'var(--success)' : 'var(--danger)';
       }
 
