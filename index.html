@@ -353,13 +353,14 @@
             <span id="security-pill-status">Security Active: ENABLED</span>
           </div>
 
-          <div style="margin-top: 14px;">
-            <label style="font-size: 13px; font-weight: 700; display: block; margin-bottom: 6px;">Admin Practice Access:</label>
-            <div id="hide-student-tabs-pill" class="tap-toggle-pill disabled" onclick="toggleHideStudentTabsForAdmin()">
-              <span>👁️</span>
-              <span id="hide-student-tabs-status">Hide Practice & Portfolio for Admin: OFF</span>
-            </div>
-          </div>
+          <!-- ADMIN PRACTICE ACCESS PILL TOGGLE -->
+<div style="margin-top: 14px;">
+  <label style="font-size: 13px; font-weight: 700; display: block; margin-bottom: 6px;">Admin Practice Access:</label>
+  <div id="show-student-tabs-pill" class="tap-toggle-pill disabled" onclick="toggleShowStudentTabsForAdmin()">
+    <span>👁️</span>
+    <span id="show-student-tabs-status">Show Practice and Portfolio for Admin: OFF</span>
+  </div>
+</div>
         </div>
       </div>
     </div>
@@ -998,6 +999,7 @@
     
     let securityProtectionActive = true;
     let hideStudentTabsForAdmin = false;
+    let showStudentTabsForAdmin = false;
 
     document.addEventListener('DOMContentLoaded', () => {
       if (currentUser) initializeSession();
@@ -1334,34 +1336,58 @@
     }
 
     function initializeSession() {
-      document.getElementById('login-sec').style.display = 'none';
-      document.getElementById('top-navbar').style.display = 'flex';
-      document.getElementById('tab-bar-container').style.display = 'flex';
+  document.getElementById('login-sec').style.display = 'none';
+  document.getElementById('top-navbar').style.display = 'flex';
+  document.getElementById('tab-bar-container').style.display = 'flex';
 
-      document.getElementById('user-display-name').innerText = currentUser.name || currentUser.username;
-      document.getElementById('user-display-class').innerText = currentUser.userClass || '10';
-      document.getElementById('user-display-div').innerText = currentUser.division || 'A';
+  document.getElementById('user-display-name').innerText = currentUser.name || currentUser.username;
+  document.getElementById('user-display-class').innerText = currentUser.userClass || '10';
+  document.getElementById('user-display-div').innerText = currentUser.division || 'A';
 
-      filterPracticeSubjectDropdown();
+  filterPracticeSubjectDropdown();
 
-      const adminNavButtons = document.querySelectorAll('.admin-only');
-      const role = String(currentUser.role).trim().toLowerCase();
+  const adminNavButtons = document.querySelectorAll('.admin-only');
+  const studentTabs = document.querySelectorAll('.student-tab-btn');
+  const role = String(currentUser.role).trim().toLowerCase();
 
-      if (role === 'admin') {
-        adminNavButtons.forEach(btn => btn.style.display = 'inline-flex');
-        
-        const studentTabs = document.querySelectorAll('.student-tab-btn');
-        studentTabs.forEach(tab => tab.style.display = hideStudentTabsForAdmin ? 'none' : 'inline-flex');
+  if (role === 'admin') {
+    adminNavButtons.forEach(btn => btn.style.display = 'inline-flex');
+    
+    // HIDE PRACTICE AND PORTFOLIO TABS BY DEFAULT FOR ADMIN
+    studentTabs.forEach(tab => tab.style.display = showStudentTabsForAdmin ? 'inline-flex' : 'none');
 
-        showSection('admin-report-sec');
-        checkAdminPendingAlerts();
-      } else {
-        adminNavButtons.forEach(btn => btn.style.display = 'none');
-        showSection('practice-sec');
-      }
+    showSection('admin-report-sec');
+    checkAdminPendingAlerts();
+  } else {
+    adminNavButtons.forEach(btn => btn.style.display = 'none');
+    studentTabs.forEach(tab => tab.style.display = 'inline-flex');
+    showSection('practice-sec');
+  }
 
-      loadNotifications();
-    }
+  loadNotifications();
+}
+
+function toggleShowStudentTabsForAdmin() {
+  showStudentTabsForAdmin = !showStudentTabsForAdmin;
+  const pill = document.getElementById('show-student-tabs-pill');
+  const statusText = document.getElementById('show-student-tabs-status');
+
+  if (showStudentTabsForAdmin) {
+    pill.className = 'tap-toggle-pill enabled';
+    statusText.innerText = 'Show Practice and Portfolio for Admin: ON';
+    showToast('Practice & Portfolio tabs are now visible for Admin', 'info');
+  } else {
+    pill.className = 'tap-toggle-pill disabled';
+    statusText.innerText = 'Show Practice and Portfolio for Admin: OFF';
+    showToast('Practice & Portfolio tabs hidden for Admin', 'info');
+  }
+
+  // Real-time tab visibility toggle for Admin login
+  if (currentUser && String(currentUser.role).toLowerCase() === 'admin') {
+    const studentTabs = document.querySelectorAll('.student-tab-btn');
+    studentTabs.forEach(tab => tab.style.display = showStudentTabsForAdmin ? 'inline-flex' : 'none');
+  }
+}
 
     async function checkAdminPendingAlerts() {
       const res = await apiRequest({ action: 'getAdminData' });
