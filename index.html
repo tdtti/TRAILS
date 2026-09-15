@@ -12,7 +12,7 @@
 
   <style>
     /* ==========================================================================
-       1. FLUID RESPONSIVE DESIGN SYSTEM
+       1. FLUID MINIMALIST DESIGN SYSTEM
        ========================================================================== */
     :root {
       --primary: #1b5e20;
@@ -45,12 +45,13 @@
       flex-direction: column;
       -webkit-font-smoothing: antialiased;
       overflow-x: hidden;
+      width: 100%;
     }
 
     .malayalam-font { font-family: 'Manjari', 'Inter', sans-serif !important; }
 
     /* ==========================================================================
-       2. COMPACT DEVICE-AWARE HEADER
+       2. RESPONSIVE HEADER
        ========================================================================== */
     header.app-header {
       background: var(--primary);
@@ -59,7 +60,7 @@
       display: flex;
       justify-content: space-between;
       align-items: center;
-      box-shadow: 0 2px 4px rgba(0,0,0,0.1);
+      box-shadow: 0 1px 3px rgba(0,0,0,0.12);
       position: sticky;
       top: 0;
       z-index: 1000;
@@ -76,7 +77,7 @@
     }
     .header-titles { display: flex; align-items: baseline; gap: 6px; min-width: 0; }
     .header-brand h1 {
-      font-size: 0.95rem; font-weight: 700;
+      font-size: 0.94rem; font-weight: 700;
       letter-spacing: -0.01em;
       white-space: nowrap; overflow: hidden; text-overflow: ellipsis;
     }
@@ -93,7 +94,7 @@
     .header-controls { display: flex; align-items: center; gap: 6px; flex-shrink: 0; }
 
     .btn-header {
-      background: rgba(255, 255, 255, 0.15);
+      background: rgba(255, 255, 255, 0.16);
       color: #fff;
       border: 1px solid rgba(255, 255, 255, 0.35);
       padding: 6px 10px;
@@ -110,34 +111,82 @@
     .btn-header:hover { background: rgba(255, 255, 255, 0.28); }
 
     /* ==========================================================================
-       3. TOP COLLAPSIBLE CONTROLS DRAWER
+       3. TOP DRAWER (ADAPTIVE DESKTOP/TABLET GRID & MOBILE SEGMENTED VIEW)
        ========================================================================== */
     .top-controls-panel {
       background: var(--surface);
       border-bottom: 1px solid var(--border);
       padding: 12px 14px;
-      transition: all 0.25s ease-in-out;
+      transition: all 0.22s ease-in-out;
       box-shadow: 0 4px 10px rgba(0,0,0,0.03);
+      width: 100%;
     }
     .top-controls-panel.collapsed {
       display: none !important;
     }
 
-    /* Grid Breakpoints: 4-col (Desktop) -> 2-col (Tablet) -> 1-col (Mobile) */
+    /* Mobile Segmented Switcher */
+    .mobile-drawer-nav {
+      display: none;
+      gap: 4px;
+      overflow-x: auto;
+      padding-bottom: 8px;
+      margin-bottom: 8px;
+      border-bottom: 1px solid var(--border);
+      -webkit-overflow-scrolling: touch;
+      scrollbar-width: none;
+    }
+    .mobile-drawer-nav::-webkit-scrollbar { display: none; }
+    .mob-tab-btn {
+      flex: 1;
+      padding: 6px 8px;
+      border: 1px solid var(--border);
+      background: #f8fafc;
+      border-radius: 5px;
+      font-size: 0.72rem;
+      font-weight: 600;
+      color: var(--secondary);
+      white-space: nowrap;
+      cursor: pointer;
+      display: inline-flex;
+      align-items: center;
+      justify-content: center;
+      gap: 4px;
+    }
+    .mob-tab-btn.active {
+      background: var(--primary-light);
+      border-color: var(--primary);
+      color: var(--primary);
+    }
+    .pill-mini {
+      background: rgba(0,0,0,0.08);
+      padding: 1px 4px;
+      border-radius: 8px;
+      font-size: 0.65rem;
+    }
+
+    /* Grid Layout for Desktop & Tablet */
     .top-controls-grid {
       display: grid;
-      grid-template-columns: repeat(4, 1fr);
+      grid-template-columns: 1.1fr 1.3fr 1fr 1.1fr;
       gap: 12px;
       align-items: stretch;
-      max-width: 1440px;
+      max-width: 1400px;
       margin: 0 auto;
+      width: 100%;
     }
     @media (max-width: 1024px) {
-      .top-controls-grid { grid-template-columns: repeat(2, 1fr); }
+      .top-controls-grid { grid-template-columns: 1fr 1fr; }
     }
     @media (max-width: 640px) {
-      .top-controls-grid { grid-template-columns: 1fr; gap: 10px; }
       .top-controls-panel { padding: 10px; }
+      .mobile-drawer-nav { display: flex; }
+      .top-controls-grid { display: block; }
+      .ctrl-card { display: none; }
+      .ctrl-card.mob-active { display: flex !important; }
+    }
+    @media (min-width: 641px) {
+      .ctrl-card { display: flex !important; }
     }
 
     .ctrl-card {
@@ -145,9 +194,9 @@
       border: 1px solid var(--border);
       border-radius: 6px;
       padding: 10px 12px;
-      display: flex;
       flex-direction: column;
       justify-content: space-between;
+      min-width: 0;
     }
     .ctrl-card h3 {
       font-size: 0.78rem;
@@ -183,14 +232,11 @@
     .form-row .half { flex: 1; min-width: 0; }
     .radio-toggle { display: flex; gap: 10px; font-size: 0.76rem; font-weight: 500; }
 
-    /* 6-Slot Master Matrix */
+    /* Matrix Slots with Custom Overflow-Proof File Pickers */
     .matrix-grid {
       display: grid;
       grid-template-columns: 1fr 1fr;
       gap: 5px;
-    }
-    @media (max-width: 380px) {
-      .matrix-grid { grid-template-columns: 1fr; }
     }
     .slot-card {
       background: #ffffff;
@@ -199,6 +245,7 @@
       padding: 5px 6px;
       cursor: pointer;
       transition: all 0.15s;
+      min-width: 0;
     }
     .slot-card.active-target {
       border: 1.5px solid var(--primary);
@@ -210,7 +257,7 @@
       align-items: center;
       margin-bottom: 2px;
     }
-    .slot-title { font-size: 0.68rem; font-weight: 700; color: var(--secondary); }
+    .slot-title { font-size: 0.68rem; font-weight: 700; color: var(--secondary); white-space: nowrap; }
     .slot-badge {
       font-size: 0.58rem;
       padding: 1px 4px;
@@ -225,18 +272,39 @@
       overflow: hidden;
       text-overflow: ellipsis;
       white-space: nowrap;
-      margin-bottom: 2px;
+      margin-bottom: 3px;
     }
     .slot-actions { display: flex; gap: 3px; align-items: center; }
-    .slot-input { font-size: 0.62rem; flex: 1; min-width: 0; }
-    .slot-btn { padding: 2px 5px; font-size: 0.64rem; }
+
+    /* Custom File Picker Trigger (Never overflows) */
+    .btn-file-select {
+      flex: 1;
+      min-width: 0;
+      background: #f1f5f9;
+      border: 1px dashed #cbd5e1;
+      border-radius: 3px;
+      padding: 2px 4px;
+      font-size: 0.64rem;
+      font-weight: 600;
+      color: var(--secondary);
+      cursor: pointer;
+      display: inline-flex;
+      align-items: center;
+      justify-content: center;
+      gap: 3px;
+      white-space: nowrap;
+      overflow: hidden;
+      text-overflow: ellipsis;
+    }
+    .btn-file-select:hover { background: #e2e8f0; }
+    .slot-btn { padding: 2px 6px; font-size: 0.64rem; flex-shrink: 0; }
 
     /* Saved Packages Archive */
     .pkg-archive-container {
       display: flex;
       flex-direction: column;
       gap: 4px;
-      max-height: 160px;
+      max-height: 165px;
       overflow-y: auto;
     }
     .pkg-card {
@@ -270,12 +338,12 @@
     .pkg-card.expanded .pkg-body { display: block; }
     .pkg-actions-row { display: flex; gap: 4px; margin-top: 5px; flex-wrap: wrap; }
 
-    /* Active Generator Controls */
+    /* Active Generator Status Bar */
     .active-status-bar {
       background: #fef9c3;
       border: 1px solid #fde047;
       color: #854d0e;
-      padding: 6px 8px;
+      padding: 5px 7px;
       border-radius: 4px;
       font-size: 0.72rem;
       margin-bottom: 6px;
@@ -298,7 +366,7 @@
       gap: 4px;
       transition: background 0.15s;
       touch-action: manipulation;
-      min-height: 32px;
+      min-height: 30px;
     }
     .btn-primary { background: var(--primary); color: #fff; }
     .btn-primary:hover { background: var(--primary-hover); }
@@ -310,15 +378,10 @@
     .btn-danger { background: #dc2626; color: #fff; }
     .btn-whatsapp { background: var(--whatsapp-green); color: #fff; }
     .btn-whatsapp:hover { background: #1eb956; }
-    .btn-translate {
-      background: #fdf2f8;
-      border: 1px solid #f472b6;
-      color: #be185d;
-    }
-    .btn-translate:hover { background: #fce7f3; }
+    .btn-translate { background: #fdf2f8; border: 1px solid #f472b6; color: #be185d; }
     .btn-translate.active-ml { background: #be185d; color: #fff; }
     .btn-block { width: 100%; }
-    .btn-sm { padding: 4px 7px; font-size: 0.7rem; min-height: 28px; }
+    .btn-sm { padding: 4px 7px; font-size: 0.7rem; min-height: 26px; }
 
     /* ==========================================================================
        4. WORKSPACE CANVAS & TABS
@@ -331,12 +394,12 @@
       width: 100%;
     }
     
-    /* Horizontal Scrolling Touch-Friendly Tabs */
+    /* Smooth Scrollable Touch Tab Bar */
     .canvas-tabs {
       background: var(--surface);
       border-bottom: 1px solid var(--border);
       display: flex;
-      padding: 0 10px;
+      padding: 0 8px;
       overflow-x: auto;
       white-space: nowrap;
       position: sticky;
@@ -350,9 +413,9 @@
     .tab-btn {
       background: none;
       border: none;
-      padding: 10px 12px;
+      padding: 9px 11px;
       font-weight: 600;
-      font-size: 0.8rem;
+      font-size: 0.78rem;
       color: var(--text-muted);
       cursor: pointer;
       border-bottom: 2px solid transparent;
@@ -361,7 +424,7 @@
       gap: 5px;
       flex-shrink: 0;
     }
-    .tab-btn .tab-icon { font-size: 1.05rem; line-height: 1; }
+    .tab-btn .tab-icon { font-size: 1rem; line-height: 1; }
     .tab-btn.active {
       color: var(--primary);
       border-bottom: 2px solid var(--primary);
@@ -375,7 +438,7 @@
       margin: 0 auto;
     }
     @media (max-width: 640px) {
-      .tab-content-wrapper { padding: 10px; }
+      .tab-content-wrapper { padding: 10px 8px; }
     }
     .tab-pane { display: none; width: 100%; }
     .tab-pane.active { display: block; }
@@ -384,29 +447,30 @@
       display: flex;
       justify-content: space-between;
       align-items: center;
-      margin-bottom: 12px;
+      margin-bottom: 10px;
       flex-wrap: wrap;
-      gap: 8px;
+      gap: 6px;
     }
-    .pane-header h2 { font-size: 0.96rem; font-weight: 700; color: var(--text); }
+    .pane-header h2 { font-size: 0.92rem; font-weight: 700; color: var(--text); }
     .pane-header-actions { display: flex; gap: 4px; align-items: center; flex-wrap: wrap; }
 
-    /* Universal Chapter & CO Header (Visible on Screen & Print) */
+    /* Universal Chapter & CO Header (Screen & Print) */
     .universal-header-card {
       background: #ffffff;
       border: 1px solid var(--border);
       border-left: 4px solid var(--primary);
       border-radius: 6px;
-      padding: 10px 12px;
+      padding: 9px 11px;
       margin-bottom: 12px;
       box-shadow: 0 1px 2px rgba(0,0,0,0.02);
+      width: 100%;
     }
     .u-header-top {
       display: flex;
       justify-content: space-between;
       align-items: center;
       margin-bottom: 4px;
-      font-size: 0.72rem;
+      font-size: 0.7rem;
       flex-wrap: wrap;
       gap: 4px;
     }
@@ -417,99 +481,104 @@
       padding: 2px 5px;
       border-radius: 3px;
       text-transform: uppercase;
-      font-size: 0.65rem;
+      font-size: 0.64rem;
     }
     .u-meta-pacing { font-weight: 600; color: var(--secondary); }
     .u-header-unit {
-      font-size: 0.92rem;
+      font-size: 0.9rem;
       font-weight: 700;
       color: var(--text);
       margin-bottom: 4px;
+      word-break: break-word;
     }
     .u-header-co {
       background: #f8fafc;
       border: 1px dashed #cbd5e1;
-      padding: 6px 8px;
+      padding: 5px 8px;
       border-radius: 4px;
-      font-size: 0.78rem;
+      font-size: 0.76rem;
       line-height: 1.4;
       color: #1e293b;
+      word-break: break-word;
     }
 
     /* Rendered Markdown Containers */
     .rendered-markdown {
       background: var(--surface);
-      padding: 16px;
+      padding: 14px;
       border-radius: 6px;
       border: 1px solid var(--border);
       line-height: 1.6;
-      font-size: 0.88rem;
-      overflow-x: auto;
+      font-size: 0.86rem;
+      width: 100%;
+      word-break: break-word;
+      overflow-wrap: anywhere;
     }
     .co-box-master {
       background: #f1f5f9;
       border-left: 4px solid var(--secondary);
-      padding: 10px 12px;
+      padding: 9px 11px;
       border-radius: 4px;
-      margin-bottom: 12px;
+      margin-bottom: 10px;
     }
-    .co-box-master strong { color: var(--secondary); font-size: 0.84rem; }
-    .co-box-master ul { margin-top: 5px; padding-left: 18px; }
-    .co-box-master li { margin-bottom: 3px; line-height: 1.45; font-size: 0.82rem; }
+    .co-box-master strong { color: var(--secondary); font-size: 0.82rem; }
+    .co-box-master ul { margin-top: 4px; padding-left: 18px; }
+    .co-box-master li { margin-bottom: 3px; line-height: 1.4; font-size: 0.8rem; }
 
     /* Blackboard Notes UI */
-    .bb-container { display: flex; flex-direction: column; gap: 12px; }
+    .bb-container { display: flex; flex-direction: column; gap: 10px; width: 100%; }
     .bb-card {
       background: #ffffff;
       border: 1px solid #cbd5e1;
       border-radius: 6px;
-      box-shadow: 0 1px 3px rgba(0,0,0,0.02);
+      box-shadow: 0 1px 2px rgba(0,0,0,0.02);
       overflow: hidden;
+      width: 100%;
     }
     .bb-card-header {
       background: #f8fafc;
       border-bottom: 1px solid #e2e8f0;
-      padding: 8px 12px;
+      padding: 6px 10px;
       display: flex;
       justify-content: space-between;
       align-items: center;
       flex-wrap: wrap;
       gap: 4px;
     }
-    .bb-tag-group { display: flex; align-items: center; gap: 4px; flex-wrap: wrap; }
+    .bb-tag-group { display: flex; align-items: center; gap: 4px; }
     .bb-num-pill {
       background: var(--secondary);
       color: #fff;
       font-weight: 700;
-      font-size: 0.65rem;
-      padding: 2px 6px;
-      border-radius: 10px;
+      font-size: 0.64rem;
+      padding: 1px 5px;
+      border-radius: 8px;
     }
     .bb-cognitive-pill {
       background: #ede9fe;
       color: #5b21b6;
       font-weight: 600;
-      font-size: 0.65rem;
-      padding: 2px 6px;
-      border-radius: 10px;
+      font-size: 0.64rem;
+      padding: 1px 5px;
+      border-radius: 8px;
     }
-    .bb-card-body { padding: 12px; display: flex; flex-direction: column; gap: 8px; }
+    .bb-card-body { padding: 10px; display: flex; flex-direction: column; gap: 6px; }
     .bb-q-section {
       background: #fefce8;
-      border-left: 3.5px solid #eab308;
-      border-radius: 4px;
-      padding: 8px 10px;
+      border-left: 3px solid #eab308;
+      border-radius: 3px;
+      padding: 7px 9px;
     }
-    .bb-label-q { font-size: 0.66rem; font-weight: 700; color: #854d0e; text-transform: uppercase; margin-bottom: 2px; }
-    .bb-text-q { font-size: 0.88rem; font-weight: 600; color: #1e293b; }
+    .bb-label-q { font-size: 0.64rem; font-weight: 700; color: #854d0e; text-transform: uppercase; margin-bottom: 2px; }
+    .bb-text-q { font-size: 0.86rem; font-weight: 600; color: #1e293b; }
     .bb-a-section {
       background: #f0fdf4;
-      border-left: 3.5px solid var(--primary);
-      border-radius: 4px;
-      padding: 10px 12px;
+      border-left: 3px solid var(--primary);
+      border-radius: 3px;
+      padding: 8px 10px;
     }
-    .bb-label-a { font-size: 0.66rem; font-weight: 700; color: var(--primary); text-transform: uppercase; margin-bottom: 3px; }
-    .bb-text-a { font-size: 0.85rem; color: #0f172a; line-height: 1.55; }
+    .bb-label-a { font-size: 0.64rem; font-weight: 700; color: var(--primary); text-transform: uppercase; margin-bottom: 2px; }
+    .bb-text-a { font-size: 0.84rem; color: #0f172a; line-height: 1.5; }
 
     /* WhatsApp UI */
     .wa-view-switch {
@@ -517,145 +586,145 @@
       gap: 4px;
       background: #e2e8f0;
       padding: 3px;
-      border-radius: 6px;
-      margin-bottom: 10px;
+      border-radius: 5px;
+      margin-bottom: 8px;
     }
     .wa-switch-btn {
       flex: 1;
-      padding: 6px 8px;
+      padding: 5px 8px;
       border: none;
       background: transparent;
-      font-size: 0.74rem;
+      font-size: 0.72rem;
       font-weight: 600;
       color: var(--text-muted);
-      border-radius: 4px;
+      border-radius: 3px;
       cursor: pointer;
     }
     .wa-switch-btn.active {
       background: #fff;
       color: var(--primary);
-      box-shadow: 0 1px 2px rgba(0,0,0,0.08);
+      box-shadow: 0 1px 2px rgba(0,0,0,0.06);
     }
     .wa-chat-canvas {
       background: var(--whatsapp-bg);
       background-image: radial-gradient(#d1c7b7 1px, transparent 1px);
       background-size: 16px 16px;
       border: 1px solid #d6cfc7;
-      border-radius: 8px;
-      padding: 12px;
+      border-radius: 6px;
+      padding: 10px;
       display: flex;
       flex-direction: column;
       gap: 8px;
+      width: 100%;
     }
     .wa-bubble {
       background: #ffffff;
-      border-radius: 8px;
-      padding: 10px 12px;
-      box-shadow: 0 1px 2px rgba(0,0,0,0.08);
-      font-size: 0.82rem;
-      line-height: 1.45;
-    }
-    .wa-bubble-green { background: var(--whatsapp-bubble); border-left: 3.5px solid var(--whatsapp-green); }
-    .wa-qa-list { display: flex; flex-direction: column; gap: 6px; margin-top: 6px; }
-    .wa-qa-card { background: #ffffff; border: 1px solid #cbd5e1; border-radius: 4px; padding: 7px 9px; }
-    .wa-qa-q { font-weight: 700; font-size: 0.8rem; margin-bottom: 2px; }
-    .wa-qa-a { font-size: 0.78rem; background: #f8fafc; padding: 5px 7px; border-radius: 3px; border-left: 3px solid var(--primary); }
-    .wa-box-raw {
-      background: #fff;
-      padding: 12px;
-      border: 1px solid #cbd5e1;
       border-radius: 6px;
-      font-family: monospace;
-      white-space: pre-wrap;
+      padding: 8px 10px;
+      box-shadow: 0 1px 2px rgba(0,0,0,0.06);
       font-size: 0.8rem;
       line-height: 1.45;
+      word-break: break-word;
+    }
+    .wa-bubble-green { background: var(--whatsapp-bubble); border-left: 3px solid var(--whatsapp-green); }
+    .wa-qa-list { display: flex; flex-direction: column; gap: 5px; margin-top: 5px; }
+    .wa-qa-card { background: #ffffff; border: 1px solid #cbd5e1; border-radius: 4px; padding: 6px 8px; }
+    .wa-qa-q { font-weight: 700; font-size: 0.78rem; margin-bottom: 2px; }
+    .wa-qa-a { font-size: 0.76rem; background: #f8fafc; padding: 4px 6px; border-radius: 3px; border-left: 2px solid var(--primary); }
+    .wa-box-raw {
+      background: #fff;
+      padding: 10px;
+      border: 1px solid #cbd5e1;
+      border-radius: 5px;
+      font-family: monospace;
+      white-space: pre-wrap;
+      font-size: 0.78rem;
+      line-height: 1.4;
       overflow-x: auto;
+      word-break: break-word;
     }
 
-    /* Screen Adaptive Worksheet Preview Container */
+    /* Screen Adaptive Fluid Worksheet (No horizontal scroll blowout) */
     .worksheet-preview-container {
       background: #64748b;
-      padding: 12px;
-      overflow-x: auto;
+      padding: 10px;
       border-radius: 6px;
-    }
-    @media (max-width: 640px) {
-      .worksheet-preview-container { padding: 6px; }
+      width: 100%;
+      box-sizing: border-box;
     }
     .worksheet-page {
       background: #ffffff;
       width: 100%;
-      max-width: 820px;
-      min-height: auto;
-      padding: 24px;
+      max-width: 800px;
+      padding: 20px 16px;
       margin: 0 auto;
-      box-shadow: 0 3px 12px rgba(0,0,0,0.12);
+      box-shadow: 0 2px 8px rgba(0,0,0,0.1);
       color: #000;
       font-family: 'Merriweather', serif;
       border-radius: 4px;
-    }
-    @media (max-width: 640px) {
-      .worksheet-page { padding: 14px; }
+      box-sizing: border-box;
     }
     .score-badge {
       display: inline-block;
       background: #f1f5f9;
       border: 1px solid #cbd5e1;
-      padding: 1px 5px;
+      padding: 1px 4px;
       border-radius: 3px;
-      font-size: 8pt;
+      font-size: 7.5pt;
       font-weight: 700;
       float: right;
     }
-    .question-block { margin-bottom: 14px; font-size: 9.5pt; line-height: 1.5; }
-    .answer-line { border-bottom: 1px dashed #666; height: 20px; width: 100%; margin-top: 4px; display: block; }
+    .question-block { margin-bottom: 12px; font-size: 9pt; line-height: 1.45; word-break: break-word; }
+    .answer-line { border-bottom: 1px dashed #666; height: 18px; width: 100%; margin-top: 4px; display: block; }
 
     /* Media Cards Grid */
     .media-grid {
       display: grid;
-      grid-template-columns: repeat(auto-fill, minmax(240px, 1fr));
-      gap: 10px;
+      grid-template-columns: repeat(auto-fill, minmax(220px, 1fr));
+      gap: 8px;
     }
     .media-card {
       background: var(--surface);
       border: 1px solid var(--border);
-      border-radius: 6px;
-      padding: 12px;
+      border-radius: 5px;
+      padding: 10px;
       display: flex;
       flex-direction: column;
       justify-content: space-between;
     }
     .media-card-type {
-      font-size: 0.65rem;
+      font-size: 0.62rem;
       font-weight: 700;
       text-transform: uppercase;
-      padding: 2px 5px;
+      padding: 1px 4px;
       border-radius: 3px;
       display: inline-block;
-      margin-bottom: 5px;
+      margin-bottom: 4px;
     }
     .type-video { background: #fee2e2; color: #b91c1c; }
     .type-diksha { background: #e0f2fe; color: #0369a1; }
     .type-sim { background: #ede9fe; color: #6d28d9; }
-    .media-card h4 { font-size: 0.86rem; margin-bottom: 4px; }
-    .media-card p { font-size: 0.76rem; color: var(--text-muted); margin-bottom: 8px; }
+    .media-card h4 { font-size: 0.84rem; margin-bottom: 3px; }
+    .media-card p { font-size: 0.74rem; color: var(--text-muted); margin-bottom: 6px; }
 
-    /* Copiable Table Responsive Scroll */
+    /* Touch-Scrollable Table Container */
     .table-scroll-wrapper {
       width: 100%;
       overflow-x: auto;
-      margin: 12px 0;
+      margin: 10px 0;
       -webkit-overflow-scrolling: touch;
+      border: 1px solid var(--border);
+      border-radius: 4px;
     }
     .copiable-table {
       width: 100%;
-      min-width: 500px;
+      min-width: 480px;
       border-collapse: collapse;
-      font-size: 0.82rem;
+      font-size: 0.8rem;
       background: #fff;
     }
     .copiable-table th, .copiable-table td {
-      border: 1px solid #94a3b8;
+      border: 1px solid #cbd5e1;
       padding: 6px 8px;
       text-align: left;
       vertical-align: top;
@@ -673,20 +742,20 @@
     }
     .spinner-card {
       background: #ffffff;
-      padding: 20px 28px;
+      padding: 18px 24px;
       border-radius: 8px;
-      display: flex; flex-direction: column; align-items: center; gap: 12px;
+      display: flex; flex-direction: column; align-items: center; gap: 10px;
       box-shadow: 0 10px 25px rgba(0,0,0,0.2);
     }
     .yt-spinner-8px {
-      width: 42px; height: 42px;
-      border: 5px solid #e2e8f0;
-      border-top: 5px solid var(--primary);
+      width: 38px; height: 38px;
+      border: 4px solid #e2e8f0;
+      border-top: 4px solid var(--primary);
       border-radius: 50%;
       animation: yt-spin 0.8s linear infinite;
     }
     @keyframes yt-spin { 0% { transform: rotate(0deg); } 100% { transform: rotate(360deg); } }
-    .spinner-text { font-weight: 600; font-size: 0.84rem; color: var(--secondary); text-align: center; max-width: 260px; }
+    .spinner-text { font-weight: 600; font-size: 0.82rem; color: var(--secondary); text-align: center; max-width: 240px; }
 
     .modal-overlay {
       position: fixed;
@@ -696,26 +765,26 @@
       z-index: 100000;
     }
     .modal-box {
-      background: #fff; width: 92%; max-width: 420px;
+      background: #fff; width: 92%; max-width: 400px;
       border-radius: 8px; box-shadow: 0 10px 25px rgba(0,0,0,0.25);
       overflow: hidden;
     }
     .modal-header {
       background: var(--primary); color: #fff;
-      padding: 10px 14px; display: flex; justify-content: space-between; align-items: center;
+      padding: 9px 12px; display: flex; justify-content: space-between; align-items: center;
     }
-    .modal-header h4 { font-size: 0.88rem; font-weight: 600; }
+    .modal-header h4 { font-size: 0.86rem; font-weight: 600; }
     .modal-close { background: none; border: none; color: #fff; font-size: 1.2rem; cursor: pointer; }
-    .modal-body { padding: 14px; font-size: 0.84rem; line-height: 1.45; }
+    .modal-body { padding: 12px; font-size: 0.82rem; line-height: 1.45; }
     .modal-footer {
-      padding: 10px 14px; background: #f8fafc;
+      padding: 9px 12px; background: #f8fafc;
       display: flex; justify-content: flex-end; gap: 6px; border-top: 1px solid var(--border);
     }
 
     .toast-popup {
-      position: fixed; bottom: 16px; right: 16px;
-      background: #1e293b; color: #fff; padding: 8px 14px;
-      border-radius: 6px; font-size: 0.78rem; font-weight: 500;
+      position: fixed; bottom: 14px; right: 14px;
+      background: #1e293b; color: #fff; padding: 8px 12px;
+      border-radius: 5px; font-size: 0.76rem; font-weight: 500;
       box-shadow: 0 4px 12px rgba(0,0,0,0.2);
       z-index: 100001; opacity: 0; transform: translateY(10px);
       transition: all 0.2s ease-out;
@@ -816,12 +885,12 @@
   <div id="custom-modal-overlay" class="modal-overlay no-print" style="display:none;">
     <div class="modal-box">
       <div class="modal-header">
-        <h4 id="modal-title">Teacher Planner</h4>
+        <h4 id="modal-title">Teacher Studio</h4>
         <button id="modal-close-btn" class="modal-close">&times;</button>
       </div>
       <div class="modal-body" id="modal-message"></div>
       <div class="modal-footer">
-        <button id="modal-ok-btn" class="btn btn-primary">OK</button>
+        <button id="modal-ok-btn" class="btn btn-primary btn-sm">OK</button>
       </div>
     </div>
   </div>
@@ -834,32 +903,29 @@
         <button id="key-modal-close-btn" class="modal-close">&times;</button>
       </div>
       <div class="modal-body">
-        <p style="font-size:0.8rem; color:var(--text-muted); margin-bottom:10px;">
+        <p style="font-size:0.8rem; color:var(--text-muted); margin-bottom:8px;">
           Enter your free key from <a href="https://aistudio.google.com/apikey" target="_blank" rel="noopener" style="color:var(--primary); font-weight:700;">Google AI Studio ↗</a>.
-        </p>
-        <p style="font-size:0.72rem; color:#16a34a; margin-bottom:8px;">
-          🔒 Saved privately in your browser storage.
         </p>
         <input type="password" id="key-modal-input" class="form-control" placeholder="Paste AIza... or AQ... key">
       </div>
       <div class="modal-footer">
-        <button id="save-key-modal-btn" class="btn btn-primary">Save Key</button>
+        <button id="save-key-modal-btn" class="btn btn-primary btn-sm">Save Key</button>
       </div>
     </div>
   </div>
 
-  <!-- Floating Toast -->
+  <!-- Floating Toast Notification -->
   <div id="toast-popup" class="toast-popup no-print">Notification</div>
 
-  <!-- Responsive Header -->
+  <!-- Fluid Responsive Header -->
   <header class="app-header no-print">
     <div class="header-brand">
-      <button id="controls-toggle-btn" class="btn-header" title="Toggle Controls Drawer">
+      <button id="controls-toggle-btn" class="btn-header" title="Toggle Controls">
         <span id="toggle-icon">🔼</span> <span id="toggle-text">Controls</span>
       </button>
       <div class="brand-icon">🎓</div>
       <div class="header-titles">
-        <h1>Teacher Planner</h1>
+        <h1>Teacher Studio</h1>
         <span class="badge-tag">SCERT</span>
       </div>
     </div>
@@ -869,13 +935,22 @@
   </header>
 
   <!-- ==========================================================================
-       TOP COLLAPSIBLE CONTROLS DRAWER
+       TOP DRAWER (WITH MOBILE SEGMENTED CONTROL & DESKTOP GRID)
        ========================================================================== -->
   <section class="top-controls-panel no-print" id="top-controls-panel">
+    
+    <!-- Mobile Segmented Navigation Bar -->
+    <div class="mobile-drawer-nav">
+      <button class="mob-tab-btn active" data-drawer-tab="pacing">🎯 Pacing</button>
+      <button class="mob-tab-btn" data-drawer-tab="books">📚 Books <span id="mob-locked-pill" class="pill-mini">0/6</span></button>
+      <button class="mob-tab-btn" data-drawer-tab="generate">⚡ Action</button>
+      <button class="mob-tab-btn" data-drawer-tab="archive">💾 Saved <span id="mob-pkg-pill" class="pill-mini">0</span></button>
+    </div>
+
     <div class="top-controls-grid">
       
       <!-- Card 1: Pacing Target -->
-      <div class="ctrl-card">
+      <div class="ctrl-card mob-active" data-section="pacing">
         <h3><span>1. Pacing Target</span></h3>
         <div class="form-row">
           <div class="form-group half">
@@ -912,51 +987,81 @@
         </div>
       </div>
 
-      <!-- Card 2: 6 Locked Textbooks -->
-      <div class="ctrl-card">
+      <!-- Card 2: 6 Locked Textbooks (With Overflow-Proof File Pickers) -->
+      <div class="ctrl-card" data-section="books">
         <h3>
           <span>2. Locked Textbooks</span>
           <span style="font-size:0.65rem; color:var(--text-muted);" id="locked-count">0/6 Locked</span>
         </h3>
         
         <div class="matrix-grid">
+          <!-- Std 5 -->
           <div class="slot-card" id="card-5_part1" data-slot="5_part1">
             <div class="slot-header"><span class="slot-title">Std 5 - Pt 1</span><span class="slot-badge unlocked" id="badge-5_part1">Unlocked</span></div>
-            <div class="slot-file-name" id="name-5_part1">No PDF</div>
-            <div class="slot-actions"><input type="file" accept="application/pdf" class="slot-input" id="input-5_part1"><button class="btn btn-outline slot-btn" data-slot="5_part1">Lock</button></div>
+            <div class="slot-file-name" id="name-5_part1">No PDF Attached</div>
+            <div class="slot-actions">
+              <input type="file" accept="application/pdf" id="input-5_part1" data-slot="5_part1" class="slot-input-hidden" style="display:none;">
+              <label for="input-5_part1" class="btn-file-select" id="label-5_part1">📎 <span id="label-text-5_part1">Choose</span></label>
+              <button class="btn btn-outline slot-btn" data-slot="5_part1">Lock</button>
+            </div>
           </div>
+
           <div class="slot-card" id="card-5_part2" data-slot="5_part2">
             <div class="slot-header"><span class="slot-title">Std 5 - Pt 2</span><span class="slot-badge unlocked" id="badge-5_part2">Unlocked</span></div>
-            <div class="slot-file-name" id="name-5_part2">No PDF</div>
-            <div class="slot-actions"><input type="file" accept="application/pdf" class="slot-input" id="input-5_part2"><button class="btn btn-outline slot-btn" data-slot="5_part2">Lock</button></div>
+            <div class="slot-file-name" id="name-5_part2">No PDF Attached</div>
+            <div class="slot-actions">
+              <input type="file" accept="application/pdf" id="input-5_part2" data-slot="5_part2" class="slot-input-hidden" style="display:none;">
+              <label for="input-5_part2" class="btn-file-select" id="label-5_part2">📎 <span id="label-text-5_part2">Choose</span></label>
+              <button class="btn btn-outline slot-btn" data-slot="5_part2">Lock</button>
+            </div>
           </div>
 
+          <!-- Std 6 -->
           <div class="slot-card" id="card-6_part1" data-slot="6_part1">
             <div class="slot-header"><span class="slot-title">Std 6 - Pt 1</span><span class="slot-badge unlocked" id="badge-6_part1">Unlocked</span></div>
-            <div class="slot-file-name" id="name-6_part1">No PDF</div>
-            <div class="slot-actions"><input type="file" accept="application/pdf" class="slot-input" id="input-6_part1"><button class="btn btn-outline slot-btn" data-slot="6_part1">Lock</button></div>
-          </div>
-          <div class="slot-card" id="card-6_part2" data-slot="6_part2">
-            <div class="slot-header"><span class="slot-title">Std 6 - Pt 2</span><span class="slot-badge unlocked" id="badge-6_part2">Unlocked</span></div>
-            <div class="slot-file-name" id="name-6_part2">No PDF</div>
-            <div class="slot-actions"><input type="file" accept="application/pdf" class="slot-input" id="input-6_part2"><button class="btn btn-outline slot-btn" data-slot="6_part2">Lock</button></div>
+            <div class="slot-file-name" id="name-6_part1">No PDF Attached</div>
+            <div class="slot-actions">
+              <input type="file" accept="application/pdf" id="input-6_part1" data-slot="6_part1" class="slot-input-hidden" style="display:none;">
+              <label for="input-6_part1" class="btn-file-select" id="label-6_part1">📎 <span id="label-text-6_part1">Choose</span></label>
+              <button class="btn btn-outline slot-btn" data-slot="6_part1">Lock</button>
+            </div>
           </div>
 
+          <div class="slot-card" id="card-6_part2" data-slot="6_part2">
+            <div class="slot-header"><span class="slot-title">Std 6 - Pt 2</span><span class="slot-badge unlocked" id="badge-6_part2">Unlocked</span></div>
+            <div class="slot-file-name" id="name-6_part2">No PDF Attached</div>
+            <div class="slot-actions">
+              <input type="file" accept="application/pdf" id="input-6_part2" data-slot="6_part2" class="slot-input-hidden" style="display:none;">
+              <label for="input-6_part2" class="btn-file-select" id="label-6_part2">📎 <span id="label-text-6_part2">Choose</span></label>
+              <button class="btn btn-outline slot-btn" data-slot="6_part2">Lock</button>
+            </div>
+          </div>
+
+          <!-- Std 7 -->
           <div class="slot-card" id="card-7_part1" data-slot="7_part1">
             <div class="slot-header"><span class="slot-title">Std 7 - Pt 1</span><span class="slot-badge unlocked" id="badge-7_part1">Unlocked</span></div>
-            <div class="slot-file-name" id="name-7_part1">No PDF</div>
-            <div class="slot-actions"><input type="file" accept="application/pdf" class="slot-input" id="input-7_part1"><button class="btn btn-outline slot-btn" data-slot="7_part1">Lock</button></div>
+            <div class="slot-file-name" id="name-7_part1">No PDF Attached</div>
+            <div class="slot-actions">
+              <input type="file" accept="application/pdf" id="input-7_part1" data-slot="7_part1" class="slot-input-hidden" style="display:none;">
+              <label for="input-7_part1" class="btn-file-select" id="label-7_part1">📎 <span id="label-text-7_part1">Choose</span></label>
+              <button class="btn btn-outline slot-btn" data-slot="7_part1">Lock</button>
+            </div>
           </div>
+
           <div class="slot-card" id="card-7_part2" data-slot="7_part2">
             <div class="slot-header"><span class="slot-title">Std 7 - Pt 2</span><span class="slot-badge unlocked" id="badge-7_part2">Unlocked</span></div>
-            <div class="slot-file-name" id="name-7_part2">No PDF</div>
-            <div class="slot-actions"><input type="file" accept="application/pdf" class="slot-input" id="input-7_part2"><button class="btn btn-outline slot-btn" data-slot="7_part2">Lock</button></div>
+            <div class="slot-file-name" id="name-7_part2">No PDF Attached</div>
+            <div class="slot-actions">
+              <input type="file" accept="application/pdf" id="input-7_part2" data-slot="7_part2" class="slot-input-hidden" style="display:none;">
+              <label for="input-7_part2" class="btn-file-select" id="label-7_part2">📎 <span id="label-text-7_part2">Choose</span></label>
+              <button class="btn btn-outline slot-btn" data-slot="7_part2">Lock</button>
+            </div>
           </div>
         </div>
       </div>
 
       <!-- Card 3: Generator Control -->
-      <div class="ctrl-card">
+      <div class="ctrl-card" data-section="generate">
         <h3><span>3. Generator Control</span></h3>
         <div id="active-status-bar" class="active-status-bar">
           <span id="active-status-text">🔒 Active</span>
@@ -966,18 +1071,18 @@
           ⚡ Generate Package
         </button>
         <button id="reset-workspace-btn" class="btn btn-outline btn-block btn-sm">
-          🔄 Reset / New Setup
+          🔄 Reset Setup
         </button>
       </div>
 
       <!-- Card 4: Saved Packages -->
-      <div class="ctrl-card">
+      <div class="ctrl-card" data-section="archive">
         <h3>
           <span>4. Saved Packages</span>
           <span class="badge-tag" id="package-count-badge" style="background:#cbd5e1; color:#0f172a;">0</span>
         </h3>
         <div id="pkg-archive-list" class="pkg-archive-container">
-          <div style="font-size: 0.7rem; color: var(--text-muted); text-align: center; padding: 8px;">
+          <div style="font-size: 0.7rem; color: var(--text-muted); text-align: center; padding: 6px;">
             Syncing archive...
           </div>
         </div>
@@ -991,7 +1096,7 @@
        ========================================================================== -->
   <main class="canvas">
     
-    <!-- Responsive Tabs Navigation Bar -->
+    <!-- Touch-Friendly Tab Bar -->
     <nav class="canvas-tabs no-print">
       <button class="tab-btn active" data-tab="lesson-plan">
         <span class="tab-icon">📋</span> <span>Lesson Plan</span>
@@ -1061,7 +1166,7 @@
         </div>
 
         <div class="pane-header no-print">
-          <h2>Digital & Media Recommendations</h2>
+          <h2>Digital Media Recommendations</h2>
           <div class="pane-header-actions">
             <button class="btn btn-translate btn-sm translate-tab-btn" data-tab="tab-media-resources">🌐 മലയാളം</button>
             <button class="btn btn-secondary btn-sm copy-btn" data-target="media-resources-body">📋 Copy</button>
@@ -1244,7 +1349,7 @@
     const PRIMARY_MODEL = "gemini-3.6-flash";
     const FALLBACK_MODEL = "gemini-3.5-flash-lite";
 
-    /* IndexedDB Helper */
+    /* IndexedDB Database Helper */
     const idb = {
       db: null,
       async init() {
@@ -1343,6 +1448,8 @@
     const activeStatusText = document.getElementById('active-status-text');
     const pkgArchiveList = document.getElementById('pkg-archive-list');
     const packageCountBadge = document.getElementById('package-count-badge');
+    const mobPkgPill = document.getElementById('mob-pkg-pill');
+    const mobLockedPill = document.getElementById('mob-locked-pill');
     const lockedCountLabel = document.getElementById('locked-count');
     const shareWhatsAppBtn = document.getElementById('share-whatsapp-btn');
     const headerKeyBtn = document.getElementById('header-key-btn');
@@ -1361,6 +1468,18 @@
     const keyModalInput = document.getElementById('key-modal-input');
     const keyModalCloseBtn = document.getElementById('key-modal-close-btn');
     const saveKeyModalBtn = document.getElementById('save-key-modal-btn');
+
+    // Mobile Drawer Navigation (Segmented Switcher)
+    document.querySelectorAll('.mob-tab-btn').forEach(btn => {
+      btn.addEventListener('click', () => {
+        document.querySelectorAll('.mob-tab-btn').forEach(b => b.classList.remove('active'));
+        btn.classList.add('active');
+        const target = btn.dataset.drawerTab;
+        document.querySelectorAll('.ctrl-card').forEach(card => {
+          card.classList.toggle('mob-active', card.dataset.section === target);
+        });
+      });
+    });
 
     // Toggle Controls Drawer
     controlsToggleBtn.addEventListener('click', () => {
@@ -1491,7 +1610,7 @@
 
     document.querySelectorAll('.slot-card').forEach(card => {
       card.addEventListener('click', (e) => {
-        if (e.target.tagName === 'INPUT' || e.target.tagName === 'BUTTON') return;
+        if (e.target.tagName === 'INPUT' || e.target.tagName === 'BUTTON' || e.target.tagName === 'LABEL') return;
         const [cls, prt] = card.dataset.slot.split('_');
         state.currentClass = cls; state.currentPart = prt;
         classSelect.value = cls;
@@ -1534,14 +1653,16 @@
             state.slotsData[slotId] = data;
             const badge = document.getElementById(`badge-${slotId}`);
             const nameEl = document.getElementById(`name-${slotId}`);
-            const actionsEl = document.getElementById(`actions-${slotId}`);
+            const labelText = document.getElementById(`label-text-${slotId}`);
+
             if (badge) { badge.className = 'slot-badge locked'; badge.textContent = 'Locked'; }
             if (nameEl) { nameEl.textContent = `📄 ${data.fileName || 'Locked PDF'}`; nameEl.style.color = '#1b5e20'; }
-            if (actionsEl) { actionsEl.innerHTML = `<span style="font-size:0.62rem; color:#2e7d32;">🔒 Ready</span>`; }
+            if (labelText) { labelText.textContent = 'Locked'; }
           }
         } catch (err) {}
       }));
       if (lockedCountLabel) lockedCountLabel.textContent = `${lockedTotal}/6 Locked`;
+      if (mobLockedPill) mobLockedPill.textContent = `${lockedTotal}/6`;
     }
 
     function fileToBase64(file) {
@@ -1553,11 +1674,25 @@
       });
     }
 
+    // Custom File Select Feedback
+    document.querySelectorAll('.slot-input-hidden').forEach(input => {
+      input.addEventListener('change', (e) => {
+        const slotId = e.target.dataset.slot;
+        const file = e.target.files[0];
+        const nameEl = document.getElementById(`name-${slotId}`);
+        const labelText = document.getElementById(`label-text-${slotId}`);
+        if (file) {
+          if (nameEl) { nameEl.textContent = `📎 ${file.name}`; nameEl.style.color = '#0284c7'; }
+          if (labelText) { labelText.textContent = 'Selected'; }
+        }
+      });
+    });
+
     document.querySelectorAll('.slot-btn').forEach(btn => {
       btn.addEventListener('click', async (e) => {
         const slotId = e.target.dataset.slot;
         const file = document.getElementById(`input-${slotId}`)?.files[0];
-        if (!file) return showMessageBox(`Please select a PDF file to lock.`, "Missing File");
+        if (!file) return showMessageBox(`Please tap 'Choose' and select a PDF file first.`, "Missing File");
 
         showSpinner(`Reading and locking ${file.name}...`);
         try {
@@ -1609,7 +1744,7 @@
                      response.status === 429 || 
                      msgLower.includes("high demand") || 
                      msgLower.includes("overloaded") || 
-                     msgLower.includes("unavailable") ||
+                     msgLower.includes("unavailable") || 
                      msgLower.includes("quota");
 
       return { 
@@ -1746,7 +1881,7 @@ RETURN ONLY THE TRANSLATED HTML. DO NOT WRAP IN BACKTICKS OR MARKDOWN CODE BLOCK
     });
 
     // =========================================================================
-    // UNIVERSAL PRINT HANDLER (ALL TABS IN A4 PORTRAIT)
+    // UNIVERSAL PRINT HANDLER
     // =========================================================================
     document.querySelectorAll('.print-tab-btn').forEach(btn => {
       btn.addEventListener('click', () => {
@@ -1786,15 +1921,14 @@ RETURN ONLY THE TRANSLATED HTML. DO NOT WRAP IN BACKTICKS OR MARKDOWN CODE BLOCK
       // 1. Render Lesson Plan
       let coMasterListHtml = `
         <div class="co-box-master">
-          <strong>All Curricular Objectives (Unit Master — Comprehensive Coverage of Unit):</strong>
-          <ul style="margin-top:6px; padding-left:20px;">
+          <strong>All Curricular Objectives (Unit Master — Comprehensive Scope):</strong>
+          <ul style="margin-top:5px; padding-left:18px;">
       `;
       (pkgData.allUnitCurricularObjectives || []).forEach(co => {
         coMasterListHtml += `<li>${co}</li>`;
       });
       coMasterListHtml += `</ul></div>`;
 
-      // Wrap table in responsive touch scroll container
       let tableHtml = pkgData.lessonPlanTableHtml || '';
       if (!tableHtml.includes('table-scroll-wrapper')) {
         tableHtml = `<div class="table-scroll-wrapper">${tableHtml}</div>`;
@@ -1803,7 +1937,7 @@ RETURN ONLY THE TRANSLATED HTML. DO NOT WRAP IN BACKTICKS OR MARKDOWN CODE BLOCK
       document.getElementById('lesson-plan-body').innerHTML = `
         ${coMasterListHtml}
         ${pkgData.lessonPlanIntroHtml || ''}
-        <h3 style="margin:14px 0 6px 0; color:var(--primary); font-size:0.9rem;">35-Minute Period Breakdown:</h3>
+        <h3 style="margin:12px 0 5px 0; color:var(--primary); font-size:0.86rem;">35-Minute Period Breakdown:</h3>
         ${tableHtml}
       `;
       
@@ -1818,10 +1952,10 @@ RETURN ONLY THE TRANSLATED HTML. DO NOT WRAP IN BACKTICKS OR MARKDOWN CODE BLOCK
       
       // 5. Render Printable Worksheet
       document.getElementById('worksheet-render-area').innerHTML = `
-        <div class="ws-header" style="border-bottom: 2px solid #000; padding-bottom: 8px; margin-bottom: 12px; text-align: center;">
-          <h2 style="font-size: 12pt; text-transform: uppercase; margin-bottom: 3px;">Kerala SCERT Curriculum Worksheet</h2>
-          <div style="font-weight:bold; font-size:9pt; margin-top:2px;">Application-Level Evaluation Activity (Total: 5 Scores)</div>
-          <div class="ws-meta-grid" style="display: grid; grid-template-columns: 2fr 1fr 1fr; gap: 4px; font-size: 8.5pt; margin-top: 6px; text-align: left;">
+        <div class="ws-header" style="border-bottom: 2px solid #000; padding-bottom: 6px; margin-bottom: 10px; text-align: center;">
+          <h2 style="font-size: 11pt; text-transform: uppercase; margin-bottom: 2px;">Kerala SCERT Curriculum Worksheet</h2>
+          <div style="font-weight:bold; font-size:8.5pt; margin-top:2px;">Application-Level Evaluation Activity (Total: 5 Scores)</div>
+          <div class="ws-meta-grid" style="display: grid; grid-template-columns: 2fr 1fr 1fr; gap: 4px; font-size: 8pt; margin-top: 6px; text-align: left;">
             <div class="ws-meta-line" style="border-bottom: 1px dotted #444; padding-bottom: 2px;"><strong>Unit:</strong> ${unitTitle} (Day ${dayNumber}/${totalDays})</div>
             <div class="ws-meta-line" style="border-bottom: 1px dotted #444; padding-bottom: 2px;"><strong>Class:</strong> Std ${classId}</div>
             <div class="ws-meta-line" style="border-bottom: 1px dotted #444; padding-bottom: 2px;"><strong>Max Score:</strong> 5</div>
@@ -1835,7 +1969,7 @@ RETURN ONLY THE TRANSLATED HTML. DO NOT WRAP IN BACKTICKS OR MARKDOWN CODE BLOCK
 
       // 6. Render Answer Key
       document.getElementById('worksheet-answers-body').innerHTML = `
-        <div style="margin-bottom:12px; padding:8px 10px; background:#f1f5f9; border-radius:4px; font-size:0.82rem;">
+        <div style="margin-bottom:10px; padding:7px 9px; background:#f1f5f9; border-radius:4px; font-size:0.78rem;">
           <strong>Standard:</strong> SCERT Criteria | <strong>Total Score:</strong> 5 | <strong>Unit:</strong> ${unitTitle} (Day ${dayNumber}/${totalDays})
         </div>
         ${pkgData.worksheetAnswerKeyHtml || ''}
@@ -1874,7 +2008,7 @@ RETURN ONLY THE TRANSLATED HTML. DO NOT WRAP IN BACKTICKS OR MARKDOWN CODE BLOCK
       document.getElementById('blackboard-notes-body').innerHTML = `<div class="rendered-markdown"><p style="color: var(--text-muted); font-style: italic;">Application questions and solutions will render here.</p></div>`;
       document.getElementById('whatsapp-preview-area').innerHTML = `<div class="wa-bubble" style="color: var(--text-muted); font-style: italic;">Parent broadcast message will render here.</div>`;
       document.getElementById('whatsapp-summary-body').textContent = `Parent communication message will render here.`;
-      document.getElementById('worksheet-render-area').innerHTML = `<div style="text-align: center; color: #777; font-style: italic; padding: 30px;" class="no-print">Worksheet will render inside this container.</div>`;
+      document.getElementById('worksheet-render-area').innerHTML = `<div style="text-align: center; color: #777; font-style: italic; padding: 20px;" class="no-print">Worksheet will render inside this container.</div>`;
       document.getElementById('worksheet-answers-body').innerHTML = `<p style="color: var(--text-muted); font-style: italic;">Model answers will render here.</p>`;
 
       document.querySelectorAll('.pkg-card').forEach(c => c.classList.remove('active-loaded'));
@@ -1944,9 +2078,10 @@ RETURN ONLY THE TRANSLATED HTML. DO NOT WRAP IN BACKTICKS OR MARKDOWN CODE BLOCK
 
       const packages = Array.from(packageMap.values());
       packageCountBadge.textContent = packages.length;
+      if (mobPkgPill) mobPkgPill.textContent = packages.length;
 
       if (packages.length === 0) {
-        pkgArchiveList.innerHTML = `<div style="font-size: 0.7rem; color: var(--text-muted); text-align: center; padding: 6px;">No saved packages yet.</div>`;
+        pkgArchiveList.innerHTML = `<div style="font-size: 0.68rem; color: var(--text-muted); text-align: center; padding: 6px;">No saved packages yet.</div>`;
         return;
       }
 
