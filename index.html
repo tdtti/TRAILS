@@ -8,7 +8,7 @@
   <!-- Fonts -->
   <link rel="preconnect" href="https://fonts.googleapis.com">
   <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
-  <link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600;700&family=Merriweather:ital,wght@0,400;0,700;1,400&display=swap" rel="stylesheet">
+  <link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600;700&family=Merriweather:ital,wght@0,400;0,700;1,400&family=JetBrains+Mono:wght@400;500&display=swap" rel="stylesheet">
 
   <style>
     /* ==========================================================================
@@ -29,6 +29,8 @@
       --success: #16a34a;
       --media-blue: #0284c7;
       --whatsapp-green: #25d366;
+      --whatsapp-bg: #efeae2;
+      --whatsapp-bubble: #d9fdd3;
     }
 
     * { box-sizing: border-box; margin: 0; padding: 0; }
@@ -62,12 +64,23 @@
       border-radius: 4px;
       text-transform: uppercase;
     }
+    .header-controls { display: flex; align-items: center; gap: 8px; }
     .header-status {
       font-size: 0.75rem;
       background: rgba(255, 255, 255, 0.15);
       padding: 3px 10px;
       border-radius: 12px;
     }
+    .btn-key-settings {
+      background: rgba(255, 255, 255, 0.2);
+      color: #fff;
+      border: 1px solid rgba(255, 255, 255, 0.4);
+      padding: 3px 8px;
+      border-radius: 4px;
+      font-size: 0.75rem;
+      cursor: pointer;
+    }
+    .btn-key-settings:hover { background: rgba(255, 255, 255, 0.3); }
 
     /* Two-Column Responsive Layout */
     .app-container {
@@ -143,7 +156,9 @@
       border-radius: 4px;
       padding: 6px 8px;
       transition: all 0.15s;
+      cursor: pointer;
     }
+    .slot-card:hover { border-color: #94a3b8; }
     .slot-card.active-target {
       border: 2px solid var(--primary);
       background: var(--primary-light);
@@ -202,7 +217,7 @@
     .btn-sm { padding: 5px 10px; font-size: 0.75rem; }
     .btn:disabled { opacity: 0.5; cursor: not-allowed; }
 
-    /* Canvas Tabs */
+    /* Canvas Area */
     .canvas {
       flex: 1;
       display: flex;
@@ -252,7 +267,7 @@
     .pane-header h2 { font-size: 1rem; color: var(--text); font-weight: 700; }
     .pane-header-actions { display: flex; gap: 8px; align-items: center; }
 
-    /* Rendered Panels */
+    /* Rendered Markdown / Generic */
     .rendered-markdown {
       background: var(--surface);
       padding: 20px 24px;
@@ -278,83 +293,199 @@
     }
     .co-box-active strong { color: var(--primary); }
 
-    /* Copiable HTML Table for Word / LibreOffice */
-    .copiable-table {
-      width: 100%;
-      border-collapse: collapse;
-      margin: 14px 0;
-      font-size: 0.85rem;
-      background: #fff;
-    }
-    .copiable-table th, .copiable-table td {
-      border: 1px solid #94a3b8;
-      padding: 8px 10px;
-      text-align: left;
-      vertical-align: top;
-    }
-    .copiable-table th {
-      background-color: #f1f5f9;
-      font-weight: 700;
-      color: #1e293b;
-    }
-    .copiable-table tr:nth-child(even) {
-      background-color: #f8fafc;
-    }
-
-    /* Media Cards Grid */
-    .media-grid {
-      display: grid;
-      grid-template-columns: repeat(auto-fill, minmax(260px, 1fr));
-      gap: 12px;
-    }
-    .media-card {
-      background: var(--surface);
-      border: 1px solid var(--border);
-      border-radius: 6px;
-      padding: 14px;
+    /* Blackboard Notes UI */
+    .bb-container {
       display: flex;
       flex-direction: column;
+      gap: 16px;
+    }
+    .bb-card {
+      background: #ffffff;
+      border: 1px solid #cbd5e1;
+      border-radius: 8px;
+      box-shadow: 0 2px 6px rgba(0,0,0,0.04);
+      overflow: hidden;
+      transition: transform 0.15s, box-shadow 0.15s;
+    }
+    .bb-card:hover { box-shadow: 0 4px 12px rgba(0,0,0,0.08); }
+    .bb-card-header {
+      background: #f8fafc;
+      border-bottom: 1px solid #e2e8f0;
+      padding: 10px 16px;
+      display: flex;
       justify-content: space-between;
+      align-items: center;
+      flex-wrap: wrap;
+      gap: 6px;
     }
-    .media-card-type {
-      font-size: 0.68rem;
+    .bb-tag-group { display: flex; align-items: center; gap: 8px; }
+    .bb-num-pill {
+      background: var(--secondary);
+      color: #fff;
       font-weight: 700;
+      font-size: 0.72rem;
+      padding: 3px 8px;
+      border-radius: 12px;
       text-transform: uppercase;
-      padding: 2px 6px;
-      border-radius: 3px;
-      display: inline-block;
-      margin-bottom: 6px;
     }
-    .type-video { background: #fee2e2; color: #b91c1c; }
-    .type-diksha { background: #e0f2fe; color: #0369a1; }
-    .type-sim { background: #ede9fe; color: #6d28d9; }
+    .bb-cognitive-pill {
+      background: #ede9fe;
+      color: #5b21b6;
+      font-weight: 600;
+      font-size: 0.7rem;
+      padding: 3px 8px;
+      border-radius: 12px;
+      border: 1px solid #ddd6fe;
+    }
+    .bb-card-body { padding: 16px; display: flex; flex-direction: column; gap: 12px; }
+    
+    .bb-q-section {
+      background: #fefce8;
+      border: 1px solid #fef08a;
+      border-left: 4px solid #eab308;
+      border-radius: 6px;
+      padding: 12px 14px;
+    }
+    .bb-label-q {
+      font-size: 0.72rem;
+      font-weight: 700;
+      color: #854d0e;
+      text-transform: uppercase;
+      letter-spacing: 0.04em;
+      margin-bottom: 4px;
+      display: flex;
+      align-items: center;
+      gap: 5px;
+    }
+    .bb-text-q {
+      font-size: 0.95rem;
+      font-weight: 600;
+      color: #1e293b;
+      line-height: 1.45;
+    }
 
-    .media-card h4 { font-size: 0.9rem; margin-bottom: 4px; color: var(--text); }
-    .media-card p { font-size: 0.8rem; color: var(--text-muted); margin-bottom: 10px; line-height: 1.4; }
-    .media-card a {
-      display: inline-block;
-      text-align: center;
-      padding: 6px 10px;
-      text-decoration: none;
+    .bb-a-section {
+      background: #f0fdf4;
+      border: 1px solid #bbf7d0;
+      border-left: 4px solid var(--primary);
+      border-radius: 6px;
+      padding: 14px 16px;
+    }
+    .bb-label-a {
+      font-size: 0.72rem;
+      font-weight: 700;
+      color: var(--primary);
+      text-transform: uppercase;
+      letter-spacing: 0.04em;
+      margin-bottom: 6px;
+      display: flex;
+      align-items: center;
+      gap: 5px;
+    }
+    .bb-text-a {
+      font-size: 0.9rem;
+      color: #0f172a;
+      line-height: 1.6;
+    }
+    .bb-text-a p { margin-bottom: 6px; }
+    .bb-text-a ul { padding-left: 18px; margin: 6px 0; }
+
+    /* WhatsApp Broadcast UI */
+    .wa-view-switch {
+      display: flex;
+      gap: 6px;
+      background: #e2e8f0;
+      padding: 3px;
+      border-radius: 6px;
+      margin-bottom: 12px;
+    }
+    .wa-switch-btn {
+      flex: 1;
+      padding: 6px 12px;
+      border: none;
+      background: transparent;
       font-size: 0.78rem;
       font-weight: 600;
+      color: var(--text-muted);
       border-radius: 4px;
+      cursor: pointer;
+      transition: all 0.15s;
+    }
+    .wa-switch-btn.active {
+      background: #fff;
+      color: var(--primary);
+      box-shadow: 0 1px 3px rgba(0,0,0,0.1);
     }
 
-    /* WhatsApp Box */
-    .whatsapp-box {
-      background: #e7f8ec;
+    .wa-chat-canvas {
+      background: var(--whatsapp-bg);
+      background-image: radial-gradient(#d1c7b7 1px, transparent 1px);
+      background-size: 16px 16px;
+      border: 1px solid #d6cfc7;
+      border-radius: 10px;
       padding: 16px;
+      display: flex;
+      flex-direction: column;
+      gap: 12px;
+    }
+    .wa-bubble {
+      background: #ffffff;
       border-radius: 8px;
-      font-family: monospace;
-      white-space: pre-wrap;
-      border: 1px solid #bbf7d0;
+      padding: 12px 14px;
+      box-shadow: 0 1px 2px rgba(0,0,0,0.12);
+      position: relative;
       font-size: 0.88rem;
       line-height: 1.5;
-      color: #0f5132;
+    }
+    .wa-bubble-green {
+      background: var(--whatsapp-bubble);
+      border-left: 4px solid var(--whatsapp-green);
+    }
+    .wa-bubble-header {
+      font-size: 0.72rem;
+      font-weight: 700;
+      color: #047857;
+      text-transform: uppercase;
+      margin-bottom: 6px;
+      display: flex;
+      justify-content: space-between;
+      align-items: center;
+    }
+    .wa-qa-list {
+      display: flex;
+      flex-direction: column;
+      gap: 10px;
+      margin-top: 8px;
+    }
+    .wa-qa-card {
+      background: #ffffff;
+      border: 1px solid #cbd5e1;
+      border-radius: 6px;
+      padding: 10px 12px;
+    }
+    .wa-qa-q {
+      font-weight: 700;
+      color: #1e293b;
+      margin-bottom: 4px;
+      font-size: 0.86rem;
+    }
+    .wa-qa-a {
+      color: #334155;
+      font-size: 0.83rem;
+      background: #f8fafc;
+      padding: 8px 10px;
+      border-radius: 4px;
+      border-left: 3px solid var(--primary);
+    }
+    .wa-links-box {
+      margin-top: 8px;
+      padding: 8px 10px;
+      background: #f1f5f9;
+      border-radius: 6px;
+      font-size: 0.8rem;
     }
 
-    /* Worksheet Print Preview */
+    /* Worksheet & Print Layout */
     .worksheet-preview-container {
       background: #64748b;
       padding: 16px;
@@ -410,7 +541,70 @@
       display: block;
     }
 
-    /* YouTube 8px Spinner */
+    /* Media Cards */
+    .media-grid {
+      display: grid;
+      grid-template-columns: repeat(auto-fill, minmax(260px, 1fr));
+      gap: 12px;
+    }
+    .media-card {
+      background: var(--surface);
+      border: 1px solid var(--border);
+      border-radius: 6px;
+      padding: 14px;
+      display: flex;
+      flex-direction: column;
+      justify-content: space-between;
+    }
+    .media-card-type {
+      font-size: 0.68rem;
+      font-weight: 700;
+      text-transform: uppercase;
+      padding: 2px 6px;
+      border-radius: 3px;
+      display: inline-block;
+      margin-bottom: 6px;
+    }
+    .type-video { background: #fee2e2; color: #b91c1c; }
+    .type-diksha { background: #e0f2fe; color: #0369a1; }
+    .type-sim { background: #ede9fe; color: #6d28d9; }
+
+    .media-card h4 { font-size: 0.9rem; margin-bottom: 4px; color: var(--text); }
+    .media-card p { font-size: 0.8rem; color: var(--text-muted); margin-bottom: 10px; line-height: 1.4; }
+    .media-card a {
+      display: inline-block;
+      text-align: center;
+      padding: 6px 10px;
+      text-decoration: none;
+      font-size: 0.78rem;
+      font-weight: 600;
+      border-radius: 4px;
+    }
+
+    /* Copiable Table */
+    .copiable-table {
+      width: 100%;
+      border-collapse: collapse;
+      margin: 14px 0;
+      font-size: 0.85rem;
+      background: #fff;
+    }
+    .copiable-table th, .copiable-table td {
+      border: 1px solid #94a3b8;
+      padding: 8px 10px;
+      text-align: left;
+      vertical-align: top;
+    }
+    .copiable-table th {
+      background-color: #f1f5f9;
+      font-weight: 700;
+      color: #1e293b;
+    }
+    .copiable-table tr:nth-child(even) {
+      background-color: #f8fafc;
+    }
+
+    /* Spinner & Modal Overlays */
     .spinner-overlay {
       position: fixed;
       top: 0; left: 0; width: 100vw; height: 100vh;
@@ -443,9 +637,8 @@
       0% { transform: rotate(0deg); }
       100% { transform: rotate(360deg); }
     }
-    .spinner-text { font-weight: 600; font-size: 0.9rem; color: var(--secondary); }
+    .spinner-text { font-weight: 600; font-size: 0.9rem; color: var(--secondary); text-align: center; max-width: 280px; }
 
-    /* Custom In-App Modal Dialog */
     .modal-overlay {
       position: fixed;
       top: 0; left: 0; width: 100vw; height: 100vh;
@@ -458,7 +651,7 @@
     .modal-box {
       background: #fff;
       width: 90%;
-      max-width: 420px;
+      max-width: 440px;
       border-radius: 8px;
       box-shadow: 0 10px 30px rgba(0,0,0,0.25);
       overflow: hidden;
@@ -481,6 +674,7 @@
       background: #f8fafc;
       display: flex;
       justify-content: flex-end;
+      gap: 8px;
       border-top: 1px solid var(--border);
     }
 
@@ -510,9 +704,7 @@
       .worksheet-page { width: 100%; padding: 10mm; min-height: auto; }
     }
 
-    /* ==========================================================================
-       2. STRICT CSS PRINT MEDIA STYLESHEET (A4 PORTRAIT OPTIMIZATION)
-       ========================================================================== */
+    /* Print Stylesheet (A4 Portrait) */
     @media print {
       @page {
         size: A4 portrait;
@@ -527,7 +719,7 @@
         font-size: 10pt;
         line-height: 1.4;
       }
-      .no-print, header, nav, .sidebar, button, .pane-header, .spinner-overlay, .modal-overlay, .toast-popup {
+      .no-print, header, nav, .sidebar, button, .pane-header, .spinner-overlay, .modal-overlay, .toast-popup, .wa-view-switch {
         display: none !important;
       }
       .canvas, .tab-content-wrapper, .worksheet-preview-container {
@@ -537,13 +729,18 @@
         overflow: visible !important;
       }
       .tab-pane { display: none !important; }
-      #tab-worksheet-view { display: block !important; }
-      .worksheet-page {
+      .tab-pane.print-active { display: block !important; }
+      body:not(.has-print-active) #tab-worksheet-view { display: block !important; }
+
+      .worksheet-page, #worksheet-answers-body {
         width: 100% !important;
         min-height: auto !important;
         margin: 0 !important;
         padding: 0 !important;
         box-shadow: none !important;
+        border: none !important;
+        background: #fff !important;
+        color: #000 !important;
       }
       .question-block {
         page-break-inside: avoid !important;
@@ -551,17 +748,13 @@
         margin-bottom: 14px;
         padding-bottom: 4px;
       }
-      .page-break {
-        page-break-after: always !important;
-        break-after: always !important;
-      }
       .answer-line { border-bottom: 1px dashed #333333 !important; }
     }
   </style>
 </head>
 <body>
 
-  <!-- YouTube-Style 8px Spinner Overlay -->
+  <!-- Spinner Overlay -->
   <div id="spinner-overlay" class="spinner-overlay no-print" style="display:none;">
     <div class="spinner-card">
       <div class="yt-spinner-8px"></div>
@@ -569,7 +762,7 @@
     </div>
   </div>
 
-  <!-- Custom In-App Modal Dialog -->
+  <!-- General Notification Modal -->
   <div id="custom-modal-overlay" class="modal-overlay no-print" style="display:none;">
     <div class="modal-box">
       <div class="modal-header">
@@ -583,7 +776,29 @@
     </div>
   </div>
 
-  <!-- Floating Toast Notification -->
+  <!-- Dedicated API Key Modal -->
+  <div id="key-modal-overlay" class="modal-overlay no-print" style="display:none;">
+    <div class="modal-box">
+      <div class="modal-header">
+        <h4>🔑 Gemini API Key Settings</h4>
+        <button id="key-modal-close-btn" class="modal-close">&times;</button>
+      </div>
+      <div class="modal-body">
+        <p style="font-size:0.84rem; color:var(--text-muted); margin-bottom:12px;">
+          To use AI generation, enter your free Gemini key from <a href="https://aistudio.google.com/apikey" target="_blank" rel="noopener" style="color:var(--primary); font-weight:700;">Google AI Studio ↗</a>.
+        </p>
+        <p style="font-size:0.75rem; color:#16a34a; margin-bottom:8px;">
+          🔒 Your key stays strictly in your browser's private storage. It is never saved to GitHub.
+        </p>
+        <input type="password" id="key-modal-input" class="form-control" placeholder="Paste your AIza... or AQ... key here">
+      </div>
+      <div class="modal-footer">
+        <button id="save-key-modal-btn" class="btn btn-primary">Save Key & Proceed</button>
+      </div>
+    </div>
+  </div>
+
+  <!-- Floating Toast -->
   <div id="toast-popup" class="toast-popup no-print">Notification</div>
 
   <!-- Top Header Navigation -->
@@ -592,18 +807,19 @@
       <span class="badge">Kerala SCERT</span>
       <h1>Smart Teacher Planner & Worksheet Studio</h1>
     </div>
-    <div class="header-status">
-      <span>● Standards 5, 6, 7 (Part 1 & 2)</span>
+    <div class="header-controls">
+      <span class="header-status">Standards 5, 6, 7 (Part 1 & 2)</span>
+      <button id="header-key-btn" class="btn-key-settings" title="Change Gemini API Key">🔑 Key</button>
     </div>
   </header>
 
-  <!-- Main Application Container -->
+  <!-- Main Container -->
   <div class="app-container">
 
-    <!-- Left Sidebar: Configuration & 6-Slot Master Repository -->
+    <!-- Left Sidebar -->
     <aside class="sidebar no-print">
       
-      <!-- Curriculum Selection & Pacing -->
+      <!-- Pacing Settings -->
       <section class="card">
         <h3>1. Instructional Pacing Target</h3>
         <div class="form-group">
@@ -645,7 +861,7 @@
         </div>
       </section>
 
-      <!-- 6-Slot Master Repository Matrix -->
+      <!-- 6-Slot Master Matrix -->
       <section class="card">
         <h3>
           <span>2. Locked Textbooks (6 Core Slots)</span>
@@ -730,7 +946,7 @@
         </div>
       </section>
 
-      <!-- Primary Action Button -->
+      <!-- Generate Button -->
       <section class="card">
         <button id="generate-btn" class="btn btn-primary btn-block" style="padding: 10px;">
           ⚡ Generate Lesson Package
@@ -741,7 +957,7 @@
     <!-- Right Workspace Area -->
     <main class="canvas">
       
-      <!-- Canvas Tabs -->
+      <!-- Navigation Tabs -->
       <nav class="canvas-tabs no-print">
         <button class="tab-btn active" data-tab="lesson-plan">📋 35-Min Lesson Plan</button>
         <button class="tab-btn" data-tab="media-resources">🌐 Digital & Internet Media</button>
@@ -764,10 +980,11 @@
           </div>
         </section>
 
-        <!-- Tab 2: Digital & Internet Media -->
+        <!-- Tab 2: Digital Media -->
         <section id="tab-media-resources" class="tab-pane">
           <div class="pane-header no-print">
             <h2>Digital & Internet Media Recommendations (DIKSHA / YouTube / KITE Victers)</h2>
+            <button class="btn btn-secondary btn-sm copy-btn" data-target="media-resources-body">Copy Media Resources</button>
           </div>
           <div id="media-resources-body">
             <p style="color: var(--text-muted); font-style: italic;">Curated media, simulations, and search keywords will render here.</p>
@@ -777,31 +994,63 @@
         <!-- Tab 3: Blackboard Notes -->
         <section id="tab-blackboard-notes" class="tab-pane">
           <div class="pane-header no-print">
-            <h2>Blackboard Notes (Strict Application-Level Q&A Only)</h2>
-            <button class="btn btn-secondary btn-sm copy-btn" data-target="blackboard-notes-body">Copy Notes</button>
+            <div>
+              <h2>Blackboard Notes (Strict Application-Level Q&A Only)</h2>
+              <span style="font-size:0.75rem; color:var(--text-muted);">Organized for clear, separate teacher board notes and student notebooks.</span>
+            </div>
+            <button class="btn btn-secondary btn-sm" id="copy-all-bb-btn">📋 Copy All Blackboard Notes</button>
           </div>
-          <div id="blackboard-notes-body" class="rendered-markdown">
-            <p style="color: var(--text-muted); font-style: italic;">Application-level questions and answers for student notebooks will render here.</p>
+          <div id="blackboard-notes-body">
+            <div class="rendered-markdown">
+              <p style="color: var(--text-muted); font-style: italic;">Application-level questions and solutions structured for classroom board work will render here.</p>
+            </div>
           </div>
         </section>
 
         <!-- Tab 4: WhatsApp Broadcast -->
         <section id="tab-whatsapp-summary" class="tab-pane">
           <div class="pane-header no-print">
-            <h2>Daily WhatsApp Parent Communication Broadcast (With Blackboard Q&As)</h2>
+            <div>
+              <h2>Daily WhatsApp Parent Communication Broadcast</h2>
+              <span style="font-size:0.75rem; color:var(--text-muted);">Separated recap, distinct Q&A cards, and home study links.</span>
+            </div>
             <div class="pane-header-actions">
               <button id="share-whatsapp-btn" class="btn btn-whatsapp btn-sm">📲 Share to WhatsApp Group</button>
-              <button class="btn btn-secondary btn-sm copy-btn" data-target="whatsapp-summary-body">Copy Text</button>
+              <button class="btn btn-secondary btn-sm" id="copy-whatsapp-text-btn">Copy Text</button>
             </div>
           </div>
-          <div id="whatsapp-summary-body" class="whatsapp-box">Parent communication message will render here.</div>
+
+          <!-- View Switcher -->
+          <div class="wa-view-switch no-print">
+            <button class="wa-switch-btn active" id="wa-btn-chat">📱 Styled WhatsApp Card View</button>
+            <button class="wa-switch-btn" id="wa-btn-raw">📋 Raw Plaintext (Copy-Ready)</button>
+          </div>
+
+          <!-- Card/Chat Styled View -->
+          <div id="wa-styled-container">
+            <div class="wa-chat-canvas" id="whatsapp-preview-area">
+              <div class="wa-bubble" style="color: var(--text-muted); font-style: italic;">
+                Parent broadcast message will render here in structured conversational card layout.
+              </div>
+            </div>
+          </div>
+
+          <!-- Raw Plaintext View -->
+          <div id="wa-raw-container" style="display:none;">
+            <div id="whatsapp-summary-body" class="whatsapp-box" style="background:#fff; border:1px solid #cbd5e1; color:#1e293b;">
+              Parent communication message will render here.
+            </div>
+          </div>
         </section>
 
-        <!-- Tab 5: Printable Worksheet (5 Scores) -->
+        <!-- Tab 5: Printable Worksheet -->
         <section id="tab-worksheet-view" class="tab-pane">
           <div class="pane-header no-print">
             <h2>A4 Portrait Printable Worksheet (Total: 5 Scores)</h2>
-            <button id="print-btn" class="btn btn-success btn-sm">🖨️ Print / Save to PDF</button>
+            <div class="pane-header-actions">
+              <button class="btn btn-secondary btn-sm copy-btn" data-target="worksheet-render-area">Copy Worksheet</button>
+              <button id="print-btn" class="btn btn-success btn-sm">🖨️ Print / Save to PDF</button>
+            </div>
           </div>
           
           <div class="worksheet-preview-container">
@@ -813,11 +1062,14 @@
           </div>
         </section>
 
-        <!-- Tab 6: Worksheet Answer Key -->
+        <!-- Tab 6: Worksheet Answers -->
         <section id="tab-worksheet-answers" class="tab-pane">
           <div class="pane-header no-print">
             <h2>Worksheet Answer Key & Scoring Guide (Total: 5 Scores)</h2>
-            <button class="btn btn-secondary btn-sm copy-btn" data-target="worksheet-answers-body">Copy Answer Key</button>
+            <div class="pane-header-actions">
+              <button class="btn btn-secondary btn-sm copy-btn" data-target="worksheet-answers-body">Copy Answer Key</button>
+              <button id="print-answers-btn" class="btn btn-success btn-sm">🖨️ Print / Save to PDF</button>
+            </div>
           </div>
           <div id="worksheet-answers-body" class="rendered-markdown">
             <p style="color: var(--text-muted); font-style: italic;">Model answers and scoring breakdown will render here.</p>
@@ -830,36 +1082,81 @@
   </div>
 
   <!-- ==========================================================================
-       3. MODULAR JAVASCRIPT: ACTIVE GEMINI 3 SERIES MULTI-MODEL FAILOVER
+       3. MODULAR JAVASCRIPT ENGINE (SANITIZED & GITHUB-READY)
        ========================================================================== -->
   <script type="module">
     import { initializeApp } from "https://www.gstatic.com/firebasejs/10.13.0/firebase-app.js";
     import { getFirestore, doc, getDoc, setDoc } from "https://www.gstatic.com/firebasejs/10.13.0/firebase-firestore.js";
     import { getAuth, signInAnonymously } from "https://www.gstatic.com/firebasejs/10.13.0/firebase-auth.js";
 
-    // Configuration
-    const GEMINI_API_KEY = "AQ.Ab8RN6Lsr8BiJBFziW8c13d-k2HgEq2ur9FQUy3ea93IUJRsrA";
-
+    /* =========================================================================
+       FIREBASE CLIENT CONFIGURATION
+       ========================================================================= */
     const firebaseConfig = {
-      apiKey: "AIzaSyCYbDtRF3yGLfL-43LnrhsprykbDq5x_yM",
-      authDomain: "scert-teacher-planner.firebaseapp.com",
-      projectId: "scert-teacher-planner",
-      storageBucket: "scert-teacher-planner.firebasestorage.app",
-      messagingSenderId: "44796509095",
-      appId: "1:44796509095:web:b07abddc4899ba247a5482",
-      measurementId: "G-ZPJCZZG56J"
+      apiKey: "AIzaSyAizutSlc9XnjMBVoG3AGRlwNp6ojeanTo",
+      authDomain: "scert-383dd.firebaseapp.com",
+      projectId: "scert-383dd",
+      storageBucket: "scert-383dd.firebasestorage.app",
+      messagingSenderId: "760875235627",
+      appId: "1:760875235627:web:388c1251b5cf82293bed6e",
+      measurementId: "G-5B7SB0HHN6"
     };
 
-    // Initialize Firebase
+    /* =========================================================================
+       DYNAMIC GEMINI KEY MANAGEMENT (NO KEYS STORED IN SOURCE CODE)
+       ========================================================================= */
+    let GEMINI_API_KEY = localStorage.getItem('SCERT_GEMINI_KEY') || "";
+    const PRIMARY_MODEL = "gemini-3.6-flash";
+    const FALLBACK_MODEL = "gemini-3.5-flash-lite";
+
+    /* =========================================================================
+       INDEXED-DB LOCAL STORAGE (Keeps locked PDFs across page reloads)
+       ========================================================================= */
+    const idb = {
+      db: null,
+      async init() {
+        return new Promise((resolve) => {
+          const req = indexedDB.open("SCERT_PDF_CACHE", 1);
+          req.onupgradeneeded = () => req.result.createObjectStore("books");
+          req.onsuccess = () => { this.db = req.result; resolve(); };
+          req.onerror = () => resolve();
+        });
+      },
+      async set(key, val) {
+        if (!this.db) await this.init();
+        return new Promise((resolve) => {
+          if (!this.db) return resolve();
+          const tx = this.db.transaction("books", "readwrite");
+          tx.objectStore("books").put(val, key);
+          tx.oncomplete = resolve;
+        });
+      },
+      async get(key) {
+        if (!this.db) await this.init();
+        return new Promise((resolve) => {
+          if (!this.db) return resolve(null);
+          const tx = this.db.transaction("books", "readonly");
+          const req = tx.objectStore("books").get(key);
+          req.onsuccess = () => resolve(req.result);
+          req.onerror = () => resolve(null);
+        });
+      }
+    };
+
+    // Firebase Safe Initialization
     let db = null;
     let auth = null;
-    try {
-      const app = initializeApp(firebaseConfig);
-      db = getFirestore(app);
-      auth = getAuth(app);
-      signInAnonymously(auth).catch(() => {});
-    } catch (e) {
-      console.warn("Firebase Init:", e.message);
+    const isFirebaseConfigured = firebaseConfig.apiKey && !firebaseConfig.apiKey.includes("YOUR_FIREBASE");
+
+    if (isFirebaseConfigured) {
+      try {
+        const app = initializeApp(firebaseConfig);
+        db = getFirestore(app);
+        auth = getAuth(app);
+        signInAnonymously(auth).catch(() => {});
+      } catch (e) {
+        console.warn("Firebase Init bypassed:", e.message);
+      }
     }
 
     const ALL_SLOTS = ['5_part1', '5_part2', '6_part1', '6_part2', '7_part1', '7_part2'];
@@ -869,7 +1166,8 @@
       currentClass: '5',
       currentPart: 'part1',
       slotsData: {},
-      slotsBase64: {}
+      slotsBase64: {},
+      currentPackage: null
     };
 
     // DOM Elements
@@ -877,8 +1175,10 @@
     const partRadios = document.querySelectorAll('input[name="textbook-part"]');
     const generateBtn = document.getElementById('generate-btn');
     const printBtn = document.getElementById('print-btn');
+    const printAnswersBtn = document.getElementById('print-answers-btn');
     const lockedCountLabel = document.getElementById('locked-count');
     const shareWhatsAppBtn = document.getElementById('share-whatsapp-btn');
+    const headerKeyBtn = document.getElementById('header-key-btn');
     
     // UI Helpers
     const spinnerOverlay = document.getElementById('spinner-overlay');
@@ -889,6 +1189,12 @@
     const modalCloseBtn = document.getElementById('modal-close-btn');
     const modalOkBtn = document.getElementById('modal-ok-btn');
     const toastPopup = document.getElementById('toast-popup');
+
+    // Key Recovery Modal Elements
+    const keyModalOverlay = document.getElementById('key-modal-overlay');
+    const keyModalInput = document.getElementById('key-modal-input');
+    const keyModalCloseBtn = document.getElementById('key-modal-close-btn');
+    const saveKeyModalBtn = document.getElementById('save-key-modal-btn');
 
     function showSpinner(text = "Processing...") {
       spinnerText.textContent = text;
@@ -912,43 +1218,100 @@
     modalCloseBtn.addEventListener('click', hideMessageBox);
     modalOkBtn.addEventListener('click', hideMessageBox);
 
+    function showKeyModal() {
+      keyModalInput.value = GEMINI_API_KEY;
+      keyModalOverlay.style.display = "flex";
+      keyModalInput.focus();
+    }
+
+    function hideKeyModal() {
+      keyModalOverlay.style.display = "none";
+    }
+
+    headerKeyBtn.addEventListener('click', showKeyModal);
+    keyModalCloseBtn.addEventListener('click', hideKeyModal);
+
+    saveKeyModalBtn.addEventListener('click', () => {
+      const val = keyModalInput.value.trim();
+      if (!val) return alert("Please enter a valid Google AI Studio API key.");
+      localStorage.setItem('SCERT_GEMINI_KEY', val);
+      GEMINI_API_KEY = val;
+      hideKeyModal();
+      showToast("Gemini API Key saved securely in your browser!");
+    });
+
     function showToast(message) {
       toastPopup.textContent = message;
       toastPopup.classList.add('visible');
       setTimeout(() => toastPopup.classList.remove('visible'), 2400);
     }
 
-    // Dual-Engine Clipboard (Bypasses Permissions-Policy Blocks)
     function copyText(text, successMsg = "Copied to Clipboard!") {
       if (!text) return;
-
-      function execCommandFallback(str) {
-        const textarea = document.createElement("textarea");
-        textarea.value = str;
-        textarea.style.position = "fixed";
-        textarea.style.left = "-9999px";
-        textarea.style.top = "-9999px";
-        document.body.appendChild(textarea);
-        textarea.focus();
-        textarea.select();
-        try {
-          document.execCommand('copy');
-          showToast(successMsg);
-        } catch (err) {
-          console.warn("Fallback copy failed", err);
-          showToast("Copying blocked by environment.");
-        }
-        document.body.removeChild(textarea);
-      }
-
       if (navigator.clipboard && window.isSecureContext) {
         navigator.clipboard.writeText(text)
           .then(() => showToast(successMsg))
-          .catch(() => execCommandFallback(text));
+          .catch(() => execFallback(text, successMsg));
       } else {
-        execCommandFallback(text);
+        execFallback(text, successMsg);
       }
     }
+
+    function execFallback(str, successMsg) {
+      const ta = document.createElement("textarea");
+      ta.value = str;
+      ta.style.position = "fixed";
+      ta.style.left = "-9999px";
+      document.body.appendChild(ta);
+      ta.focus();
+      ta.select();
+      try {
+        document.execCommand('copy');
+        showToast(successMsg);
+      } catch (e) {
+        showToast("Copying not permitted in this context.");
+      }
+      document.body.removeChild(ta);
+    }
+
+    // WhatsApp View Switcher
+    const waBtnChat = document.getElementById('wa-btn-chat');
+    const waBtnRaw = document.getElementById('wa-btn-raw');
+    const waStyledContainer = document.getElementById('wa-styled-container');
+    const waRawContainer = document.getElementById('wa-raw-container');
+
+    waBtnChat.addEventListener('click', () => {
+      waBtnChat.classList.add('active');
+      waBtnRaw.classList.remove('active');
+      waStyledContainer.style.display = 'block';
+      waRawContainer.style.display = 'none';
+    });
+
+    waBtnRaw.addEventListener('click', () => {
+      waBtnRaw.classList.add('active');
+      waBtnChat.classList.remove('active');
+      waStyledContainer.style.display = 'none';
+      waRawContainer.style.display = 'block';
+    });
+
+    // Copy Blackboard All Notes
+    document.getElementById('copy-all-bb-btn').addEventListener('click', () => {
+      if (!state.currentPackage?.blackboardQa?.length) {
+        const text = document.getElementById('blackboard-notes-body').innerText;
+        return copyText(text, "Copied Blackboard Notes!");
+      }
+      let combined = `*BLACKBOARD APPLICATION NOTES*\n\n`;
+      state.currentPackage.blackboardQa.forEach((item, idx) => {
+        combined += `Q${idx + 1}: ${item.question}\nAns: ${item.answer}\n\n`;
+      });
+      copyText(combined.trim(), "Copied All Blackboard Q&As!");
+    });
+
+    // Copy WhatsApp Broadcast Text
+    document.getElementById('copy-whatsapp-text-btn').addEventListener('click', () => {
+      const text = document.getElementById('whatsapp-summary-body').textContent.trim();
+      copyText(text, "Copied WhatsApp Broadcast Text!");
+    });
 
     // WhatsApp Group Sharing
     shareWhatsAppBtn.addEventListener('click', () => {
@@ -966,28 +1329,67 @@
       ALL_SLOTS.forEach(slotId => {
         const card = document.getElementById(`card-${slotId}`);
         if (card) {
-          if (slotId === targetSlot) {
-            card.classList.add('active-target');
-          } else {
-            card.classList.remove('active-target');
-          }
+          card.classList.toggle('active-target', slotId === targetSlot);
         }
       });
     }
 
-    // Parallel sync for all 6 slots (Zero loops)
+    // Bidirectional Slot Selection
+    document.querySelectorAll('.slot-card').forEach(card => {
+      card.addEventListener('click', (e) => {
+        if (e.target.tagName === 'INPUT' || e.target.tagName === 'BUTTON') return;
+        const [cls, prt] = card.dataset.slot.split('_');
+        state.currentClass = cls;
+        state.currentPart = prt;
+        classSelect.value = cls;
+        partRadios.forEach(r => r.checked = (r.value === prt));
+        highlightActiveTarget();
+      });
+    });
+
+    // Network timeout wrapper
+    const withTimeout = (promise, ms = 2000) => 
+      Promise.race([
+        promise,
+        new Promise((_, reject) => setTimeout(() => reject(new Error("Network timeout")), ms))
+      ]);
+
+    // Parallel sync across Firestore & local IndexedDB
     async function syncAllSlots() {
       highlightActiveTarget();
-      if (!db) return;
-
       let lockedTotal = 0;
 
-      const syncTasks = ALL_SLOTS.map(async (slotId) => {
+      await Promise.all(ALL_SLOTS.map(async (slotId) => {
         try {
-          const snapshot = await getDoc(doc(db, 'curriculum_books', slotId));
-          if (snapshot.exists() && snapshot.data().isLocked) {
+          let data = null;
+
+          if (db) {
+            try {
+              const snap = await withTimeout(getDoc(doc(db, 'curriculum_books', slotId)), 2000);
+              if (snap.exists() && snap.data().isLocked) {
+                data = snap.data();
+              }
+            } catch (netErr) {
+              console.warn(`Cloud check bypassed for ${slotId}`);
+            }
+          }
+
+          // Restore from IndexedDB
+          const cached = await idb.get(slotId);
+          if (cached) {
+            const base64Str = typeof cached === 'string' ? cached : cached.base64;
+            state.slotsBase64[slotId] = base64Str;
+            if (!data) {
+              data = { 
+                fileName: (typeof cached === 'object' && cached.fileName) ? cached.fileName : "Locally Cached PDF", 
+                fileSize: (typeof cached === 'object' && cached.fileSize) ? cached.fileSize : "Standard",
+                isLocked: true 
+              };
+            }
+          }
+
+          if (data && (data.isLocked || cached)) {
             lockedTotal++;
-            const data = snapshot.data();
             state.slotsData[slotId] = data;
 
             const badge = document.getElementById(`badge-${slotId}`);
@@ -999,20 +1401,18 @@
               badge.textContent = 'Verified & Locked';
             }
             if (nameEl) {
-              nameEl.textContent = `📄 ${data.fileName || 'Locked SCERT PDF'} (${data.fileSize || 'Standard'})`;
+              nameEl.textContent = `📄 ${data.fileName || 'Locked SCERT PDF'}`;
               nameEl.style.color = '#1b5e20';
               nameEl.style.fontWeight = '600';
             }
             if (actionsEl) {
-              actionsEl.innerHTML = `<span style="font-size:0.7rem; color:#2e7d32;">🔒 Immutable</span>`;
+              actionsEl.innerHTML = `<span style="font-size:0.7rem; color:#2e7d32;">🔒 Ready</span>`;
             }
           }
         } catch (err) {
           console.warn(`Sync check for ${slotId}:`, err.message);
         }
-      });
-
-      await Promise.all(syncTasks);
+      }));
 
       if (lockedCountLabel) {
         lockedCountLabel.textContent = `${lockedTotal}/6 Locked`;
@@ -1028,7 +1428,7 @@
       });
     }
 
-    // Lock Slot Button Handler
+    // Lock Slot Button Handler (Cloud + Offline-Safe)
     document.querySelectorAll('.slot-btn').forEach(btn => {
       btn.addEventListener('click', async (e) => {
         const slotId = e.target.dataset.slot;
@@ -1043,25 +1443,39 @@
 
         try {
           const base64Data = await fileToBase64(file);
+          const fileSizeFormatted = (file.size / (1024 * 1024)).toFixed(2) + " MB";
+          
           state.slotsBase64[slotId] = base64Data;
+          await idb.set(slotId, {
+            base64: base64Data,
+            fileName: file.name,
+            fileSize: fileSizeFormatted
+          });
 
           const [cls, prt] = slotId.split('_');
-
-          if (auth && !auth.currentUser) {
-            await signInAnonymously(auth).catch(() => {});
-          }
+          state.slotsData[slotId] = {
+            fileName: file.name,
+            fileSize: fileSizeFormatted,
+            isLocked: true
+          };
 
           if (db) {
-            await setDoc(doc(db, 'curriculum_books', slotId), {
-              slotId: slotId,
-              classId: cls,
-              partId: prt,
-              fileName: file.name,
-              fileSize: (file.size / (1024 * 1024)).toFixed(2) + " MB",
-              fileUri: "inline_base64",
-              isLocked: true,
-              uploadedAt: new Date().toISOString()
-            });
+            try {
+              if (auth && !auth.currentUser) {
+                await signInAnonymously(auth).catch(() => {});
+              }
+              await setDoc(doc(db, 'curriculum_books', slotId), {
+                slotId: slotId,
+                classId: cls,
+                partId: prt,
+                fileName: file.name,
+                fileSize: fileSizeFormatted,
+                isLocked: true,
+                uploadedAt: new Date().toISOString()
+              });
+            } catch (cloudErr) {
+              console.warn(`Firestore sync skipped (${cloudErr.message}). Saved locally in IndexedDB.`);
+            }
           }
 
           hideSpinner();
@@ -1070,8 +1484,7 @@
         } catch (err) {
           hideSpinner();
           console.error(err);
-          showMessageBox(`Locking updated locally: ${err.message}`, "Local Mode Notice");
-          syncAllSlots();
+          showMessageBox(`Failed to read file: ${err.message}`, "Error");
         }
       });
     });
@@ -1089,99 +1502,79 @@
     });
 
     // =========================================================================
-    // ACTIVE GOOGLE GEMINI 3 SERIES MULTI-MODEL ENGINE (Sandbox Safe)
+    // API CALLS & ERROR HANDLING (Uses x-goog-api-key header for AQ. / AIza)
     // =========================================================================
-    const ACTIVE_MODELS = [
-      "gemini-3.6-flash",       // Primary High-Speed Workhorse
-      "gemini-3.5-flash",       // Active 3-Series Backup
-      "gemini-3.5-flash-lite",  // Ultra-Fast Independent Quota Pool
-      "gemini-3.1-flash-lite",  // Secondary Light Pool
-      "gemini-3.1-pro-preview"  // High-Capacity Reasoning
-    ];
-
     const delay = (ms) => new Promise((resolve) => setTimeout(resolve, ms));
 
-    async function callSingleModel(modelName, payload) {
-      const controller = new AbortController();
-      const timeoutId = setTimeout(() => controller.abort(), 55000);
+    async function callGemini(modelName, payload) {
+      const endpoint = `https://generativelanguage.googleapis.com/v1beta/models/${modelName}:generateContent`;
+      const response = await fetch(endpoint, {
+        method: "POST",
+        headers: { 
+          "Content-Type": "application/json",
+          "x-goog-api-key": GEMINI_API_KEY 
+        },
+        body: JSON.stringify(payload)
+      });
 
-      try {
-        const endpoint = `https://generativelanguage.googleapis.com/v1beta/models/${modelName}:generateContent`;
-        const response = await fetch(endpoint, {
-          method: "POST",
-          headers: {
-            "Content-Type": "application/json",
-            "x-goog-api-key": GEMINI_API_KEY
-          },
-          body: JSON.stringify(payload),
-          signal: controller.signal
-        });
-
-        clearTimeout(timeoutId);
-        const data = await response.json();
-
-        if (response.ok && data.candidates && data.candidates[0]?.content) {
-          return { success: true, data: data, model: modelName };
-        }
-
-        const errorMsg = data.error?.message || `HTTP ${response.status}`;
-        return { success: false, error: `${modelName}: ${errorMsg}` };
-      } catch (err) {
-        clearTimeout(timeoutId);
-        if (err.name === 'AbortError') {
-          return { success: false, error: `${modelName}: Timed out (55s)` };
-        }
-        return { success: false, error: `${modelName}: ${err.message}` };
-      }
-    }
-
-    // Recursive failover across separate active quota pools
-    async function fetchWithModelFailover(payload, modelIndex = 0, errorHistory = []) {
-      if (modelIndex >= ACTIVE_MODELS.length) {
-        const match = errorHistory.join(" ").match(/retry in ([0-9.]+)s/i);
-        const waitSec = match ? Math.ceil(parseFloat(match[1])) : 35;
-        throw new Error(`Daily/minute free-tier limit reached across all active models.\n• Please wait ${waitSec} seconds for Google's quota counter to reset, then click Generate again.`);
+      const data = await response.json();
+      if (response.ok && data.candidates && data.candidates[0]?.content) {
+        return { success: true, data: data };
       }
 
-      const currentModel = ACTIVE_MODELS[modelIndex];
-      showSpinner(`Synthesizing with ${currentModel}...`);
+      const errorMsg = data.error?.message || `HTTP ${response.status}`;
+      const isAuthError = response.status === 400 || response.status === 401 || response.status === 403 || errorMsg.toLowerCase().includes("key");
+      const isQuota = response.status === 429 || errorMsg.includes("quota");
+      const isModelError = response.status === 404 || errorMsg.includes("no longer available");
 
-      const result = await callSingleModel(currentModel, payload);
+      return { success: false, error: errorMsg, isAuthError, isQuota, isModelError, status: response.status };
+    }
 
-      if (result.success) {
-        console.log(`Generated successfully using ${result.model}`);
-        return result.data;
+    async function executeSmartGeneration(payload) {
+      if (!GEMINI_API_KEY) {
+        showKeyModal();
+        throw new Error("Please enter your Google AI Studio API key to continue.");
       }
 
-      errorHistory.push(result.error);
-      const isQuotaLimit = result.error.includes("quota") || result.error.includes("429");
-      
-      console.warn(`${currentModel} unavailable (${result.error}). Hopping to next active model...`);
-      showSpinner(isQuotaLimit 
-        ? `Model quota reached. Switching immediately to alternate pool (${ACTIVE_MODELS[modelIndex + 1] || 'Next'})...` 
-        : `Switching to backup model (${ACTIVE_MODELS[modelIndex + 1] || 'Finalizing'})...`
-      );
+      showSpinner(`Synthesizing with ${PRIMARY_MODEL}...`);
+      let result = await callGemini(PRIMARY_MODEL, payload);
 
-      await delay(600); // Clean buffer
-      return await fetchWithModelFailover(payload, modelIndex + 1, errorHistory);
+      if (result.success) return result.data;
+
+      if (result.isAuthError) {
+        showKeyModal();
+        throw new Error("Invalid or expired Gemini API key. Please update your key above.");
+      }
+
+      if (result.isQuota || result.status === 503 || result.isModelError) {
+        showSpinner(`Switching to backup model (${FALLBACK_MODEL})...`);
+        await delay(1500);
+        const fallbackRes = await callGemini(FALLBACK_MODEL, payload);
+        if (fallbackRes.success) return fallbackRes.data;
+      }
+
+      throw new Error(`Generation error: ${result.error}`);
     }
 
-    async function callGeminiModel(payload) {
-      return await fetchWithModelFailover(payload, 0);
-    }
-
-    // Content Generation Handler
+    // =========================================================================
+    // GENERATE COMPLETE INSTRUCTIONAL PACKAGE
+    // =========================================================================
     generateBtn.addEventListener('click', async () => {
       const unitTitle = document.getElementById('unit-title').value.trim();
       if (!unitTitle) return showMessageBox("Please enter a Chapter or Unit Title before generating.", "Missing Unit");
 
-      const dayNumber = document.getElementById('day-number').value;
-      const totalDays = document.getElementById('total-days').value;
+      const dayNumber = parseInt(document.getElementById('day-number').value, 10);
+      const totalDays = parseInt(document.getElementById('total-days').value, 10);
+
+      if (dayNumber > totalDays) {
+        return showMessageBox("Day in Unit cannot be greater than Total Planned Days.", "Invalid Pacing");
+      }
+
       const activeSlotId = `${state.currentClass}_${state.currentPart}`;
       const activeBase64 = state.slotsBase64[activeSlotId];
 
       generateBtn.disabled = true;
-      showSpinner(`Synthesizing Day ${dayNumber} of ${totalDays} for ${unitTitle}...`);
+      showSpinner(`Synthesizing Day ${dayNumber} of ${totalDays} for "${unitTitle}"...`);
 
       try {
         const prompt = `
@@ -1190,70 +1583,50 @@ Formulate a complete daily teaching package calibrated specifically for:
 - Standard: Class ${state.currentClass}
 - Textbook: Part ${state.currentPart === 'part1' ? '1' : '2'}
 - Unit Name: ${unitTitle}
-- UNIT PACING & PROGRESSION: This is Day ${dayNumber} of ${totalDays} Total Planned Days for this complete unit.
-  Synthesize the entire unit scope into this multi-day pacing and focus TODAY's 35-minute period strictly on the conceptual slice designated for Day ${dayNumber}.
+- UNIT PACING & PROGRESSION: Day ${dayNumber} of ${totalDays} Total Planned Days.
+Focus TODAY's 35-minute period strictly on the designated conceptual slice for Day ${dayNumber}.
 
-CRITICAL PEDAGOGICAL SPECIFICATIONS:
+PEDAGOGICAL SPECIFICATIONS:
+1. CURRICULAR OBJECTIVES (COs): Provide all unit COs (CO 1, CO 2, ...) and highlight the specific CO for Day ${dayNumber}.
+2. 35-MINUTE ALLOCATION TABLE: HTML <table> with inline borders for LibreOffice/Word.
+   Phases: 0-5 min (Entry Activity), 5-20 min (Concept & Inquiry), 20-25 min (Assessment), 25-35 min (Blackboard Work).
 
-1. CURRICULAR OBJECTIVES (COs) STRUCTURE:
-   - Provide "All Curricular Objectives of the Unit" (numbered systematically: CO 1, CO 2, CO 3, etc.).
-   - Explicitly highlight: "Curricular Objective(s) Targeted in Present Pacing (Day ${dayNumber} of ${totalDays})", referring to the exact CO number and verbatim text.
+3. BLACKBOARD NOTES (STRICT APPLICATION-LEVEL ONLY):
+   - Provide 2 to 3 Higher-Order Thinking / Application-Level Questions.
+   - For EACH question, provide the Question and the Model Answer as separated properties in an array.
+   - Focus on problem solving, daily life scenarios, or deductive reasoning.
 
-2. 35-MINUTE TIME ALLOCATION (COPIABLE TABLE):
-   - Deliver the minute-by-minute schedule as an HTML <table> with inline borders (border="1" style="border-collapse:collapse; width:100%;") designed to paste cleanly into LibreOffice Writer, Google Docs, or MS Word.
-   - Columns: Phase / Step | Allocated Time | Classroom Process & Learning Activity | Teacher & Learner Roles / Evidence.
-   - Fixed 35-minute breakdown:
-     * 0-5 min: Entry Activity / Prerequisite Activation
-     * 5-20 min: Concept Presentation & Inquiry Activity
-     * 20-25 min: Assessment of Learning / Synthesis
-     * 25-35 min: Blackboard Work (Copying into Notebooks)
+4. WHATSAPP BROADCAST (STRUCTURED & SEPARATED):
+   - Provide a reassuring 100-word daily recap of what the child explored in class.
+   - Include the EXACT same Application-Level Questions & Answers from the Blackboard section.
+   - Provide home study tips and DIKSHA/YouTube search keywords.
 
-3. BLACKBOARD NOTES (APPLICATION-LEVEL ONLY):
-   - MUST consist ONLY of Application-Level Questions and structured model answers (Higher-Order Thinking / HOTs, daily-life scenarios, or deduction).
-   - No passive summary or simple recall. Suitable for copying in 10-12 minutes.
+5. A4 PRINTABLE WORKSHEET: Exactly 5 total scores, application-level questions with score tags [Score: X] and answer lines.
+6. WORKSHEET ANSWER KEY: Scoring breakdown totaling 5 marks.
+7. DIGITAL MEDIA: 3-4 recommended resources (DIKSHA, KITE Victers, PhET simulations, YouTube).
 
-4. DAILY WHATSAPP PARENT BROADCAST:
-   - Formatted for direct sharing in WhatsApp parent groups using WhatsApp Markdown (*bold*, emojis).
-   - Must contain:
-     * 100-word reassuring summary of what happened in class today.
-     * The EXACT Application-Level Questions and Answers from the Blackboard Notes (identical wording).
-     * Recommended search keywords for DIKSHA and YouTube.
-
-5. A4 PORTRAIT PRINTABLE WORKSHEET (TOTAL: 5 SCORES):
-   - Plan an activity with a TOTAL OF STRICTLY 5 SCORES.
-   - Question distribution: minimum 2 questions (e.g., one 3-score and one 2-score = 5, OR two 2-score and one 1-score = 5, OR maximum five 1-score questions = 5).
-   - Questions must be purely APPLICATION LEVEL (reasoning, problem-solving, deduction).
-   - Every question must display its score badge: [Score: X].
-   - Provide clean handwriting answer lines.
-
-6. WORKSHEET ANSWER KEY & SCORING GUIDE (5 SCORES):
-   - Detailed point-by-point rubric and model answers totaling 5 scores, matching the worksheet questions.
-
-7. DIGITAL MEDIA: Suggest 4 internet resources (KITE Victers, DIKSHA, PhET simulation, YouTube visual).
-
-OUTPUT MUST BE A STRICT JSON OBJECT MATCHING THIS EXACT SCHEMA:
+OUTPUT MUST BE A STRICT JSON OBJECT MATCHING THIS SCHEMA:
 {
-  "allUnitCurricularObjectives": [
-    "CO 1: ...",
-    "CO 2: ...",
-    "CO 3: ..."
-  ],
-  "targetedCurricularObjective": "CO X: ... (Verbatim text)",
+  "allUnitCurricularObjectives": ["CO 1: ...", "CO 2: ..."],
+  "targetedCurricularObjective": "CO X: ...",
   "lessonPlanIntroHtml": "<p>...</p>",
   "lessonPlanTableHtml": "<table class='copiable-table' border='1' style='border-collapse:collapse; width:100%;'>...</table>",
-  "mediaResources": [
+  "mediaResources": [{"title": "...", "type": "video|diksha|sim", "platform": "...", "description": "...", "searchQuery": "..."}],
+  "blackboardQa": [
     {
-      "title": "Title",
-      "type": "video" | "diksha" | "sim",
-      "platform": "KITE Victers / YouTube / DIKSHA / PhET",
-      "description": "Pedagogical note",
-      "searchQuery": "Search query"
+      "qNum": 1,
+      "cognitiveDomain": "Application / HOTS",
+      "question": "Scenario-based question...",
+      "answer": "Clear, structured board answer with bullet points..."
     }
   ],
-  "blackboardNotes": "Markdown string with Application-Level Q&As only...",
-  "whatsappSummary": "WhatsApp formatted string with *bold*, parent summary, exact Blackboard Q&As, and DIKSHA links...",
-  "worksheetHtml": "<div class='ws-header'>...</div><div class='question-block'>...</div>",
-  "worksheetAnswerKeyHtml": "<div class='answer-key-block'>...</div>"
+  "whatsappSummary": {
+    "dailyRecap": "100-word reassuring message to parents...",
+    "studyTip": "A friendly home observation or discussion prompt...",
+    "dikshaKeywords": "Recommended search terms for DIKSHA and KITE Victers..."
+  },
+  "worksheetHtml": "<div class='ws-content'>...</div>",
+  "worksheetAnswerKeyHtml": "<div class='key-content'>...</div>"
 }`;
 
         const parts = [{ text: prompt }];
@@ -1278,12 +1651,14 @@ OUTPUT MUST BE A STRICT JSON OBJECT MATCHING THIS EXACT SCHEMA:
           }
         };
 
-        generateBtn.textContent = "Formatting Worksheets & Plans...";
-        const data = await callGeminiModel(payload);
-        const rawJson = data.candidates[0].content.parts[0].text;
+        const data = await executeSmartGeneration(payload);
+        let rawJson = data.candidates[0].content.parts[0].text;
+        
+        rawJson = rawJson.replace(/^```(?:json)?\s*/i, '').replace(/\s*```$/i, '').trim();
         const result = JSON.parse(rawJson);
+        state.currentPackage = result;
 
-        // Render Lesson Plan
+        // 1. Render Lesson Plan
         let coMasterListHtml = `<div class="co-box-master"><strong>All Curricular Objectives (Unit Master):</strong><ul style="margin-top:6px; padding-left:20px;">`;
         (result.allUnitCurricularObjectives || []).forEach(co => {
           coMasterListHtml += `<li>${co}</li>`;
@@ -1292,8 +1667,8 @@ OUTPUT MUST BE A STRICT JSON OBJECT MATCHING THIS EXACT SCHEMA:
 
         const coActiveHtml = `
           <div class="co-box-active">
-            🎯 <strong>Curricular Objective(s) Targeted in Present Pacing (Day ${dayNumber} of ${totalDays}):</strong><br>
-            <span>${result.targetedCurricularObjective || 'Specified for today'}</span>
+            🎯 <strong>Curricular Objective(s) Targeted (Day ${dayNumber} of ${totalDays}):</strong><br>
+            <span>${result.targetedCurricularObjective || ''}</span>
           </div>
         `;
 
@@ -1301,20 +1676,20 @@ OUTPUT MUST BE A STRICT JSON OBJECT MATCHING THIS EXACT SCHEMA:
           ${coMasterListHtml}
           ${coActiveHtml}
           ${result.lessonPlanIntroHtml || ''}
-          <h3 style="margin:16px 0 8px 0; color:var(--primary);">35-Minute Instructional Period Breakdown (Copy-ready for LibreOffice / Word):</h3>
+          <h3 style="margin:16px 0 8px 0; color:var(--primary);">35-Minute Period Breakdown:</h3>
           ${result.lessonPlanTableHtml}
         `;
         
-        // Render Digital Media Resources
+        // 2. Render Media Resources
         renderMediaResources(result.mediaResources || []);
 
-        // Render Blackboard Notes
-        document.getElementById('blackboard-notes-body').innerHTML = formatMarkdown(result.blackboardNotes);
+        // 3. Render Blackboard Notes
+        renderBlackboardNotes(result.blackboardQa || []);
 
-        // Render WhatsApp
-        document.getElementById('whatsapp-summary-body').textContent = result.whatsappSummary;
+        // 4. Render WhatsApp Broadcast
+        renderWhatsAppBroadcast(result.whatsappSummary, result.blackboardQa || [], unitTitle, dayNumber, totalDays);
         
-        // Render Printable Worksheet (5 Scores)
+        // 5. Render Printable Worksheet
         document.getElementById('worksheet-render-area').innerHTML = `
           <div class="ws-header">
             <h2>Kerala SCERT Curriculum Worksheet</h2>
@@ -1331,31 +1706,165 @@ OUTPUT MUST BE A STRICT JSON OBJECT MATCHING THIS EXACT SCHEMA:
           ${result.worksheetHtml}
         `;
 
-        // Render Answer Key
+        // 6. Render Answer Key
         document.getElementById('worksheet-answers-body').innerHTML = `
           <div style="margin-bottom:14px; padding:10px; background:#f1f5f9; border-radius:4px;">
-            <strong>Evaluation Standard:</strong> Kerala SCERT Criteria | <strong>Total Score:</strong> 5 | <strong>Unit:</strong> ${unitTitle} (Day ${dayNumber}/${totalDays})
+            <strong>Standard:</strong> SCERT Criteria | <strong>Total Score:</strong> 5 | <strong>Unit:</strong> ${unitTitle} (Day ${dayNumber}/${totalDays})
           </div>
-          ${result.worksheetAnswerKeyHtml || formatMarkdown(result.blackboardNotes)}
+          ${result.worksheetAnswerKeyHtml || ''}
         `;
 
         hideSpinner();
-        showToast("Pedagogical package generated successfully!");
+        showToast("Lesson package generated successfully!");
       } catch (err) {
         hideSpinner();
         console.error(err);
-        showMessageBox(err.message, "Service Notice");
+        showMessageBox(err.message, "Notice");
       } finally {
         generateBtn.disabled = false;
-        generateBtn.textContent = "⚡ Generate Lesson Package";
       }
     });
+
+    // =========================================================================
+    // RENDERER: BLACKBOARD NOTES
+    // =========================================================================
+    function renderBlackboardNotes(qaList) {
+      const container = document.getElementById('blackboard-notes-body');
+      
+      if (!qaList || qaList.length === 0) {
+        container.innerHTML = `<div class="rendered-markdown"><p style="color:var(--text-muted);">No structured blackboard notes generated.</p></div>`;
+        return;
+      }
+
+      let html = `<div class="bb-container">`;
+      qaList.forEach((item, index) => {
+        const qNum = item.qNum || (index + 1);
+        const domain = item.cognitiveDomain || "Application / Reasoning";
+        const cleanAnswer = formatMarkdown(item.answer);
+
+        html += `
+          <div class="bb-card">
+            <div class="bb-card-header">
+              <div class="bb-tag-group">
+                <span class="bb-num-pill">Question ${qNum}</span>
+                <span class="bb-cognitive-pill">🎯 ${domain}</span>
+              </div>
+              <button class="btn btn-outline btn-sm copy-single-bb" data-index="${index}">
+                📋 Copy Q&A
+              </button>
+            </div>
+            <div class="bb-card-body">
+              <div class="bb-q-section">
+                <div class="bb-label-q">
+                  <span>❓ Blackboard Question</span>
+                </div>
+                <div class="bb-text-q">${item.question}</div>
+              </div>
+
+              <div class="bb-a-section">
+                <div class="bb-label-a">
+                  <span>✍️ Chalkboard Solution / Student Notebook Note</span>
+                </div>
+                <div class="bb-text-a">${cleanAnswer}</div>
+              </div>
+            </div>
+          </div>
+        `;
+      });
+      html += `</div>`;
+      container.innerHTML = html;
+
+      container.querySelectorAll('.copy-single-bb').forEach(btn => {
+        btn.addEventListener('click', (e) => {
+          const idx = parseInt(e.currentTarget.dataset.index, 10);
+          const item = qaList[idx];
+          const text = `Q${idx + 1}: ${item.question}\n\nAns:\n${item.answer}`;
+          copyText(text, `Copied Question ${idx + 1}!`);
+        });
+      });
+    }
+
+    // =========================================================================
+    // RENDERER: WHATSAPP BROADCAST
+    // =========================================================================
+    function renderWhatsAppBroadcast(summaryObj, qaList, unitTitle, dayNumber, totalDays) {
+      const previewArea = document.getElementById('whatsapp-preview-area');
+      const rawBody = document.getElementById('whatsapp-summary-body');
+
+      const recap = summaryObj?.dailyRecap || "Today, our students engaged in interactive concept exploration and hands-on reasoning.";
+      const tip = summaryObj?.studyTip || "Ask your child to explain today's classroom example in their own words.";
+      const links = summaryObj?.dikshaKeywords || `${unitTitle} SCERT Class ${state.currentClass}`;
+
+      let chatHtml = `
+        <div class="wa-bubble wa-bubble-green">
+          <div class="wa-bubble-header">
+            <span>🏫 Daily Classroom Recap (Std ${state.currentClass})</span>
+            <span>Day ${dayNumber}/${totalDays}</span>
+          </div>
+          <p style="font-weight:600; margin-bottom:4px;">*Unit:* ${unitTitle}</p>
+          <p>${recap}</p>
+        </div>
+
+        <div class="wa-bubble">
+          <div class="wa-bubble-header" style="color:#1e293b;">
+            <span>📝 Today's Notebook & Blackboard Q&As</span>
+            <span>${qaList.length} Items</span>
+          </div>
+          <p style="font-size:0.78rem; color:var(--text-muted); margin-bottom:8px;">
+            Please ensure your child has copied and revised these application questions in their science/social notebook:
+          </p>
+          
+          <div class="wa-qa-list">
+      `;
+
+      qaList.forEach((item, idx) => {
+        chatHtml += `
+          <div class="wa-qa-card">
+            <div class="wa-qa-q">❓ Q${idx + 1}: ${item.question}</div>
+            <div class="wa-qa-a"><strong>Ans:</strong> ${item.answer}</div>
+          </div>
+        `;
+      });
+
+      chatHtml += `
+          </div>
+        </div>
+
+        <div class="wa-bubble wa-bubble-green">
+          <div class="wa-bubble-header">
+            <span>💡 Evening Study & DIKSHA Recommendations</span>
+          </div>
+          <p style="margin-bottom:6px;"><strong>Home Discussion:</strong> ${tip}</p>
+          <div class="wa-links-box">
+            🔍 <strong>Recommended Search Terms (DIKSHA / YouTube):</strong><br>
+            <span style="font-family: monospace; color:#0369a1;">"${links}"</span>
+          </div>
+        </div>
+      `;
+      previewArea.innerHTML = chatHtml;
+
+      let rawText = `*🏫 SCERT Std ${state.currentClass} Daily Learning Update*\n`;
+      rawText += `*Unit:* ${unitTitle} (Day ${dayNumber}/${totalDays})\n\n`;
+      rawText += `*🌟 What we learned today:*\n${recap}\n\n`;
+      rawText += `*📚 Today's Blackboard Q&As (Check Child's Notebook):*\n\n`;
+
+      qaList.forEach((item, idx) => {
+        rawText += `*Q${idx + 1}:* ${item.question}\n`;
+        rawText += `*Ans:* ${item.answer}\n\n`;
+      });
+
+      rawText += `*💡 Home Engagement Tip:*\n${tip}\n\n`;
+      rawText += `*🔍 Suggested DIKSHA & Victers Search:*\n"${links}"\n\n`;
+      rawText += `_— Sent via Kerala SCERT Teacher Studio_`;
+
+      rawBody.textContent = rawText;
+    }
 
     // Render Digital Media Cards
     function renderMediaResources(mediaList) {
       const container = document.getElementById('media-resources-body');
       if (!mediaList || mediaList.length === 0) {
-        container.innerHTML = `<p style="color: var(--text-muted);">No specific media links retrieved.</p>`;
+        container.innerHTML = `<p style="color: var(--text-muted);">No media suggestions found.</p>`;
         return;
       }
 
@@ -1363,15 +1872,14 @@ OUTPUT MUST BE A STRICT JSON OBJECT MATCHING THIS EXACT SCHEMA:
       mediaList.forEach(item => {
         const typeClass = `type-${item.type || 'video'}`;
         const queryEncoded = encodeURIComponent(item.searchQuery || item.title);
-        
         let searchUrl = `https://www.youtube.com/results?search_query=${queryEncoded}`;
         let actionLabel = "Search YouTube ↗";
 
         if (item.type === 'diksha' || item.platform?.toLowerCase().includes('diksha')) {
           searchUrl = `https://diksha.gov.in/explore?query=${queryEncoded}`;
-          actionLabel = "Open on DIKSHA ↗";
+          actionLabel = "Open DIKSHA ↗";
         } else if (item.type === 'sim' || item.platform?.toLowerCase().includes('phet')) {
-          searchUrl = `https://www.google.com/search?q=${encodeURIComponent(item.searchQuery + ' simulation phet')}`;
+          searchUrl = `https://www.google.com/search?q=${encodeURIComponent(item.searchQuery + ' phet simulation')}`;
           actionLabel = "Open Simulation ↗";
         }
 
@@ -1382,9 +1890,7 @@ OUTPUT MUST BE A STRICT JSON OBJECT MATCHING THIS EXACT SCHEMA:
               <h4>${item.title}</h4>
               <p>${item.description}</p>
             </div>
-            <a href="${searchUrl}" target="_blank" rel="noopener noreferrer" class="btn btn-info">
-              ${actionLabel}
-            </a>
+            <a href="${searchUrl}" target="_blank" rel="noopener noreferrer" class="btn btn-info">${actionLabel}</a>
           </div>
         `;
       });
@@ -1392,18 +1898,15 @@ OUTPUT MUST BE A STRICT JSON OBJECT MATCHING THIS EXACT SCHEMA:
       container.innerHTML = html;
     }
 
-    // Linear Markdown Formatter
     function formatMarkdown(md) {
       if (!md) return "";
       let html = md
         .replace(/^### (.*$)/gim, '<h3>$1</h3>')
         .replace(/^## (.*$)/gim, '<h3>$1</h3>')
         .replace(/\*\*(.*?)\*\*/gim, '<strong>$1</strong>')
-        .replace(/^[\*\-] (.*$)/gim, '<li>$1</li>')
-        .replace(/\n\n+/g, '</p><p>');
-
+        .replace(/^[\*\-] (.*$)/gim, '<li>$1</li>');
       html = html.replace(/(<li>[\s\S]*?<\/li>)/g, '<ul>$1</ul>');
-      return html;
+      return `<p>${html.replace(/\n\n+/g, '</p><p>')}</p>`;
     }
 
     // Tabs Navigation
@@ -1416,20 +1919,48 @@ OUTPUT MUST BE A STRICT JSON OBJECT MATCHING THIS EXACT SCHEMA:
       });
     });
 
-    // Dual-Engine Copy
+    // Dual-Engine Copy Handlers
     document.querySelectorAll('.copy-btn').forEach(btn => {
       btn.addEventListener('click', () => {
         const target = document.getElementById(btn.dataset.target);
-        const textToCopy = target.innerText || target.textContent;
-        copyText(textToCopy, "Copied content to clipboard!");
+        if (target) {
+          copyText(target.innerText || target.textContent, "Copied content!");
+        }
       });
     });
 
-    // Print Dialog
-    printBtn.addEventListener('click', () => window.print());
+    // Print Worksheet Button
+    printBtn.addEventListener('click', () => {
+      document.querySelector('[data-tab="worksheet-view"]').click();
+      document.querySelectorAll('.tab-pane').forEach(p => p.classList.remove('print-active'));
+      document.getElementById('tab-worksheet-view').classList.add('print-active');
+      document.body.classList.add('has-print-active');
+      setTimeout(() => window.print(), 100);
+    });
 
-    // Initial Load: Sync all 6 slots from Firestore
-    syncAllSlots();
+    // Print Answer Key Button
+    if (printAnswersBtn) {
+      printAnswersBtn.addEventListener('click', () => {
+        document.querySelector('[data-tab="worksheet-answers"]').click();
+        document.querySelectorAll('.tab-pane').forEach(p => p.classList.remove('print-active'));
+        document.getElementById('tab-worksheet-answers').classList.add('print-active');
+        document.body.classList.add('has-print-active');
+        setTimeout(() => window.print(), 100);
+      });
+    }
+
+    window.addEventListener('afterprint', () => {
+      document.body.classList.remove('has-print-active');
+      document.querySelectorAll('.tab-pane').forEach(p => p.classList.remove('print-active'));
+    });
+
+    // Prompt user for API key if missing on first launch
+    window.addEventListener('DOMContentLoaded', () => {
+      syncAllSlots();
+      if (!GEMINI_API_KEY) {
+        setTimeout(showKeyModal, 600);
+      }
+    });
   </script>
 </body>
 </html>
