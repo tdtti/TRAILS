@@ -2,2565 +2,1434 @@
 <html lang="en">
 <head>
   <meta charset="UTF-8">
-  <meta name="viewport" content="width=device-width, initial-scale=1.0, maximum-scale=1.0, minimum-scale=1.0, user-scalable=no, shrink-to-fit=no">
-  <title>TDTTI USS TRAINING PORTAL 2026-27</title>
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>SCERT Kerala Smart Teacher Planner & Worksheet Studio</title>
+  
+  <!-- Fonts -->
   <link rel="preconnect" href="https://fonts.googleapis.com">
   <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
-  <link href="https://fonts.googleapis.com/css2?family=Inter:wght@300;400;500;600;700;800;900&family=Amiri:wght@400;700&display=swap" rel="stylesheet">
-  
+  <link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600;700&family=Merriweather:ital,wght@0,400;0,700;1,400&display=swap" rel="stylesheet">
+
   <style>
-    /* DISABLE TOUCH ZOOM AND GESTURE SCALING */
-    html, body {
-      touch-action: pan-x pan-y;
-      -webkit-text-size-adjust: 100%;
-      -ms-text-size-adjust: 100%;
-      text-size-adjust: 100%;
-    }
-
+    /* ==========================================================================
+       1. MINIMALIST & DEVICE-COMPACT UI STYLESHEET
+       ========================================================================== */
     :root {
-      --primary: #1e40af;
-      --primary-hover: #1e3a8a;
-      --accent: #d97706;
-      --accent-light: #fef3c7;
-      --bg-main: #f1f5f9;
-      --card-bg: #ffffff;
-      --text-main: #0f172a;
+      --primary: #1b5e20;        /* Kerala SCERT Deep Green */
+      --primary-hover: #144718;
+      --primary-light: #e8f5e9;
+      --secondary: #37474f;
+      --border: #dce3e6;
+      --bg: #f8fafc;
+      --surface: #ffffff;
+      --text: #1e293b;
       --text-muted: #64748b;
-      --border-color: #cbd5e1;
-      --success: #10b981;
-      --danger: #ef4444;
-      --shadow-sm: 0 2px 4px rgba(15, 23, 42, 0.05);
-      --shadow-md: 0 10px 20px -5px rgba(30, 64, 175, 0.12);
-      --shadow-lg: 0 20px 30px -10px rgba(15, 23, 42, 0.18);
+      --accent: #fbc02d;
+      --error: #ef4444;
+      --success: #16a34a;
+      --media-blue: #0284c7;
+      --whatsapp-green: #25d366;
     }
 
-    * { box-sizing: border-box; }
-
+    * { box-sizing: border-box; margin: 0; padding: 0; }
     body {
-      font-family: 'Inter', system-ui, -apple-system, sans-serif;
-      color: var(--text-main);
-      margin: 0;
-      padding: 0;
+      font-family: 'Inter', -apple-system, BlinkMacSystemFont, "Segoe UI", Roboto, sans-serif;
+      background: var(--bg);
+      color: var(--text);
       min-height: 100vh;
-      background-color: var(--bg-main);
-    }
-
-    /* RED PROGRESS BAR */
-    #progress-bar-container { position: fixed; top: 0; left: 0; width: 100%; height: 10px; z-index: 9999; pointer-events: none; }
-    #progress-bar { height: 100%; width: 0%; background: var(--danger); box-shadow: 0 0 10px rgba(239, 68, 68, 0.9); transition: width 0.2s ease-out, opacity 0.3s; }
-
-    #toast-container { position: fixed; top: 20px; right: 20px; z-index: 10000; display: flex; flex-direction: column; gap: 10px; }
-    .toast { min-width: 280px; padding: 14px 18px; border-radius: 12px; background: #ffffff; color: var(--text-main); box-shadow: var(--shadow-lg); border-left: 5px solid var(--primary); font-size: 14px; font-weight: 600; transform: translateX(120%); transition: transform 0.3s cubic-bezier(0.175, 0.885, 0.32, 1.275); }
-    .toast.show { transform: translateX(0); }
-    .toast-success { border-left-color: var(--success); }
-    .toast-danger { border-left-color: var(--danger); }
-
-    .modal-overlay { position: fixed; top: 0; left: 0; width: 100%; height: 100%; background: rgba(15, 23, 42, 0.6); backdrop-filter: blur(6px); display: flex; align-items: center; justify-content: center; z-index: 9999; }
-    .modal-card { background: #ffffff; padding: 28px; border-radius: 18px; max-width: 500px; width: 92%; box-shadow: var(--shadow-lg); border: 1px solid var(--border-color); max-height: 90vh; overflow-y: auto; }
-
-    .container { max-width: 1100px; margin: 25px auto; padding: 0 20px; }
-
-    /* Top Navbar */
-    .top-navbar { display: flex; justify-content: space-between; align-items: center; background: linear-gradient(135deg, #0f172a, #1e3a8a); color: #fff; padding: 14px 28px; box-shadow: var(--shadow-md); }
-    .brand-logo { display: flex; align-items: center; gap: 12px; font-weight: 800; font-size: 16px; letter-spacing: 0.5px; }
-
-    .status-pill { display: inline-flex; align-items: center; gap: 8px; background: rgba(255, 255, 255, 0.12); padding: 6px 14px; border-radius: 20px; font-size: 12px; font-weight: 600; color: #fff; border: 1px solid rgba(255, 255, 255, 0.2); }
-    .led-dot { width: 10px; height: 10px; border-radius: 50%; display: inline-block; }
-    .led-green { background-color: #10b981; box-shadow: 0 0 8px #10b981; }
-    .led-red { background-color: #ef4444; box-shadow: 0 0 8px #ef4444; }
-    .led-blue { background-color: #3b82f6; box-shadow: 0 0 8px #3b82f6; animation: led-pulse 0.8s infinite alternate; }
-
-    @keyframes led-pulse { 0% { opacity: 0.5; transform: scale(0.9); } 100% { opacity: 1; transform: scale(1.15); } }
-    
-    .icon-btn-header { background: rgba(255, 255, 255, 0.15); color: #fff; border: 1px solid rgba(255, 255, 255, 0.3); padding: 8px 12px; border-radius: 10px; cursor: pointer; display: flex; align-items: center; justify-content: center; transition: all 0.2s; font-size: 16px; }
-    .icon-btn-header:hover { background: #ffffff; color: #1e3a8a; }
-
-    /* Modern Tab Bar */
-    .tab-bar-container { background: #ffffff; border-bottom: 1px solid var(--border-color); padding: 10px 24px; display: flex; gap: 10px; overflow-x: auto; position: relative; box-shadow: var(--shadow-sm); }
-    .icon-tab-btn { position: relative; display: inline-flex; align-items: center; justify-content: center; background: #f8fafc; border: 1px solid var(--border-color); color: var(--text-muted); padding: 10px 16px; border-radius: 12px; cursor: pointer; transition: all 0.2s ease; }
-    .icon-tab-btn svg { stroke: currentColor; width: 22px; height: 22px; }
-    .icon-tab-btn:hover { background: #eff6ff; color: var(--primary); border-color: var(--primary); }
-    .icon-tab-btn.active { background: var(--primary); color: #ffffff; border-color: var(--primary); box-shadow: 0 4px 12px rgba(30, 64, 175, 0.25); }
-
-    .tab-badge-dot { position: absolute; top: 4px; right: 4px; width: 10px; height: 10px; background-color: var(--danger); border-radius: 50%; border: 2px solid #ffffff; }
-
-    .mode-selector-group { display: flex; gap: 12px; margin-bottom: 20px; }
-    .mode-btn { flex: 1; padding: 14px; border: 1px solid var(--border-color); background: #ffffff; border-radius: 12px; font-weight: 700; font-size: 14px; color: var(--text-muted); cursor: pointer; text-align: center; transition: all 0.2s; }
-    .mode-btn:hover { background: #f8fafc; color: var(--primary); }
-    .mode-btn.active { background: var(--primary); color: #ffffff; border-color: var(--primary); }
-
-    .card { background: var(--card-bg); padding: 28px; border-radius: 18px; border: 1px solid var(--border-color); box-shadow: var(--shadow-sm); margin-bottom: 24px; }
-
-    /* LOGIN PORTAL CARD */
-    #login-sec {
-      max-width: 100%;
-      margin: 30px auto;
-      padding: 0;
-      background: #ffffff;
-      border-radius: 24px;
-      overflow: hidden;
-      box-shadow: 0 20px 40px rgba(15, 23, 42, 0.2);
-      border: 1px solid var(--border-color);
-    }
-
-    .login-hero-header {
-      height: 240px;
-      background: linear-gradient(180deg, rgba(15, 23, 42, 0.4) 0%, rgba(15, 23, 42, 0.85) 100%), 
-                  url('https://blogger.googleusercontent.com/img/b/R29vZ2xl/AVvXsEiJDRmD-1uwtSzqTkbIEhBWAuIpDIfKh-PH0KPn241KNSrg4UumjKqKbedmLdWFuQWElyHUUAuuepQW6J_om1lDT2yeFBE6JAFMGqLbf8fe2ueqI_NHjE0IOBlV9RlgbsmHgxKysW5b_jrsE7Kjx5oZTnbnyF6RKSWGSk8OjtBlcqNS3To/s1600/School_Photo.jpeg') center/cover no-repeat;
       display: flex;
       flex-direction: column;
-      align-items: center;
-      justify-content: center;
-      color: #ffffff;
-      text-align: center;
-      padding: 20px;
-      position: relative;
+      -webkit-font-smoothing: antialiased;
     }
 
-    .school-logo-img {
-      width: 100px;
-      height: 100px;
-      border-radius: 8%;
-      background: #ffffff;
-      padding: 4px;
-      box-shadow: 0 8px 16px rgba(0,0,0,0.3);
-      margin-bottom: 8px;
-    }
-
-    .login-hero-title { font-size: 18px; font-weight: 900; color: #ffffff; margin: 0; letter-spacing: 0.5px; text-shadow: 0 2px 4px rgba(0,0,0,0.6); }
-    .login-hero-subtitle { font-size: 12px; font-weight: 700; color: #fde68a; margin-top: 4px; }
-    .login-form-body { padding: 28px 26px; background: #ffffff; }
-
-    .keep-logged-pill {
+    header.app-header {
+      background: var(--primary);
+      color: #fff;
+      padding: 12px 20px;
       display: flex;
+      justify-content: space-between;
       align-items: center;
-      gap: 10px;
-      padding: 10px 16px;
-      border-radius: 20px;
-      background: #f1f5f9;
-      border: 1.5px solid var(--border-color);
-      cursor: pointer;
-      user-select: none;
-      font-size: 13px;
-      font-weight: 700;
-      margin: 14px 0 20px 0;
-      transition: all 0.2s ease;
+      box-shadow: 0 1px 3px rgba(0,0,0,0.1);
     }
-    .keep-logged-pill.active { background: #dbeafe; border-color: #3b82f6; color: #1e40af; }
-    .pill-indicator-dot { width: 12px; height: 12px; border-radius: 50%; background: #94a3b8; transition: all 0.2s ease; }
-    .keep-logged-pill.active .pill-indicator-dot { background: #2563eb; box-shadow: 0 0 8px #2563eb; }
+    .header-brand { display: flex; align-items: center; gap: 10px; }
+    .header-brand h1 { font-size: 1.05rem; font-weight: 600; letter-spacing: -0.01em; }
+    .badge {
+      background: var(--accent);
+      color: #000;
+      font-size: 0.7rem;
+      font-weight: 700;
+      padding: 2px 6px;
+      border-radius: 4px;
+      text-transform: uppercase;
+    }
+    .header-status {
+      font-size: 0.75rem;
+      background: rgba(255, 255, 255, 0.15);
+      padding: 3px 10px;
+      border-radius: 12px;
+    }
 
-    .form-group { margin-bottom: 18px; text-align: left; width: 100%; }
-    .form-group label { display: block; margin-bottom: 6px; font-weight: 700; font-size: 13px; color: var(--text-main); }
-    input, select, textarea { width: 100%; padding: 12px 14px; border: 1px solid var(--border-color); border-radius: 10px; font-family: inherit; font-size: 14px; background: #f8fafc; }
+    /* Two-Column Responsive Layout */
+    .app-container {
+      display: flex;
+      flex: 1;
+      overflow: hidden;
+    }
 
-    .icon-action-btn { display: inline-flex; align-items: center; justify-content: center; width: 42px; height: 42px; border-radius: 12px; border: 1px solid var(--border-color); background: #ffffff; color: var(--text-main); cursor: pointer; transition: all 0.2s; box-shadow: var(--shadow-sm); }
-    .icon-action-btn:hover { background: #eff6ff; border-color: var(--primary); color: var(--primary); transform: translateY(-2px); }
+    /* Left Sidebar */
+    .sidebar {
+      width: 380px;
+      background: var(--surface);
+      border-right: 1px solid var(--border);
+      padding: 16px;
+      overflow-y: auto;
+      display: flex;
+      flex-direction: column;
+      gap: 12px;
+      flex-shrink: 0;
+    }
 
-    .btn { display: inline-flex; align-items: center; justify-content: center; padding: 12px 22px; border: none; border-radius: 10px; font-weight: 700; font-size: 14px; cursor: pointer; transition: opacity 0.2s; }
-    .btn:hover { opacity: 0.9; }
-    .btn-primary { background: var(--primary); color: #fff; }
-    .btn-danger { background: var(--danger); color: #fff; }
-    .btn-outline { border: 1px solid var(--border-color); background: #fff; color: var(--text-main); }
-    .btn-block { width: 100%; }
+    .card {
+      background: var(--surface);
+      border: 1px solid var(--border);
+      border-radius: 6px;
+      padding: 12px;
+    }
+    .card h3 {
+      font-size: 0.85rem;
+      font-weight: 600;
+      margin-bottom: 8px;
+      color: var(--secondary);
+      border-bottom: 1px solid #f1f5f9;
+      padding-bottom: 5px;
+      display: flex;
+      justify-content: space-between;
+      align-items: center;
+    }
+    .form-group { margin-bottom: 8px; }
+    .form-group label {
+      display: block;
+      font-size: 0.75rem;
+      font-weight: 600;
+      margin-bottom: 3px;
+      color: var(--text-muted);
+    }
+    .form-control {
+      width: 100%;
+      padding: 7px 9px;
+      border: 1px solid var(--border);
+      border-radius: 4px;
+      font-size: 0.82rem;
+      color: var(--text);
+      background: #fff;
+    }
+    .form-control:focus {
+      outline: none;
+      border-color: var(--primary);
+    }
+    .form-row { display: flex; gap: 8px; }
+    .form-row .half { flex: 1; }
+    .radio-toggle { display: flex; gap: 14px; font-size: 0.8rem; }
 
-    .tap-toggle-pill {
+    /* 6-Slot Master Matrix */
+    .matrix-grid {
+      display: flex;
+      flex-direction: column;
+      gap: 6px;
+    }
+    .slot-card {
+      background: #fafafa;
+      border: 1px solid var(--border);
+      border-radius: 4px;
+      padding: 6px 8px;
+      transition: all 0.15s;
+    }
+    .slot-card.active-target {
+      border: 2px solid var(--primary);
+      background: var(--primary-light);
+    }
+    .slot-header {
+      display: flex;
+      justify-content: space-between;
+      align-items: center;
+      margin-bottom: 3px;
+    }
+    .slot-title { font-size: 0.78rem; font-weight: 700; color: var(--secondary); }
+    .slot-badge {
+      font-size: 0.65rem;
+      padding: 2px 5px;
+      border-radius: 3px;
+      font-weight: 600;
+    }
+    .slot-badge.locked { background: var(--success); color: #fff; }
+    .slot-badge.unlocked { background: var(--error); color: #fff; }
+    .slot-file-name {
+      font-size: 0.7rem;
+      color: var(--text-muted);
+      overflow: hidden;
+      text-overflow: ellipsis;
+      white-space: nowrap;
+      margin-bottom: 3px;
+    }
+    .slot-actions { display: flex; gap: 4px; align-items: center; }
+    .slot-input { font-size: 0.68rem; flex: 1; }
+    .slot-btn { padding: 3px 6px; font-size: 0.7rem; }
+
+    /* Buttons */
+    .btn {
+      cursor: pointer;
+      border: none;
+      border-radius: 4px;
+      padding: 7px 12px;
+      font-size: 0.82rem;
+      font-weight: 600;
       display: inline-flex;
       align-items: center;
       justify-content: center;
-      width: 100%;
-      gap: 10px;
-      padding: 12px 18px;
-      border-radius: 12px;
+      gap: 5px;
+      transition: background 0.15s, transform 0.05s;
+    }
+    .btn:active { transform: scale(0.98); }
+    .btn-primary { background: var(--primary); color: #fff; }
+    .btn-primary:hover { background: var(--primary-hover); }
+    .btn-secondary { background: var(--secondary); color: #fff; }
+    .btn-outline { background: #fff; border: 1px solid var(--border); color: var(--secondary); }
+    .btn-success { background: var(--success); color: #fff; }
+    .btn-info { background: var(--media-blue); color: #fff; }
+    .btn-whatsapp { background: var(--whatsapp-green); color: #fff; }
+    .btn-whatsapp:hover { background: #1eb956; }
+    .btn-block { width: 100%; }
+    .btn-sm { padding: 5px 10px; font-size: 0.75rem; }
+    .btn:disabled { opacity: 0.5; cursor: not-allowed; }
+
+    /* Canvas Tabs */
+    .canvas {
+      flex: 1;
+      display: flex;
+      flex-direction: column;
+      overflow-y: auto;
+      background: var(--bg);
+    }
+    .canvas-tabs {
+      background: var(--surface);
+      border-bottom: 1px solid var(--border);
+      display: flex;
+      padding: 0 12px;
+      overflow-x: auto;
+      white-space: nowrap;
+      position: sticky;
+      top: 0;
+      z-index: 10;
+    }
+    .tab-btn {
+      background: none;
+      border: none;
+      padding: 12px 14px;
+      font-weight: 600;
+      font-size: 0.8rem;
+      color: var(--text-muted);
       cursor: pointer;
-      font-weight: 800;
-      font-size: 13px;
-      user-select: none;
-      transition: all 0.25s ease;
-      border: 2px solid transparent;
-      margin-bottom: 10px;
+      border-bottom: 2px solid transparent;
+      display: inline-flex;
+      align-items: center;
+      gap: 6px;
     }
-    .tap-toggle-pill.enabled { background: #dcfce7; color: #15803d; border-color: #86efac; }
-    .tap-toggle-pill.disabled { background: #fee2e2; color: #b91c1c; border-color: #fca5a5; }
+    .tab-btn.active {
+      color: var(--primary);
+      border-bottom: 2px solid var(--primary);
+    }
+    .tab-content-wrapper { padding: 16px 20px; flex: 1; }
+    .tab-pane { display: none; }
+    .tab-pane.active { display: block; }
+    .pane-header {
+      display: flex;
+      justify-content: space-between;
+      align-items: center;
+      margin-bottom: 14px;
+      flex-wrap: wrap;
+      gap: 8px;
+    }
+    .pane-header h2 { font-size: 1rem; color: var(--text); font-weight: 700; }
+    .pane-header-actions { display: flex; gap: 8px; align-items: center; }
 
-    .timer-badge { display: inline-flex; align-items: center; gap: 6px; background: #dbeafe; color: #1e40af; font-weight: 800; padding: 6px 14px; border-radius: 20px; font-size: 14px; border: 1px solid #93c5fd; }
-    .timer-badge.danger { background: #fee2e2; color: #991b1b; border-color: #fca5a5; }
-
-    .quiz-header { display: flex; justify-content: space-between; align-items: center; margin-bottom: 15px; }
-    .question-text { font-size: 19px; font-weight: 700; margin: 15px 0 20px 0; }
-    .question-img { max-width: 100%; max-height: 250px; border-radius: 10px; margin-bottom: 20px; border: 1px solid var(--border-color); }
-    
-    .options-grid { display: grid; grid-template-columns: 1fr 1fr; gap: 14px; }
-    .opt-btn { display: flex; align-items: center; gap: 12px; padding: 16px 20px; border: 1px solid var(--border-color); border-radius: 12px; background: #ffffff; text-align: left; font-size: 15px; font-weight: 600; cursor: pointer; transition: all 0.2s ease; }
-    .opt-btn:hover { background: #f1f5f9; border-color: var(--primary); }
-    .opt-btn.selected { background: #dbeafe !important; border-color: var(--primary) !important; color: var(--primary) !important; font-weight: 800; box-shadow: 0 0 0 2px var(--primary); }
-
-    .spinner-box { display: flex; flex-direction: column; align-items: center; justify-content: center; padding: 40px 20px; text-align: center; }
-    .spinner-bar-pulse { width: 60px; height: 6px; background: var(--primary); border-radius: 3px; animation: bar-pulse 0.9s infinite ease-in-out alternate; }
-    @keyframes bar-pulse { 0% { width: 10px; opacity: 0.3; } 100% { width: 70px; opacity: 1; } }
-
-    .rtl-content { direction: rtl !important; text-align: right !important; font-family: 'Amiri', serif !important; }
-    .rtl-content .opt-btn { text-align: right !important; }
-
-    .badge { background: #dbeafe; color: #1e40af; padding: 4px 10px; border-radius: 6px; font-size: 12px; font-weight: 700; }
-    .badge-success { background: #dcfce7; color: #166534; }
-    .badge-danger { background: #fee2e2; color: #991b1b; }
-
-    .chart-item { margin-bottom: 16px; }
-    .chart-label-row { display: flex; justify-content: space-between; font-size: 13px; font-weight: 700; margin-bottom: 6px; }
-    .chart-track { height: 14px; background: #e2e8f0; border-radius: 7px; overflow: hidden; position: relative; }
-    .chart-fill { height: 100%; border-radius: 7px; transition: width 0.8s cubic-bezier(0.4, 0, 0.2, 1); }
-    .chart-fill-strong { background: linear-gradient(90deg, #10b981, #059669); }
-    .chart-fill-weak { background: linear-gradient(90deg, #f59e0b, #ef4444); }
-
-    .student-chips-container { display: flex; flex-wrap: wrap; gap: 10px; max-height: 220px; overflow-y: auto; background: #ffffff; padding: 14px; border: 1px solid var(--border-color); border-radius: 12px; margin-top: 8px; }
-    .student-chip { padding: 9px 18px; border-radius: 20px; border: 1px solid var(--border-color); background: #f8fafc; font-size: 13px; font-weight: 600; color: var(--text-main); cursor: pointer; user-select: none; transition: all 0.2s; }
-    .student-chip.selected { background: var(--primary); color: #ffffff; border-color: var(--primary); }
-
-    .notif-card-stylish {
-      background: #ffffff;
-      border: 1px solid #e2e8f0;
-      border-radius: 16px;
-      padding: 18px 20px;
+    /* Rendered Panels */
+    .rendered-markdown {
+      background: var(--surface);
+      padding: 20px 24px;
+      border-radius: 6px;
+      border: 1px solid var(--border);
+      line-height: 1.6;
+      font-size: 0.9rem;
+    }
+    .co-box-master {
+      background: #f1f5f9;
+      border-left: 4px solid var(--secondary);
+      padding: 10px 14px;
+      border-radius: 4px;
+      margin-bottom: 14px;
+    }
+    .co-box-active {
+      background: #e8f5e9;
+      border-left: 4px solid var(--primary);
+      padding: 12px 16px;
+      border-radius: 4px;
       margin-bottom: 16px;
-      box-shadow: 0 4px 12px rgba(15, 23, 42, 0.04);
-      position: relative;
-      transition: all 0.2s ease;
+      font-weight: 500;
     }
-    .notif-card-stylish.unread { border-left: 5px solid var(--primary); background: #f8fafc; }
-    .notif-card-stylish.selected { border: 2px solid var(--primary) !important; background: #eff6ff !important; }
-    .notif-header-title { font-weight: 800; font-size: 16px; color: #1e3a8a; margin-bottom: 4px; }
-    .notif-date-stamp { font-size: 12px; color: #64748b; font-weight: 600; margin-bottom: 12px; }
-    .notif-body-box { background: #ffffff; border: 1px dashed #cbd5e1; padding: 12px 14px; border-radius: 10px; font-size: 13.5px; line-height: 1.5; color: #0f172a; margin-bottom: 12px; white-space: pre-wrap; }
+    .co-box-active strong { color: var(--primary); }
 
-    .accordion-item { border: 1px solid var(--border-color); border-radius: 12px; margin-bottom: 12px; overflow: hidden; background: #fff; }
-    .accordion-header { padding: 16px 20px; background: #f8fafc; cursor: pointer; display: flex; justify-content: space-between; align-items: center; font-weight: 700; user-select: none; }
-    .accordion-header:hover { background: #eff6ff; }
-    .accordion-body { padding: 20px; border-top: 1px solid var(--border-color); display: none; }
-
-    .table-responsive { width: 100%; overflow-x: auto; border: 1px solid var(--border-color); border-radius: 12px; margin-top: 15px; margin-bottom: 15px; }
-    .data-table { width: 100%; min-width: 650px; border-collapse: collapse; }
-    .data-table th, .data-table td { border: 1px solid var(--border-color) !important; padding: 12px 14px; text-align: left; font-size: 13px; }
-    .data-table th { background: #eff6ff; font-weight: 700; color: var(--text-main); }
-    .sortable-header { cursor: pointer; user-select: none; }
-    .sortable-header:hover { background: #dbeafe; }
-
-    .grid-2 { display: grid; grid-template-columns: 1fr 1fr; gap: 14px; }
-    .stats-grid { display: grid; grid-template-columns: 1fr 1fr; gap: 16px; margin-bottom: 24px; }
-
-    .spinning { animation: spin 0.8s linear infinite; }
-    @keyframes spin { 100% { transform: rotate(360deg); } }
-
-    @media (max-width: 640px) {
-      .grid-2, .options-grid, .stats-grid { grid-template-columns: 1fr; }
-      .container { padding: 0 12px; margin: 15px auto; }
-      .top-navbar { padding: 12px 16px; }
+    /* Copiable HTML Table for Word / LibreOffice */
+    .copiable-table {
+      width: 100%;
+      border-collapse: collapse;
+      margin: 14px 0;
+      font-size: 0.85rem;
+      background: #fff;
+    }
+    .copiable-table th, .copiable-table td {
+      border: 1px solid #94a3b8;
+      padding: 8px 10px;
+      text-align: left;
+      vertical-align: top;
+    }
+    .copiable-table th {
+      background-color: #f1f5f9;
+      font-weight: 700;
+      color: #1e293b;
+    }
+    .copiable-table tr:nth-child(even) {
+      background-color: #f8fafc;
     }
 
+    /* Media Cards Grid */
+    .media-grid {
+      display: grid;
+      grid-template-columns: repeat(auto-fill, minmax(260px, 1fr));
+      gap: 12px;
+    }
+    .media-card {
+      background: var(--surface);
+      border: 1px solid var(--border);
+      border-radius: 6px;
+      padding: 14px;
+      display: flex;
+      flex-direction: column;
+      justify-content: space-between;
+    }
+    .media-card-type {
+      font-size: 0.68rem;
+      font-weight: 700;
+      text-transform: uppercase;
+      padding: 2px 6px;
+      border-radius: 3px;
+      display: inline-block;
+      margin-bottom: 6px;
+    }
+    .type-video { background: #fee2e2; color: #b91c1c; }
+    .type-diksha { background: #e0f2fe; color: #0369a1; }
+    .type-sim { background: #ede9fe; color: #6d28d9; }
+
+    .media-card h4 { font-size: 0.9rem; margin-bottom: 4px; color: var(--text); }
+    .media-card p { font-size: 0.8rem; color: var(--text-muted); margin-bottom: 10px; line-height: 1.4; }
+    .media-card a {
+      display: inline-block;
+      text-align: center;
+      padding: 6px 10px;
+      text-decoration: none;
+      font-size: 0.78rem;
+      font-weight: 600;
+      border-radius: 4px;
+    }
+
+    /* WhatsApp Box */
+    .whatsapp-box {
+      background: #e7f8ec;
+      padding: 16px;
+      border-radius: 8px;
+      font-family: monospace;
+      white-space: pre-wrap;
+      border: 1px solid #bbf7d0;
+      font-size: 0.88rem;
+      line-height: 1.5;
+      color: #0f5132;
+    }
+
+    /* Worksheet Print Preview */
+    .worksheet-preview-container {
+      background: #64748b;
+      padding: 16px;
+      overflow-x: auto;
+      border-radius: 6px;
+    }
+    .worksheet-page {
+      background: #ffffff;
+      width: 210mm;
+      min-height: 297mm;
+      padding: 15mm;
+      margin: 0 auto;
+      box-shadow: 0 4px 14px rgba(0,0,0,0.15);
+      color: #000;
+      font-family: 'Merriweather', serif;
+    }
+    .ws-header {
+      border-bottom: 2px solid #000;
+      padding-bottom: 8px;
+      margin-bottom: 14px;
+      text-align: center;
+    }
+    .ws-header h2 { font-size: 13pt; text-transform: uppercase; margin-bottom: 4px; }
+    .ws-meta-grid {
+      display: grid;
+      grid-template-columns: 2fr 1fr 1fr;
+      gap: 6px;
+      font-size: 9.5pt;
+      margin-top: 8px;
+      text-align: left;
+    }
+    .ws-meta-line { border-bottom: 1px dotted #444; padding-bottom: 2px; }
+    .score-badge {
+      display: inline-block;
+      background: #f1f5f9;
+      border: 1px solid #cbd5e1;
+      padding: 1px 6px;
+      border-radius: 3px;
+      font-size: 9pt;
+      font-weight: 700;
+      float: right;
+    }
+    .question-block {
+      margin-bottom: 16px;
+      font-size: 10pt;
+      line-height: 1.5;
+    }
+    .answer-line {
+      border-bottom: 1px dashed #666;
+      height: 22px;
+      width: 100%;
+      margin-top: 4px;
+      display: block;
+    }
+
+    /* YouTube 8px Spinner */
+    .spinner-overlay {
+      position: fixed;
+      top: 0; left: 0; width: 100vw; height: 100vh;
+      background: rgba(0, 0, 0, 0.4);
+      backdrop-filter: blur(2px);
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      z-index: 99999;
+    }
+    .spinner-card {
+      background: #ffffff;
+      padding: 26px 40px;
+      border-radius: 8px;
+      display: flex;
+      flex-direction: column;
+      align-items: center;
+      gap: 16px;
+      box-shadow: 0 10px 30px rgba(0,0,0,0.2);
+    }
+    .yt-spinner-8px {
+      width: 52px;
+      height: 52px;
+      border: 8px solid #e2e8f0;
+      border-top: 8px solid var(--primary);
+      border-radius: 50%;
+      animation: yt-spin 0.8s linear infinite;
+    }
+    @keyframes yt-spin {
+      0% { transform: rotate(0deg); }
+      100% { transform: rotate(360deg); }
+    }
+    .spinner-text { font-weight: 600; font-size: 0.9rem; color: var(--secondary); }
+
+    /* Custom In-App Modal Dialog */
+    .modal-overlay {
+      position: fixed;
+      top: 0; left: 0; width: 100vw; height: 100vh;
+      background: rgba(0, 0, 0, 0.45);
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      z-index: 100000;
+    }
+    .modal-box {
+      background: #fff;
+      width: 90%;
+      max-width: 420px;
+      border-radius: 8px;
+      box-shadow: 0 10px 30px rgba(0,0,0,0.25);
+      overflow: hidden;
+    }
+    .modal-header {
+      background: var(--primary);
+      color: #fff;
+      padding: 10px 16px;
+      display: flex;
+      justify-content: space-between;
+      align-items: center;
+    }
+    .modal-header h4 { font-size: 0.9rem; font-weight: 600; }
+    .modal-close {
+      background: none; border: none; color: #fff; font-size: 1.2rem; cursor: pointer;
+    }
+    .modal-body { padding: 18px 16px; font-size: 0.88rem; line-height: 1.5; color: var(--text); }
+    .modal-footer {
+      padding: 10px 16px;
+      background: #f8fafc;
+      display: flex;
+      justify-content: flex-end;
+      border-top: 1px solid var(--border);
+    }
+
+    .toast-popup {
+      position: fixed;
+      bottom: 20px;
+      right: 20px;
+      background: #1e293b;
+      color: #fff;
+      padding: 10px 18px;
+      border-radius: 6px;
+      font-size: 0.82rem;
+      font-weight: 500;
+      box-shadow: 0 4px 12px rgba(0,0,0,0.2);
+      z-index: 100001;
+      opacity: 0;
+      transform: translateY(10px);
+      transition: all 0.2s ease-out;
+    }
+    .toast-popup.visible { opacity: 1; transform: translateY(0); }
+
+    /* Responsive */
+    @media (max-width: 960px) {
+      .app-container { flex-direction: column; overflow: auto; }
+      .sidebar { width: 100%; border-right: none; border-bottom: 1px solid var(--border); }
+      .worksheet-preview-container { padding: 8px; }
+      .worksheet-page { width: 100%; padding: 10mm; min-height: auto; }
+    }
+
+    /* ==========================================================================
+       2. STRICT CSS PRINT MEDIA STYLESHEET (A4 PORTRAIT OPTIMIZATION)
+       ========================================================================== */
     @media print {
-      body * { visibility: hidden; }
-      #printable-consolidated-area, #printable-consolidated-area * { visibility: visible; }
-      #printable-consolidated-area { position: absolute; left: 0; top: 0; width: 100%; background: #fff; padding: 20px; }
-      .no-print { display: none !important; }
+      @page {
+        size: A4 portrait;
+        margin: 15mm;
+      }
+      html, body {
+        width: 210mm;
+        height: auto;
+        background: #ffffff !important;
+        color: #000000 !important;
+        font-family: 'Merriweather', 'Times New Roman', serif;
+        font-size: 10pt;
+        line-height: 1.4;
+      }
+      .no-print, header, nav, .sidebar, button, .pane-header, .spinner-overlay, .modal-overlay, .toast-popup {
+        display: none !important;
+      }
+      .canvas, .tab-content-wrapper, .worksheet-preview-container {
+        padding: 0 !important;
+        margin: 0 !important;
+        background: transparent !important;
+        overflow: visible !important;
+      }
+      .tab-pane { display: none !important; }
+      #tab-worksheet-view { display: block !important; }
+      .worksheet-page {
+        width: 100% !important;
+        min-height: auto !important;
+        margin: 0 !important;
+        padding: 0 !important;
+        box-shadow: none !important;
+      }
+      .question-block {
+        page-break-inside: avoid !important;
+        break-inside: avoid !important;
+        margin-bottom: 14px;
+        padding-bottom: 4px;
+      }
+      .page-break {
+        page-break-after: always !important;
+        break-after: always !important;
+      }
+      .answer-line { border-bottom: 1px dashed #333333 !important; }
     }
-
-    .target-audience-pill { width: 100%; padding: 12px 16px; border-radius: 12px; border: 1.5px solid var(--border-color); background: #ffffff; font-weight: 700; font-size: 13.5px; color: var(--text-main); cursor: pointer; user-select: none; text-align: left; transition: all 0.2s ease; box-sizing: border-box; }
-    .target-audience-pill.active { background: #dbeafe; border-color: #2563eb; color: #1e40af; box-shadow: var(--shadow-sm); }
   </style>
 </head>
 <body>
 
-  <div id="progress-bar-container"><div id="progress-bar"></div></div>
-  <div id="toast-container"></div>
+  <!-- YouTube-Style 8px Spinner Overlay -->
+  <div id="spinner-overlay" class="spinner-overlay no-print" style="display:none;">
+    <div class="spinner-card">
+      <div class="yt-spinner-8px"></div>
+      <div id="spinner-text" class="spinner-text">Processing Request...</div>
+    </div>
+  </div>
 
-  <!-- Confirmation Modal -->
-  <div id="confirm-modal" class="modal-overlay" style="display: none;">
-    <div class="modal-card">
-      <h3 id="modal-title" style="margin-top:0;">Confirm Action</h3>
-      <p id="modal-msg" style="color: var(--text-muted); font-size:14px;"></p>
-      <div style="display: flex; justify-content: flex-end; gap: 10px; margin-top: 20px;">
-        <button class="btn btn-outline" onclick="closeConfirmModal(false)">Cancel</button>
-        <button class="btn btn-primary" id="modal-confirm-btn">Confirm</button>
+  <!-- Custom In-App Modal Dialog -->
+  <div id="custom-modal-overlay" class="modal-overlay no-print" style="display:none;">
+    <div class="modal-box">
+      <div class="modal-header">
+        <h4 id="modal-title">Teacher Planner</h4>
+        <button id="modal-close-btn" class="modal-close">&times;</button>
+      </div>
+      <div class="modal-body" id="modal-message"></div>
+      <div class="modal-footer">
+        <button id="modal-ok-btn" class="btn btn-primary">OK</button>
       </div>
     </div>
   </div>
 
-  <!-- RESTRUCTURED PROFILE & SETTINGS MODAL -->
-  <div id="settings-modal" class="modal-overlay" style="display: none;">
-    <div class="modal-card">
-      <div style="display: flex; justify-content: space-between; align-items: center; margin-bottom: 20px;">
-        <h3 style="margin:0; font-weight:800; color:var(--primary);">Profile & Settings</h3>
-        <div style="display: flex; gap: 8px; align-items: center;">
-          <button class="icon-action-btn" onclick="logout()" title="Logout" style="background:#fee2e2; color:#b91c1c; border-color:#fca5a5;">
-            <svg width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.2" stroke-linecap="round" stroke-linejoin="round">
-              <path d="M9 21H5a2 2 0 0 1-2-2V5a2 2 0 0 1 2-2h4"></path>
-              <polyline points="16 17 21 12 16 7"></polyline>
-              <line x1="21" y1="12" x2="9" y2="12"></line>
-            </svg>
-          </button>
-          <button class="icon-action-btn" onclick="document.getElementById('settings-modal').style.display='none'" title="Close">
-            ✕
-          </button>
-        </div>
-      </div>
+  <!-- Floating Toast Notification -->
+  <div id="toast-popup" class="toast-popup no-print">Notification</div>
 
-      <div style="background: linear-gradient(135deg, #eff6ff, #dbeafe); padding: 18px; border-radius: 14px; margin-bottom: 18px; border: 1px solid var(--border-color);">
-        <div style="display:flex; align-items:center; gap:14px; margin-bottom:12px;">
-          <div style="width:48px; height:48px; background:var(--primary); color:#fff; border-radius:50%; display:flex; align-items:center; justify-content:center; font-weight:900; font-size:18px;">
-            👤
-          </div>
-          <div>
-            <h4 id="set-name" style="margin:0; font-size:16px; color:#1e3a8a;">-</h4>
-            <span id="set-first-lang" class="badge badge-success" style="margin-top:4px; display:inline-block;">-</span>
-          </div>
-        </div>
-        <div style="display:grid; grid-template-columns:1fr 1fr; gap:8px; font-size:13px; background:#fff; padding:10px 12px; border-radius:10px; border:1px solid var(--border-color);">
-          <div><strong>Gender:</strong> <span id="set-gender">-</span></div>
-          <div><strong>Class/Div:</strong> <span id="set-class">-</span>-<span id="set-div">-</span></div>
-          <div style="grid-column: span 2;"><strong>Phone:</strong> <span id="set-phone">-</span></div>
-        </div>
-      </div>
-
-      <!-- COLLAPSIBLE 1: MODIFY PASSWORD -->
-      <div class="accordion-item" style="margin-bottom: 12px;">
-        <div class="accordion-header" onclick="toggleAccordion('modal-collapsible-pass')">
-          <span>🔑 Modify Password</span>
-        </div>
-        <div class="accordion-body" id="modal-collapsible-pass">
-          <form id="change-pass-form">
-            <div style="font-size: 13px; color: var(--text-muted); margin-bottom: 10px; background: #f8fafc; padding: 8px 12px; border-radius: 8px; border: 1px solid var(--border-color);">
-              Username: <strong id="set-username-display" style="color: var(--text-main); font-size: 14px;">-</strong>
-            </div>
-            <div class="form-group">
-              <input type="password" id="new-password" required placeholder="Enter new password">
-            </div>
-            <button type="submit" class="btn btn-primary btn-block">Update Password</button>
-          </form>
-        </div>
-      </div>
-
-      <!-- COLLAPSIBLE 2: SYSTEM & SECURITY SETTINGS (ADMIN ONLY) -->
-      <div class="accordion-item admin-only" style="margin-bottom: 12px;width:100%" >
-        <div class="accordion-header" onclick="toggleAccordion('modal-collapsible-sys')">
-          <span >⚙️ System & Security Settings</span>
-          
-        </div></div>
-        <div class="accordion-body" id="modal-collapsible-sys">
-          
-          <div id="security-pill-btn" class="tap-toggle-pill enabled" onclick="toggleSecurityModePill()">
-            <span id="security-pill-icon">🛡️</span>
-            <span id="security-pill-status">Security Active: ENABLED</span>
-          </div>
-
-          <div style="margin-top: 14px;">
-            
-            <div id="show-student-tabs-pill" class="tap-toggle-pill disabled" onclick="toggleShowStudentTabsForAdmin()">
-              <span>👁️</span>
-              <span id="show-student-tabs-status">Show Practice and Portfolio for Admin: OFF</span>
-            
-          </div>
-        </div>
-      </div>
+  <!-- Top Header Navigation -->
+  <header class="app-header no-print">
+    <div class="header-brand">
+      <span class="badge">Kerala SCERT</span>
+      <h1>Smart Teacher Planner & Worksheet Studio</h1>
     </div>
-  </div>
-
-  <!-- Printable Modal View -->
-  <div id="print-modal" class="modal-overlay" style="display: none;">
-    <div class="modal-card" style="max-width: 850px; width: 95%;">
-      <div class="no-print" style="display: flex; justify-content: space-between; align-items: center; margin-bottom: 15px;">
-        <h3 style="margin:0;">Report Print Preview</h3>
-        <div style="display: flex; gap: 10px;">
-          <button class="btn btn-primary" onclick="window.print()">Print / Save PDF</button>
-          <button class="btn btn-outline" onclick="document.getElementById('print-modal').style.display='none'">Close</button>
-        </div>
-      </div>
-      <div id="print-modal-content"></div>
+    <div class="header-status">
+      <span>● Standards 5, 6, 7 (Part 1 & 2)</span>
     </div>
-  </div>
+  </header>
 
-  <!-- Top Navbar -->
-  <nav class="top-navbar" id="top-navbar" style="display: none;">
-    <div class="brand-logo">
-      <span>🎓 TDTTI USS PORTAL</span>
-    </div>
+  <!-- Main Application Container -->
+  <div class="app-container">
 
-    <div style="display: flex; align-items: center; gap: 12px;">
-      <div class="status-pill">
-        <span id="network-led" class="led-dot led-green"></span>
-        <span id="network-status-text">Online</span>
-      </div>
-
-      <div style="text-align: right; font-size: 13px;">
-        <div id="user-display-name" style="font-weight: 700;">User</div>
-        <div style="color: #93c5fd; font-size: 11px;">Class <span id="user-display-class">10</span>-<span id="user-display-div">A</span></div>
-      </div>
-
-      <button class="icon-btn-header" onclick="openSettingsModal()" title="Profile & Settings">
-        ⚙️
-      </button>
-    </div>
-  </nav>
-
-  <!-- TAB NAVIGATION BAR -->
-  <div class="tab-bar-container" id="tab-bar-container" style="display: none;">
-    <button class="icon-tab-btn active student-tab-btn" id="tab-practice" onclick="showSection('practice-sec')" title="Practice Center">
-      <svg viewBox="0 0 24 24" fill="none"><path d="M12 6.253v13m0-13C10.832 5.477 9.246 5 7.5 5S4.168 5.477 3 6.253v13C4.168 18.477 5.754 18 7.5 18s3.332.477 4.5 1.253m0-13C13.168 5.477 14.754 5 16.5 5c1.747 0 3.332.477 4.5 1.253v13C19.832 18.477 18.247 18 16.5 18c-1.746 0-3.332.477-4.5 1.253" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"/></svg>
-    </button>
-    <button class="icon-tab-btn student-tab-btn" id="tab-portfolio" onclick="showSection('portfolio-sec')" title="My Dashboard & Portfolio">
-      <svg viewBox="0 0 24 24" fill="none"><path d="M18 20V10M12 20V4M6 20v-6" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"/></svg>
-    </button>
-    <button class="icon-tab-btn" id="tab-notif" onclick="showSection('notif-sec')" title="Notification Center">
-      <svg viewBox="0 0 24 24" fill="none"><path d="M15 17h5l-1.405-1.405A2.032 2.032 0 0118 14.158V11a6.002 6.002 0 00-4-5.659V5a2 2 0 10-4 0v.341C7.67 6.165 6 8.388 6 11v3.159c0 .538-.214 1.055-.595 1.436L4 17h5m6 0v1a3 3 0 11-6 0v-1m6 0H9" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"/></svg>
-      <span class="tab-badge-dot" id="notif-badge-dot" style="display:none;"></span>
-    </button>
-    <button class="icon-tab-btn" id="tab-refresh" onclick="refreshCurrentView()" title="Refresh Data">
-      <svg id="global-refresh-icon" viewBox="0 0 24 24" fill="none"><path d="M4 4v5h.582m15.356 2A8.001 8.001 0 004.582 9m0 0H9m11 11v-5h-.581m0 0a8.003 8.003 0 01-15.357-2m15.357 2H15" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"/></svg>
-    </button>
-    
-    <!-- ADMIN TABS -->
-    <button class="icon-tab-btn admin-only" id="tab-student-reports" onclick="showSection('admin-report-sec')" title="Student Reports">
-      <svg viewBox="0 0 24 24" fill="none"><path d="M9 12h6m-6 4h6m2 5H7a2 2 0 01-2-2V5a2 2 0 012-2h5.586a1 1 0 01.707.293l5.414 5.414a1 1 0 01.293.707V19a2 2 0 01-2 2z" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"/></svg>
-    </button>
-    <!-- UPDATED RESET REQUESTS TAB ICON -->
-    <button class="icon-tab-btn admin-only" id="tab-resets" onclick="showSection('admin-resets-sec')" title="Reset Requests">
-      <svg viewBox="0 0 24 24" fill="none"><path d="M3 12a9 9 0 1 0 9-9 9.75 9.75 0 0 0-6.74 2.74L3 8m0 0V3m0 5h5" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"/></svg>
-      <span class="tab-badge-dot" id="reset-badge-dot" style="display:none;"></span>
-    </button>
-    <button class="icon-tab-btn admin-only" id="tab-manage-qs" onclick="showSection('manage-qs-sec')" title="Manage Questions">
-      <svg viewBox="0 0 24 24" fill="none"><path d="M8.228 9c.549-1.165 2.03-2 3.772-2 2.21 0 4 1.343 4 3 0 1.4-1.278 2.575-3.006 2.907-.542.104-.994.54-.994 1.093m0 3h.01M21 12a9 9 0 11-18 0 9 9 0 0118 0z" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"/></svg>
-    </button>
-    <button class="icon-tab-btn admin-only" id="tab-manage-users" onclick="showSection('manage-users-sec')" title="Manage Users & Optimization">
-      <svg viewBox="0 0 24 24" fill="none"><path d="M12 4.354a4 4 0 110 5.292M15 21H3v-1a6 6 0 0112 0v1zm0 0h6v-1a6 6 0 00-9-5.197M13 7a4 4 0 11-8 0 4 4 0 018 0z" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"/></svg>
-    </button>
-    <button class="icon-tab-btn admin-only" id="tab-logs" onclick="showSection('admin-logs-sec')" title="Audit Access Logs">
-      <svg viewBox="0 0 24 24" fill="none"><path d="M9 12l2 2 4-4m5.618-4.016A11.955 11.955 0 0112 2.944a11.955 11.955 0 01-8.618 3.04A12.02 12.02 0 003 9c0 5.591 3.824 10.29 9 11.622 5.176-1.332 9-6.03 9-11.622 0-1.042-.133-2.052-.382-3.016z" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"/></svg>
-    </button>
-  </div>
-
-  <div class="container">
-
-    <!-- LOGIN SCREEN -->
-    <section id="login-sec">
-      <div class="login-hero-header">
-        <img src="https://encrypted-tbn0.gstatic.com/images?q=tbn:ANd9GcS6dWKvrSQKybNS-C8s5KIFwaCI7GbTTMt1QavDq1yKrA&s=10" alt="School Logo" class="school-logo-img">
-        <h2 class="login-hero-title">TDTTI USS TRAINING PORTAL</h2>
-        <span class="login-hero-subtitle">ACADEMIC SESSION 2026-27</span>
-      </div>
-
-      <div class="login-form-body">
-        <form id="login-form">
-          <div class="form-group">
-            <label>Username</label>
-            <input type="text" id="login-username" required placeholder="Enter username">
-          </div>
-
-          <div class="form-group">
-            <label>Password</label>
-            <input type="password" id="login-password" required placeholder="Enter password">
-          </div>
-          
-          <div id="keep-logged-pill" class="keep-logged-pill active" onclick="toggleKeepLoggedPill()">
-            <span class="pill-indicator-dot"></span>
-            <span id="keep-logged-text">Keep Me Logged In: ON</span>
-          </div>
-
-          <button type="submit" class="btn btn-primary btn-block" style="padding:14px; font-weight:800;">Sign In →</button>
-        </form>
-      </div>
-    </section>
-
-    <!-- 1. PRACTICE TAB -->
-    <section id="practice-sec" class="section" style="display:none;">
-      <h3 style="margin-top:0; color:var(--primary);">Practice Center</h3>
-
-      <div class="mode-selector-group" id="practice-mode-selector">
-        <button class="mode-btn" onclick="switchPracticeMode('PRACTICE')">📖 Subject Practice</button>
-        <button class="mode-btn" onclick="switchPracticeMode('TRIAL')">⭐ Trial Exam Mode</button>
-      </div>
-
-      <!-- SUBJECT PRACTICE BOX -->
-      <div id="subject-practice-box" class="card" style="display:none;">
-        <div style="display:flex; justify-content:space-between; align-items:center; margin-bottom:12px;">
-          <label style="font-weight: 700; font-size: 14px; margin:0;">Choose Subject:</label>
-          <button class="btn btn-outline" style="padding:6px 12px; font-size:12px;" onclick="exitPracticeMode()">✕ Exit Practice</button>
+    <!-- Left Sidebar: Configuration & 6-Slot Master Repository -->
+    <aside class="sidebar no-print">
+      
+      <!-- Curriculum Selection & Pacing -->
+      <section class="card">
+        <h3>1. Instructional Pacing Target</h3>
+        <div class="form-group">
+          <label>Standard (Class):</label>
+          <select id="class-select" class="form-control">
+            <option value="5">Class 5</option>
+            <option value="6">Class 6</option>
+            <option value="7">Class 7</option>
+          </select>
         </div>
-        <select id="subject-select" onchange="loadPracticeSubject()">
-          <option value="">-- Choose Subject --</option>
-          <option value="MI" data-firstlang="true">Malayalam I (MI)</option>
-          <option value="AR" data-firstlang="true">Arabic - العربية (AR)</option>
-          <option value="SK" data-firstlang="true">Sanskrit - संस्कृतम् (SK)</option>
-          <option value="MII">Malayalam II (MII)</option>
-          <option value="EN">English (EN)</option>
-          <option value="MM">Mathematics (MM)</option>
-          <option value="BS">Basic Science (BS)</option>
-          <option value="SS">Social Science (SS)</option>
-        </select>
-      </div>
 
-      <!-- TRIAL EXAM BOX -->
-      <div id="trial-exam-box" class="card" style="display:none; text-align:center; padding:35px 20px; position:relative;">
-        <button class="btn btn-outline" style="position:absolute; top:15px; right:15px; padding:6px 12px; font-size:12px;" onclick="exitPracticeMode()">✕ Close Trial Mode</button>
-        <h3 style="margin-top:10px; color:var(--primary);">Comprehensive Trial Exam</h3>
-        <p style="color:var(--text-muted); font-size:14px; max-width:550px; margin:0 auto 20px auto; line-height:1.5;">
-          Includes up to 5 unseen questions from each subject (1 score per question, 30s timer). Attendance is compulsory once started!
-        </p>
-        <button class="btn btn-primary" onclick="startTrialExam()">Start Trial Exam Now →</button>
-      </div>
-
-      <div id="practice-spinner" class="card spinner-box" style="display:none;">
-        <div class="spinner-bar-pulse"></div>
-        <p style="color:var(--text-muted); font-size:14px; margin:15px 0 0 0; font-weight:600;">Loading Questions...</p>
-      </div>
-
-      <div id="no-trial-card" class="card" style="display:none; text-align:center; padding:45px 20px;">
-        <div style="font-size:52px; margin-bottom:12px;">ℹ️</div>
-        <h3 style="color:var(--text-main); margin:0 0 10px 0;">Notice</h3>
-        <p style="color:var(--text-muted); font-size:16px; margin:0 0 24px 0; font-weight:600;">
-          There is no Trial Exam available for you right now.
-        </p>
-        <button class="btn btn-primary" onclick="closeNoTrialCard()">Close</button>
-      </div>
-
-      <div id="no-questions-card" class="card" style="display:none; text-align:center; padding:40px 20px;">
-        <div style="font-size:48px; margin-bottom:10px;">📂</div>
-        <h3 style="color:var(--text-main); margin:0 0 8px 0;">No Questions Found</h3>
-        <p style="color:var(--text-muted); font-size:14px; margin:0 0 20px 0;">No questions found to attend for this subject yet.</p>
-        <button class="btn btn-primary" onclick="exitPracticeMode()">Return to Subjects</button>
-      </div>
-
-      <!-- QUIZ CARD -->
-      <div id="quiz-card" class="card" style="display:none;">
-        <div class="quiz-header" style="display:flex; justify-content:space-between; align-items:center; flex-wrap:wrap; gap:10px;">
-          <span id="quiz-subject" class="badge">Subject</span>
-          <div id="timer-badge" class="timer-badge">⏱️ <span id="timer-count">30</span>s</div>
-          <span id="quiz-progress" style="font-size: 13px; color: var(--text-muted); font-weight:600;">Question 1</span>
-          
-          <button id="quiz-exit-btn" onclick="triggerEarlyExitPractice()" class="btn btn-outline" style="padding:6px 14px; font-size:12px; color:var(--danger); border-color:#fca5a5; background:#fee2e2; font-weight:800;" title="Exit Practice">
-            Exit ✕
-          </button>
+        <div class="form-group">
+          <label>Textbook Part:</label>
+          <div class="radio-toggle">
+            <label><input type="radio" name="textbook-part" value="part1" checked> Part 1</label>
+            <label><input type="radio" name="textbook-part" value="part2"> Part 2</label>
+          </div>
         </div>
+
+        <div class="form-group">
+          <label>Chapter / Unit Title:</label>
+          <input type="text" id="unit-title" class="form-control" placeholder="e.g., Reflection of Light, Medieval India">
+        </div>
+
+        <div class="form-row">
+          <div class="form-group half">
+            <label>Day in Unit:</label>
+            <input type="number" id="day-number" class="form-control" value="1" min="1" max="15">
+          </div>
+          <div class="form-group half">
+            <label>Pacing (Total Days):</label>
+            <input type="number" id="total-days" class="form-control" value="5" min="1" max="15">
+          </div>
+        </div>
+
+        <div class="form-group">
+          <label>Period Duration:</label>
+          <input type="text" class="form-control" value="35 Minutes (SCERT Fixed)" disabled>
+        </div>
+      </section>
+
+      <!-- 6-Slot Master Repository Matrix -->
+      <section class="card">
+        <h3>
+          <span>2. Locked Textbooks (6 Core Slots)</span>
+          <span style="font-size: 0.7rem; font-weight: normal; color: var(--text-muted);" id="locked-count">0/6 Locked</span>
+        </h3>
         
-        <div id="quiz-question" class="question-text">Question prompt?</div>
-        <img id="quiz-image" class="question-img" style="display:none;" src="" alt="Question Diagram">
-
-        <div class="options-grid">
-          <button class="opt-btn" id="opt-btn-A" onclick="selectOption('A')"><span class="badge">A</span> <span id="optA"></span></button>
-          <button class="opt-btn" id="opt-btn-B" onclick="selectOption('B')"><span class="badge">B</span> <span id="optB"></span></button>
-          <button class="opt-btn" id="opt-btn-C" onclick="selectOption('C')"><span class="badge">C</span> <span id="optC"></span></button>
-          <button class="opt-btn" id="opt-btn-D" onclick="selectOption('D')"><span class="badge">D</span> <span id="optD"></span></button>
-        </div>
-
-        <div style="display:flex; justify-content:flex-end; margin-top:24px;">
-          <button id="next-btn" class="btn btn-primary" onclick="confirmNextQuestion()">Next Question →</button>
-        </div>
-      </div>
-
-      <!-- CONSOLIDATION CARD -->
-      <div id="consolidation-card" class="card" style="display:none;">
-        <div style="text-align:center; margin-bottom:25px;">
-          <div style="font-size:48px; margin-bottom:8px;">🎯</div>
-          <h2 id="consolidation-title" style="margin:0; color:var(--primary);">Practice Session Summary</h2>
-          <p id="consolidation-subtitle" style="color:var(--text-muted); font-size:14px; margin-top:4px;">Detailed consolidation of answered questions.</p>
-        </div>
-
-        <div class="stats-grid">
-          <div class="card" style="margin:0; text-align:center; background:#f8fafc;">
-            <p style="margin:0; color:var(--text-muted); font-weight:700; font-size:13px;">Score / Attended</p>
-            <h2 id="summary-score-val" style="margin:6px 0 0 0; color:var(--primary);">0 / 0</h2>
-          </div>
-          <div class="card" style="margin:0; text-align:center; background:#f8fafc;">
-            <p style="margin:0; color:var(--text-muted); font-weight:700; font-size:13px;">Victory Rate</p>
-            <h2 id="summary-acc-val" style="margin:6px 0 0 0; color:var(--success);">0%</h2>
-          </div>
-        </div>
-
-        <h3 style="margin-top:25px; color:var(--text-main);">Question Breakdown</h3>
-        <div class="table-responsive">
-          <table class="data-table">
-            <thead>
-              <tr>
-                <th>Subject</th>
-                <th>Question</th>
-                <th>Options</th>
-                <th>Your Choice</th>
-                <th>Correct Choice</th>
-                <th>Status</th>
-              </tr>
-            </thead>
-            <tbody id="summary-breakdown-body"></tbody>
-          </table>
-        </div>
-
-        <div style="margin-top:30px; text-align:center;">
-          <button class="btn btn-primary" style="padding:14px 32px; font-weight:800; font-size:15px;" onclick="exitConsolidationView()">Proceed / Exit Practice →</button>
-        </div>
-      </div>
-    </section>
-
-    <!-- 2. MY DASHBOARD & PORTFOLIO SECTION -->
-    <section id="portfolio-sec" class="section" style="display:none;">
-      <h3 style="margin-top:0; color:var(--primary);">My Performance Dashboard</h3>
-
-      <div class="stats-grid">
-        <div class="card" style="margin:0;">
-          <p style="margin:0; color:var(--text-muted); font-size:13px; font-weight:700;">Total Answered Questions</p>
-          <h2 id="stat-total" style="margin:6px 0 0 0; color:var(--primary);">0</h2>
-        </div>
-        <div class="card" style="margin:0;">
-          <p style="margin:0; color:var(--text-muted); font-size:13px; font-weight:700;">Overall Accuracy Rate</p>
-          <h2 id="stat-accuracy" style="margin:6px 0 0 0; color:var(--success);">0%</h2>
-        </div>
-      </div>
-
-      <div class="grid-2" style="margin-bottom:24px;">
-        <div style="background:#f0fdf4; border:1px solid #bbf7d0; padding:18px; border-radius:12px;">
-          <h4 style="margin:0 0 15px 0; color:#166534; display:flex; align-items:center; gap:8px;">
-            <span>🌟 Strengths (≥70%)</span>
-          </h4>
-          <div id="strong-subjects-chart-container">
-            <p style="font-size:13px; color:var(--text-muted);">No strength subjects recorded yet.</p>
-          </div>
-        </div>
-
-        <div style="background:#fffbe0; border:1px solid #fef08a; padding:18px; border-radius:12px;">
-          <h4 style="margin:0 0 15px 0; color:#92400e; display:flex; align-items:center; gap:8px;">
-            <span>⚠️ Priorities (<70%)</span>
-          </h4>
-          <div id="weak-subjects-chart-container">
-            <p style="font-size:13px; color:var(--text-muted);">No weak subjects identified!</p>
-          </div>
-        </div>
-      </div>
-
-      <h3 style="margin-top:30px; color:var(--primary);">Subject Overview</h3> 
-      <div class="table-responsive">
-        <table class="data-table">
-          <thead>
-            <tr>
-              <th>Subject</th>
-              <th>Total</th>
-              <th>Correct</th>
-              <th>Wrong</th>
-              <th>Last Attended</th>
-            </tr>
-          </thead>
-          <tbody id="portfolio-overview-body"></tbody>
-        </table>
-      </div>
-
-      <div id="portfolio-trial-history-box" style="display:none; margin-top:35px;">
-        <h3 style="margin-top:0; color:var(--primary);">Trial Exam Consolidations</h3>
-        <p style="font-size:13px; color:var(--text-muted); margin-bottom:15px;">Historical consolidations of all attended Trial Exams.</p>
-        <div id="portfolio-trial-history-container"></div>
-      </div>
-
-      <h3 style="margin-top:35px; color:var(--primary);">Practice Audit Log</h3> 
-      <div class="table-responsive">
-        <table class="data-table">
-          <thead>
-            <tr>
-              <th>S.No</th>
-              <th>Subject</th>
-              <th>Question</th>
-              <th>Your Answer</th>
-              <th>Correct Answer</th>
-              <th>Status</th>
-            </tr>
-          </thead>
-          <tbody id="portfolio-audit-body"></tbody>
-        </table>
-      </div>
-    </section>
-
-    <!-- 3. NOTIFICATION CENTER TAB -->
-    <section id="notif-sec" class="section" style="display:none;">
-      <div style="display: flex; justify-content: space-between; align-items: center; margin-bottom: 20px;">
-        <h2 style="margin:0; color: #1B257D;">Notification Center</h2>
-        <button class="btn btn-outline" onclick="markAllNotifsAsRead()">Mark All Read ✓</button>
-      </div>
-      
-      <div id="admin-notif-composer" class="card admin-only" style="width:100%; box-sizing:border-box;">
-        <h3 style="margin-top:0; color:var(--primary);">Compose Notification</h3>
-        <form id="send-notif-form" style="width:100%; display:flex; flex-direction:column; align-items:flex-start;">
-          
-          <label style="font-weight:700; font-size:13px; margin-bottom:8px; display:block; width:100%; text-align:left;">Target Audience</label>
-          <input type="hidden" id="notif-target-mode" value="ALL">
-          
-          <div style="display:flex; flex-direction:column; gap:10px; width:100%; margin-bottom:18px;">
-            <div id="target-pill-all" class="target-audience-pill active" onclick="selectNotifTarget('ALL')">
-              📢 Broadcast to All Users
+        <div class="matrix-grid">
+          <!-- Class 5 Slots -->
+          <div class="slot-card" id="card-5_part1" data-slot="5_part1">
+            <div class="slot-header">
+              <span class="slot-title">Class 5 - Part 1</span>
+              <span class="slot-badge unlocked" id="badge-5_part1">Unlocked</span>
             </div>
-            <div id="target-pill-custom" class="target-audience-pill" onclick="selectNotifTarget('CUSTOM')">
-              🎯 Select Specific Student(s)
+            <div class="slot-file-name" id="name-5_part1">No PDF Attached</div>
+            <div class="slot-actions" id="actions-5_part1">
+              <input type="file" accept="application/pdf" class="slot-input" id="input-5_part1">
+              <button class="btn btn-outline slot-btn" data-slot="5_part1">Lock</button>
             </div>
           </div>
 
-          <div id="student-picker-box" style="display:none; width:100%; margin-bottom:18px;">
-            <label style="font-weight:700; font-size:13px; margin-bottom:6px; display:block; text-align:left;">Tap to Select Student(s):</label>
-            <div class="student-chips-container" id="student-chips-container" style="width:100%; box-sizing:border-box;"></div>
+          <div class="slot-card" id="card-5_part2" data-slot="5_part2">
+            <div class="slot-header">
+              <span class="slot-title">Class 5 - Part 2</span>
+              <span class="slot-badge unlocked" id="badge-5_part2">Unlocked</span>
+            </div>
+            <div class="slot-file-name" id="name-5_part2">No PDF Attached</div>
+            <div class="slot-actions" id="actions-5_part2">
+              <input type="file" accept="application/pdf" class="slot-input" id="input-5_part2">
+              <button class="btn btn-outline slot-btn" data-slot="5_part2">Lock</button>
+            </div>
           </div>
 
-          <div class="form-group" style="width:100%;">
-            <label>Notification Title</label>
-            <input type="text" id="notif-title" required placeholder="e.g. Sanskrit Practice Activity Summary">
+          <!-- Class 6 Slots -->
+          <div class="slot-card" id="card-6_part1" data-slot="6_part1">
+            <div class="slot-header">
+              <span class="slot-title">Class 6 - Part 1</span>
+              <span class="slot-badge unlocked" id="badge-6_part1">Unlocked</span>
+            </div>
+            <div class="slot-file-name" id="name-6_part1">No PDF Attached</div>
+            <div class="slot-actions" id="actions-6_part1">
+              <input type="file" accept="application/pdf" class="slot-input" id="input-6_part1">
+              <button class="btn btn-outline slot-btn" data-slot="6_part1">Lock</button>
+            </div>
           </div>
 
-          <div class="form-group" style="width:100%;">
-            <label>Message Content</label>
-            <textarea id="notif-message" rows="4" required placeholder="Type notification message here..."></textarea>
+          <div class="slot-card" id="card-6_part2" data-slot="6_part2">
+            <div class="slot-header">
+              <span class="slot-title">Class 6 - Part 2</span>
+              <span class="slot-badge unlocked" id="badge-6_part2">Unlocked</span>
+            </div>
+            <div class="slot-file-name" id="name-6_part2">No PDF Attached</div>
+            <div class="slot-actions" id="actions-6_part2">
+              <input type="file" accept="application/pdf" class="slot-input" id="input-6_part2">
+              <button class="btn btn-outline slot-btn" data-slot="6_part2">Lock</button>
+            </div>
           </div>
 
-          <button type="submit" class="btn btn-primary btn-block" style="width:100%; padding:12px; font-weight:800;">Send Notification</button>
-        </form>
-      </div>
+          <!-- Class 7 Slots -->
+          <div class="slot-card" id="card-7_part1" data-slot="7_part1">
+            <div class="slot-header">
+              <span class="slot-title">Class 7 - Part 1</span>
+              <span class="slot-badge unlocked" id="badge-7_part1">Unlocked</span>
+            </div>
+            <div class="slot-file-name" id="name-7_part1">No PDF Attached</div>
+            <div class="slot-actions" id="actions-7_part1">
+              <input type="file" accept="application/pdf" class="slot-input" id="input-7_part1">
+              <button class="btn btn-outline slot-btn" data-slot="7_part1">Lock</button>
+            </div>
+          </div>
 
-      <div style="display:flex; justify-content:space-between; align-items:center; margin-bottom:15px; margin-top:30px;">
-        <h3 style="margin:0;">Notifications Feed</h3>
-        <button id="admin-delete-selected-btn" class="btn btn-danger admin-only" onclick="deleteSelectedNotifs()" style="display:none;">
-          Remove Selected (<span id="selected-notif-count">0</span>)
+          <div class="slot-card" id="card-7_part2" data-slot="7_part2">
+            <div class="slot-header">
+              <span class="slot-title">Class 7 - Part 2</span>
+              <span class="slot-badge unlocked" id="badge-7_part2">Unlocked</span>
+            </div>
+            <div class="slot-file-name" id="name-7_part2">No PDF Attached</div>
+            <div class="slot-actions" id="actions-7_part2">
+              <input type="file" accept="application/pdf" class="slot-input" id="input-7_part2">
+              <button class="btn btn-outline slot-btn" data-slot="7_part2">Lock</button>
+            </div>
+          </div>
+        </div>
+      </section>
+
+      <!-- Primary Action Button -->
+      <section class="card">
+        <button id="generate-btn" class="btn btn-primary btn-block" style="padding: 10px;">
+          ⚡ Generate Lesson Package
         </button>
-      </div>
+      </section>
+    </aside>
 
-      <div id="notifications-list-container">
-        <p style="color:var(--text-muted); font-size:14px;">Loading notifications...</p>
-      </div>
-    </section>
-
-    <!-- 4. ADMIN TAB: Student Reports -->
-    <section id="admin-report-sec" class="section" style="display:none;">
-      <h2 style="margin-top:0px; color: #1B257D;">Evaluation Reports</h2>
-      <div id="admin-student-accordion-list"></div>
-    </section>
-
-    <!-- 5. ADMIN TAB: Reset Requests -->
-    <section id="admin-resets-sec" class="section" style="display:none;">
-      <div style="display: flex; justify-content: space-between; align-items: center; margin-bottom: 15px;">
-        <h2 style="margin:0; color: #1B257D;">Reset Requests</h2>
-        <button onclick="refreshResetRequests()" class="btn btn-outline" title="Refresh Requests">🔄 Refresh</button>
-      </div>
+    <!-- Right Workspace Area -->
+    <main class="canvas">
       
-      <div class="table-responsive">
-        <table class="data-table">
-          <thead>
-            <tr>
-              <th>ID</th>
-              <th>DT</th>
-              <th>NAME</th>
-              <th>CD</th>
-              <th>PH</th>
-              <th>SUB</th>
-              <th>Status</th>
-              <th>Action</th>
-            </tr>
-          </thead>
-          <tbody id="admin-resets-body"></tbody>
-        </table>
-      </div>
-    </section>
+      <!-- Canvas Tabs -->
+      <nav class="canvas-tabs no-print">
+        <button class="tab-btn active" data-tab="lesson-plan">📋 35-Min Lesson Plan</button>
+        <button class="tab-btn" data-tab="media-resources">🌐 Digital & Internet Media</button>
+        <button class="tab-btn" data-tab="blackboard-notes">✍️ Blackboard Notes (Application)</button>
+        <button class="tab-btn" data-tab="whatsapp-summary">💬 WhatsApp Broadcast</button>
+        <button class="tab-btn" data-tab="worksheet-view">📄 A4 Worksheet (5 Scores)</button>
+        <button class="tab-btn" data-tab="worksheet-answers">🔑 Worksheet Answer Key</button>
+      </nav>
 
-    <!-- 6. ADMIN TAB: Manage Questions -->
-    <section id="manage-qs-sec" class="section" style="display:none;">
-      <div style="display: flex; justify-content: space-between; align-items: center; margin-bottom: 20px;">
-        <h2 style="margin:0; color: #1B257D;">Manage Questions</h2>
-        <button onclick="triggerDbSetup()" class="btn btn-outline">Initialize Tabs</button>
-      </div>
+      <div class="tab-content-wrapper">
+        
+        <!-- Tab 1: Lesson Plan -->
+        <section id="tab-lesson-plan" class="tab-pane active">
+          <div class="pane-header no-print">
+            <h2>35-Minute Daily Instructional Lesson Plan</h2>
+            <button class="btn btn-secondary btn-sm copy-btn" data-target="lesson-plan-body">Copy Lesson Plan</button>
+          </div>
+          <div id="lesson-plan-body" class="rendered-markdown">
+            <p style="color: var(--text-muted); font-style: italic;">Enter your unit and pacing details on the left, then click "Generate Lesson Package".</p>
+          </div>
+        </section>
 
-      <form id="question-form" class="card">
-        <input type="hidden" id="q-id">
-        <div class="form-group">
-          <label>Subject</label>
-          <select id="q-subject" required>
-            <option value="MI">Malayalam I (MI)</option>
-            <option value="AR">Arabic - العربية (AR)</option>
-            <option value="SK">Sanskrit - संस्कृतम् (SK)</option>
-            <option value="MII">Malayalam II (MII)</option>
-            <option value="EN">English (EN)</option>
-            <option value="MM">Mathematics (MM)</option>
-            <option value="BS">Basic Science (BS)</option>
-            <option value="SS">Social Science (SS)</option>
-          </select>
-        </div>
+        <!-- Tab 2: Digital & Internet Media -->
+        <section id="tab-media-resources" class="tab-pane">
+          <div class="pane-header no-print">
+            <h2>Digital & Internet Media Recommendations (DIKSHA / YouTube / KITE Victers)</h2>
+          </div>
+          <div id="media-resources-body">
+            <p style="color: var(--text-muted); font-style: italic;">Curated media, simulations, and search keywords will render here.</p>
+          </div>
+        </section>
 
-        <div class="form-group">
-          <div style="display:flex; justify-content:space-between; align-items:center; margin-bottom:6px;">
-            <label style="margin:0;">Question Text</label>
-            <div style="display:flex; gap:8px;">
-              <label class="btn btn-outline" title="Capture Camera Diagram" style="padding:4px 8px; cursor:pointer;">
-                <input type="file" accept="image/*" capture="environment" onchange="uploadToImgBB(this)" hidden> 📷 Camera
-              </label>
-              <label class="btn btn-outline" title="Upload Image File" style="padding:4px 8px; cursor:pointer;">
-                <input type="file" accept="image/*" onchange="uploadToImgBB(this)" hidden> 🖼️ Upload
-              </label>
+        <!-- Tab 3: Blackboard Notes -->
+        <section id="tab-blackboard-notes" class="tab-pane">
+          <div class="pane-header no-print">
+            <h2>Blackboard Notes (Strict Application-Level Q&A Only)</h2>
+            <button class="btn btn-secondary btn-sm copy-btn" data-target="blackboard-notes-body">Copy Notes</button>
+          </div>
+          <div id="blackboard-notes-body" class="rendered-markdown">
+            <p style="color: var(--text-muted); font-style: italic;">Application-level questions and answers for student notebooks will render here.</p>
+          </div>
+        </section>
+
+        <!-- Tab 4: WhatsApp Broadcast -->
+        <section id="tab-whatsapp-summary" class="tab-pane">
+          <div class="pane-header no-print">
+            <h2>Daily WhatsApp Parent Communication Broadcast (With Blackboard Q&As)</h2>
+            <div class="pane-header-actions">
+              <button id="share-whatsapp-btn" class="btn btn-whatsapp btn-sm">📲 Share to WhatsApp Group</button>
+              <button class="btn btn-secondary btn-sm copy-btn" data-target="whatsapp-summary-body">Copy Text</button>
             </div>
           </div>
-          <textarea id="q-text" required rows="3" placeholder="Type Question Here..."></textarea>
-          <input type="text" id="q-img-url" style="display:none;">
-          <div style="text-align:right;">
-            <img id="q-img-preview" src="" style="display:none; max-height:120px; border-radius:8px; margin-top:10px; border:1px solid var(--border-color);">
+          <div id="whatsapp-summary-body" class="whatsapp-box">Parent communication message will render here.</div>
+        </section>
+
+        <!-- Tab 5: Printable Worksheet (5 Scores) -->
+        <section id="tab-worksheet-view" class="tab-pane">
+          <div class="pane-header no-print">
+            <h2>A4 Portrait Printable Worksheet (Total: 5 Scores)</h2>
+            <button id="print-btn" class="btn btn-success btn-sm">🖨️ Print / Save to PDF</button>
           </div>
-        </div>
+          
+          <div class="worksheet-preview-container">
+            <div id="worksheet-render-area" class="worksheet-page">
+              <div style="text-align: center; color: #777; font-style: italic; padding: 40px;" class="no-print">
+                Worksheet will render inside this portrait A4 container.
+              </div>
+            </div>
+          </div>
+        </section>
 
-        <div class="grid-2">
-          <div><input type="text" placeholder="Option A" id="q-optA" required></div>
-          <div><input type="text" placeholder="Option B" id="q-optB" required></div>
-          <div><input type="text" placeholder="Option C" id="q-optC" required></div>
-          <div><input type="text" placeholder="Option D" id="q-optD" required></div>
-        </div>
+        <!-- Tab 6: Worksheet Answer Key -->
+        <section id="tab-worksheet-answers" class="tab-pane">
+          <div class="pane-header no-print">
+            <h2>Worksheet Answer Key & Scoring Guide (Total: 5 Scores)</h2>
+            <button class="btn btn-secondary btn-sm copy-btn" data-target="worksheet-answers-body">Copy Answer Key</button>
+          </div>
+          <div id="worksheet-answers-body" class="rendered-markdown">
+            <p style="color: var(--text-muted); font-style: italic;">Model answers and scoring breakdown will render here.</p>
+          </div>
+        </section>
 
-        <div class="form-group" style="margin-top:12px;">
-          <label>Correct Choice</label>
-          <select id="q-correct" required>
-            <option value="A">Option A</option>
-            <option value="B">Option B</option>
-            <option value="C">Option C</option>
-            <option value="D">Option D</option>
-          </select>
-        </div>
-
-        <button type="submit" class="btn btn-primary">Save Question</button>
-      </form>
-
-      <h2 style="margin-top:35px; color: #1B257D;">Question Bank</h2>
-      <div class="table-responsive">
-        <table class="data-table">
-          <thead>
-            <tr><th>Subject</th><th>Question</th><th>Answer</th><th>Actions</th></tr>
-          </thead>
-          <tbody id="admin-questions-body"></tbody>
-        </table>
       </div>
-    </section>
-
-    <!-- 7. ADMIN TAB: Manage Users & Optimization -->
-    <section id="manage-users-sec" class="section" style="display:none;">
-      <h2 style="margin:0 0 15px 0; color: #1B257D;">Student Optimization Analytics</h2>
-      <div id="manage-users-analytics-accordion"></div>
-
-      <hr style="margin:30px 0; border:none; border-top:1px solid var(--border-color);">
-
-      <div id="printable-consolidated-area">
-        <div style="display:flex; justify-content:space-between; align-items:center; margin-bottom:15px;">
-          <h3 style="margin:0; color: #1B257D;">Performance Consolidated Summary</h3>
-          <button class="btn btn-outline print-icon-btn no-print" onclick="printConsolidatedTable()">🖨️ Print Report</button>
-        </div>
-
-        <div class="table-responsive">
-          <table class="data-table" id="consolidated-perf-table">
-            <thead>
-              <tr>
-                <th class="sortable-header" onclick="sortConsolidatedTable('sno')">Sn ↕</th>
-                <th class="sortable-header" onclick="sortConsolidatedTable('name')">Name ↕</th>
-                <th class="sortable-header" onclick="sortConsolidatedTable('gender')">G ↕</th>
-                <th class="sortable-header" onclick="sortConsolidatedTable('userClass')">C ↕</th>
-                <th class="sortable-header" onclick="sortConsolidatedTable('div')">D ↕</th>
-                <th class="sortable-header" onclick="sortConsolidatedTable('firstLanguage')">Lan ↕</th>
-                <th class="sortable-header" onclick="sortConsolidatedTable('phone')">Phone ↕</th>
-                <th class="sortable-header" onclick="sortConsolidatedTable('accuracy')">Overall % ↕</th>
-              </tr>
-            </thead>
-            <tbody id="consolidated-table-body"></tbody>
-          </table>
-        </div>
-      </div>
-
-      <hr style="margin:30px 0; border:none; border-top:1px solid var(--border-color);">
-
-      <h3 style="margin-top:0; color: #1B257D;">Enrolled Users Management</h3>
-      <form id="user-form" class="card">
-        <div class="grid-2">
-          <div><input type="text" placeholder="Name" id="u-name" required></div>
-          <div>
-            <select id="u-gender" required>
-              <option value="Male">Male</option>
-              <option value="Female">Female</option>
-            </select>
-          </div>
-          <div><input type="text" placeholder="Class (e.g. 10)" id="u-class" required></div>
-          <div><input type="text" placeholder="Division (e.g. A)" id="u-div" required></div>
-          <div>
-            <select id="u-first-lang" required>
-              <option value="MI">MI (Malayalam I)</option>
-              <option value="AR">AR (Arabic)</option>
-              <option value="SK">SK (Sanskrit)</option>
-            </select>
-          </div>
-          <div><input type="text" placeholder="Phone No" id="u-phone" required></div>
-          <div><input type="text" placeholder="Username" id="u-username" required></div>
-          <div><input type="password" placeholder="Password" id="u-password" required></div>
-          <div>
-            <select id="u-role">
-              <option value="Student">Student</option>
-              <option value="Admin">Admin</option>
-            </select>
-          </div>
-          <div>
-            <select id="u-status">
-              <option value="Active">Active</option>
-              <option value="Blocked">Blocked</option>
-            </select>
-          </div>
-        </div>
-        <button type="submit" class="btn btn-primary" style="margin-top:15px;">Save User Credentials</button>
-      </form>
-
-      <h3 style="margin-top:30px; color: #1B257D;">Enrolled Users List</h3>
-      <div class="table-responsive">
-        <table class="data-table">
-          <thead>
-            <tr><th>Name</th><th>Gender</th><th>Class</th><th>Div</th><th>First Language</th><th>Phone</th><th>Username</th><th>Role</th><th>Status</th><th>Action</th></tr>
-          </thead>
-          <tbody id="admin-users-body"></tbody>
-        </table>
-      </div>
-    </section>
-
-    <!-- 8. ADMIN TAB: Audit Access Logs -->
-    <section id="admin-logs-sec" class="section" style="display:none;">
-      <h2 style="margin-top:0; color: #1B257D;">Audit Access Logs</h2>
-      <div class="table-responsive">
-        <table class="data-table">
-          <thead>
-            <tr>
-              <th>Timestamp</th>
-              <th>Identifier</th>
-              <th>Role</th>
-              <th>Status</th>
-              <th>Login Time</th>
-              <th>Logout Time</th>
-              <th>Device Details</th>
-            </tr>
-          </thead>
-          <tbody id="admin-logs-body"></tbody>
-        </table>
-      </div>
-    </section>
+    </main>
 
   </div>
 
-  <!-- FIRST TIME PASSWORD CHANGE MODAL -->
-  <div id="first-time-pass-modal" class="modal-overlay" style="display: none;">
-    <div class="modal-card">
-      <h3 style="margin-top:0; color:var(--danger);">⚠️ Password Change Required</h3>
-      <p style="font-size:13px; color:var(--text-muted); line-height:1.5;">
-        Welcome! Since this is your first login or you are using a default password, you <strong>must update your password</strong> to continue.
-      </p>
+  <!-- ==========================================================================
+       3. MODULAR JAVASCRIPT: ACTIVE GEMINI 3 SERIES MULTI-MODEL FAILOVER
+       ========================================================================== -->
+  <script type="module">
+    import { initializeApp } from "https://www.gstatic.com/firebasejs/10.13.0/firebase-app.js";
+    import { getFirestore, doc, getDoc, setDoc } from "https://www.gstatic.com/firebasejs/10.13.0/firebase-firestore.js";
+    import { getAuth, signInAnonymously } from "https://www.gstatic.com/firebasejs/10.13.0/firebase-auth.js";
 
-      <form id="first-time-pass-form" onsubmit="handleFirstTimePassSubmit(event)">
-        <div class="form-group">
-          <label>New Password</label>
-          <input type="password" id="first-new-pass" required minlength="4" placeholder="Enter new password">
-        </div>
-        <div class="form-group">
-          <label>Confirm New Password</label>
-          <input type="password" id="first-confirm-pass" required minlength="4" placeholder="Re-enter new password">
-        </div>
-        <button type="submit" class="btn btn-primary btn-block">Save Password & Access Portal</button>
-      </form>
-    </div>
-  </div>
+    // Configuration
+    const GEMINI_API_KEY = "AQ.Ab8RN6Lsr8BiJBFziW8c13d-k2HgEq2ur9FQUy3ea93IUJRsrA";
 
-  <script>
-    // =========================================================================
-    // CONFIGURATION
-    // =========================================================================
-    const API_URL = "https://script.google.com/macros/s/AKfycbxxhYtS1uKCCkOFQE0qeF4-i18LQHYsFJXt0aQAnulnCGUmJsv2deFGO388Is2qGoR5Eg/exec";
-    const IMGBB_API_KEY = "9a4cc70bf56546f088b5e617ea7abbc8";
-    // =========================================================================
-
-    const SUBJECT_MAP = {
-      'MI': 'Malayalam I',
-      'AR': 'Arabic',
-      'SK': 'Sanskrit',
-      'MII': 'Malayalam II',
-      'EN': 'English',
-      'MM': 'Mathematics',
-      'BS': 'Basic Science',
-      'SS': 'Social Science'
+    const firebaseConfig = {
+      apiKey: "AIzaSyCYbDtRF3yGLfL-43LnrhsprykbDq5x_yM",
+      authDomain: "scert-teacher-planner.firebaseapp.com",
+      projectId: "scert-teacher-planner",
+      storageBucket: "scert-teacher-planner.firebasestorage.app",
+      messagingSenderId: "44796509095",
+      appId: "1:44796509095:web:b07abddc4899ba247a5482",
+      measurementId: "G-ZPJCZZG56J"
     };
 
-    let currentUser = JSON.parse(localStorage.getItem('USS_USER')) || JSON.parse(sessionStorage.getItem('USS_USER')) || null;
-    let currentQuestions = [];
-    let qIndex = 0;
-    let timerInterval = null;
-    let timeLeft = 30;
-    let confirmCallback = null;
-    let cachedAdminData = null;
+    // Initialize Firebase
+    let db = null;
+    let auth = null;
+    try {
+      const app = initializeApp(firebaseConfig);
+      db = getFirestore(app);
+      auth = getAuth(app);
+      signInAnonymously(auth).catch(() => {});
+    } catch (e) {
+      console.warn("Firebase Init:", e.message);
+    }
+
+    const ALL_SLOTS = ['5_part1', '5_part2', '6_part1', '6_part2', '7_part1', '7_part2'];
     
-    let isTrialMode = false;
-    let selectedOption = null;
-    let sessionAnswersLog = [];
+    // State
+    const state = {
+      currentClass: '5',
+      currentPart: 'part1',
+      slotsData: {},
+      slotsBase64: {}
+    };
 
-    let sortColumn = 'name';
-    let sortAscending = true;
-    let consolidatedStudentsList = [];
-    let selectedStudentPhones = new Set();
-    let selectedNotifIds = new Set();
+    // DOM Elements
+    const classSelect = document.getElementById('class-select');
+    const partRadios = document.querySelectorAll('input[name="textbook-part"]');
+    const generateBtn = document.getElementById('generate-btn');
+    const printBtn = document.getElementById('print-btn');
+    const lockedCountLabel = document.getElementById('locked-count');
+    const shareWhatsAppBtn = document.getElementById('share-whatsapp-btn');
     
-    let securityProtectionActive = true;
-    let showStudentTabsForAdmin = false; // ADMIN SHOW PRACTICE & PORTFOLIO OFF BY DEFAULT
+    // UI Helpers
+    const spinnerOverlay = document.getElementById('spinner-overlay');
+    const spinnerText = document.getElementById('spinner-text');
+    const modalOverlay = document.getElementById('custom-modal-overlay');
+    const modalTitle = document.getElementById('modal-title');
+    const modalMessage = document.getElementById('modal-message');
+    const modalCloseBtn = document.getElementById('modal-close-btn');
+    const modalOkBtn = document.getElementById('modal-ok-btn');
+    const toastPopup = document.getElementById('toast-popup');
 
-    document.addEventListener('DOMContentLoaded', () => {
-      if (currentUser) initializeSession();
+    function showSpinner(text = "Processing...") {
+      spinnerText.textContent = text;
+      spinnerOverlay.style.display = "flex";
+    }
 
-      document.getElementById('login-form').addEventListener('submit', handleLogin);
-      document.getElementById('question-form').addEventListener('submit', handleSaveQuestion);
-      document.getElementById('user-form').addEventListener('submit', handleSaveUser);
-      document.getElementById('change-pass-form').addEventListener('submit', handleChangePassword);
-      document.getElementById('send-notif-form').addEventListener('submit', handleSendNotification);
+    function hideSpinner() {
+      spinnerOverlay.style.display = "none";
+    }
 
-      enableSecurityProtection();
+    function showMessageBox(message, title = "Teacher Studio") {
+      modalTitle.textContent = title;
+      modalMessage.textContent = message;
+      modalOverlay.style.display = "flex";
+    }
 
-      window.addEventListener('online', () => {
-        showToast('⚡ You are Online. Syncing latest data...', 'success');
-        updateNetworkStatus();
-        triggerBackgroundSync();
-      });
+    function hideMessageBox() {
+      modalOverlay.style.display = "none";
+    }
 
-      window.addEventListener('offline', () => {
-        showToast('⚠️ You are Offline. Working in offline mode.', 'danger');
-        updateNetworkStatus();
-      });
+    modalCloseBtn.addEventListener('click', hideMessageBox);
+    modalOkBtn.addEventListener('click', hideMessageBox);
 
-      updateNetworkStatus();
-      triggerBackgroundSync();
+    function showToast(message) {
+      toastPopup.textContent = message;
+      toastPopup.classList.add('visible');
+      setTimeout(() => toastPopup.classList.remove('visible'), 2400);
+    }
+
+    // Dual-Engine Clipboard (Bypasses Permissions-Policy Blocks)
+    function copyText(text, successMsg = "Copied to Clipboard!") {
+      if (!text) return;
+
+      function execCommandFallback(str) {
+        const textarea = document.createElement("textarea");
+        textarea.value = str;
+        textarea.style.position = "fixed";
+        textarea.style.left = "-9999px";
+        textarea.style.top = "-9999px";
+        document.body.appendChild(textarea);
+        textarea.focus();
+        textarea.select();
+        try {
+          document.execCommand('copy');
+          showToast(successMsg);
+        } catch (err) {
+          console.warn("Fallback copy failed", err);
+          showToast("Copying blocked by environment.");
+        }
+        document.body.removeChild(textarea);
+      }
+
+      if (navigator.clipboard && window.isSecureContext) {
+        navigator.clipboard.writeText(text)
+          .then(() => showToast(successMsg))
+          .catch(() => execCommandFallback(text));
+      } else {
+        execCommandFallback(text);
+      }
+    }
+
+    // WhatsApp Group Sharing
+    shareWhatsAppBtn.addEventListener('click', () => {
+      const text = document.getElementById('whatsapp-summary-body').textContent.trim();
+      if (!text || text.includes("Parent communication message will render here")) {
+        return showMessageBox("Please generate the lesson package first.", "Nothing to Share");
+      }
+      const whatsappUrl = `https://api.whatsapp.com/send?text=${encodeURIComponent(text)}`;
+      window.open(whatsappUrl, '_blank');
     });
 
-    function getFullSubjectName(code) {
-      return SUBJECT_MAP[code] || code || 'General';
-    }
-
-    function enableSecurityProtection() {
-      document.addEventListener('contextmenu', (e) => {
-        if (!securityProtectionActive) return;
-        e.preventDefault();
-        return false;
-      });
-
-      document.addEventListener('copy', (e) => {
-        if (!securityProtectionActive) return;
-        e.preventDefault();
-        showToast('⚠️ Copying content is restricted!', 'danger');
-      });
-
-      document.addEventListener('cut', (e) => {
-        if (!securityProtectionActive) return;
-        e.preventDefault();
-      });
-
-      document.addEventListener('selectstart', (e) => {
-        if (!securityProtectionActive) return;
-        if (!['INPUT', 'TEXTAREA'].includes(e.target.tagName)) e.preventDefault();
-      });
-
-      document.addEventListener('keydown', (e) => {
-        if (!securityProtectionActive) return;
-        const isCtrl = e.ctrlKey || e.metaKey;
-        if (e.keyCode === 123) { e.preventDefault(); showToast('⚠️ Developer tools restricted!', 'danger'); return false; }
-
-        if (isCtrl) {
-          const key = e.key.toLowerCase();
-          if (['u', 's', 'p'].includes(key)) { e.preventDefault(); return false; }
-          if (e.shiftKey && ['i', 'j', 'c'].includes(key)) { e.preventDefault(); return false; }
-        }
-      });
-    }
-
-    function toggleSecurityModePill() {
-      securityProtectionActive = !securityProtectionActive;
-      const pill = document.getElementById('security-pill-btn');
-      const statusText = document.getElementById('security-pill-status');
-
-      if (securityProtectionActive) {
-        pill.className = 'tap-toggle-pill enabled';
-        statusText.innerText = 'Security Active: ENABLED';
-        showToast('Security protection ENABLED', 'success');
-      } else {
-        pill.className = 'tap-toggle-pill disabled';
-        statusText.innerText = 'Security Active: DISABLED';
-        showToast('Security protection DISABLED', 'warning');
-      }
-    }
-
-    function toggleShowStudentTabsForAdmin() {
-      showStudentTabsForAdmin = !showStudentTabsForAdmin;
-      const pill = document.getElementById('show-student-tabs-pill');
-      const statusText = document.getElementById('show-student-tabs-status');
-
-      if (showStudentTabsForAdmin) {
-        pill.className = 'tap-toggle-pill enabled';
-        statusText.innerText = 'Show Practice and Portfolio for Admin: ON';
-        showToast('Practice & Portfolio tabs are now visible for Admin', 'info');
-      } else {
-        pill.className = 'tap-toggle-pill disabled';
-        statusText.innerText = 'Show Practice and Portfolio for Admin: OFF';
-        showToast('Practice & Portfolio tabs hidden for Admin', 'info');
-      }
-
-      if (currentUser && String(currentUser.role).toLowerCase() === 'admin') {
-        const studentTabs = document.querySelectorAll('.student-tab-btn');
-        studentTabs.forEach(tab => tab.style.display = showStudentTabsForAdmin ? 'inline-flex' : 'none');
-      }
-    }
-
-    function updateNetworkStatus(isSyncing = false) {
-      const led = document.getElementById('network-led');
-      const text = document.getElementById('network-status-text');
-
-      if (!navigator.onLine) {
-        led.className = 'led-dot led-red';
-        text.innerText = 'Offline';
-      } else if (isSyncing) {
-        led.className = 'led-dot led-blue';
-        text.innerText = 'Updating...';
-      } else {
-        led.className = 'led-dot led-green';
-        text.innerText = 'Online';
-      }
-    }
-
-    function showToast(message, type = 'info') {
-      const container = document.getElementById('toast-container');
-      const toast = document.createElement('div');
-      toast.className = `toast toast-${type}`;
-      toast.innerHTML = `<span>${message}</span>`;
-      container.appendChild(toast);
-
-      setTimeout(() => toast.classList.add('show'), 10);
-      setTimeout(() => {
-        toast.classList.remove('show');
-        setTimeout(() => toast.remove(), 300);
-      }, 3500);
-    }
-
-    function showConfirmModal(title, msg, onConfirm) {
-      document.getElementById('modal-title').innerText = title;
-      document.getElementById('modal-msg').innerText = msg;
-      confirmCallback = onConfirm;
-      document.getElementById('confirm-modal').style.display = 'flex';
-      
-      document.getElementById('modal-confirm-btn').onclick = () => { closeConfirmModal(true); };
-    }
-
-    function closeConfirmModal(isConfirmed) {
-      document.getElementById('confirm-modal').style.display = 'none';
-      if (isConfirmed && confirmCallback) confirmCallback();
-      confirmCallback = null;
-    }
-
-    function openSettingsModal() {
-      document.getElementById('set-name').innerText = currentUser.name || currentUser.username;
-      document.getElementById('set-gender').innerText = currentUser.gender || 'Male';
-      document.getElementById('set-class').innerText = currentUser.userClass || '10';
-      document.getElementById('set-div').innerText = currentUser.division || 'A';
-      document.getElementById('set-first-lang').innerText = currentUser.firstLanguage || 'MI';
-      document.getElementById('set-phone').innerText = currentUser.phone;
-      document.getElementById('set-username-display').innerText = currentUser.username;
-      document.getElementById('settings-modal').style.display = 'flex';
-    }
-
-    function formatDateStrict(dateStr) {
-      if (!dateStr || dateStr === '-' || dateStr === 'Active Now') return dateStr;
-      const d = new Date(dateStr);
-      if (isNaN(d.getTime())) return dateStr;
-
-      const dd = String(d.getDate()).padStart(2, '0');
-      const mm = String(d.getMonth() + 1).padStart(2, '0');
-      const yyyy = d.getFullYear();
-      let hours = d.getHours();
-      const minutes = String(d.getMinutes()).padStart(2, '0');
-      const seconds = String(d.getSeconds()).padStart(2, '0');
-      const ampm = hours >= 12 ? 'PM' : 'AM';
-      hours = hours % 12;
-      hours = hours ? hours : 12;
-      const hh = String(hours).padStart(2, '0');
-
-      return `${dd}/${mm}/${yyyy}, ${hh}:${minutes}:${seconds} ${ampm}`;
-    }
-
-    function getDeviceInfo() {
-      const ua = navigator.userAgent;
-      const platform = navigator.platform || 'Unknown';
-      const screenRes = `${window.screen.width}x${window.screen.height} (${window.screen.colorDepth}-bit)`;
-      const cores = navigator.hardwareConcurrency ? `${navigator.hardwareConcurrency} CPU Cores` : 'N/A Cores';
-      const memory = navigator.deviceMemory ? `${navigator.deviceMemory}GB RAM` : 'N/A RAM';
-      const lang = navigator.language || 'en-US';
-      const touch = ('ontouchstart' in window || navigator.maxTouchPoints > 0) ? 'Touch Enabled' : 'Non-Touch';
-
-      let os = "Unknown OS";
-      if (ua.includes("Win")) os = "Windows PC";
-      else if (ua.includes("Android")) os = "Android Device";
-      else if (ua.includes("iPhone")) os = "Apple iPhone";
-      else if (ua.includes("iPad")) os = "Apple iPad";
-      else if (ua.includes("Mac")) os = "macOS";
-      else if (ua.includes("Linux")) os = "Linux Desktop";
-
-      let browser = "Browser";
-      if (ua.includes("Edg")) browser = "MS Edge";
-      else if (ua.includes("Chrome")) browser = "Chrome";
-      else if (ua.includes("Safari")) browser = "Safari";
-      else if (ua.includes("Firefox")) browser = "Firefox";
-
-      return `OS: ${os} (${platform}) | Browser: ${browser} | Screen: ${screenRes} | Hardware: ${cores}, ${memory} | Touch: ${touch} | Lang: ${lang}`;
-    }
-
-    function setProgress(percent) {
-      const bar = document.getElementById('progress-bar');
-      if (!bar) return;
-      bar.style.width = percent + '%';
-      if (percent >= 100) {
-        setTimeout(() => { bar.style.opacity = '0'; setTimeout(() => { bar.style.width = '0%'; bar.style.opacity = '1'; }, 250); }, 300);
-      } else {
-        bar.style.opacity = '1';
-      }
-    }
-
-    async function apiRequest(payload) {
-      if (!API_URL || API_URL.includes("YOUR_DEPLOYMENT_ID_HERE")) {
-        showToast('Please configure API_URL!', 'danger');
-        return { success: false };
-      }
-      
-      setProgress(35);
-      try {
-        setProgress(70);
-        const response = await fetch(API_URL, { method: 'POST', body: JSON.stringify(payload) });
-        const json = await response.json();
-        setProgress(100);
-
-        if (json.success) localStorage.setItem('cache_' + payload.action, JSON.stringify(json));
-        return json;
-      } catch (err) {
-        setProgress(100);
-        showToast('⚠️ Offline mode active.', 'danger');
-        const cached = localStorage.getItem('cache_' + payload.action);
-        if (cached) return JSON.parse(cached);
-        return { success: false };
-      }
-    }
-
-    function queueLocalProgress(record) {
-      let queue = JSON.parse(localStorage.getItem('uss_offline_queue') || '[]');
-      if (!queue.some(q => q.questionId === record.questionId && q.phone === record.phone)) {
-        queue.push(record);
-        localStorage.setItem('uss_offline_queue', JSON.stringify(queue));
-      }
-      triggerBackgroundSync();
-    }
-
-    async function triggerBackgroundSync() {
-      if (!navigator.onLine) { updateNetworkStatus(); return; }
-      let queue = JSON.parse(localStorage.getItem('uss_offline_queue') || '[]');
-      if (queue.length === 0) { updateNetworkStatus(); return; }
-
-      updateNetworkStatus(true);
-      const currentItem = queue[0];
-      const res = await apiRequest({ action: 'recordProgress', ...currentItem });
-      if (res && res.success) {
-        queue.shift();
-        localStorage.setItem('uss_offline_queue', JSON.stringify(queue));
-        if (queue.length > 0) triggerBackgroundSync();
-        else updateNetworkStatus();
-      } else {
-        updateNetworkStatus();
-      }
-    }
-
-    async function triggerDbSetup() {
-      const res = await apiRequest({ action: 'setupDatabase' });
-      showToast(res.message || 'Database Setup Done', 'success');
-    }
-
-    async function refreshCurrentView() {
-      const icon = document.getElementById('global-refresh-icon');
-      if (icon) icon.classList.add('spinning');
-
-      const activeSec = document.querySelector('.section[style*="display: block"]');
-      const activeId = activeSec ? activeSec.id : 'practice-sec';
-
-      if (activeId === 'portfolio-sec') await loadPortfolio();
-      else if (activeId === 'notif-sec') await loadNotifications();
-      else if (['admin-report-sec', 'admin-resets-sec', 'manage-qs-sec', 'manage-users-sec', 'admin-logs-sec'].includes(activeId)) await loadAdminData();
-
-      setTimeout(() => {
-        if (icon) icon.classList.remove('spinning');
-        showToast('Data refreshed successfully!', 'success');
-      }, 500);
-    }
-
-    async function handleLogin(e) {
-      e.preventDefault();
-      const username = document.getElementById('login-username').value.trim();
-      const password = document.getElementById('login-password').value.trim();
-
-      const res = await apiRequest({ action: 'login', username, password, ipDevice: getDeviceInfo() });
-      if (res.success) {
-        currentUser = res.user;
-
-        if (res.user.isDefaultPass) {
-          document.getElementById('first-time-pass-modal').style.display = 'flex';
-          return;
-        }
-
-        if (document.getElementById('keep-logged-pill').classList.contains('active')) {
-          localStorage.setItem('USS_USER', JSON.stringify(currentUser));
-        } else {
-          sessionStorage.setItem('USS_USER', JSON.stringify(currentUser));
-        }
-
-        initializeSession();
-        showToast('Logged in successfully!', 'success');
-      } else {
-        showToast(res.message, 'danger');
-      }
-    }
-
-    function filterPracticeSubjectDropdown() {
-      if (!currentUser) return;
-      const select = document.getElementById('subject-select');
-      const userLang = (currentUser.firstLanguage || 'MI').trim().toUpperCase();
-
-      Array.from(select.options).forEach(opt => {
-        if (opt.getAttribute('data-firstlang') === 'true') {
-          if (opt.value.toUpperCase() === userLang) {
-            opt.style.display = '';
-            opt.disabled = false;
+    // Highlight target slot in matrix
+    function highlightActiveTarget() {
+      const targetSlot = `${state.currentClass}_${state.currentPart}`;
+      ALL_SLOTS.forEach(slotId => {
+        const card = document.getElementById(`card-${slotId}`);
+        if (card) {
+          if (slotId === targetSlot) {
+            card.classList.add('active-target');
           } else {
-            opt.style.display = 'none';
-            opt.disabled = true;
+            card.classList.remove('active-target');
           }
         }
       });
     }
 
-    function initializeSession() {
-      document.getElementById('login-sec').style.display = 'none';
-      document.getElementById('top-navbar').style.display = 'flex';
-      document.getElementById('tab-bar-container').style.display = 'flex';
+    // Parallel sync for all 6 slots (Zero loops)
+    async function syncAllSlots() {
+      highlightActiveTarget();
+      if (!db) return;
 
-      document.getElementById('user-display-name').innerText = currentUser.name || currentUser.username;
-      document.getElementById('user-display-class').innerText = currentUser.userClass || '10';
-      document.getElementById('user-display-div').innerText = currentUser.division || 'A';
+      let lockedTotal = 0;
 
-      filterPracticeSubjectDropdown();
+      const syncTasks = ALL_SLOTS.map(async (slotId) => {
+        try {
+          const snapshot = await getDoc(doc(db, 'curriculum_books', slotId));
+          if (snapshot.exists() && snapshot.data().isLocked) {
+            lockedTotal++;
+            const data = snapshot.data();
+            state.slotsData[slotId] = data;
 
-      const adminNavButtons = document.querySelectorAll('.admin-only');
-      const studentTabs = document.querySelectorAll('.student-tab-btn');
-      const role = String(currentUser.role).trim().toLowerCase();
+            const badge = document.getElementById(`badge-${slotId}`);
+            const nameEl = document.getElementById(`name-${slotId}`);
+            const actionsEl = document.getElementById(`actions-${slotId}`);
 
-      if (role === 'admin') {
-        adminNavButtons.forEach(btn => btn.style.display = 'inline-flex');
-        
-        // HIDE PRACTICE AND PORTFOLIO TABS BY DEFAULT FOR ADMIN
-        studentTabs.forEach(tab => tab.style.display = showStudentTabsForAdmin ? 'inline-flex' : 'none');
-
-        showSection('admin-report-sec');
-        checkAdminPendingAlerts();
-      } else {
-        adminNavButtons.forEach(btn => btn.style.display = 'none');
-        studentTabs.forEach(tab => tab.style.display = 'inline-flex');
-        showSection('practice-sec');
-      }
-
-      loadNotifications();
-    }
-
-    async function checkAdminPendingAlerts() {
-      const res = await apiRequest({ action: 'getAdminData' });
-      if (res.success && res.resetRequests) {
-        const pending = res.resetRequests.filter(r => r.Status === 'Pending');
-        if (pending.length > 0) {
-          showToast(`🔔 ${pending.length} pending reset request(s) waiting!`, 'danger');
-          document.getElementById('reset-badge-dot').style.display = 'block';
-        } else {
-          document.getElementById('reset-badge-dot').style.display = 'none';
+            if (badge) {
+              badge.className = 'slot-badge locked';
+              badge.textContent = 'Verified & Locked';
+            }
+            if (nameEl) {
+              nameEl.textContent = `📄 ${data.fileName || 'Locked SCERT PDF'} (${data.fileSize || 'Standard'})`;
+              nameEl.style.color = '#1b5e20';
+              nameEl.style.fontWeight = '600';
+            }
+            if (actionsEl) {
+              actionsEl.innerHTML = `<span style="font-size:0.7rem; color:#2e7d32;">🔒 Immutable</span>`;
+            }
+          }
+        } catch (err) {
+          console.warn(`Sync check for ${slotId}:`, err.message);
         }
-      }
-    }
-
-    async function handleChangePassword(e) {
-      e.preventDefault();
-      const newPass = document.getElementById('new-password').value.trim();
-      if (!newPass) return;
-
-      const res = await apiRequest({ action: 'changePassword', username: currentUser.username, newPassword: newPass });
-      if (res.success) {
-        showToast('Password updated successfully!', 'success');
-        document.getElementById('change-pass-form').reset();
-        document.getElementById('settings-modal').style.display = 'none';
-      } else {
-        showToast('Failed to update password.', 'danger');
-      }
-    }
-
-    async function logout() {
-      if (currentUser && currentUser.logId) {
-        await apiRequest({ action: 'recordLogout', logId: currentUser.logId, username: currentUser.username });
-      }
-      localStorage.removeItem('USS_USER');
-      sessionStorage.clear();
-      location.reload();
-    }
-
-    function showSection(sectionId) {
-      clearInterval(timerInterval);
-      document.querySelectorAll('.section').forEach(s => s.style.display = 'none');
-      document.querySelectorAll('.icon-tab-btn').forEach(b => b.classList.remove('active'));
-
-      document.getElementById(sectionId).style.display = 'block';
-      document.getElementById('tab-bar-container').style.display = 'flex';
-
-      if (sectionId === 'practice-sec') {
-        document.getElementById('practice-mode-selector').style.display = 'flex';
-        document.getElementById('subject-practice-box').style.display = 'none';
-        document.getElementById('trial-exam-box').style.display = 'none';
-        document.getElementById('quiz-card').style.display = 'none';
-        document.getElementById('consolidation-card').style.display = 'none';
-      }
-
-      const tabMap = {
-        'practice-sec': 'tab-practice',
-        'portfolio-sec': 'tab-portfolio',
-        'notif-sec': 'tab-notif',
-        'admin-report-sec': 'tab-student-reports',
-        'admin-resets-sec': 'tab-resets',
-        'manage-qs-sec': 'tab-manage-qs',
-        'manage-users-sec': 'tab-manage-users',
-        'admin-logs-sec': 'tab-logs'
-      };
-      if (tabMap[sectionId]) document.getElementById(tabMap[sectionId]).classList.add('active');
-
-      if (sectionId === 'portfolio-sec') loadPortfolio();
-      else if (sectionId === 'notif-sec') loadNotifications();
-      else if (['admin-report-sec', 'admin-resets-sec', 'manage-qs-sec', 'manage-users-sec', 'admin-logs-sec'].includes(sectionId)) loadAdminData();
-    }
-
-    // =========================================================================
-    // PRACTICE & TRIAL EXAM MODULE
-    // =========================================================================
-
-    function switchPracticeMode(mode) {
-      document.getElementById('tab-bar-container').style.display = 'none';
-      document.getElementById('practice-mode-selector').style.display = 'none';
-      document.getElementById('quiz-card').style.display = 'none';
-      document.getElementById('no-questions-card').style.display = 'none';
-      document.getElementById('no-trial-card').style.display = 'none';
-      document.getElementById('consolidation-card').style.display = 'none';
-
-      if (mode === 'PRACTICE') {
-        document.getElementById('subject-practice-box').style.display = 'block';
-        document.getElementById('trial-exam-box').style.display = 'none';
-      } else {
-        document.getElementById('subject-practice-box').style.display = 'none';
-        document.getElementById('trial-exam-box').style.display = 'block';
-      }
-    }
-
-    function exitPracticeMode() {
-      clearInterval(timerInterval);
-      document.getElementById('tab-bar-container').style.display = 'flex';
-      document.getElementById('practice-mode-selector').style.display = 'flex';
-
-      document.getElementById('subject-practice-box').style.display = 'none';
-      document.getElementById('trial-exam-box').style.display = 'none';
-      document.getElementById('quiz-card').style.display = 'none';
-      document.getElementById('no-questions-card').style.display = 'none';
-      document.getElementById('no-trial-card').style.display = 'none';
-      document.getElementById('consolidation-card').style.display = 'none';
-
-      document.getElementById('subject-select').value = '';
-    }
-
-    async function loadPracticeSubject() {
-      const subject = document.getElementById('subject-select').value;
-      if (!subject) return;
-
-      sessionAnswersLog = [];
-      isTrialMode = false;
-
-      document.getElementById('no-questions-card').style.display = 'none';
-      document.getElementById('no-trial-card').style.display = 'none';
-      document.getElementById('consolidation-card').style.display = 'none';
-      document.getElementById('quiz-card').style.display = 'none';
-      document.getElementById('practice-spinner').style.display = 'flex';
-
-      const res = await apiRequest({ action: 'getQuestions', subject, phone: currentUser.phone });
-      document.getElementById('practice-spinner').style.display = 'none';
-
-      if (res.success) {
-        if (res.status === 'NO_QUESTIONS' || res.status === 'ALL_ANSWERED') {
-          document.getElementById('no-questions-card').style.display = 'block';
-        } else if (res.questions.length > 0) {
-          currentQuestions = res.questions;
-          qIndex = 0;
-          enterExamFocusMode();
-          renderQuestion();
-          document.getElementById('quiz-card').style.display = 'block';
-        }
-      }
-    }
-
-    async function startTrialExam() {
-      document.getElementById('trial-exam-box').style.display = 'none';
-      document.getElementById('no-trial-card').style.display = 'none';
-      document.getElementById('practice-spinner').style.display = 'flex';
-
-      isTrialMode = true;
-      sessionAnswersLog = [];
-
-      const res = await apiRequest({ action: 'getTrialQuestions', phone: currentUser.phone });
-      document.getElementById('practice-spinner').style.display = 'none';
-
-      if (res.success) {
-        if (res.status === 'ALL_ANSWERED' || res.questions.length === 0) {
-          document.getElementById('no-trial-card').style.display = 'block';
-        } else {
-          currentQuestions = res.questions;
-          qIndex = 0;
-          enterExamFocusMode();
-          renderQuestion();
-          document.getElementById('quiz-card').style.display = 'block';
-        }
-      }
-    }
-
-    function enterExamFocusMode() {
-      document.getElementById('top-navbar').style.display = 'none';
-      document.getElementById('tab-bar-container').style.display = 'none';
-      document.querySelector('.mode-selector-group').style.display = 'none';
-      document.getElementById('subject-practice-box').style.display = 'none';
-      document.getElementById('trial-exam-box').style.display = 'none';
-
-      const quizExitBtn = document.getElementById('quiz-exit-btn');
-      if (isTrialMode) {
-        quizExitBtn.style.display = 'none';
-      } else {
-        quizExitBtn.style.display = 'inline-flex';
-      }
-    }
-
-    function triggerEarlyExitPractice() {
-      if (isTrialMode) return;
-      if (sessionAnswersLog.length > 0) {
-        showConsolidationView();
-      } else {
-        exitConsolidationView();
-      }
-    }
-
-    function closeNoTrialCard() {
-      document.getElementById('no-trial-card').style.display = 'none';
-      document.getElementById('trial-exam-box').style.display = 'block';
-    }
-
-    function startTimer() {
-      clearInterval(timerInterval);
-      timeLeft = 30;
-      const timerCount = document.getElementById('timer-count');
-      const timerBadge = document.getElementById('timer-badge');
-      timerCount.innerText = timeLeft;
-      timerBadge.classList.remove('danger');
-
-      timerInterval = setInterval(() => {
-        timeLeft--;
-        timerCount.innerText = timeLeft;
-        if (timeLeft <= 10) timerBadge.classList.add('danger');
-        if (timeLeft <= 0) {
-          clearInterval(timerInterval);
-          confirmNextQuestion(true);
-        }
-      }, 1000);
-    }
-
-    function renderQuestion() {
-      selectedOption = null;
-      const q = currentQuestions[qIndex];
-      const quizCard = document.getElementById('quiz-card');
-
-      if (q.Subject === 'AR' || q.Subject === 'Arabic') {
-        quizCard.classList.add('rtl-content');
-      } else {
-        quizCard.classList.remove('rtl-content');
-      }
-
-      document.getElementById('quiz-subject').innerText = isTrialMode ? `TRIAL: ${getFullSubjectName(q.Subject)}` : getFullSubjectName(q.Subject);
-      document.getElementById('quiz-progress').innerText = `Question ${qIndex + 1} of ${currentQuestions.length}`;
-      document.getElementById('quiz-question').innerText = q.Question;
-      
-      const imgEl = document.getElementById('quiz-image');
-      if (q.ImageUrl) {
-        imgEl.src = q.ImageUrl;
-        imgEl.style.display = 'block';
-      } else {
-        imgEl.style.display = 'none';
-      }
-
-      document.getElementById('optA').innerText = q.OptionA;
-      document.getElementById('optB').innerText = q.OptionB;
-      document.getElementById('optC').innerText = q.OptionC;
-      document.getElementById('optD').innerText = q.OptionD;
-
-      ['A', 'B', 'C', 'D'].forEach(opt => {
-        const btn = document.getElementById(`opt-btn-${opt}`);
-        btn.className = 'opt-btn';
       });
 
-      startTimer();
+      await Promise.all(syncTasks);
+
+      if (lockedCountLabel) {
+        lockedCountLabel.textContent = `${lockedTotal}/6 Locked`;
+      }
     }
 
-    function selectOption(opt) {
-      selectedOption = opt;
-      ['A', 'B', 'C', 'D'].forEach(o => {
-        const btn = document.getElementById(`opt-btn-${o}`);
-        if (o === opt) {
-          btn.classList.add('selected');
-        } else {
-          btn.classList.remove('selected');
-        }
+    function fileToBase64(file) {
+      return new Promise((resolve, reject) => {
+        const reader = new FileReader();
+        reader.onload = () => resolve(reader.result.split(',')[1]);
+        reader.onerror = reject;
+        reader.readAsDataURL(file);
       });
     }
 
-    async function confirmNextQuestion(isTimeout = false) {
-      clearInterval(timerInterval);
-      const q = currentQuestions[qIndex];
-      const userChoice = isTimeout ? (selectedOption || 'Timed Out') : (selectedOption || 'Not Answered');
-      const isCorrect = userChoice === q.CorrectAnswer;
+    // Lock Slot Button Handler
+    document.querySelectorAll('.slot-btn').forEach(btn => {
+      btn.addEventListener('click', async (e) => {
+        const slotId = e.target.dataset.slot;
+        const fileInput = document.getElementById(`input-${slotId}`);
+        const file = fileInput?.files[0];
 
-      if (!sessionAnswersLog.some(item => item.QuestionID === q.ID)) {
-        const record = {
-          Subject: getFullSubjectName(q.Subject),
-          SubjectCode: q.Subject,
-          QuestionID: q.ID,
-          QuestionText: q.Question,
-          OptionA: q.OptionA,
-          OptionB: q.OptionB,
-          OptionC: q.OptionC,
-          OptionD: q.OptionD,
-          UserAnswer: userChoice,
-          CorrectAnswer: q.CorrectAnswer,
-          IsCorrect: isCorrect
-        };
-
-        sessionAnswersLog.push(record);
-
-        if (!isTrialMode) {
-          queueLocalProgress({
-            phone: currentUser.phone,
-            studentName: currentUser.name || currentUser.username,
-            userClass: currentUser.userClass || '10',
-            division: currentUser.division || 'A',
-            subject: q.Subject,
-            questionId: q.ID,
-            questionText: q.Question,
-            userAnswer: userChoice,
-            correctAnswer: q.CorrectAnswer,
-            isCorrect: isCorrect
-          });
+        if (!file) {
+          return showMessageBox(`Please select a PDF file to lock for ${slotId.replace('_', ' ').toUpperCase()}`, "Missing File");
         }
-      }
 
-      if (qIndex + 1 < currentQuestions.length) {
-        qIndex++;
-        renderQuestion();
-      } else {
-        document.getElementById('quiz-card').style.display = 'none';
-        showConsolidationView();
-      }
-    }
+        showSpinner(`Reading and locking ${file.name}...`);
 
-    async function showConsolidationView() {
-      clearInterval(timerInterval);
-      document.getElementById('quiz-card').style.display = 'none';
+        try {
+          const base64Data = await fileToBase64(file);
+          state.slotsBase64[slotId] = base64Data;
 
-      const total = sessionAnswersLog.length;
-      const score = sessionAnswersLog.filter(a => a.IsCorrect).length;
-      const victoryRate = total ? Math.round((score / total) * 100) : 0;
+          const [cls, prt] = slotId.split('_');
 
-      document.getElementById('summary-score-val').innerText = `${score} / ${total}`;
-      document.getElementById('summary-acc-val').innerText = `${victoryRate}%`;
-      document.getElementById('consolidation-title').innerText = isTrialMode ? 'Trial Exam Report Consolidation' : 'Subject Practice Summary';
+          if (auth && !auth.currentUser) {
+            await signInAnonymously(auth).catch(() => {});
+          }
 
-      const tbody = document.getElementById('summary-breakdown-body');
-      tbody.innerHTML = sessionAnswersLog.map(item => `
-        <tr>
-          <td><span class="badge">${item.Subject}</span></td>
-          <td>${item.QuestionText}</td>
-          <td><small>A:${item.OptionA} | B:${item.OptionB} | C:${item.OptionC} | D:${item.OptionD}</small></td>
-          <td><b>${item.UserAnswer}</b></td>
-          <td><b style="color:var(--success);">${item.CorrectAnswer}</b></td>
-          <td><span class="badge ${item.IsCorrect ? 'badge-success' : 'badge-danger'}">${item.IsCorrect ? 'Correct' : 'Wrong'}</span></td>
-        </tr>
-      `).join('');
-
-      document.getElementById('consolidation-card').style.display = 'block';
-
-      const formattedDT = formatDateStrict(new Date().toISOString());
-      const studentNameBold = `<b>${currentUser.name || currentUser.username} ${currentUser.userClass || '10'}${currentUser.division || 'A'}</b>`;
-      const subjName = isTrialMode ? 'Comprehensive Trial Exam' : sessionAnswersLog[0].Subject;
-
-      const notifTitle = `${subjName} Practice Activity Summary`;
-      const notifMsg = `${studentNameBold} completed a ${subjName} session ON ${formattedDT}\n\nTotal Questions Practiced/Attended: ${total}\nCorrect: ${score} • Incorrect: ${total - score}`;
-
-      if (isTrialMode) {
-        await apiRequest({
-          action: 'saveTrialExam',
-          phone: currentUser.phone,
-          studentName: currentUser.name || currentUser.username,
-          userClass: currentUser.userClass || '10',
-          division: currentUser.division || 'A',
-          score: score,
-          total: total,
-          answersJson: sessionAnswersLog
-        });
-      } else {
-        await apiRequest({
-          action: 'sendNotification',
-          recipientPhones: ['ADMIN', currentUser.phone],
-          title: notifTitle,
-          message: notifMsg,
-          sender: 'Practice Monitor'
-        });
-      }
-    }
-
-    function exitConsolidationView() {
-      document.getElementById('consolidation-card').style.display = 'none';
-      document.getElementById('top-navbar').style.display = 'flex';
-      document.getElementById('tab-bar-container').style.display = 'flex';
-
-      if (isTrialMode) {
-        document.getElementById('trial-exam-box').style.display = 'block';
-      } else {
-        document.getElementById('subject-select').value = '';
-        document.getElementById('subject-practice-box').style.display = 'block';
-        document.getElementById('practice-mode-selector').style.display = 'flex';
-      }
-    }
-
-    // =========================================================================
-    // ACCURATE DASHBOARD & PORTFOLIO CALCULATIONS (WITH GRAND TOTAL ROW)
-    // =========================================================================
-
-    async function loadPortfolio() {
-      const res = await apiRequest({ action: 'getPortfolio', phone: currentUser.phone });
-      if (!res.success) return;
-
-      renderStudentDashboardAndOverview(res, 'stat-total', 'stat-accuracy', 'strong-subjects-chart-container', 'weak-subjects-chart-container', 'portfolio-overview-body', 'portfolio-trial-history-box', 'portfolio-trial-history-container', 'portfolio-audit-body');
-    }
-
-    function renderStudentDashboardAndOverview(resData, totalElId, accElId, strongContainerId, weakContainerId, overviewTbodyId, trialBoxId, trialContainerId, auditTbodyId) {
-      let combinedAnswers = [];
-      let seenQKeys = new Set();
-
-      if (resData.detailedAnswers) {
-        resData.detailedAnswers.forEach(a => {
-          const uniqueKey = `${a.QuestionID || a.QuestionText}`;
-          if (!seenQKeys.has(uniqueKey)) {
-            seenQKeys.add(uniqueKey);
-            combinedAnswers.push({
-              Subject: getFullSubjectName(a.Subject),
-              SubjectCode: a.Subject,
-              QuestionID: a.QuestionID,
-              QuestionText: a.QuestionText,
-              UserAnswer: a.UserAnswer,
-              CorrectAnswer: a.CorrectAnswer,
-              IsCorrect: a.IsCorrect === 'YES' || a.IsCorrect === true,
-              Timestamp: a.Timestamp
+          if (db) {
+            await setDoc(doc(db, 'curriculum_books', slotId), {
+              slotId: slotId,
+              classId: cls,
+              partId: prt,
+              fileName: file.name,
+              fileSize: (file.size / (1024 * 1024)).toFixed(2) + " MB",
+              fileUri: "inline_base64",
+              isLocked: true,
+              uploadedAt: new Date().toISOString()
             });
           }
-        });
-      }
 
-      if (resData.trialExams) {
-        resData.trialExams.forEach(tr => {
-          let tAns = [];
-          try { tAns = JSON.parse(tr.AnswersJson || '[]'); } catch(e){}
-          tAns.forEach(ta => {
-            const uniqueKey = `${ta.QuestionID || ta.QuestionText}`;
-            if (!seenQKeys.has(uniqueKey)) {
-              seenQKeys.add(uniqueKey);
-              combinedAnswers.push({
-                Subject: getFullSubjectName(ta.Subject),
-                SubjectCode: ta.Subject,
-                QuestionID: ta.QuestionID,
-                QuestionText: ta.QuestionText,
-                OptionA: ta.OptionA,
-                OptionB: ta.OptionB,
-                OptionC: ta.OptionC,
-                OptionD: ta.OptionD,
-                UserAnswer: ta.UserAnswer,
-                CorrectAnswer: ta.CorrectAnswer,
-                IsCorrect: ta.IsCorrect === true || ta.IsCorrect === 'YES',
-                Timestamp: tr.Timestamp
-              });
-            }
-          });
-        });
-      }
-
-      const totalAnswered = combinedAnswers.length;
-      const totalCorrect = combinedAnswers.filter(a => a.IsCorrect).length;
-      const overallAccuracy = totalAnswered ? Math.round((totalCorrect / totalAnswered) * 100) : 0;
-
-      if (document.getElementById(totalElId)) document.getElementById(totalElId).innerText = totalAnswered;
-      if (document.getElementById(accElId)) document.getElementById(accElId).innerText = `${overallAccuracy}%`;
-
-      const subjectStats = {};
-      combinedAnswers.forEach(a => {
-        const sName = a.Subject;
-        if (!subjectStats[sName]) {
-          subjectStats[sName] = { total: 0, correct: 0, wrong: 0, lastDate: a.Timestamp };
+          hideSpinner();
+          showMessageBox(`Textbook verified and locked permanently for Class ${cls} ${prt.toUpperCase()}!`, "Lock Verified");
+          syncAllSlots();
+        } catch (err) {
+          hideSpinner();
+          console.error(err);
+          showMessageBox(`Locking updated locally: ${err.message}`, "Local Mode Notice");
+          syncAllSlots();
         }
-        subjectStats[sName].total++;
-        if (a.IsCorrect) subjectStats[sName].correct++;
-        else subjectStats[sName].wrong++;
-        if (a.Timestamp > subjectStats[sName].lastDate) subjectStats[sName].lastDate = a.Timestamp;
       });
+    });
 
-      let strongHTML = '';
-      let weakHTML = '';
+    classSelect.addEventListener('change', (e) => {
+      state.currentClass = e.target.value;
+      highlightActiveTarget();
+    });
 
-      for (let sName in subjectStats) {
-        const st = subjectStats[sName];
-        const acc = Math.round((st.correct / st.total) * 100);
-
-        const cardHTML = `
-          <div class="chart-item">
-            <div class="chart-label-row">
-              <span><b>${sName}</b></span>
-              <span>${acc}% (${st.correct}/${st.total} Correct)</span>
-            </div>
-            <div class="chart-track">
-              <div class="chart-fill ${acc >= 70 ? 'chart-fill-strong' : 'chart-fill-weak'}" style="width: ${acc}%;"></div>
-            </div>
-          </div>
-        `;
-
-        if (acc >= 70) strongHTML += cardHTML;
-        else weakHTML += cardHTML;
-      }
-
-      if (document.getElementById(strongContainerId)) {
-        document.getElementById(strongContainerId).innerHTML = strongHTML || '<p style="font-size:13px; color:var(--text-muted); margin:0;">No strength subjects (≥70%) recorded yet.</p>';
-      }
-      if (document.getElementById(weakContainerId)) {
-        document.getElementById(weakContainerId).innerHTML = weakHTML || '<p style="font-size:13px; color:var(--text-muted); margin:0;">No priority areas (<70%) identified!</p>';
-      }
-
-      // RENDER OVERVIEW TABLE WITH GRAND TOTAL ROW AT THE BOTTOM
-      if (document.getElementById(overviewTbodyId)) {
-        const overviewBody = document.getElementById(overviewTbodyId);
-        let gTotal = 0, gCorrect = 0, gWrong = 0;
-
-        let rowsHTML = Object.keys(subjectStats).map(sName => {
-          const st = subjectStats[sName];
-          gTotal += st.total;
-          gCorrect += st.correct;
-          gWrong += st.wrong;
-
-          return `
-            <tr>
-              <td><b>${sName}</b></td>
-              <td>${st.total}</td>
-              <td><b style="color:var(--success);">${st.correct}</b></td>
-              <td><b style="color:var(--danger);">${st.wrong}</b></td>
-              <td>${formatDateStrict(st.lastDate)}</td>
-            </tr>
-          `;
-        }).join('');
-
-        if (Object.keys(subjectStats).length > 0) {
-          rowsHTML += `
-            <tr style="font-weight:800; background:#eff6ff; border-top:2px solid var(--primary) !important;">
-              <td>GRAND TOTAL</td>
-              <td>${gTotal}</td>
-              <td><b style="color:var(--success);">${gCorrect}</b></td>
-              <td><b style="color:var(--danger);">${gWrong}</b></td>
-              <td>-</td>
-            </tr>
-          `;
-        }
-
-        overviewBody.innerHTML = rowsHTML || '<tr><td colspan="5">No subject overview data available.</td></tr>';
-      }
-
-      // RENDER TRIAL EXAM CONSOLIDATIONS
-      if (document.getElementById(trialBoxId) && document.getElementById(trialContainerId)) {
-        const trialBox = document.getElementById(trialBoxId);
-        const trialContainer = document.getElementById(trialContainerId);
-
-        if (resData.trialExams && resData.trialExams.length > 0) {
-          trialBox.style.display = 'block';
-          trialContainer.innerHTML = resData.trialExams.map((t) => {
-            let answers = [];
-            try { answers = JSON.parse(t.AnswersJson || '[]'); } catch(e){}
-
-            return `
-              <div style="background:#ffffff; border:1px solid var(--border-color); border-radius:12px; padding:18px; margin-bottom:20px; box-shadow:var(--shadow-sm);">
-                <div style="display:flex; justify-content:space-between; align-items:center; font-weight:800; font-size:14px; margin-bottom:12px; color:var(--primary);">
-                  <span>Trial Exam (${formatDateStrict(t.Timestamp)})</span>
-                  <span class="badge badge-success" style="font-size:14px;">Score: ${t.Score} / ${t.TotalQuestions}</span>
-                </div>
-                <div class="table-responsive">
-                  <table class="data-table">
-                    <thead>
-                      <tr><th>S.No</th><th>Subject</th><th>Question</th><th>Options</th><th>Your Choice</th><th>Correct</th><th>Status</th></tr>
-                    </thead>
-                    <tbody>
-                      ${answers.map((a, aIdx) => `
-                        <tr>
-                          <td>${aIdx + 1}</td>
-                          <td><span class="badge">${getFullSubjectName(a.Subject)}</span></td>
-                          <td>${a.QuestionText}</td>
-                          <td><small>A:${a.OptionA} | B:${a.OptionB} | C:${a.OptionC} | D:${a.OptionD}</small></td>
-                          <td><b>${a.UserAnswer}</b></td>
-                          <td><b style="color:var(--success);">${a.CorrectAnswer}</b></td>
-                          <td><span class="badge ${a.IsCorrect ? 'badge-success' : 'badge-danger'}">${a.IsCorrect ? 'Correct' : 'Wrong'}</span></td>
-                        </tr>
-                      `).join('')}
-                    </tbody>
-                  </table>
-                </div>
-              </div>
-            `;
-          }).join('<hr style="margin:20px 0; border:none; border-top:1px dashed var(--border-color);">');
-        } else {
-          trialBox.style.display = 'none';
-        }
-      }
-
-      // RENDER DEDUPLICATED PRACTICE AUDIT LOG
-      if (document.getElementById(auditTbodyId) && resData.detailedAnswers) {
-        const auditBody = document.getElementById(auditTbodyId);
-        const uniqueAuditLogs = [];
-        const auditSeenKeys = new Set();
-
-        resData.detailedAnswers.forEach(item => {
-          const key = `${item.QuestionID || item.QuestionText}`;
-          if (!auditSeenKeys.has(key)) {
-            auditSeenKeys.add(key);
-            uniqueAuditLogs.push(item);
-          }
-        });
-
-        auditBody.innerHTML = uniqueAuditLogs.map((item, idx) => `
-          <tr>
-            <td>${idx + 1}</td>
-            <td><span class="badge">${getFullSubjectName(item.Subject)}</span></td>
-            <td>${item.QuestionText}</td>
-            <td><b>${item.UserAnswer}</b></td>
-            <td><b style="color:var(--success);">${item.CorrectAnswer}</b></td>
-            <td><span class="badge ${item.IsCorrect === 'YES' || item.IsCorrect === true ? 'badge-success' : 'badge-danger'}">${item.IsCorrect === 'YES' || item.IsCorrect === true ? 'Correct' : 'Wrong'}</span></td>
-          </tr>
-        `).join('') || '<tr><td colspan="6">No practice audit records found.</td></tr>';
-      }
-    }
+    partRadios.forEach(radio => {
+      radio.addEventListener('change', (e) => {
+        state.currentPart = e.target.value;
+        highlightActiveTarget();
+      });
+    });
 
     // =========================================================================
-    // NOTIFICATIONS FEED
+    // ACTIVE GOOGLE GEMINI 3 SERIES MULTI-MODEL ENGINE (Sandbox Safe)
     // =========================================================================
+    const ACTIVE_MODELS = [
+      "gemini-3.6-flash",       // Primary High-Speed Workhorse
+      "gemini-3.5-flash",       // Active 3-Series Backup
+      "gemini-3.5-flash-lite",  // Ultra-Fast Independent Quota Pool
+      "gemini-3.1-flash-lite",  // Secondary Light Pool
+      "gemini-3.1-pro-preview"  // High-Capacity Reasoning
+    ];
 
-    async function loadNotifications() {
-      const res = await apiRequest({ action: 'getNotifications', phone: currentUser.phone, role: currentUser.role });
-      if (!res.success) return;
+    const delay = (ms) => new Promise((resolve) => setTimeout(resolve, ms));
 
-      const container = document.getElementById('notifications-list-container');
-      const readSet = new Set(JSON.parse(localStorage.getItem('read_notifs_' + currentUser.username) || '[]'));
-      const isAdmin = String(currentUser.role).trim().toLowerCase() === 'admin';
-
-      if (res.notifications.length === 0) {
-        container.innerHTML = `<p style="color:var(--text-muted); font-size:14px;">No notifications yet.</p>`;
-        document.getElementById('notif-badge-dot').style.display = 'none';
-        return;
-      }
-
-      let unreadCount = 0;
-      container.innerHTML = '';
-      selectedNotifIds.clear();
-
-      res.notifications.forEach(n => {
-        const isRead = readSet.has(n.NotificationID);
-        if (!isRead) unreadCount++;
-
-        const card = document.createElement('div');
-        card.className = `notif-card-stylish ${isRead ? '' : 'unread'}`;
-        card.id = `notif-card-${n.NotificationID}`;
-
-        card.innerHTML = `
-          <div class="notif-header-title">${n.Title}</div>
-          <div class="notif-date-stamp">DATE AND TIME : ${formatDateStrict(n.Timestamp)}</div>
-          <div class="notif-body-box">${n.Message}</div>
-          <div style="display:flex; justify-content:space-between; align-items:center;">
-            <small style="color:var(--text-muted); font-weight:700;">Sender: ${n.Sender}</small>
-            <div style="display:flex; gap:8px;">
-              <button onclick="event.stopPropagation(); toggleNotifRead('${n.NotificationID}')" class="btn btn-outline" style="padding:4px 12px; font-size:12px;">
-                ${isRead ? 'Mark Unread' : 'Mark Read ✓'}
-              </button>
-              ${isAdmin ? `
-                <button onclick="event.stopPropagation(); deleteSingleNotif('${n.NotificationID}')" class="btn btn-outline" style="padding:4px 8px; font-size:12px; color:var(--danger);" title="Delete Notification">
-                  🗑️
-                </button>
-              ` : ''}
-            </div>
-          </div>
-        `;
-
-        if (isAdmin) attachNotifTouchAndHold(card, n.NotificationID);
-        container.appendChild(card);
-      });
-
-      document.getElementById('notif-badge-dot').style.display = unreadCount > 0 ? 'block' : 'none';
-    }
-
-    function attachNotifTouchAndHold(cardEl, notifId) {
-      let timer = null;
-      let isLongPress = false;
-
-      cardEl.addEventListener('touchstart', () => {
-        isLongPress = false;
-        timer = setTimeout(() => {
-          isLongPress = true;
-          toggleNotifCardSelection(cardEl, notifId);
-        }, 350);
-      }, { passive: true });
-
-      cardEl.addEventListener('touchend', () => clearTimeout(timer));
-      cardEl.addEventListener('click', (e) => {
-        if (e.target.closest('button')) return;
-        if (!isLongPress) toggleNotifCardSelection(cardEl, notifId);
-      });
-    }
-
-    function toggleNotifCardSelection(cardEl, notifId) {
-      if (selectedNotifIds.has(notifId)) {
-        selectedNotifIds.delete(notifId);
-        cardEl.classList.remove('selected');
-      } else {
-        selectedNotifIds.add(notifId);
-        cardEl.classList.add('selected');
-      }
-      const delBtn = document.getElementById('admin-delete-selected-btn');
-      delBtn.style.display = selectedNotifIds.size > 0 ? 'inline-flex' : 'none';
-      document.getElementById('selected-notif-count').innerText = selectedNotifIds.size;
-    }
-
-    function toggleNotifRead(notifId) {
-      let readSet = new Set(JSON.parse(localStorage.getItem('read_notifs_' + currentUser.username) || '[]'));
-      if (readSet.has(notifId)) readSet.delete(notifId);
-      else readSet.add(notifId);
-      localStorage.setItem('read_notifs_' + currentUser.username, JSON.stringify(Array.from(readSet)));
-      loadNotifications();
-    }
-
-    function markAllNotifsAsRead() {
-      const cards = document.querySelectorAll('.notif-card-stylish');
-      let readSet = new Set(JSON.parse(localStorage.getItem('read_notifs_' + currentUser.username) || '[]'));
-      cards.forEach(c => {
-        const id = c.id.replace('notif-card-', '');
-        if (id) readSet.add(id);
-      });
-      localStorage.setItem('read_notifs_' + currentUser.username, JSON.stringify(Array.from(readSet)));
-      showToast('All notifications marked as read', 'success');
-      loadNotifications();
-    }
-
-    function selectNotifTarget(mode) {
-      const pillAll = document.getElementById('target-pill-all');
-      const pillCustom = document.getElementById('target-pill-custom');
-      const pickerBox = document.getElementById('student-picker-box');
-
-      if (mode === 'ALL') {
-        pillAll.className = 'target-audience-pill active';
-        pillCustom.className = 'target-audience-pill';
-        pickerBox.style.display = 'none';
-        document.getElementById('notif-target-mode').value = 'ALL';
-      } else {
-        pillAll.className = 'target-audience-pill';
-        pillCustom.className = 'target-audience-pill active';
-        pickerBox.style.display = 'block';
-        document.getElementById('notif-target-mode').value = 'CUSTOM';
-      }
-    }
-
-    async function handleSendNotification(e) {
-      e.preventDefault();
-      const targetMode = document.getElementById('notif-target-mode').value;
-      let recipients = [];
-
-      if (targetMode === 'ALL') {
-        recipients = ['ALL'];
-      } else {
-        recipients = Array.from(selectedStudentPhones);
-        if (recipients.length === 0) {
-          showToast('Please select at least one student!', 'danger');
-          return;
-        }
-      }
-
-      const title = document.getElementById('notif-title').value.trim();
-      const message = document.getElementById('notif-message').value.trim();
-
-      const res = await apiRequest({
-        action: 'sendNotification',
-        recipientPhones: recipients,
-        title,
-        message,
-        sender: currentUser.name || 'System Admin'
-      });
-
-      if (res.success) {
-        showToast('Notification sent successfully!', 'success');
-        document.getElementById('send-notif-form').reset();
-        selectedStudentPhones.clear();
-        selectNotifTarget('ALL');
-        loadNotifications();
-      }
-    }
-
-    async function deleteSingleNotif(notifId) {
-      showConfirmModal('Delete Notification', 'Permanently delete this notification?', async () => {
-        await apiRequest({ action: 'deleteNotifications', notificationIds: [notifId] });
-        showToast('Notification deleted', 'info');
-        loadNotifications();
-      });
-    }
-
-    async function deleteSelectedNotifs() {
-      const ids = Array.from(selectedNotifIds);
-      if (ids.length === 0) return;
-
-      showConfirmModal('Delete Notifications', `Delete ${ids.length} selected notification(s)?`, async () => {
-        await apiRequest({ action: 'deleteNotifications', notificationIds: ids });
-        showToast(`${ids.length} notification(s) deleted`, 'info');
-        selectedNotifIds.clear();
-        loadNotifications();
-      });
-    }
-
-    // =========================================================================
-    // ADMIN REPORTS & USER OPTIMIZATION ACCORDIONS
-    // =========================================================================
-
-    async function loadAdminData() {
-      const res = await apiRequest({ action: 'getAdminData' });
-      if (!res.success) return;
-      cachedAdminData = res;
-
-      const studentChipsContainer = document.getElementById('student-chips-container');
-      const students = res.users.filter(u => String(u.Role).trim().toLowerCase() === 'student');
-
-      studentChipsContainer.innerHTML = '';
-      students.forEach(s => {
-        const chip = document.createElement('div');
-        chip.className = 'student-chip';
-        chip.innerText = `${s.Name} (${s.Class || '10'}-${s.Division || 'A'}) [${s.Phone}]`;
-        chip.onclick = () => {
-          if (selectedStudentPhones.has(s.Phone)) {
-            selectedStudentPhones.delete(s.Phone);
-            chip.classList.remove('selected');
-          } else {
-            selectedStudentPhones.add(s.Phone);
-            chip.classList.add('selected');
-          }
-        };
-        studentChipsContainer.appendChild(chip);
-      });
-
-      // RENDER STUDENT REPORTS WITH SERIAL NO IN TRIAL EXAMS
-      const reportAccordion = document.getElementById('admin-student-accordion-list');
-      reportAccordion.innerHTML = students.map((st, idx) => {
-        return `
-          <div class="accordion-item">
-            <div class="accordion-header" onclick="toggleAccordion('report-acc-${idx}')">
-              <div>
-                <strong>${st.Name}</strong> — Class ${st.Class || '10'}-${st.Division || 'A'} [FL: ${st.FirstLanguage || 'MI'}] [${st.Phone}]
-              </div>
-              <div>▾</div>
-            </div>
-            <div class="accordion-body" id="report-acc-${idx}">
-              <div id="admin-rep-container-${idx}"></div>
-            </div>
-          </div>
-        `;
-      }).join('');
-
-      students.forEach((st, idx) => {
-        const stPhone = String(st.Phone).trim();
-        const stAnswers = res.allAnswers.filter(a => String(a.Phone).trim() === stPhone);
-        const stTrials = res.allTrialExams.filter(t => String(t.Phone).trim() === stPhone);
-        const stData = { detailedAnswers: stAnswers, trialExams: stTrials };
-
-        const container = document.getElementById(`admin-rep-container-${idx}`);
-        container.innerHTML = `
-          <h4 style="margin-top:0; color:var(--primary);">Subject Overview</h4>
-          <div class="table-responsive"><table class="data-table"><thead><tr><th>Subject</th><th>Total</th><th>Correct</th><th>Wrong</th><th>Last Attended</th></tr></thead><tbody id="admin-rep-overview-${idx}"></tbody></table></div>
-          
-          <h4 style="margin-top:20px; color:var(--primary);">Trial Exam Consolidations</h4>
-          <div id="admin-rep-trial-box-${idx}">
-            ${stTrials.length > 0 ? stTrials.map(t => {
-              let tAns = []; try { tAns = JSON.parse(t.AnswersJson || '[]'); } catch(e){}
-              return `
-                <div style="background:#f8fafc; padding:0px; border-radius:8px; margin-bottom:12px;">
-                  <div style="font-weight:700; font-size:13px; margin-bottom:6px;">Date: ${formatDateStrict(t.Timestamp)} | Score: ${t.Score} / ${t.TotalQuestions}</div>
-                  <div class="table-responsive"><table class="data-table"><thead><tr><th>S.No</th><th>Subject</th><th>Question</th><th>User Choice</th><th>Correct Choice</th></tr></thead><tbody>
-                    ${tAns.map((a, aIdx) => `<tr><td>${aIdx + 1}</td><td>${getFullSubjectName(a.Subject)}</td><td>${a.QuestionText}</td><td><b>${a.UserAnswer}</b></td><td><b style="color:var(--success);">${a.CorrectAnswer}</b></td></tr>`).join('')}
-                  </tbody></table></div>
-                </div>
-              `;
-            }).join('') : '<p style="font-size:13px; color:var(--text-muted);">No trial exams recorded.</p>'}
-          </div>
-
-          <h4 style="margin-top:20px; color:var(--primary);">Practice Audit Log</h4>
-          <div class="table-responsive"><table class="data-table"><thead><tr><th>S.No</th><th>Subject</th><th>Question</th><th>Your Answer</th><th>Correct Answer</th><th>Status</th></tr></thead><tbody id="admin-rep-audit-${idx}"></tbody></table></div>
-        `;
-
-        renderStudentDashboardAndOverview(stData, null, null, null, null, `admin-rep-overview-${idx}`, null, null, `admin-rep-audit-${idx}`);
-      });
-
-      // RENDER USER OPTIMIZATION ACCORDIONS
-      const optAccordion = document.getElementById('manage-users-analytics-accordion');
-      optAccordion.innerHTML = students.map((st, idx) => {
-        return `
-          <div class="accordion-item">
-            <div class="accordion-header" onclick="toggleAccordion('opt-acc-${idx}')">
-              <div>
-                <strong>${st.Name}</strong> — Class ${st.Class || '10'}-${st.Division || 'A'} Optimization Analytics
-              </div>
-              <div>▾</div>
-            </div>
-            <div class="accordion-body" id="opt-acc-${idx}">
-              <h4 style="margin-top:0; color:var(--primary); font-weight:800;">STUDENT PERFORMANCE DASHBOARD</h4>
-              
-              <div class="stats-grid">
-                <div class="card" style="margin:0;"><p style="margin:0; font-size:12px; color:var(--text-muted);">Total Answered</p><h3 id="opt-tot-${idx}">0</h3></div>
-                <div class="card" style="margin:0;"><p style="margin:0; font-size:12px; color:var(--text-muted);">Overall Accuracy</p><h3 id="opt-acc-val-${idx}">0%</h3></div>
-              </div>
-
-              <div class="grid-2" style="margin-bottom:20px;">
-                <div style="background:#f0fdf4; border:1px solid #bbf7d0; padding:12px; border-radius:10px;">
-                  <h5 style="margin:0 0 10px 0; color:#166534;">🌟 Strengths (≥70%)</h5>
-                  <div id="opt-strong-${idx}"></div>
-                </div>
-                <div style="background:#fffbe0; border:1px solid #fef08a; padding:12px; border-radius:10px;">
-                  <h5 style="margin:0 0 10px 0; color:#92400e;">⚠️ Priorities (<70%)</h5>
-                  <div id="opt-weak-${idx}"></div>
-                </div>
-              </div>
-
-              <h4 style="margin:20px 0 8px 0; color:var(--primary); font-weight:800;">Subject Overview</h4>
-              <div class="table-responsive"><table class="data-table"><thead><tr><th>Subject</th><th>Total</th><th>Correct</th><th>Wrong</th><th>Last Attended</th></tr></thead><tbody id="opt-overview-${idx}"></tbody></table></div>
-            </div>
-          </div>
-        `;
-      }).join('');
-
-      students.forEach((st, idx) => {
-        const stPhone = String(st.Phone).trim();
-        const stAnswers = res.allAnswers.filter(a => String(a.Phone).trim() === stPhone);
-        const stTrials = res.allTrialExams.filter(t => String(t.Phone).trim() === stPhone);
-        const stData = { detailedAnswers: stAnswers, trialExams: stTrials };
-
-        renderStudentDashboardAndOverview(stData, `opt-tot-${idx}`, `opt-acc-val-${idx}`, `opt-strong-${idx}`, `opt-weak-${idx}`, `opt-overview-${idx}`);
-      });
-
-      // CONSOLIDATED TABLE
-      consolidatedStudentsList = students.map((st, index) => {
-        const stPhone = String(st.Phone).trim();
-        const stAnswers = res.allAnswers.filter(a => String(a.Phone).trim() === stPhone);
-        const stTrials = res.allTrialExams.filter(t => String(t.Phone).trim() === stPhone);
-        
-        let total = stAnswers.length;
-        stTrials.forEach(t => { try { total += JSON.parse(t.AnswersJson||'[]').length; }catch(e){} });
-        let correct = stAnswers.filter(a => a.IsCorrect === 'YES' || a.IsCorrect === true).length;
-        stTrials.forEach(t => { try { correct += JSON.parse(t.AnswersJson||'[]').filter(x=>x.IsCorrect).length; }catch(e){} });
-
-        const accuracy = total ? Math.round((correct / total) * 100) : 0;
-
-        return {
-          sno: index + 1,
-          name: st.Name,
-          gender: st.Gender || 'Male',
-          userClass: st.Class || '10',
-          div: st.Division || 'A',
-          firstLanguage: st.FirstLanguage || 'MI',
-          phone: st.Phone,
-          accuracy: accuracy,
-          totalAttempted: total
-        };
-      });
-
-      renderConsolidatedTable();
-
-      // RESET REQUESTS
-      const resetBody = document.getElementById('admin-resets-body');
-      resetBody.innerHTML = res.resetRequests.map(r => `
-        <tr>
-          <td><small>${r.RequestID}</small></td>
-          <td>${formatDateStrict(r.Timestamp)}</td>
-          <td><b>${r.StudentName}</b></td>
-          <td>${r.Class || '10'}-${r.Division || 'A'}</td>
-          <td>${r.Phone}</td>
-          <td><span class="badge">${r.Subject}</span></td>
-          <td><b>${r.Status}</b></td>
-          <td>
-            ${r.Status === 'Pending' ? `
-              <button onclick="handleReset('${r.RequestID}', 'Accepted', '${r.Phone}', '${r.Subject}')" class="btn btn-primary" style="padding:4px 8px; font-size:12px;">Accept</button>
-              <button onclick="handleReset('${r.RequestID}', 'Rejected', '${r.Phone}', '${r.Subject}')" class="btn btn-danger" style="padding:4px 8px; font-size:12px;">Reject</button>
-            ` : '-'}
-          </td>
-        </tr>
-      `).join('');
-
-      // QUESTIONS LIST
-      const qBody = document.getElementById('admin-questions-body');
-      qBody.innerHTML = res.questions.map(q => `
-        <tr>
-          <td><span class="badge">${q.Subject}</span></td>
-          <td>${q.Question} ${q.ImageUrl ? '📷' : ''}</td>
-          <td><b>${q.CorrectAnswer}</b></td>
-          <td style="display:flex; gap:8px;">
-            <button onclick="editQuestion('${q.ID}','${encodeURIComponent(q.Subject)}','${encodeURIComponent(q.Question)}','${encodeURIComponent(q.OptionA)}','${encodeURIComponent(q.OptionB)}','${encodeURIComponent(q.OptionC)}','${encodeURIComponent(q.OptionD)}','${q.CorrectAnswer}','${encodeURIComponent(q.ImageUrl || '')}')" class="btn btn-outline" style="padding:4px 8px;">✏️ Edit</button>
-            <button onclick="confirmDeleteQuestion('${q.ID}')" class="btn btn-outline" style="padding:4px 8px; color:var(--danger);" title="Delete">🗑️ Delete</button>
-          </td>
-        </tr>
-      `).join('');
-
-      // USERS LIST
-      const uBody = document.getElementById('admin-users-body');
-      uBody.innerHTML = res.users.map(u => `
-        <tr>
-          <td><b>${u.Name}</b></td>
-          <td>${u.Gender || 'Male'}</td>
-          <td>${u.Class || '10'}</td>
-          <td>${u.Division || 'A'}</td>
-          <td><span class="badge badge-success">${u.FirstLanguage || 'MI'}</span></td>
-          <td>${u.Phone}</td>
-          <td>${u.Username}</td>
-          <td>${u.Role}</td>
-          <td><span class="badge ${u.Status === 'Active' ? 'badge-success' : ''}">${u.Status}</span></td>
-          <td>
-            <button onclick="editUser('${u.Name}','${u.Gender || 'Male'}','${u.Phone}','${u.Username}','${u.Password}','${u.Role}','${u.Status}','${u.Class || '10'}','${u.Division || 'A'}','${u.FirstLanguage || 'MI'}')" class="btn btn-outline" style="padding:4px 8px;">✏️ Edit</button>
-          </td>
-        </tr>
-      `).join('');
-
-      // LOGS LIST WITH FULL DEVICE SPECS
-      const lBody = document.getElementById('admin-logs-body');
-      if (lBody && res.logs) {
-        lBody.innerHTML = res.logs.map(l => `
-          <tr>
-            <td>${formatDateStrict(l.Timestamp)}</td>
-            <td><b>${l.Identifier}</b></td>
-            <td>${l.Role}</td>
-            <td><span class="badge ${l.LoginStatus === 'SUCCESS' ? 'badge-success' : 'badge-danger'}">${l.LoginStatus}</span></td>
-            <td>${formatDateStrict(l.LoginTime)}</td>
-            <td>${l.LogoutTime === 'Active Now' ? '<span class="badge badge-success">Active Now</span>' : formatDateStrict(l.LogoutTime)}</td>
-            <td style="font-size:12px; color:var(--text-muted);">${l.Device}</td>
-          </tr>
-        `).join('');
-      }
-    }
-
-    function sortConsolidatedTable(key) {
-      if (sortColumn === key) sortAscending = !sortAscending;
-      else { sortColumn = key; sortAscending = true; }
-      renderConsolidatedTable();
-    }
-
-    function renderConsolidatedTable() {
-      const tbody = document.getElementById('consolidated-table-body');
-      if (!tbody) return;
-
-      consolidatedStudentsList.sort((a, b) => {
-        let valA = a[sortColumn]; let valB = b[sortColumn];
-        if (typeof valA === 'string') valA = valA.toLowerCase();
-        if (typeof valB === 'string') valB = valB.toLowerCase();
-        if (valA < valB) return sortAscending ? -1 : 1;
-        if (valA > valB) return sortAscending ? 1 : -1;
-        return 0;
-      });
-
-      tbody.innerHTML = consolidatedStudentsList.map((item, idx) => `
-        <tr>
-          <td>${idx + 1}</td>
-          <td><b>${item.name}</b></td>
-          <td>${item.gender}</td>
-          <td>${item.userClass}</td>
-          <td>${item.div}</td>
-          <td><span class="badge badge-success">${item.firstLanguage}</span></td>
-          <td>${item.phone}</td>
-          <td><b>${item.accuracy}%</b> (${item.totalAttempted} Answered)</td>
-        </tr>
-      `).join('');
-    }
-
-    function printConsolidatedTable() {
-      const printableContent = document.getElementById('printable-consolidated-area').outerHTML;
-      const modalContent = document.getElementById('print-modal-content');
-      modalContent.innerHTML = printableContent;
-      document.getElementById('print-modal').style.display = 'flex';
-    }
-
-    function refreshResetRequests() {
-      loadAdminData().then(() => showToast('Reset requests refreshed!', 'info'));
-    }
-
-    function toggleAccordion(id) {
-      const el = document.getElementById(id);
-      if (!el) return;
-      el.style.display = el.style.display === 'block' ? 'none' : 'block';
-    }
-
-    async function handleReset(requestId, decision, phone, subject) {
-      await apiRequest({ action: 'handleResetRequest', requestId, decision, phone, subject });
-      showToast(`Request ${decision}! Notification sent to user.`, 'info');
-      loadAdminData();
-    }
-
-    async function uploadToImgBB(input) {
-      if (!input.files || !input.files[0]) return;
-      if (!IMGBB_API_KEY || IMGBB_API_KEY.includes("YOUR_IMGBB_API_KEY")) {
-        showToast('Please insert your ImgBB API Key!', 'danger');
-        return;
-      }
-
-      const file = input.files[0];
-      showToast('Uploading diagram...', 'info');
-
-      const formData = new FormData();
-      formData.append('image', file);
+    async function callSingleModel(modelName, payload) {
+      const controller = new AbortController();
+      const timeoutId = setTimeout(() => controller.abort(), 55000);
 
       try {
-        const res = await fetch(`https://api.imgbb.com/1/upload?key=${IMGBB_API_KEY}`, { method: 'POST', body: formData });
-        const data = await res.json();
-        if (data.success) {
-          document.getElementById('q-img-url').value = data.data.url;
-          const preview = document.getElementById('q-img-preview');
-          preview.src = data.data.url;
-          preview.style.display = 'block';
-          showToast('Image uploaded successfully!', 'success');
-        } else {
-          showToast('ImgBB Upload Failed', 'danger');
+        const endpoint = `https://generativelanguage.googleapis.com/v1beta/models/${modelName}:generateContent`;
+        const response = await fetch(endpoint, {
+          method: "POST",
+          headers: {
+            "Content-Type": "application/json",
+            "x-goog-api-key": GEMINI_API_KEY
+          },
+          body: JSON.stringify(payload),
+          signal: controller.signal
+        });
+
+        clearTimeout(timeoutId);
+        const data = await response.json();
+
+        if (response.ok && data.candidates && data.candidates[0]?.content) {
+          return { success: true, data: data, model: modelName };
         }
-      } catch (e) {
-        showToast('Cloud upload failed.', 'danger');
+
+        const errorMsg = data.error?.message || `HTTP ${response.status}`;
+        return { success: false, error: `${modelName}: ${errorMsg}` };
+      } catch (err) {
+        clearTimeout(timeoutId);
+        if (err.name === 'AbortError') {
+          return { success: false, error: `${modelName}: Timed out (55s)` };
+        }
+        return { success: false, error: `${modelName}: ${err.message}` };
       }
     }
 
-    async function handleSaveQuestion(e) {
-      e.preventDefault();
-      const questionData = {
-        ID: document.getElementById('q-id').value,
-        Subject: document.getElementById('q-subject').value,
-        Question: document.getElementById('q-text').value,
-        ImageUrl: document.getElementById('q-img-url').value,
-        OptionA: document.getElementById('q-optA').value,
-        OptionB: document.getElementById('q-optB').value,
-        OptionC: document.getElementById('q-optC').value,
-        OptionD: document.getElementById('q-optD').value,
-        CorrectAnswer: document.getElementById('q-correct').value,
-      };
-
-      await apiRequest({ action: 'saveQuestion', questionData });
-      showToast('Question saved!', 'success');
-      document.getElementById('question-form').reset();
-      document.getElementById('q-id').value = '';
-      document.getElementById('q-img-preview').style.display = 'none';
-      loadAdminData();
-    }
-
-    function editQuestion(id, subject, text, optA, optB, optC, optD, correct, imgUrl) {
-      showSection('manage-qs-sec');
-      document.getElementById('q-id').value = id;
-      document.getElementById('q-subject').value = decodeURIComponent(subject);
-      document.getElementById('q-text').value = decodeURIComponent(text);
-      document.getElementById('q-optA').value = decodeURIComponent(optA);
-      document.getElementById('q-optB').value = decodeURIComponent(optB);
-      document.getElementById('q-optC').value = decodeURIComponent(optC);
-      document.getElementById('q-optD').value = decodeURIComponent(optD);
-      document.getElementById('q-correct').value = correct;
-
-      const img = decodeURIComponent(imgUrl);
-      document.getElementById('q-img-url').value = img;
-      const preview = document.getElementById('q-img-preview');
-      if (img) { preview.src = img; preview.style.display = 'block'; }
-      else preview.style.display = 'none';
-    }
-
-    function confirmDeleteQuestion(id) {
-      showConfirmModal('Delete Question', 'Permanently delete this question?', async () => {
-        await apiRequest({ action: 'deleteQuestion', id });
-        showToast('Question deleted', 'info');
-        loadAdminData();
-      });
-    }
-
-    async function handleSaveUser(e) {
-      e.preventDefault();
-      const userData = {
-        Name: document.getElementById('u-name').value,
-        Gender: document.getElementById('u-gender').value,
-        Phone: document.getElementById('u-phone').value,
-        Class: document.getElementById('u-class').value,
-        Division: document.getElementById('u-div').value,
-        FirstLanguage: document.getElementById('u-first-lang').value,
-        Username: document.getElementById('u-username').value,
-        Password: document.getElementById('u-password').value,
-        Role: document.getElementById('u-role').value,
-        Status: document.getElementById('u-status').value
-      };
-
-      await apiRequest({ action: 'updateUser', userData });
-      showToast('User credentials updated!', 'success');
-      document.getElementById('user-form').reset();
-      loadAdminData();
-    }
-
-    function editUser(name, gender, phone, username, password, role, status, userClass, div, firstLang) {
-      showSection('manage-users-sec');
-      document.getElementById('u-name').value = name;
-      document.getElementById('u-gender').value = gender || 'Male';
-      document.getElementById('u-phone').value = phone;
-      document.getElementById('u-class').value = userClass;
-      document.getElementById('u-div').value = div;
-      document.getElementById('u-first-lang').value = firstLang || 'MI';
-      document.getElementById('u-username').value = username;
-      document.getElementById('u-password').value = password;
-      document.getElementById('u-role').value = role;
-      document.getElementById('u-status').value = status;
-    }
-
-    function toggleKeepLoggedPill() {
-      const pill = document.getElementById('keep-logged-pill');
-      const text = document.getElementById('keep-logged-text');
-      if (pill.classList.contains('active')) {
-        pill.className = 'keep-logged-pill';
-        text.innerText = 'Keep Me Logged In: OFF';
-      } else {
-        pill.className = 'keep-logged-pill active';
-        text.innerText = 'Keep Me Logged In: ON';
+    // Recursive failover across separate active quota pools
+    async function fetchWithModelFailover(payload, modelIndex = 0, errorHistory = []) {
+      if (modelIndex >= ACTIVE_MODELS.length) {
+        const match = errorHistory.join(" ").match(/retry in ([0-9.]+)s/i);
+        const waitSec = match ? Math.ceil(parseFloat(match[1])) : 35;
+        throw new Error(`Daily/minute free-tier limit reached across all active models.\n• Please wait ${waitSec} seconds for Google's quota counter to reset, then click Generate again.`);
       }
+
+      const currentModel = ACTIVE_MODELS[modelIndex];
+      showSpinner(`Synthesizing with ${currentModel}...`);
+
+      const result = await callSingleModel(currentModel, payload);
+
+      if (result.success) {
+        console.log(`Generated successfully using ${result.model}`);
+        return result.data;
+      }
+
+      errorHistory.push(result.error);
+      const isQuotaLimit = result.error.includes("quota") || result.error.includes("429");
+      
+      console.warn(`${currentModel} unavailable (${result.error}). Hopping to next active model...`);
+      showSpinner(isQuotaLimit 
+        ? `Model quota reached. Switching immediately to alternate pool (${ACTIVE_MODELS[modelIndex + 1] || 'Next'})...` 
+        : `Switching to backup model (${ACTIVE_MODELS[modelIndex + 1] || 'Finalizing'})...`
+      );
+
+      await delay(600); // Clean buffer
+      return await fetchWithModelFailover(payload, modelIndex + 1, errorHistory);
     }
 
-    async function handleFirstTimePassSubmit(e) {
-      e.preventDefault();
-      const pass1 = document.getElementById('first-new-pass').value.trim();
-      const pass2 = document.getElementById('first-confirm-pass').value.trim();
+    async function callGeminiModel(payload) {
+      return await fetchWithModelFailover(payload, 0);
+    }
 
-      if (pass1 !== pass2) {
-        showToast('Passwords do not match!', 'danger');
+    // Content Generation Handler
+    generateBtn.addEventListener('click', async () => {
+      const unitTitle = document.getElementById('unit-title').value.trim();
+      if (!unitTitle) return showMessageBox("Please enter a Chapter or Unit Title before generating.", "Missing Unit");
+
+      const dayNumber = document.getElementById('day-number').value;
+      const totalDays = document.getElementById('total-days').value;
+      const activeSlotId = `${state.currentClass}_${state.currentPart}`;
+      const activeBase64 = state.slotsBase64[activeSlotId];
+
+      generateBtn.disabled = true;
+      showSpinner(`Synthesizing Day ${dayNumber} of ${totalDays} for ${unitTitle}...`);
+
+      try {
+        const prompt = `
+You are an expert pedagogical assistant for Kerala SCERT Classes 5, 6, and 7.
+Formulate a complete daily teaching package calibrated specifically for:
+- Standard: Class ${state.currentClass}
+- Textbook: Part ${state.currentPart === 'part1' ? '1' : '2'}
+- Unit Name: ${unitTitle}
+- UNIT PACING & PROGRESSION: This is Day ${dayNumber} of ${totalDays} Total Planned Days for this complete unit.
+  Synthesize the entire unit scope into this multi-day pacing and focus TODAY's 35-minute period strictly on the conceptual slice designated for Day ${dayNumber}.
+
+CRITICAL PEDAGOGICAL SPECIFICATIONS:
+
+1. CURRICULAR OBJECTIVES (COs) STRUCTURE:
+   - Provide "All Curricular Objectives of the Unit" (numbered systematically: CO 1, CO 2, CO 3, etc.).
+   - Explicitly highlight: "Curricular Objective(s) Targeted in Present Pacing (Day ${dayNumber} of ${totalDays})", referring to the exact CO number and verbatim text.
+
+2. 35-MINUTE TIME ALLOCATION (COPIABLE TABLE):
+   - Deliver the minute-by-minute schedule as an HTML <table> with inline borders (border="1" style="border-collapse:collapse; width:100%;") designed to paste cleanly into LibreOffice Writer, Google Docs, or MS Word.
+   - Columns: Phase / Step | Allocated Time | Classroom Process & Learning Activity | Teacher & Learner Roles / Evidence.
+   - Fixed 35-minute breakdown:
+     * 0-5 min: Entry Activity / Prerequisite Activation
+     * 5-20 min: Concept Presentation & Inquiry Activity
+     * 20-25 min: Assessment of Learning / Synthesis
+     * 25-35 min: Blackboard Work (Copying into Notebooks)
+
+3. BLACKBOARD NOTES (APPLICATION-LEVEL ONLY):
+   - MUST consist ONLY of Application-Level Questions and structured model answers (Higher-Order Thinking / HOTs, daily-life scenarios, or deduction).
+   - No passive summary or simple recall. Suitable for copying in 10-12 minutes.
+
+4. DAILY WHATSAPP PARENT BROADCAST:
+   - Formatted for direct sharing in WhatsApp parent groups using WhatsApp Markdown (*bold*, emojis).
+   - Must contain:
+     * 100-word reassuring summary of what happened in class today.
+     * The EXACT Application-Level Questions and Answers from the Blackboard Notes (identical wording).
+     * Recommended search keywords for DIKSHA and YouTube.
+
+5. A4 PORTRAIT PRINTABLE WORKSHEET (TOTAL: 5 SCORES):
+   - Plan an activity with a TOTAL OF STRICTLY 5 SCORES.
+   - Question distribution: minimum 2 questions (e.g., one 3-score and one 2-score = 5, OR two 2-score and one 1-score = 5, OR maximum five 1-score questions = 5).
+   - Questions must be purely APPLICATION LEVEL (reasoning, problem-solving, deduction).
+   - Every question must display its score badge: [Score: X].
+   - Provide clean handwriting answer lines.
+
+6. WORKSHEET ANSWER KEY & SCORING GUIDE (5 SCORES):
+   - Detailed point-by-point rubric and model answers totaling 5 scores, matching the worksheet questions.
+
+7. DIGITAL MEDIA: Suggest 4 internet resources (KITE Victers, DIKSHA, PhET simulation, YouTube visual).
+
+OUTPUT MUST BE A STRICT JSON OBJECT MATCHING THIS EXACT SCHEMA:
+{
+  "allUnitCurricularObjectives": [
+    "CO 1: ...",
+    "CO 2: ...",
+    "CO 3: ..."
+  ],
+  "targetedCurricularObjective": "CO X: ... (Verbatim text)",
+  "lessonPlanIntroHtml": "<p>...</p>",
+  "lessonPlanTableHtml": "<table class='copiable-table' border='1' style='border-collapse:collapse; width:100%;'>...</table>",
+  "mediaResources": [
+    {
+      "title": "Title",
+      "type": "video" | "diksha" | "sim",
+      "platform": "KITE Victers / YouTube / DIKSHA / PhET",
+      "description": "Pedagogical note",
+      "searchQuery": "Search query"
+    }
+  ],
+  "blackboardNotes": "Markdown string with Application-Level Q&As only...",
+  "whatsappSummary": "WhatsApp formatted string with *bold*, parent summary, exact Blackboard Q&As, and DIKSHA links...",
+  "worksheetHtml": "<div class='ws-header'>...</div><div class='question-block'>...</div>",
+  "worksheetAnswerKeyHtml": "<div class='answer-key-block'>...</div>"
+}`;
+
+        const parts = [{ text: prompt }];
+
+        if (activeBase64) {
+          const sizeInMB = (activeBase64.length * 0.75) / (1024 * 1024);
+          if (sizeInMB <= 15) {
+            parts.unshift({
+              inlineData: {
+                mimeType: "application/pdf",
+                data: activeBase64
+              }
+            });
+          }
+        }
+
+        const payload = {
+          contents: [{ role: "user", parts: parts }],
+          generationConfig: {
+            responseMimeType: "application/json",
+            temperature: 0.2
+          }
+        };
+
+        generateBtn.textContent = "Formatting Worksheets & Plans...";
+        const data = await callGeminiModel(payload);
+        const rawJson = data.candidates[0].content.parts[0].text;
+        const result = JSON.parse(rawJson);
+
+        // Render Lesson Plan
+        let coMasterListHtml = `<div class="co-box-master"><strong>All Curricular Objectives (Unit Master):</strong><ul style="margin-top:6px; padding-left:20px;">`;
+        (result.allUnitCurricularObjectives || []).forEach(co => {
+          coMasterListHtml += `<li>${co}</li>`;
+        });
+        coMasterListHtml += `</ul></div>`;
+
+        const coActiveHtml = `
+          <div class="co-box-active">
+            🎯 <strong>Curricular Objective(s) Targeted in Present Pacing (Day ${dayNumber} of ${totalDays}):</strong><br>
+            <span>${result.targetedCurricularObjective || 'Specified for today'}</span>
+          </div>
+        `;
+
+        document.getElementById('lesson-plan-body').innerHTML = `
+          ${coMasterListHtml}
+          ${coActiveHtml}
+          ${result.lessonPlanIntroHtml || ''}
+          <h3 style="margin:16px 0 8px 0; color:var(--primary);">35-Minute Instructional Period Breakdown (Copy-ready for LibreOffice / Word):</h3>
+          ${result.lessonPlanTableHtml}
+        `;
+        
+        // Render Digital Media Resources
+        renderMediaResources(result.mediaResources || []);
+
+        // Render Blackboard Notes
+        document.getElementById('blackboard-notes-body').innerHTML = formatMarkdown(result.blackboardNotes);
+
+        // Render WhatsApp
+        document.getElementById('whatsapp-summary-body').textContent = result.whatsappSummary;
+        
+        // Render Printable Worksheet (5 Scores)
+        document.getElementById('worksheet-render-area').innerHTML = `
+          <div class="ws-header">
+            <h2>Kerala SCERT Curriculum Worksheet</h2>
+            <div style="font-weight:bold; font-size:10pt; margin-top:2px;">Application-Level Evaluation Activity (Total: 5 Scores)</div>
+            <div class="ws-meta-grid">
+              <div class="ws-meta-line"><strong>Unit:</strong> ${unitTitle} (Day ${dayNumber}/${totalDays})</div>
+              <div class="ws-meta-line"><strong>Class:</strong> Std ${state.currentClass}</div>
+              <div class="ws-meta-line"><strong>Max Score:</strong> 5</div>
+              <div class="ws-meta-line"><strong>Student Name:</strong> ___________________________</div>
+              <div class="ws-meta-line"><strong>Roll No:</strong> _______</div>
+              <div class="ws-meta-line"><strong>Time:</strong> 20 Mins</div>
+            </div>
+          </div>
+          ${result.worksheetHtml}
+        `;
+
+        // Render Answer Key
+        document.getElementById('worksheet-answers-body').innerHTML = `
+          <div style="margin-bottom:14px; padding:10px; background:#f1f5f9; border-radius:4px;">
+            <strong>Evaluation Standard:</strong> Kerala SCERT Criteria | <strong>Total Score:</strong> 5 | <strong>Unit:</strong> ${unitTitle} (Day ${dayNumber}/${totalDays})
+          </div>
+          ${result.worksheetAnswerKeyHtml || formatMarkdown(result.blackboardNotes)}
+        `;
+
+        hideSpinner();
+        showToast("Pedagogical package generated successfully!");
+      } catch (err) {
+        hideSpinner();
+        console.error(err);
+        showMessageBox(err.message, "Service Notice");
+      } finally {
+        generateBtn.disabled = false;
+        generateBtn.textContent = "⚡ Generate Lesson Package";
+      }
+    });
+
+    // Render Digital Media Cards
+    function renderMediaResources(mediaList) {
+      const container = document.getElementById('media-resources-body');
+      if (!mediaList || mediaList.length === 0) {
+        container.innerHTML = `<p style="color: var(--text-muted);">No specific media links retrieved.</p>`;
         return;
       }
 
-      const res = await apiRequest({ action: 'changePassword', username: currentUser.username, newPassword: pass1 });
-      if (res.success) {
-        showToast('Password updated! Redirecting...', 'success');
-        document.getElementById('first-time-pass-modal').style.display = 'none';
-        localStorage.setItem('USS_USER', JSON.stringify(currentUser));
-        initializeSession();
-      } else {
-        showToast('Failed to change password.', 'danger');
-      }
+      let html = `<div class="media-grid">`;
+      mediaList.forEach(item => {
+        const typeClass = `type-${item.type || 'video'}`;
+        const queryEncoded = encodeURIComponent(item.searchQuery || item.title);
+        
+        let searchUrl = `https://www.youtube.com/results?search_query=${queryEncoded}`;
+        let actionLabel = "Search YouTube ↗";
+
+        if (item.type === 'diksha' || item.platform?.toLowerCase().includes('diksha')) {
+          searchUrl = `https://diksha.gov.in/explore?query=${queryEncoded}`;
+          actionLabel = "Open on DIKSHA ↗";
+        } else if (item.type === 'sim' || item.platform?.toLowerCase().includes('phet')) {
+          searchUrl = `https://www.google.com/search?q=${encodeURIComponent(item.searchQuery + ' simulation phet')}`;
+          actionLabel = "Open Simulation ↗";
+        }
+
+        html += `
+          <div class="media-card">
+            <div>
+              <span class="media-card-type ${typeClass}">${item.platform || 'Online Media'}</span>
+              <h4>${item.title}</h4>
+              <p>${item.description}</p>
+            </div>
+            <a href="${searchUrl}" target="_blank" rel="noopener noreferrer" class="btn btn-info">
+              ${actionLabel}
+            </a>
+          </div>
+        `;
+      });
+      html += `</div>`;
+      container.innerHTML = html;
     }
+
+    // Linear Markdown Formatter
+    function formatMarkdown(md) {
+      if (!md) return "";
+      let html = md
+        .replace(/^### (.*$)/gim, '<h3>$1</h3>')
+        .replace(/^## (.*$)/gim, '<h3>$1</h3>')
+        .replace(/\*\*(.*?)\*\*/gim, '<strong>$1</strong>')
+        .replace(/^[\*\-] (.*$)/gim, '<li>$1</li>')
+        .replace(/\n\n+/g, '</p><p>');
+
+      html = html.replace(/(<li>[\s\S]*?<\/li>)/g, '<ul>$1</ul>');
+      return html;
+    }
+
+    // Tabs Navigation
+    document.querySelectorAll('.tab-btn').forEach(btn => {
+      btn.addEventListener('click', () => {
+        document.querySelectorAll('.tab-btn').forEach(b => b.classList.remove('active'));
+        document.querySelectorAll('.tab-pane').forEach(p => p.classList.remove('active'));
+        btn.classList.add('active');
+        document.getElementById(`tab-${btn.dataset.tab}`).classList.add('active');
+      });
+    });
+
+    // Dual-Engine Copy
+    document.querySelectorAll('.copy-btn').forEach(btn => {
+      btn.addEventListener('click', () => {
+        const target = document.getElementById(btn.dataset.target);
+        const textToCopy = target.innerText || target.textContent;
+        copyText(textToCopy, "Copied content to clipboard!");
+      });
+    });
+
+    // Print Dialog
+    printBtn.addEventListener('click', () => window.print());
+
+    // Initial Load: Sync all 6 slots from Firestore
+    syncAllSlots();
   </script>
 </body>
 </html>
