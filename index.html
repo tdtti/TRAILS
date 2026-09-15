@@ -343,7 +343,7 @@
       display: flex;
       justify-content: space-between;
       align-items: center;
-      margin-bottom: 14px;
+      margin-bottom: 12px;
       flex-wrap: wrap;
       gap: 8px;
     }
@@ -351,10 +351,51 @@
     .pane-header-actions { display: flex; gap: 6px; align-items: center; flex-wrap: wrap; }
 
     /* ==========================================================================
-       4. UNIVERSAL PRINT HEADER COMPONENT (SHOWN IN PRINT FOR ALL TABS)
+       4. UNIVERSAL CHAPTER & CO HEADER (VISIBLE ON SCREEN & IN PRINT)
        ========================================================================== */
-    .universal-print-header {
-      display: none;
+    .universal-header-card {
+      background: #ffffff;
+      border: 1px solid var(--border);
+      border-left: 4px solid var(--primary);
+      border-radius: 6px;
+      padding: 10px 14px;
+      margin-bottom: 14px;
+      box-shadow: 0 1px 3px rgba(0,0,0,0.02);
+    }
+    .u-header-top {
+      display: flex;
+      justify-content: space-between;
+      align-items: center;
+      margin-bottom: 4px;
+      font-size: 0.74rem;
+    }
+    .u-badge {
+      background: var(--primary-light);
+      color: var(--primary);
+      font-weight: 700;
+      padding: 2px 6px;
+      border-radius: 3px;
+      text-transform: uppercase;
+      font-size: 0.68rem;
+    }
+    .u-meta-pacing {
+      font-weight: 600;
+      color: var(--secondary);
+    }
+    .u-header-unit {
+      font-size: 0.95rem;
+      font-weight: 700;
+      color: var(--text);
+      margin-bottom: 4px;
+    }
+    .u-header-co {
+      background: #f8fafc;
+      border: 1px dashed #cbd5e1;
+      padding: 6px 10px;
+      border-radius: 4px;
+      font-size: 0.82rem;
+      line-height: 1.45;
+      color: #1e293b;
     }
 
     /* Rendered Content Containers */
@@ -369,18 +410,13 @@
     .co-box-master {
       background: #f1f5f9;
       border-left: 4px solid var(--secondary);
-      padding: 10px 14px;
-      border-radius: 4px;
-      margin-bottom: 12px;
-    }
-    .co-box-active {
-      background: #e8f5e9;
-      border-left: 4px solid var(--primary);
       padding: 12px 16px;
       border-radius: 4px;
-      margin-bottom: 16px;
-      font-weight: 500;
+      margin-bottom: 14px;
     }
+    .co-box-master strong { color: var(--secondary); font-size: 0.88rem; }
+    .co-box-master ul { margin-top: 6px; padding-left: 20px; }
+    .co-box-master li { margin-bottom: 4px; line-height: 1.5; }
 
     /* Blackboard Notes UI */
     .bb-container { display: flex; flex-direction: column; gap: 14px; }
@@ -667,52 +703,27 @@
         width: 100% !important;
       }
 
-      /* Formal Universal Print Header */
-      .universal-print-header {
+      /* Print Styling for the Universal Header */
+      .universal-header-card {
         display: block !important;
-        border-bottom: 2px solid #000;
-        padding-bottom: 6px;
-        margin-bottom: 14px;
-        text-align: center;
-        width: 100% !important;
+        border: 1px solid #000 !important;
+        border-left: 4px solid #000 !important;
+        padding: 8px 12px !important;
+        margin-bottom: 14px !important;
+        background: #fff !important;
+        color: #000 !important;
+        page-break-inside: avoid !important;
+        break-inside: avoid !important;
       }
-      .u-print-title {
-        font-size: 10pt;
-        font-weight: 700;
-        letter-spacing: 0.05em;
-        text-transform: uppercase;
+      .u-badge {
+        border: 1px solid #000 !important;
+        background: #f1f5f9 !important;
+        color: #000 !important;
       }
-      .u-print-sub {
-        font-size: 8.5pt;
-        font-weight: 600;
-        margin-bottom: 3px;
-      }
-      .u-print-section-badge {
-        display: inline-block;
-        border: 1px solid #000;
-        padding: 1px 8px;
-        font-size: 8pt;
-        font-weight: 700;
-        text-transform: uppercase;
-        margin: 3px 0 6px 0;
-      }
-      .u-print-grid {
-        display: grid;
-        grid-template-columns: 1.2fr 2fr 1.2fr;
-        gap: 3px 8px;
-        font-size: 8.5pt;
-        text-align: left;
-        border-top: 1px solid #000;
-        padding-top: 5px;
-        margin-top: 4px;
-      }
-      .u-meta-co-box {
-        grid-column: 1 / -1;
-        border-top: 1px dashed #666;
-        padding-top: 4px;
-        margin-top: 3px;
-        font-size: 8.5pt;
-        line-height: 1.35;
+      .u-header-co {
+        background: #fff !important;
+        border: 1px solid #666 !important;
+        color: #000 !important;
       }
 
       /* Clean Full A4 Containers */
@@ -963,16 +974,18 @@
       
       <!-- Tab 1: Lesson Plan -->
       <section id="tab-lesson-plan" class="tab-pane active">
-        <!-- Formal Universal Print Header -->
-        <div class="universal-print-header">
-          <div class="u-print-title">TDTTI THURAVOOR</div>
-          <div class="u-print-sub">SOCIAL SCIENCE</div>
-          <div class="u-print-section-badge">Daily Instructional Lesson Plan (35-Minute Period)</div>
-          <div class="u-print-grid">
-            <div><strong>Class:</strong> Std <span class="u-meta-class">5</span> (Part <span class="u-meta-part">1</span>)</div>
-            <div><strong>Chapter / Unit:</strong> <span class="u-meta-unit">Select Unit</span></div>
-            <div><strong>Pacing:</strong> Day <span class="u-meta-day">1</span> of <span class="u-meta-total">5</span></div>
-            <div class="u-meta-co-box"><strong>Targeted Curricular Objective (CO):</strong> <span class="u-meta-co">To be specified</span></div>
+        <!-- Universal Screen + Print Header -->
+        <div class="universal-header-card">
+          <div class="u-header-top">
+            <span class="u-badge">TDTTI THURAVOOR• SOCIAL SCIENCE</span>
+            <span class="u-meta-pacing">Std <span class="u-meta-class">5</span> (Part <span class="u-meta-part">1</span>) • Day <span class="u-meta-day">1</span> of <span class="u-meta-total">5</span></span>
+          </div>
+          <div class="u-header-unit">
+            <strong>Chapter / Unit:</strong> <span class="u-meta-unit">Select Unit</span>
+          </div>
+          <div class="u-header-co">
+            <strong>🎯 Targeted Curricular Objective (Present Day Pacing):</strong><br>
+            <span class="u-meta-co">To be specified upon package generation</span>
           </div>
         </div>
 
@@ -991,16 +1004,18 @@
 
       <!-- Tab 2: Digital Media -->
       <section id="tab-media-resources" class="tab-pane">
-        <!-- Formal Universal Print Header -->
-        <div class="universal-print-header">
-          <div class="u-print-title">Department of General Education — Government of Kerala</div>
-          <div class="u-print-sub">State Council of Educational Research and Training (SCERT)</div>
-          <div class="u-print-section-badge">Digital & Internet Learning Resources (DIKSHA / Victers / PhET)</div>
-          <div class="u-print-grid">
-            <div><strong>Class:</strong> Std <span class="u-meta-class">5</span> (Part <span class="u-meta-part">1</span>)</div>
-            <div><strong>Chapter / Unit:</strong> <span class="u-meta-unit">Select Unit</span></div>
-            <div><strong>Pacing:</strong> Day <span class="u-meta-day">1</span> of <span class="u-meta-total">5</span></div>
-            <div class="u-meta-co-box"><strong>Targeted Curricular Objective (CO):</strong> <span class="u-meta-co">To be specified</span></div>
+        <!-- Universal Screen + Print Header -->
+        <div class="universal-header-card">
+          <div class="u-header-top">
+            <span class="u-badge">KERALA SCERT CURRICULUM • DIGITAL MEDIA</span>
+            <span class="u-meta-pacing">Std <span class="u-meta-class">5</span> (Part <span class="u-meta-part">1</span>) • Day <span class="u-meta-day">1</span> of <span class="u-meta-total">5</span></span>
+          </div>
+          <div class="u-header-unit">
+            <strong>Chapter / Unit:</strong> <span class="u-meta-unit">Select Unit</span>
+          </div>
+          <div class="u-header-co">
+            <strong>🎯 Targeted Curricular Objective (Present Day Pacing):</strong><br>
+            <span class="u-meta-co">To be specified upon package generation</span>
           </div>
         </div>
 
@@ -1019,16 +1034,18 @@
 
       <!-- Tab 3: Blackboard Notes -->
       <section id="tab-blackboard-notes" class="tab-pane">
-        <!-- Formal Universal Print Header -->
-        <div class="universal-print-header">
-          <div class="u-print-title">Department of General Education — Government of Kerala</div>
-          <div class="u-print-sub">State Council of Educational Research and Training (SCERT)</div>
-          <div class="u-print-section-badge">Blackboard Notes (Strict Application-Level HOTs Q&A)</div>
-          <div class="u-print-grid">
-            <div><strong>Class:</strong> Std <span class="u-meta-class">5</span> (Part <span class="u-meta-part">1</span>)</div>
-            <div><strong>Chapter / Unit:</strong> <span class="u-meta-unit">Select Unit</span></div>
-            <div><strong>Pacing:</strong> Day <span class="u-meta-day">1</span> of <span class="u-meta-total">5</span></div>
-            <div class="u-meta-co-box"><strong>Targeted Curricular Objective (CO):</strong> <span class="u-meta-co">To be specified</span></div>
+        <!-- Universal Screen + Print Header -->
+        <div class="universal-header-card">
+          <div class="u-header-top">
+            <span class="u-badge">KERALA SCERT CURRICULUM • BLACKBOARD WORK</span>
+            <span class="u-meta-pacing">Std <span class="u-meta-class">5</span> (Part <span class="u-meta-part">1</span>) • Day <span class="u-meta-day">1</span> of <span class="u-meta-total">5</span></span>
+          </div>
+          <div class="u-header-unit">
+            <strong>Chapter / Unit:</strong> <span class="u-meta-unit">Select Unit</span>
+          </div>
+          <div class="u-header-co">
+            <strong>🎯 Targeted Curricular Objective (Present Day Pacing):</strong><br>
+            <span class="u-meta-co">To be specified upon package generation</span>
           </div>
         </div>
 
@@ -1049,16 +1066,18 @@
 
       <!-- Tab 4: WhatsApp Broadcast -->
       <section id="tab-whatsapp-summary" class="tab-pane">
-        <!-- Formal Universal Print Header -->
-        <div class="universal-print-header">
-          <div class="u-print-title">Department of General Education — Government of Kerala</div>
-          <div class="u-print-sub">State Council of Educational Research and Training (SCERT)</div>
-          <div class="u-print-section-badge">Daily Parent Communication & Home Learning Broadcast</div>
-          <div class="u-print-grid">
-            <div><strong>Class:</strong> Std <span class="u-meta-class">5</span> (Part <span class="u-meta-part">1</span>)</div>
-            <div><strong>Chapter / Unit:</strong> <span class="u-meta-unit">Select Unit</span></div>
-            <div><strong>Pacing:</strong> Day <span class="u-meta-day">1</span> of <span class="u-meta-total">5</span></div>
-            <div class="u-meta-co-box"><strong>Targeted Curricular Objective (CO):</strong> <span class="u-meta-co">To be specified</span></div>
+        <!-- Universal Screen + Print Header -->
+        <div class="universal-header-card">
+          <div class="u-header-top">
+            <span class="u-badge">KERALA SCERT CURRICULUM • PARENT BROADCAST</span>
+            <span class="u-meta-pacing">Std <span class="u-meta-class">5</span> (Part <span class="u-meta-part">1</span>) • Day <span class="u-meta-day">1</span> of <span class="u-meta-total">5</span></span>
+          </div>
+          <div class="u-header-unit">
+            <strong>Chapter / Unit:</strong> <span class="u-meta-unit">Select Unit</span>
+          </div>
+          <div class="u-header-co">
+            <strong>🎯 Targeted Curricular Objective (Present Day Pacing):</strong><br>
+            <span class="u-meta-co">To be specified upon package generation</span>
           </div>
         </div>
 
@@ -1092,16 +1111,18 @@
 
       <!-- Tab 5: Printable Worksheet -->
       <section id="tab-worksheet-view" class="tab-pane">
-        <!-- Formal Universal Print Header -->
-        <div class="universal-print-header">
-          <div class="u-print-title">Department of General Education — Government of Kerala</div>
-          <div class="u-print-sub">State Council of Educational Research and Training (SCERT)</div>
-          <div class="u-print-section-badge">Application-Level Evaluation Worksheet (Total: 5 Scores)</div>
-          <div class="u-print-grid">
-            <div><strong>Class:</strong> Std <span class="u-meta-class">5</span> (Part <span class="u-meta-part">1</span>)</div>
-            <div><strong>Chapter / Unit:</strong> <span class="u-meta-unit">Select Unit</span></div>
-            <div><strong>Max Score:</strong> 5 (Time: 20 Mins)</div>
-            <div class="u-meta-co-box"><strong>Targeted Curricular Objective (CO):</strong> <span class="u-meta-co">To be specified</span></div>
+        <!-- Universal Screen + Print Header -->
+        <div class="universal-header-card">
+          <div class="u-header-top">
+            <span class="u-badge">KERALA SCERT CURRICULUM • EVALUATION WORKSHEET</span>
+            <span class="u-meta-pacing">Std <span class="u-meta-class">5</span> (Part <span class="u-meta-part">1</span>) • Day <span class="u-meta-day">1</span> of <span class="u-meta-total">5</span></span>
+          </div>
+          <div class="u-header-unit">
+            <strong>Chapter / Unit:</strong> <span class="u-meta-unit">Select Unit</span>
+          </div>
+          <div class="u-header-co">
+            <strong>🎯 Targeted Curricular Objective (Present Day Pacing):</strong><br>
+            <span class="u-meta-co">To be specified upon package generation</span>
           </div>
         </div>
 
@@ -1125,16 +1146,18 @@
 
       <!-- Tab 6: Worksheet Answers -->
       <section id="tab-worksheet-answers" class="tab-pane">
-        <!-- Formal Universal Print Header -->
-        <div class="universal-print-header">
-          <div class="u-print-title">Department of General Education — Government of Kerala</div>
-          <div class="u-print-sub">State Council of Educational Research and Training (SCERT)</div>
-          <div class="u-print-section-badge">Worksheet Model Answer Key & Scoring Guide (Total: 5 Scores)</div>
-          <div class="u-print-grid">
-            <div><strong>Class:</strong> Std <span class="u-meta-class">5</span> (Part <span class="u-meta-part">1</span>)</div>
-            <div><strong>Chapter / Unit:</strong> <span class="u-meta-unit">Select Unit</span></div>
-            <div><strong>Max Score:</strong> 5</div>
-            <div class="u-meta-co-box"><strong>Targeted Curricular Objective (CO):</strong> <span class="u-meta-co">To be specified</span></div>
+        <!-- Universal Screen + Print Header -->
+        <div class="universal-header-card">
+          <div class="u-header-top">
+            <span class="u-badge">KERALA SCERT CURRICULUM • ANSWER KEY</span>
+            <span class="u-meta-pacing">Std <span class="u-meta-class">5</span> (Part <span class="u-meta-part">1</span>) • Day <span class="u-meta-day">1</span> of <span class="u-meta-total">5</span></span>
+          </div>
+          <div class="u-header-unit">
+            <strong>Chapter / Unit:</strong> <span class="u-meta-unit">Select Unit</span>
+          </div>
+          <div class="u-header-co">
+            <strong>🎯 Targeted Curricular Objective (Present Day Pacing):</strong><br>
+            <span class="u-meta-co">To be specified upon package generation</span>
           </div>
         </div>
 
@@ -1294,9 +1317,7 @@
     const keyModalCloseBtn = document.getElementById('key-modal-close-btn');
     const saveKeyModalBtn = document.getElementById('save-key-modal-btn');
 
-    // =========================================================================
-    // TOP DRAWER TOGGLE (JUMPS TO TOP WHEN HIDDEN)
-    // =========================================================================
+    // Toggle Controls Drawer
     controlsToggleBtn.addEventListener('click', () => {
       topControlsPanel.classList.toggle('collapsed');
       const isHidden = topControlsPanel.classList.contains('collapsed');
@@ -1577,7 +1598,7 @@
     }
 
     // =========================================================================
-    // MALAYALAM TRANSLATION ENGINE (IN ALL TABS WITH FALLBACK PRIORITY)
+    // MALAYALAM TRANSLATION ENGINE (WITH PERMANENT LOCAL STORAGE CACHING)
     // =========================================================================
     async function translateActiveTab(tabId, buttonEl) {
       const containerMap = {
@@ -1593,12 +1614,11 @@
       const containerEl = document.getElementById(containerId);
       if (!containerEl) return;
 
-      // Unique storage keys based on the active package ID and tab
-      const pkgKey = state.activePackageId || document.getElementById('unit-title').value.trim() || 'default';
+      const pkgKey = state.activePackageId || document.getElementById('unit-title').value.trim() || 'active_unit';
       const mlStorageKey = `SCERT_ML_${pkgKey}_${tabId}`;
       const enStorageKey = `SCERT_EN_${pkgKey}_${tabId}`;
 
-      // 1. Toggle back to English if Malayalam is currently active
+      // Toggle back to English
       if (buttonEl.classList.contains('active-ml')) {
         const originalEnglish = localStorage.getItem(enStorageKey) || state.translations[tabId]?.originalHtml;
         if (originalEnglish) {
@@ -1611,10 +1631,9 @@
         }
       }
 
-      // 2. Check Local Memory (localStorage) first before making any network call
+      // Check Local Memory (localStorage) first
       const cachedMalayalam = localStorage.getItem(mlStorageKey);
       if (cachedMalayalam) {
-        // Save current English in memory if not already saved
         if (!localStorage.getItem(enStorageKey)) {
           localStorage.setItem(enStorageKey, containerEl.innerHTML);
         }
@@ -1622,11 +1641,10 @@
         containerEl.classList.add('malayalam-font');
         buttonEl.classList.add('active-ml');
         buttonEl.innerHTML = `🌐 English (Original)`;
-        showToast("Loaded from Local Memory (മലയാളം)");
+        showToast("Loaded Malayalam from Local Memory");
         return;
       }
 
-      // 3. If not in local memory, translate via Gemini
       const contentHtml = containerEl.innerHTML;
       if (!contentHtml || contentHtml.includes("Generate Package") || contentHtml.includes("No packages")) {
         return showMessageBox("Please generate or load a lesson package first before translating.", "Nothing to Translate");
@@ -1639,7 +1657,7 @@
 You are an expert Kerala SCERT Malayalam-medium pedagogical translator.
 Translate the following HTML content accurately and naturally into standard Kerala SCERT educational Malayalam.
 Maintain all HTML structure, classes, tags, and formatting intact.
-Use standard terms like 'പാഠ്യപദ്ധതി ലക്ഷ്യങ്ങൾ', 'പ്രവേശന പ്രവർത്തനം', 'വിലയിരുത്തൽ', 'ബ്ലാക്ക്ബോർഡ് കുറിപ്പുകൾ'.
+Use standard educational Malayalam terms like 'പാഠ്യപദ്ധതി ലക്ഷ്യങ്ങൾ', 'പ്രവേശന പ്രവർത്തനം', 'വിലയിരുത്തൽ', 'ബ്ലാക്ക്ബോർഡ് കുറിപ്പുകൾ'.
 
 ORIGINAL CONTENT:
 ${contentHtml}
@@ -1651,7 +1669,6 @@ RETURN ONLY THE TRANSLATED HTML. DO NOT WRAP IN BACKTICKS OR MARKDOWN CODE BLOCK
           generationConfig: { temperature: 0.1 }
         };
 
-        // Use fast fallback model
         let data = null;
         const liteRes = await callGemini(FALLBACK_MODEL, payload);
         if (liteRes.success) {
@@ -1663,7 +1680,7 @@ RETURN ONLY THE TRANSLATED HTML. DO NOT WRAP IN BACKTICKS OR MARKDOWN CODE BLOCK
         let translatedHtml = data.candidates[0].content.parts[0].text;
         translatedHtml = translatedHtml.replace(/^```(?:html)?\s*/i, '').replace(/\s*```$/i, '').trim();
 
-        // 4. Save both English and Malayalam permanently into localStorage
+        // Save permanently to local memory
         localStorage.setItem(enStorageKey, contentHtml);
         localStorage.setItem(mlStorageKey, translatedHtml);
 
@@ -1704,46 +1721,41 @@ RETURN ONLY THE TRANSLATED HTML. DO NOT WRAP IN BACKTICKS OR MARKDOWN CODE BLOCK
       document.querySelectorAll('.tab-pane').forEach(p => p.classList.remove('print-active'));
     });
 
-    // Update Universal Print Headers across all tabs
-    function updateAllPrintHeaders(unitTitle, dayNumber, totalDays, classId, partId, targetedCO) {
+    // Update Universal Headers across all tabs (Visible on screen and in print)
+    function updateAllUniversalHeaders(unitTitle, dayNumber, totalDays, classId, partId, targetedCO) {
       document.querySelectorAll('.u-meta-class').forEach(el => el.textContent = classId);
       document.querySelectorAll('.u-meta-part').forEach(el => el.textContent = (partId === 'part1' ? '1' : '2'));
       document.querySelectorAll('.u-meta-unit').forEach(el => el.textContent = unitTitle);
       document.querySelectorAll('.u-meta-day').forEach(el => el.textContent = dayNumber);
       document.querySelectorAll('.u-meta-total').forEach(el => el.textContent = totalDays);
-      document.querySelectorAll('.u-meta-co').forEach(el => el.textContent = targetedCO || 'SCERT Primary Competency Targeted');
+      document.querySelectorAll('.u-meta-co').forEach(el => el.textContent = targetedCO || 'SCERT Curricular Competency Targeted');
     }
 
     // =========================================================================
     // RENDER WORKSPACE WITH PACKAGE DATA
     // =========================================================================
     function renderPackageToWorkspace(pkgData, unitTitle, dayNumber, totalDays, classId, partId = state.currentPart) {
-      state.translations = {};
       document.querySelectorAll('.translate-tab-btn').forEach(b => {
         b.classList.remove('active-ml');
         b.innerHTML = `🌐 മലയാളം (Translate)`;
       });
 
-      // Update all universal print headers with Chapter Name and CO
-      updateAllPrintHeaders(unitTitle, dayNumber, totalDays, classId, partId, pkgData.targetedCurricularObjective);
+      // Update universal header across all 6 tabs
+      updateAllUniversalHeaders(unitTitle, dayNumber, totalDays, classId, partId, pkgData.targetedCurricularObjective);
 
       // 1. Render Lesson Plan
-      let coMasterListHtml = `<div class="co-box-master"><strong>All Curricular Objectives (Unit Master):</strong><ul style="margin-top:6px; padding-left:20px;">`;
+      let coMasterListHtml = `
+        <div class="co-box-master">
+          <strong>All Curricular Objectives (Unit Master — Comprehensive Coverage of Unit):</strong>
+          <ul style="margin-top:6px; padding-left:20px;">
+      `;
       (pkgData.allUnitCurricularObjectives || []).forEach(co => {
         coMasterListHtml += `<li>${co}</li>`;
       });
       coMasterListHtml += `</ul></div>`;
 
-      const coActiveHtml = `
-        <div class="co-box-active">
-          🎯 <strong>Curricular Objective(s) Targeted (Day ${dayNumber} of ${totalDays}):</strong><br>
-          <span>${pkgData.targetedCurricularObjective || ''}</span>
-        </div>
-      `;
-
       document.getElementById('lesson-plan-body').innerHTML = `
         ${coMasterListHtml}
-        ${coActiveHtml}
         ${pkgData.lessonPlanIntroHtml || ''}
         <h3 style="margin:16px 0 8px 0; color:var(--primary);">35-Minute Period Breakdown:</h3>
         ${pkgData.lessonPlanTableHtml}
@@ -1760,16 +1772,16 @@ RETURN ONLY THE TRANSLATED HTML. DO NOT WRAP IN BACKTICKS OR MARKDOWN CODE BLOCK
       
       // 5. Render Printable Worksheet
       document.getElementById('worksheet-render-area').innerHTML = `
-        <div class="ws-header">
-          <h2>Kerala SCERT Curriculum Worksheet</h2>
+        <div class="ws-header" style="border-bottom: 2px solid #000; padding-bottom: 8px; margin-bottom: 14px; text-align: center;">
+          <h2 style="font-size: 13pt; text-transform: uppercase; margin-bottom: 4px;">Kerala SCERT Curriculum Worksheet</h2>
           <div style="font-weight:bold; font-size:10pt; margin-top:2px;">Application-Level Evaluation Activity (Total: 5 Scores)</div>
-          <div class="ws-meta-grid">
-            <div class="ws-meta-line"><strong>Unit:</strong> ${unitTitle} (Day ${dayNumber}/${totalDays})</div>
-            <div class="ws-meta-line"><strong>Class:</strong> Std ${classId}</div>
-            <div class="ws-meta-line"><strong>Max Score:</strong> 5</div>
-            <div class="ws-meta-line"><strong>Student Name:</strong> ___________________________</div>
-            <div class="ws-meta-line"><strong>Roll No:</strong> _______</div>
-            <div class="ws-meta-line"><strong>Time:</strong> 20 Mins</div>
+          <div class="ws-meta-grid" style="display: grid; grid-template-columns: 2fr 1fr 1fr; gap: 6px; font-size: 9.5pt; margin-top: 8px; text-align: left;">
+            <div class="ws-meta-line" style="border-bottom: 1px dotted #444; padding-bottom: 2px;"><strong>Unit:</strong> ${unitTitle} (Day ${dayNumber}/${totalDays})</div>
+            <div class="ws-meta-line" style="border-bottom: 1px dotted #444; padding-bottom: 2px;"><strong>Class:</strong> Std ${classId}</div>
+            <div class="ws-meta-line" style="border-bottom: 1px dotted #444; padding-bottom: 2px;"><strong>Max Score:</strong> 5</div>
+            <div class="ws-meta-line" style="border-bottom: 1px dotted #444; padding-bottom: 2px;"><strong>Student Name:</strong> ___________________________</div>
+            <div class="ws-meta-line" style="border-bottom: 1px dotted #444; padding-bottom: 2px;"><strong>Roll No:</strong> _______</div>
+            <div class="ws-meta-line" style="border-bottom: 1px dotted #444; padding-bottom: 2px;"><strong>Time:</strong> 20 Mins</div>
           </div>
         </div>
         ${pkgData.worksheetHtml}
@@ -1802,7 +1814,6 @@ RETURN ONLY THE TRANSLATED HTML. DO NOT WRAP IN BACKTICKS OR MARKDOWN CODE BLOCK
     function resetWorkspace() {
       state.currentPackage = null;
       state.activePackageId = null;
-      state.translations = {};
       setPackageActiveState(false);
 
       document.querySelectorAll('.translate-tab-btn').forEach(b => {
@@ -1810,7 +1821,7 @@ RETURN ONLY THE TRANSLATED HTML. DO NOT WRAP IN BACKTICKS OR MARKDOWN CODE BLOCK
         b.innerHTML = `🌐 മലയാളം (Translate)`;
       });
 
-      updateAllPrintHeaders("Select Unit", "1", "5", state.currentClass, state.currentPart, "To be specified");
+      updateAllUniversalHeaders("Select Unit", "1", "5", state.currentClass, state.currentPart, "To be specified upon package generation");
 
       document.getElementById('lesson-plan-body').innerHTML = `<p style="color: var(--text-muted); font-style: italic;">Enter your unit and pacing details above, then click "Generate Package".</p>`;
       document.getElementById('media-resources-body').innerHTML = `<p style="color: var(--text-muted); font-style: italic;">Curated media, simulations, and search keywords will render here.</p>`;
@@ -1910,7 +1921,7 @@ RETURN ONLY THE TRANSLATED HTML. DO NOT WRAP IN BACKTICKS OR MARKDOWN CODE BLOCK
     }
 
     // =========================================================================
-    // GENERATE COMPLETE INSTRUCTIONAL PACKAGE
+    // GENERATE COMPLETE INSTRUCTIONAL PACKAGE (EXHAUSTIVE UNIT MASTER COs)
     // =========================================================================
     generateBtn.addEventListener('click', async () => {
       const unitTitle = document.getElementById('unit-title').value.trim();
@@ -1939,24 +1950,40 @@ Formulate a complete daily teaching package calibrated specifically for:
 - UNIT PACING & PROGRESSION: Day ${dayNumber} of ${totalDays} Total Planned Days.
 Focus TODAY's 35-minute period strictly on the designated conceptual slice for Day ${dayNumber}.
 
-PEDAGOGICAL SPECIFICATIONS:
-1. CURRICULAR OBJECTIVES (COs): Provide all unit COs (CO 1, CO 2, ...) and highlight the specific CO for Day ${dayNumber}.
+CRITICAL PEDAGOGICAL SPECIFICATIONS:
+
+1. ALL CURRICULAR OBJECTIVES (UNIT MASTER) — EXHAUSTIVE AND COMPLETE UNIT SCOPE:
+   - "allUnitCurricularObjectives": You MUST provide a comprehensive, detailed, and exhaustive master list of Curricular Objectives (CO 1, CO 2, CO 3, ... CO N) THAT SYSTEMATICALLY AND RIGOROUSLY COVERS THE ENTIRE CONTENT OF THIS COMPLETE UNIT.
+   - Do NOT abbreviate or give only 2 or 3 items. Cover every major conceptual domain, scientific inquiry, experiment, activity, process skill, and real-world connection spanning the entire chapter from start to finish.
+   - Number them systematically (e.g., "CO 1: ...", "CO 2: ...", "CO 3: ...", etc.).
+   
+   - "targetedCurricularObjective": Explicitly identify and state the exact Curricular Objective (verbatim from the Master list, e.g., "CO X: ...") targeted specifically in today's pacing slice (Day ${dayNumber} of ${totalDays}).
+
 2. 35-MINUTE ALLOCATION TABLE: HTML <table> with inline borders for LibreOffice/Word.
    Phases: 0-5 min (Entry Activity), 5-20 min (Concept & Inquiry), 20-25 min (Assessment), 25-35 min (Blackboard Work).
+
 3. BLACKBOARD NOTES (STRICT APPLICATION-LEVEL ONLY):
    - Provide 2 to 3 Higher-Order Thinking / Application-Level Questions.
    - For EACH question, provide the Question and the Model Answer as separated properties in an array.
+
 4. WHATSAPP BROADCAST (STRUCTURED & SEPARATED):
    - Provide a reassuring 100-word daily recap of what the child explored in class.
    - Include the EXACT same Application-Level Questions & Answers from the Blackboard section.
    - Provide home study tips and DIKSHA/YouTube search keywords.
+
 5. A4 PRINTABLE WORKSHEET: Exactly 5 total scores, application-level questions with score tags [Score: X] and answer lines.
 6. WORKSHEET ANSWER KEY: Scoring breakdown totaling 5 marks.
 7. DIGITAL MEDIA: 3-4 recommended resources (DIKSHA, KITE Victers, PhET simulations, YouTube).
 
-OUTPUT MUST BE A STRICT JSON OBJECT MATCHING THIS SCHEMA:
+OUTPUT MUST BE A STRICT JSON OBJECT MATCHING THIS EXACT SCHEMA:
 {
-  "allUnitCurricularObjectives": ["CO 1: ...", "CO 2: ..."],
+  "allUnitCurricularObjectives": [
+    "CO 1: ...",
+    "CO 2: ...",
+    "CO 3: ...",
+    "CO 4: ...",
+    "CO 5: ..."
+  ],
   "targetedCurricularObjective": "CO X: ...",
   "lessonPlanIntroHtml": "<p>...</p>",
   "lessonPlanTableHtml": "<table class='copiable-table' border='1' style='border-collapse:collapse; width:100%;'>...</table>",
@@ -2025,7 +2052,7 @@ OUTPUT MUST BE A STRICT JSON OBJECT MATCHING THIS SCHEMA:
         await refreshPackageArchiveUI();
 
         hideSpinner();
-        showToast("Lesson package generated successfully!");
+        showToast("Comprehensive lesson package generated!");
       } catch (err) {
         hideSpinner();
         console.error(err);
