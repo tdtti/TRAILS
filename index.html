@@ -1,1 +1,2336 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0, maximum-scale=5.0, user-scalable=yes">
+  <title>SCERT Kerala Smart Teacher Planner & Worksheet Studio</title>
+  
+  <!-- Fonts: Inter, Merriweather & Malayalam Manjari -->
+  <link rel="preconnect" href="https://fonts.googleapis.com">
+  <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+  <link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600;700&family=Manjari:wght@400;700&family=Merriweather:ital,wght@0,400;0,700;1,400&family=JetBrains+Mono:wght@400;500&display=swap" rel="stylesheet">
 
+  <style>
+    /* ==========================================================================
+       1. FLUID RESPONSIVE DESIGN SYSTEM
+       ========================================================================== */
+    :root {
+      --primary: #1b5e20;
+      --primary-hover: #144718;
+      --primary-light: #e8f5e9;
+      --secondary: #334155;
+      --border: #e2e8f0;
+      --bg: #f8fafc;
+      --surface: #ffffff;
+      --text: #0f172a;
+      --text-muted: #64748b;
+      --accent: #f59e0b;
+      --success: #16a34a;
+      --error: #ef4444;
+      --media-blue: #0284c7;
+      --whatsapp-green: #25d366;
+      --whatsapp-bg: #efeae2;
+      --whatsapp-bubble: #d9fdd3;
+      --header-height: 52px;
+    }
+
+    * { box-sizing: border-box; margin: 0; padding: 0; }
+    html { -webkit-text-size-adjust: 100%; scroll-behavior: smooth; }
+    body {
+      font-family: 'Inter', -apple-system, BlinkMacSystemFont, "Segoe UI", Roboto, sans-serif;
+      background: var(--bg);
+      color: var(--text);
+      min-height: 100vh;
+      display: flex;
+      flex-direction: column;
+      -webkit-font-smoothing: antialiased;
+      overflow-x: hidden;
+    }
+
+    .malayalam-font { font-family: 'Manjari', 'Inter', sans-serif !important; }
+
+    /* ==========================================================================
+       2. COMPACT DEVICE-AWARE HEADER
+       ========================================================================== */
+    header.app-header {
+      background: var(--primary);
+      color: #fff;
+      padding: 8px 14px;
+      display: flex;
+      justify-content: space-between;
+      align-items: center;
+      box-shadow: 0 2px 4px rgba(0,0,0,0.1);
+      position: sticky;
+      top: 0;
+      z-index: 1000;
+      min-height: var(--header-height);
+    }
+    .header-brand { display: flex; align-items: center; gap: 8px; min-width: 0; }
+    .brand-icon {
+      width: 32px; height: 32px;
+      background: rgba(255,255,255,0.2);
+      border-radius: 6px;
+      display: flex; align-items: center; justify-content: center;
+      font-size: 1.15rem;
+      flex-shrink: 0;
+    }
+    .header-titles { display: flex; align-items: baseline; gap: 6px; min-width: 0; }
+    .header-brand h1 {
+      font-size: 0.95rem; font-weight: 700;
+      letter-spacing: -0.01em;
+      white-space: nowrap; overflow: hidden; text-overflow: ellipsis;
+    }
+    .badge-tag {
+      background: var(--accent);
+      color: #000;
+      font-size: 0.62rem;
+      font-weight: 700;
+      padding: 2px 5px;
+      border-radius: 4px;
+      text-transform: uppercase;
+      flex-shrink: 0;
+    }
+    .header-controls { display: flex; align-items: center; gap: 6px; flex-shrink: 0; }
+
+    .btn-header {
+      background: rgba(255, 255, 255, 0.15);
+      color: #fff;
+      border: 1px solid rgba(255, 255, 255, 0.35);
+      padding: 6px 10px;
+      border-radius: 5px;
+      font-size: 0.76rem;
+      font-weight: 600;
+      cursor: pointer;
+      display: inline-flex;
+      align-items: center;
+      gap: 4px;
+      white-space: nowrap;
+      transition: background 0.15s;
+    }
+    .btn-header:hover { background: rgba(255, 255, 255, 0.28); }
+
+    /* ==========================================================================
+       3. TOP COLLAPSIBLE CONTROLS DRAWER
+       ========================================================================== */
+    .top-controls-panel {
+      background: var(--surface);
+      border-bottom: 1px solid var(--border);
+      padding: 12px 14px;
+      transition: all 0.25s ease-in-out;
+      box-shadow: 0 4px 10px rgba(0,0,0,0.03);
+    }
+    .top-controls-panel.collapsed {
+      display: none !important;
+    }
+
+    /* Grid Breakpoints: 4-col (Desktop) -> 2-col (Tablet) -> 1-col (Mobile) */
+    .top-controls-grid {
+      display: grid;
+      grid-template-columns: repeat(4, 1fr);
+      gap: 12px;
+      align-items: stretch;
+      max-width: 1440px;
+      margin: 0 auto;
+    }
+    @media (max-width: 1024px) {
+      .top-controls-grid { grid-template-columns: repeat(2, 1fr); }
+    }
+    @media (max-width: 640px) {
+      .top-controls-grid { grid-template-columns: 1fr; gap: 10px; }
+      .top-controls-panel { padding: 10px; }
+    }
+
+    .ctrl-card {
+      background: #f8fafc;
+      border: 1px solid var(--border);
+      border-radius: 6px;
+      padding: 10px 12px;
+      display: flex;
+      flex-direction: column;
+      justify-content: space-between;
+    }
+    .ctrl-card h3 {
+      font-size: 0.78rem;
+      font-weight: 700;
+      color: var(--secondary);
+      border-bottom: 1px solid #e2e8f0;
+      padding-bottom: 5px;
+      margin-bottom: 8px;
+      display: flex;
+      justify-content: space-between;
+      align-items: center;
+    }
+
+    .form-group { margin-bottom: 6px; }
+    .form-group label {
+      display: block;
+      font-size: 0.7rem;
+      font-weight: 600;
+      margin-bottom: 2px;
+      color: var(--text-muted);
+    }
+    .form-control {
+      width: 100%;
+      padding: 6px 8px;
+      border: 1px solid var(--border);
+      border-radius: 4px;
+      font-size: 0.8rem;
+      background: #fff;
+      color: var(--text);
+    }
+    .form-control:focus { outline: none; border-color: var(--primary); }
+    .form-row { display: flex; gap: 6px; }
+    .form-row .half { flex: 1; min-width: 0; }
+    .radio-toggle { display: flex; gap: 10px; font-size: 0.76rem; font-weight: 500; }
+
+    /* 6-Slot Master Matrix */
+    .matrix-grid {
+      display: grid;
+      grid-template-columns: 1fr 1fr;
+      gap: 5px;
+    }
+    @media (max-width: 380px) {
+      .matrix-grid { grid-template-columns: 1fr; }
+    }
+    .slot-card {
+      background: #ffffff;
+      border: 1px solid var(--border);
+      border-radius: 4px;
+      padding: 5px 6px;
+      cursor: pointer;
+      transition: all 0.15s;
+    }
+    .slot-card.active-target {
+      border: 1.5px solid var(--primary);
+      background: var(--primary-light);
+    }
+    .slot-header {
+      display: flex;
+      justify-content: space-between;
+      align-items: center;
+      margin-bottom: 2px;
+    }
+    .slot-title { font-size: 0.68rem; font-weight: 700; color: var(--secondary); }
+    .slot-badge {
+      font-size: 0.58rem;
+      padding: 1px 4px;
+      border-radius: 3px;
+      font-weight: 600;
+    }
+    .slot-badge.locked { background: var(--success); color: #fff; }
+    .slot-badge.unlocked { background: var(--error); color: #fff; }
+    .slot-file-name {
+      font-size: 0.64rem;
+      color: var(--text-muted);
+      overflow: hidden;
+      text-overflow: ellipsis;
+      white-space: nowrap;
+      margin-bottom: 2px;
+    }
+    .slot-actions { display: flex; gap: 3px; align-items: center; }
+    .slot-input { font-size: 0.62rem; flex: 1; min-width: 0; }
+    .slot-btn { padding: 2px 5px; font-size: 0.64rem; }
+
+    /* Saved Packages Archive */
+    .pkg-archive-container {
+      display: flex;
+      flex-direction: column;
+      gap: 4px;
+      max-height: 160px;
+      overflow-y: auto;
+    }
+    .pkg-card {
+      border: 1px solid #cbd5e1;
+      background: #ffffff;
+      border-radius: 4px;
+      overflow: hidden;
+      font-size: 0.74rem;
+    }
+    .pkg-card.active-loaded { border: 1.5px solid var(--primary); background: #f0fdf4; }
+    .pkg-header-btn {
+      width: 100%;
+      text-align: left;
+      padding: 6px 8px;
+      background: transparent;
+      border: none;
+      cursor: pointer;
+      display: flex;
+      justify-content: space-between;
+      align-items: center;
+      font-weight: 600;
+      gap: 4px;
+    }
+    .pkg-meta { font-size: 0.64rem; color: var(--text-muted); font-weight: normal; }
+    .pkg-body {
+      padding: 6px 8px;
+      border-top: 1px dashed #cbd5e1;
+      background: #fff;
+      display: none;
+    }
+    .pkg-card.expanded .pkg-body { display: block; }
+    .pkg-actions-row { display: flex; gap: 4px; margin-top: 5px; flex-wrap: wrap; }
+
+    /* Active Generator Controls */
+    .active-status-bar {
+      background: #fef9c3;
+      border: 1px solid #fde047;
+      color: #854d0e;
+      padding: 6px 8px;
+      border-radius: 4px;
+      font-size: 0.72rem;
+      margin-bottom: 6px;
+      display: none;
+      align-items: center;
+      justify-content: space-between;
+    }
+
+    /* Buttons */
+    .btn {
+      cursor: pointer;
+      border: none;
+      border-radius: 4px;
+      padding: 6px 10px;
+      font-size: 0.78rem;
+      font-weight: 600;
+      display: inline-flex;
+      align-items: center;
+      justify-content: center;
+      gap: 4px;
+      transition: background 0.15s;
+      touch-action: manipulation;
+      min-height: 32px;
+    }
+    .btn-primary { background: var(--primary); color: #fff; }
+    .btn-primary:hover { background: var(--primary-hover); }
+    .btn-secondary { background: var(--secondary); color: #fff; }
+    .btn-outline { background: #fff; border: 1px solid var(--border); color: var(--secondary); }
+    .btn-outline:hover { background: #f1f5f9; }
+    .btn-success { background: var(--success); color: #fff; }
+    .btn-info { background: var(--media-blue); color: #fff; }
+    .btn-danger { background: #dc2626; color: #fff; }
+    .btn-whatsapp { background: var(--whatsapp-green); color: #fff; }
+    .btn-whatsapp:hover { background: #1eb956; }
+    .btn-translate {
+      background: #fdf2f8;
+      border: 1px solid #f472b6;
+      color: #be185d;
+    }
+    .btn-translate:hover { background: #fce7f3; }
+    .btn-translate.active-ml { background: #be185d; color: #fff; }
+    .btn-block { width: 100%; }
+    .btn-sm { padding: 4px 7px; font-size: 0.7rem; min-height: 28px; }
+
+    /* ==========================================================================
+       4. WORKSPACE CANVAS & TABS
+       ========================================================================== */
+    .canvas {
+      flex: 1;
+      display: flex;
+      flex-direction: column;
+      background: var(--bg);
+      width: 100%;
+    }
+    
+    /* Horizontal Scrolling Touch-Friendly Tabs */
+    .canvas-tabs {
+      background: var(--surface);
+      border-bottom: 1px solid var(--border);
+      display: flex;
+      padding: 0 10px;
+      overflow-x: auto;
+      white-space: nowrap;
+      position: sticky;
+      top: var(--header-height);
+      z-index: 90;
+      -webkit-overflow-scrolling: touch;
+      scrollbar-width: none;
+    }
+    .canvas-tabs::-webkit-scrollbar { display: none; }
+    
+    .tab-btn {
+      background: none;
+      border: none;
+      padding: 10px 12px;
+      font-weight: 600;
+      font-size: 0.8rem;
+      color: var(--text-muted);
+      cursor: pointer;
+      border-bottom: 2px solid transparent;
+      display: inline-flex;
+      align-items: center;
+      gap: 5px;
+      flex-shrink: 0;
+    }
+    .tab-btn .tab-icon { font-size: 1.05rem; line-height: 1; }
+    .tab-btn.active {
+      color: var(--primary);
+      border-bottom: 2px solid var(--primary);
+    }
+
+    .tab-content-wrapper {
+      padding: 14px;
+      flex: 1;
+      width: 100%;
+      max-width: 1300px;
+      margin: 0 auto;
+    }
+    @media (max-width: 640px) {
+      .tab-content-wrapper { padding: 10px; }
+    }
+    .tab-pane { display: none; width: 100%; }
+    .tab-pane.active { display: block; }
+    
+    .pane-header {
+      display: flex;
+      justify-content: space-between;
+      align-items: center;
+      margin-bottom: 12px;
+      flex-wrap: wrap;
+      gap: 8px;
+    }
+    .pane-header h2 { font-size: 0.96rem; font-weight: 700; color: var(--text); }
+    .pane-header-actions { display: flex; gap: 4px; align-items: center; flex-wrap: wrap; }
+
+    /* Universal Chapter & CO Header (Visible on Screen & Print) */
+    .universal-header-card {
+      background: #ffffff;
+      border: 1px solid var(--border);
+      border-left: 4px solid var(--primary);
+      border-radius: 6px;
+      padding: 10px 12px;
+      margin-bottom: 12px;
+      box-shadow: 0 1px 2px rgba(0,0,0,0.02);
+    }
+    .u-header-top {
+      display: flex;
+      justify-content: space-between;
+      align-items: center;
+      margin-bottom: 4px;
+      font-size: 0.72rem;
+      flex-wrap: wrap;
+      gap: 4px;
+    }
+    .u-badge {
+      background: var(--primary-light);
+      color: var(--primary);
+      font-weight: 700;
+      padding: 2px 5px;
+      border-radius: 3px;
+      text-transform: uppercase;
+      font-size: 0.65rem;
+    }
+    .u-meta-pacing { font-weight: 600; color: var(--secondary); }
+    .u-header-unit {
+      font-size: 0.92rem;
+      font-weight: 700;
+      color: var(--text);
+      margin-bottom: 4px;
+    }
+    .u-header-co {
+      background: #f8fafc;
+      border: 1px dashed #cbd5e1;
+      padding: 6px 8px;
+      border-radius: 4px;
+      font-size: 0.78rem;
+      line-height: 1.4;
+      color: #1e293b;
+    }
+
+    /* Rendered Markdown Containers */
+    .rendered-markdown {
+      background: var(--surface);
+      padding: 16px;
+      border-radius: 6px;
+      border: 1px solid var(--border);
+      line-height: 1.6;
+      font-size: 0.88rem;
+      overflow-x: auto;
+    }
+    .co-box-master {
+      background: #f1f5f9;
+      border-left: 4px solid var(--secondary);
+      padding: 10px 12px;
+      border-radius: 4px;
+      margin-bottom: 12px;
+    }
+    .co-box-master strong { color: var(--secondary); font-size: 0.84rem; }
+    .co-box-master ul { margin-top: 5px; padding-left: 18px; }
+    .co-box-master li { margin-bottom: 3px; line-height: 1.45; font-size: 0.82rem; }
+
+    /* Blackboard Notes UI */
+    .bb-container { display: flex; flex-direction: column; gap: 12px; }
+    .bb-card {
+      background: #ffffff;
+      border: 1px solid #cbd5e1;
+      border-radius: 6px;
+      box-shadow: 0 1px 3px rgba(0,0,0,0.02);
+      overflow: hidden;
+    }
+    .bb-card-header {
+      background: #f8fafc;
+      border-bottom: 1px solid #e2e8f0;
+      padding: 8px 12px;
+      display: flex;
+      justify-content: space-between;
+      align-items: center;
+      flex-wrap: wrap;
+      gap: 4px;
+    }
+    .bb-tag-group { display: flex; align-items: center; gap: 4px; flex-wrap: wrap; }
+    .bb-num-pill {
+      background: var(--secondary);
+      color: #fff;
+      font-weight: 700;
+      font-size: 0.65rem;
+      padding: 2px 6px;
+      border-radius: 10px;
+    }
+    .bb-cognitive-pill {
+      background: #ede9fe;
+      color: #5b21b6;
+      font-weight: 600;
+      font-size: 0.65rem;
+      padding: 2px 6px;
+      border-radius: 10px;
+    }
+    .bb-card-body { padding: 12px; display: flex; flex-direction: column; gap: 8px; }
+    .bb-q-section {
+      background: #fefce8;
+      border-left: 3.5px solid #eab308;
+      border-radius: 4px;
+      padding: 8px 10px;
+    }
+    .bb-label-q { font-size: 0.66rem; font-weight: 700; color: #854d0e; text-transform: uppercase; margin-bottom: 2px; }
+    .bb-text-q { font-size: 0.88rem; font-weight: 600; color: #1e293b; }
+    .bb-a-section {
+      background: #f0fdf4;
+      border-left: 3.5px solid var(--primary);
+      border-radius: 4px;
+      padding: 10px 12px;
+    }
+    .bb-label-a { font-size: 0.66rem; font-weight: 700; color: var(--primary); text-transform: uppercase; margin-bottom: 3px; }
+    .bb-text-a { font-size: 0.85rem; color: #0f172a; line-height: 1.55; }
+
+    /* WhatsApp UI */
+    .wa-view-switch {
+      display: flex;
+      gap: 4px;
+      background: #e2e8f0;
+      padding: 3px;
+      border-radius: 6px;
+      margin-bottom: 10px;
+    }
+    .wa-switch-btn {
+      flex: 1;
+      padding: 6px 8px;
+      border: none;
+      background: transparent;
+      font-size: 0.74rem;
+      font-weight: 600;
+      color: var(--text-muted);
+      border-radius: 4px;
+      cursor: pointer;
+    }
+    .wa-switch-btn.active {
+      background: #fff;
+      color: var(--primary);
+      box-shadow: 0 1px 2px rgba(0,0,0,0.08);
+    }
+    .wa-chat-canvas {
+      background: var(--whatsapp-bg);
+      background-image: radial-gradient(#d1c7b7 1px, transparent 1px);
+      background-size: 16px 16px;
+      border: 1px solid #d6cfc7;
+      border-radius: 8px;
+      padding: 12px;
+      display: flex;
+      flex-direction: column;
+      gap: 8px;
+    }
+    .wa-bubble {
+      background: #ffffff;
+      border-radius: 8px;
+      padding: 10px 12px;
+      box-shadow: 0 1px 2px rgba(0,0,0,0.08);
+      font-size: 0.82rem;
+      line-height: 1.45;
+    }
+    .wa-bubble-green { background: var(--whatsapp-bubble); border-left: 3.5px solid var(--whatsapp-green); }
+    .wa-qa-list { display: flex; flex-direction: column; gap: 6px; margin-top: 6px; }
+    .wa-qa-card { background: #ffffff; border: 1px solid #cbd5e1; border-radius: 4px; padding: 7px 9px; }
+    .wa-qa-q { font-weight: 700; font-size: 0.8rem; margin-bottom: 2px; }
+    .wa-qa-a { font-size: 0.78rem; background: #f8fafc; padding: 5px 7px; border-radius: 3px; border-left: 3px solid var(--primary); }
+    .wa-box-raw {
+      background: #fff;
+      padding: 12px;
+      border: 1px solid #cbd5e1;
+      border-radius: 6px;
+      font-family: monospace;
+      white-space: pre-wrap;
+      font-size: 0.8rem;
+      line-height: 1.45;
+      overflow-x: auto;
+    }
+
+    /* Screen Adaptive Worksheet Preview Container */
+    .worksheet-preview-container {
+      background: #64748b;
+      padding: 12px;
+      overflow-x: auto;
+      border-radius: 6px;
+    }
+    @media (max-width: 640px) {
+      .worksheet-preview-container { padding: 6px; }
+    }
+    .worksheet-page {
+      background: #ffffff;
+      width: 100%;
+      max-width: 820px;
+      min-height: auto;
+      padding: 24px;
+      margin: 0 auto;
+      box-shadow: 0 3px 12px rgba(0,0,0,0.12);
+      color: #000;
+      font-family: 'Merriweather', serif;
+      border-radius: 4px;
+    }
+    @media (max-width: 640px) {
+      .worksheet-page { padding: 14px; }
+    }
+    .score-badge {
+      display: inline-block;
+      background: #f1f5f9;
+      border: 1px solid #cbd5e1;
+      padding: 1px 5px;
+      border-radius: 3px;
+      font-size: 8pt;
+      font-weight: 700;
+      float: right;
+    }
+    .question-block { margin-bottom: 14px; font-size: 9.5pt; line-height: 1.5; }
+    .answer-line { border-bottom: 1px dashed #666; height: 20px; width: 100%; margin-top: 4px; display: block; }
+
+    /* Media Cards Grid */
+    .media-grid {
+      display: grid;
+      grid-template-columns: repeat(auto-fill, minmax(240px, 1fr));
+      gap: 10px;
+    }
+    .media-card {
+      background: var(--surface);
+      border: 1px solid var(--border);
+      border-radius: 6px;
+      padding: 12px;
+      display: flex;
+      flex-direction: column;
+      justify-content: space-between;
+    }
+    .media-card-type {
+      font-size: 0.65rem;
+      font-weight: 700;
+      text-transform: uppercase;
+      padding: 2px 5px;
+      border-radius: 3px;
+      display: inline-block;
+      margin-bottom: 5px;
+    }
+    .type-video { background: #fee2e2; color: #b91c1c; }
+    .type-diksha { background: #e0f2fe; color: #0369a1; }
+    .type-sim { background: #ede9fe; color: #6d28d9; }
+    .media-card h4 { font-size: 0.86rem; margin-bottom: 4px; }
+    .media-card p { font-size: 0.76rem; color: var(--text-muted); margin-bottom: 8px; }
+
+    /* Copiable Table Responsive Scroll */
+    .table-scroll-wrapper {
+      width: 100%;
+      overflow-x: auto;
+      margin: 12px 0;
+      -webkit-overflow-scrolling: touch;
+    }
+    .copiable-table {
+      width: 100%;
+      min-width: 500px;
+      border-collapse: collapse;
+      font-size: 0.82rem;
+      background: #fff;
+    }
+    .copiable-table th, .copiable-table td {
+      border: 1px solid #94a3b8;
+      padding: 6px 8px;
+      text-align: left;
+      vertical-align: top;
+    }
+    .copiable-table th { background-color: #f1f5f9; font-weight: 700; color: #1e293b; }
+
+    /* Modals & Overlays */
+    .spinner-overlay {
+      position: fixed;
+      top: 0; left: 0; width: 100vw; height: 100vh;
+      background: rgba(0, 0, 0, 0.4);
+      backdrop-filter: blur(2px);
+      display: flex; align-items: center; justify-content: center;
+      z-index: 99999;
+    }
+    .spinner-card {
+      background: #ffffff;
+      padding: 20px 28px;
+      border-radius: 8px;
+      display: flex; flex-direction: column; align-items: center; gap: 12px;
+      box-shadow: 0 10px 25px rgba(0,0,0,0.2);
+    }
+    .yt-spinner-8px {
+      width: 42px; height: 42px;
+      border: 5px solid #e2e8f0;
+      border-top: 5px solid var(--primary);
+      border-radius: 50%;
+      animation: yt-spin 0.8s linear infinite;
+    }
+    @keyframes yt-spin { 0% { transform: rotate(0deg); } 100% { transform: rotate(360deg); } }
+    .spinner-text { font-weight: 600; font-size: 0.84rem; color: var(--secondary); text-align: center; max-width: 260px; }
+
+    .modal-overlay {
+      position: fixed;
+      top: 0; left: 0; width: 100vw; height: 100vh;
+      background: rgba(0, 0, 0, 0.45);
+      display: flex; align-items: center; justify-content: center;
+      z-index: 100000;
+    }
+    .modal-box {
+      background: #fff; width: 92%; max-width: 420px;
+      border-radius: 8px; box-shadow: 0 10px 25px rgba(0,0,0,0.25);
+      overflow: hidden;
+    }
+    .modal-header {
+      background: var(--primary); color: #fff;
+      padding: 10px 14px; display: flex; justify-content: space-between; align-items: center;
+    }
+    .modal-header h4 { font-size: 0.88rem; font-weight: 600; }
+    .modal-close { background: none; border: none; color: #fff; font-size: 1.2rem; cursor: pointer; }
+    .modal-body { padding: 14px; font-size: 0.84rem; line-height: 1.45; }
+    .modal-footer {
+      padding: 10px 14px; background: #f8fafc;
+      display: flex; justify-content: flex-end; gap: 6px; border-top: 1px solid var(--border);
+    }
+
+    .toast-popup {
+      position: fixed; bottom: 16px; right: 16px;
+      background: #1e293b; color: #fff; padding: 8px 14px;
+      border-radius: 6px; font-size: 0.78rem; font-weight: 500;
+      box-shadow: 0 4px 12px rgba(0,0,0,0.2);
+      z-index: 100001; opacity: 0; transform: translateY(10px);
+      transition: all 0.2s ease-out;
+      max-width: 90vw;
+    }
+    .toast-popup.visible { opacity: 1; transform: translateY(0); }
+
+    /* ==========================================================================
+       5. STRICT A4 PORTRAIT 100% WIDTH PRINT STYLESHEET
+       ========================================================================== */
+    @media print {
+      @page {
+        size: A4 portrait;
+        margin: 12mm 10mm 12mm 10mm;
+      }
+      *, *::before, *::after {
+        box-shadow: none !important;
+        text-shadow: none !important;
+      }
+      html, body {
+        width: 210mm !important;
+        height: auto !important;
+        background: #ffffff !important;
+        color: #000000 !important;
+        font-family: 'Merriweather', 'Times New Roman', serif;
+        font-size: 9.5pt;
+        line-height: 1.4;
+        -webkit-print-color-adjust: exact;
+        print-color-adjust: exact;
+      }
+      .no-print, header, .top-controls-panel, nav, button, .pane-header,
+      .pane-header-actions, .spinner-overlay, .modal-overlay, .toast-popup,
+      .wa-view-switch {
+        display: none !important;
+      }
+      .canvas, .tab-content-wrapper, .worksheet-preview-container {
+        padding: 0 !important;
+        margin: 0 !important;
+        background: transparent !important;
+        overflow: visible !important;
+        width: 100% !important;
+        max-width: 100% !important;
+      }
+      .tab-pane { display: none !important; }
+      .tab-pane.print-active { display: block !important; width: 100% !important; }
+
+      .universal-header-card {
+        display: block !important;
+        border: 1px solid #000 !important;
+        border-left: 4px solid #000 !important;
+        padding: 6px 10px !important;
+        margin-bottom: 12px !important;
+        background: #fff !important;
+        color: #000 !important;
+        page-break-inside: avoid !important;
+        break-inside: avoid !important;
+      }
+      .u-badge { border: 1px solid #000 !important; background: #f1f5f9 !important; color: #000 !important; }
+      .u-header-co { background: #fff !important; border: 1px solid #666 !important; color: #000 !important; }
+
+      .worksheet-page, .rendered-markdown, .bb-container, .wa-chat-canvas, #media-resources-body {
+        width: 100% !important;
+        max-width: 100% !important;
+        min-height: auto !important;
+        margin: 0 !important;
+        padding: 0 !important;
+        box-shadow: none !important;
+        border: none !important;
+        background: #fff !important;
+        color: #000 !important;
+      }
+
+      .question-block, .bb-card, .wa-bubble, .media-card, .copiable-table tr {
+        page-break-inside: avoid !important;
+        break-inside: avoid !important;
+      }
+      .copiable-table { width: 100% !important; min-width: auto !important; }
+      .copiable-table th, .copiable-table td {
+        padding: 4px 6px !important;
+        font-size: 8.5pt !important;
+        border: 1px solid #333 !important;
+      }
+      .answer-line { border-bottom: 1px dashed #333333 !important; }
+    }
+  </style>
+</head>
+<body>
+
+  <!-- Spinner Overlay -->
+  <div id="spinner-overlay" class="spinner-overlay no-print" style="display:none;">
+    <div class="spinner-card">
+      <div class="yt-spinner-8px"></div>
+      <div id="spinner-text" class="spinner-text">Processing Request...</div>
+    </div>
+  </div>
+
+  <!-- General Notification Modal -->
+  <div id="custom-modal-overlay" class="modal-overlay no-print" style="display:none;">
+    <div class="modal-box">
+      <div class="modal-header">
+        <h4 id="modal-title">Teacher Planner</h4>
+        <button id="modal-close-btn" class="modal-close">&times;</button>
+      </div>
+      <div class="modal-body" id="modal-message"></div>
+      <div class="modal-footer">
+        <button id="modal-ok-btn" class="btn btn-primary">OK</button>
+      </div>
+    </div>
+  </div>
+
+  <!-- Dedicated API Key Modal -->
+  <div id="key-modal-overlay" class="modal-overlay no-print" style="display:none;">
+    <div class="modal-box">
+      <div class="modal-header">
+        <h4>🔑 Gemini API Key</h4>
+        <button id="key-modal-close-btn" class="modal-close">&times;</button>
+      </div>
+      <div class="modal-body">
+        <p style="font-size:0.8rem; color:var(--text-muted); margin-bottom:10px;">
+          Enter your free key from <a href="https://aistudio.google.com/apikey" target="_blank" rel="noopener" style="color:var(--primary); font-weight:700;">Google AI Studio ↗</a>.
+        </p>
+        <p style="font-size:0.72rem; color:#16a34a; margin-bottom:8px;">
+          🔒 Saved privately in your browser storage.
+        </p>
+        <input type="password" id="key-modal-input" class="form-control" placeholder="Paste AIza... or AQ... key">
+      </div>
+      <div class="modal-footer">
+        <button id="save-key-modal-btn" class="btn btn-primary">Save Key</button>
+      </div>
+    </div>
+  </div>
+
+  <!-- Floating Toast -->
+  <div id="toast-popup" class="toast-popup no-print">Notification</div>
+
+  <!-- Responsive Header -->
+  <header class="app-header no-print">
+    <div class="header-brand">
+      <button id="controls-toggle-btn" class="btn-header" title="Toggle Controls Drawer">
+        <span id="toggle-icon">🔼</span> <span id="toggle-text">Controls</span>
+      </button>
+      <div class="brand-icon">🎓</div>
+      <div class="header-titles">
+        <h1>Teacher Planner</h1>
+        <span class="badge-tag">SCERT</span>
+      </div>
+    </div>
+    <div class="header-controls">
+      <button id="header-key-btn" class="btn-header" title="Change Gemini API Key">🔑 Key</button>
+    </div>
+  </header>
+
+  <!-- ==========================================================================
+       TOP COLLAPSIBLE CONTROLS DRAWER
+       ========================================================================== -->
+  <section class="top-controls-panel no-print" id="top-controls-panel">
+    <div class="top-controls-grid">
+      
+      <!-- Card 1: Pacing Target -->
+      <div class="ctrl-card">
+        <h3><span>1. Pacing Target</span></h3>
+        <div class="form-row">
+          <div class="form-group half">
+            <label>Class:</label>
+            <select id="class-select" class="form-control">
+              <option value="5">Class 5</option>
+              <option value="6">Class 6</option>
+              <option value="7">Class 7</option>
+            </select>
+          </div>
+          <div class="form-group half">
+            <label>Part:</label>
+            <div class="radio-toggle" style="margin-top:6px;">
+              <label><input type="radio" name="textbook-part" value="part1" checked> Pt 1</label>
+              <label><input type="radio" name="textbook-part" value="part2"> Pt 2</label>
+            </div>
+          </div>
+        </div>
+
+        <div class="form-group">
+          <label>Chapter Title:</label>
+          <input type="text" id="unit-title" class="form-control" placeholder="e.g. Reflection of Light">
+        </div>
+
+        <div class="form-row">
+          <div class="form-group half">
+            <label>Day in Unit:</label>
+            <input type="number" id="day-number" class="form-control" value="1" min="1" max="15">
+          </div>
+          <div class="form-group half">
+            <label>Total Days:</label>
+            <input type="number" id="total-days" class="form-control" value="5" min="1" max="15">
+          </div>
+        </div>
+      </div>
+
+      <!-- Card 2: 6 Locked Textbooks -->
+      <div class="ctrl-card">
+        <h3>
+          <span>2. Locked Textbooks</span>
+          <span style="font-size:0.65rem; color:var(--text-muted);" id="locked-count">0/6 Locked</span>
+        </h3>
+        
+        <div class="matrix-grid">
+          <div class="slot-card" id="card-5_part1" data-slot="5_part1">
+            <div class="slot-header"><span class="slot-title">Std 5 - Pt 1</span><span class="slot-badge unlocked" id="badge-5_part1">Unlocked</span></div>
+            <div class="slot-file-name" id="name-5_part1">No PDF</div>
+            <div class="slot-actions"><input type="file" accept="application/pdf" class="slot-input" id="input-5_part1"><button class="btn btn-outline slot-btn" data-slot="5_part1">Lock</button></div>
+          </div>
+          <div class="slot-card" id="card-5_part2" data-slot="5_part2">
+            <div class="slot-header"><span class="slot-title">Std 5 - Pt 2</span><span class="slot-badge unlocked" id="badge-5_part2">Unlocked</span></div>
+            <div class="slot-file-name" id="name-5_part2">No PDF</div>
+            <div class="slot-actions"><input type="file" accept="application/pdf" class="slot-input" id="input-5_part2"><button class="btn btn-outline slot-btn" data-slot="5_part2">Lock</button></div>
+          </div>
+
+          <div class="slot-card" id="card-6_part1" data-slot="6_part1">
+            <div class="slot-header"><span class="slot-title">Std 6 - Pt 1</span><span class="slot-badge unlocked" id="badge-6_part1">Unlocked</span></div>
+            <div class="slot-file-name" id="name-6_part1">No PDF</div>
+            <div class="slot-actions"><input type="file" accept="application/pdf" class="slot-input" id="input-6_part1"><button class="btn btn-outline slot-btn" data-slot="6_part1">Lock</button></div>
+          </div>
+          <div class="slot-card" id="card-6_part2" data-slot="6_part2">
+            <div class="slot-header"><span class="slot-title">Std 6 - Pt 2</span><span class="slot-badge unlocked" id="badge-6_part2">Unlocked</span></div>
+            <div class="slot-file-name" id="name-6_part2">No PDF</div>
+            <div class="slot-actions"><input type="file" accept="application/pdf" class="slot-input" id="input-6_part2"><button class="btn btn-outline slot-btn" data-slot="6_part2">Lock</button></div>
+          </div>
+
+          <div class="slot-card" id="card-7_part1" data-slot="7_part1">
+            <div class="slot-header"><span class="slot-title">Std 7 - Pt 1</span><span class="slot-badge unlocked" id="badge-7_part1">Unlocked</span></div>
+            <div class="slot-file-name" id="name-7_part1">No PDF</div>
+            <div class="slot-actions"><input type="file" accept="application/pdf" class="slot-input" id="input-7_part1"><button class="btn btn-outline slot-btn" data-slot="7_part1">Lock</button></div>
+          </div>
+          <div class="slot-card" id="card-7_part2" data-slot="7_part2">
+            <div class="slot-header"><span class="slot-title">Std 7 - Pt 2</span><span class="slot-badge unlocked" id="badge-7_part2">Unlocked</span></div>
+            <div class="slot-file-name" id="name-7_part2">No PDF</div>
+            <div class="slot-actions"><input type="file" accept="application/pdf" class="slot-input" id="input-7_part2"><button class="btn btn-outline slot-btn" data-slot="7_part2">Lock</button></div>
+          </div>
+        </div>
+      </div>
+
+      <!-- Card 3: Generator Control -->
+      <div class="ctrl-card">
+        <h3><span>3. Generator Control</span></h3>
+        <div id="active-status-bar" class="active-status-bar">
+          <span id="active-status-text">🔒 Active</span>
+          <button id="quick-reset-btn" class="btn btn-danger btn-sm">Reset</button>
+        </div>
+        <button id="generate-btn" class="btn btn-primary btn-block" style="padding: 8px 10px; margin-bottom: 5px;">
+          ⚡ Generate Package
+        </button>
+        <button id="reset-workspace-btn" class="btn btn-outline btn-block btn-sm">
+          🔄 Reset / New Setup
+        </button>
+      </div>
+
+      <!-- Card 4: Saved Packages -->
+      <div class="ctrl-card">
+        <h3>
+          <span>4. Saved Packages</span>
+          <span class="badge-tag" id="package-count-badge" style="background:#cbd5e1; color:#0f172a;">0</span>
+        </h3>
+        <div id="pkg-archive-list" class="pkg-archive-container">
+          <div style="font-size: 0.7rem; color: var(--text-muted); text-align: center; padding: 8px;">
+            Syncing archive...
+          </div>
+        </div>
+      </div>
+
+    </div>
+  </section>
+
+  <!-- ==========================================================================
+       MAIN WORKSPACE CANVAS
+       ========================================================================== -->
+  <main class="canvas">
+    
+    <!-- Responsive Tabs Navigation Bar -->
+    <nav class="canvas-tabs no-print">
+      <button class="tab-btn active" data-tab="lesson-plan">
+        <span class="tab-icon">📋</span> <span>Lesson Plan</span>
+      </button>
+      <button class="tab-btn" data-tab="media-resources">
+        <span class="tab-icon">🌐</span> <span>Digital Media</span>
+      </button>
+      <button class="tab-btn" data-tab="blackboard-notes">
+        <span class="tab-icon">✍️</span> <span>Board Notes</span>
+      </button>
+      <button class="tab-btn" data-tab="whatsapp-summary">
+        <span class="tab-icon">💬</span> <span>WhatsApp</span>
+      </button>
+      <button class="tab-btn" data-tab="worksheet-view">
+        <span class="tab-icon">📄</span> <span>Worksheet (5s)</span>
+      </button>
+      <button class="tab-btn" data-tab="worksheet-answers">
+        <span class="tab-icon">🔑</span> <span>Answer Key</span>
+      </button>
+    </nav>
+
+    <div class="tab-content-wrapper">
+      
+      <!-- Tab 1: Lesson Plan -->
+      <section id="tab-lesson-plan" class="tab-pane active">
+        <div class="universal-header-card">
+          <div class="u-header-top">
+            <span class="u-badge">SCERT • LESSON PLAN</span>
+            <span class="u-meta-pacing">Std <span class="u-meta-class">5</span> (Pt <span class="u-meta-part">1</span>) • Day <span class="u-meta-day">1</span>/<span class="u-meta-total">5</span></span>
+          </div>
+          <div class="u-header-unit">
+            <strong>Chapter:</strong> <span class="u-meta-unit">Select Unit</span>
+          </div>
+          <div class="u-header-co">
+            <strong>🎯 Targeted Curricular Objective:</strong><br>
+            <span class="u-meta-co">Generated upon request</span>
+          </div>
+        </div>
+
+        <div class="pane-header no-print">
+          <h2>35-Minute Daily Instructional Lesson Plan</h2>
+          <div class="pane-header-actions">
+            <button class="btn btn-translate btn-sm translate-tab-btn" data-tab="tab-lesson-plan">🌐 മലയാളം</button>
+            <button class="btn btn-secondary btn-sm copy-btn" data-target="lesson-plan-body">📋 Copy</button>
+            <button class="btn btn-success btn-sm print-tab-btn">🖨️ Print</button>
+          </div>
+        </div>
+        <div id="lesson-plan-body" class="rendered-markdown">
+          <p style="color: var(--text-muted); font-style: italic;">Enter details above and tap "Generate Package".</p>
+        </div>
+      </section>
+
+      <!-- Tab 2: Digital Media -->
+      <section id="tab-media-resources" class="tab-pane">
+        <div class="universal-header-card">
+          <div class="u-header-top">
+            <span class="u-badge">SCERT • DIGITAL MEDIA</span>
+            <span class="u-meta-pacing">Std <span class="u-meta-class">5</span> (Pt <span class="u-meta-part">1</span>) • Day <span class="u-meta-day">1</span>/<span class="u-meta-total">5</span></span>
+          </div>
+          <div class="u-header-unit">
+            <strong>Chapter:</strong> <span class="u-meta-unit">Select Unit</span>
+          </div>
+          <div class="u-header-co">
+            <strong>🎯 Targeted Curricular Objective:</strong><br>
+            <span class="u-meta-co">Generated upon request</span>
+          </div>
+        </div>
+
+        <div class="pane-header no-print">
+          <h2>Digital & Media Recommendations</h2>
+          <div class="pane-header-actions">
+            <button class="btn btn-translate btn-sm translate-tab-btn" data-tab="tab-media-resources">🌐 മലയാളം</button>
+            <button class="btn btn-secondary btn-sm copy-btn" data-target="media-resources-body">📋 Copy</button>
+            <button class="btn btn-success btn-sm print-tab-btn">🖨️ Print</button>
+          </div>
+        </div>
+        <div id="media-resources-body">
+          <p style="color: var(--text-muted); font-style: italic;">Curated media will render here.</p>
+        </div>
+      </section>
+
+      <!-- Tab 3: Blackboard Notes -->
+      <section id="tab-blackboard-notes" class="tab-pane">
+        <div class="universal-header-card">
+          <div class="u-header-top">
+            <span class="u-badge">SCERT • BLACKBOARD WORK</span>
+            <span class="u-meta-pacing">Std <span class="u-meta-class">5</span> (Pt <span class="u-meta-part">1</span>) • Day <span class="u-meta-day">1</span>/<span class="u-meta-total">5</span></span>
+          </div>
+          <div class="u-header-unit">
+            <strong>Chapter:</strong> <span class="u-meta-unit">Select Unit</span>
+          </div>
+          <div class="u-header-co">
+            <strong>🎯 Targeted Curricular Objective:</strong><br>
+            <span class="u-meta-co">Generated upon request</span>
+          </div>
+        </div>
+
+        <div class="pane-header no-print">
+          <h2>Blackboard Application Notes</h2>
+          <div class="pane-header-actions">
+            <button class="btn btn-translate btn-sm translate-tab-btn" data-tab="tab-blackboard-notes">🌐 മലയാളം</button>
+            <button class="btn btn-secondary btn-sm" id="copy-all-bb-btn">📋 Copy All</button>
+            <button class="btn btn-success btn-sm print-tab-btn">🖨️ Print</button>
+          </div>
+        </div>
+        <div id="blackboard-notes-body">
+          <div class="rendered-markdown">
+            <p style="color: var(--text-muted); font-style: italic;">Application questions and solutions will render here.</p>
+          </div>
+        </div>
+      </section>
+
+      <!-- Tab 4: WhatsApp Broadcast -->
+      <section id="tab-whatsapp-summary" class="tab-pane">
+        <div class="universal-header-card">
+          <div class="u-header-top">
+            <span class="u-badge">SCERT • PARENT BROADCAST</span>
+            <span class="u-meta-pacing">Std <span class="u-meta-class">5</span> (Pt <span class="u-meta-part">1</span>) • Day <span class="u-meta-day">1</span>/<span class="u-meta-total">5</span></span>
+          </div>
+          <div class="u-header-unit">
+            <strong>Chapter:</strong> <span class="u-meta-unit">Select Unit</span>
+          </div>
+          <div class="u-header-co">
+            <strong>🎯 Targeted Curricular Objective:</strong><br>
+            <span class="u-meta-co">Generated upon request</span>
+          </div>
+        </div>
+
+        <div class="pane-header no-print">
+          <h2>Daily WhatsApp Broadcast</h2>
+          <div class="pane-header-actions">
+            <button class="btn btn-translate btn-sm translate-tab-btn" data-tab="tab-whatsapp-summary">🌐 മലയാളം</button>
+            <button id="share-whatsapp-btn" class="btn btn-whatsapp btn-sm">📲 WhatsApp</button>
+            <button class="btn btn-secondary btn-sm" id="copy-whatsapp-text-btn">📋 Copy</button>
+            <button class="btn btn-success btn-sm print-tab-btn">🖨️ Print</button>
+          </div>
+        </div>
+
+        <div class="wa-view-switch no-print">
+          <button class="wa-switch-btn active" id="wa-btn-chat">📱 Card View</button>
+          <button class="wa-switch-btn" id="wa-btn-raw">📋 Plaintext</button>
+        </div>
+
+        <div id="wa-styled-container">
+          <div class="wa-chat-canvas" id="whatsapp-preview-area">
+            <div class="wa-bubble" style="color: var(--text-muted); font-style: italic;">
+              Parent broadcast message will render here.
+            </div>
+          </div>
+        </div>
+
+        <div id="wa-raw-container" style="display:none;">
+          <div id="whatsapp-summary-body" class="wa-box-raw">Parent communication message will render here.</div>
+        </div>
+      </section>
+
+      <!-- Tab 5: Printable Worksheet -->
+      <section id="tab-worksheet-view" class="tab-pane">
+        <div class="universal-header-card">
+          <div class="u-header-top">
+            <span class="u-badge">SCERT • EVALUATION WORKSHEET</span>
+            <span class="u-meta-pacing">Std <span class="u-meta-class">5</span> (Pt <span class="u-meta-part">1</span>) • Day <span class="u-meta-day">1</span>/<span class="u-meta-total">5</span></span>
+          </div>
+          <div class="u-header-unit">
+            <strong>Chapter:</strong> <span class="u-meta-unit">Select Unit</span>
+          </div>
+          <div class="u-header-co">
+            <strong>🎯 Targeted Curricular Objective:</strong><br>
+            <span class="u-meta-co">Generated upon request</span>
+          </div>
+        </div>
+
+        <div class="pane-header no-print">
+          <h2>A4 Printable Worksheet (Total: 5 Scores)</h2>
+          <div class="pane-header-actions">
+            <button class="btn btn-translate btn-sm translate-tab-btn" data-tab="tab-worksheet-view">🌐 മലയാളം</button>
+            <button class="btn btn-secondary btn-sm copy-btn" data-target="worksheet-render-area">📋 Copy</button>
+            <button class="btn btn-success btn-sm print-tab-btn">🖨️ Print</button>
+          </div>
+        </div>
+        
+        <div class="worksheet-preview-container">
+          <div id="worksheet-render-area" class="worksheet-page">
+            <div style="text-align: center; color: #777; font-style: italic; padding: 30px;" class="no-print">
+              Worksheet will render inside this container.
+            </div>
+          </div>
+        </div>
+      </section>
+
+      <!-- Tab 6: Worksheet Answers -->
+      <section id="tab-worksheet-answers" class="tab-pane">
+        <div class="universal-header-card">
+          <div class="u-header-top">
+            <span class="u-badge">SCERT • ANSWER KEY</span>
+            <span class="u-meta-pacing">Std <span class="u-meta-class">5</span> (Pt <span class="u-meta-part">1</span>) • Day <span class="u-meta-day">1</span>/<span class="u-meta-total">5</span></span>
+          </div>
+          <div class="u-header-unit">
+            <strong>Chapter:</strong> <span class="u-meta-unit">Select Unit</span>
+          </div>
+          <div class="u-header-co">
+            <strong>🎯 Targeted Curricular Objective:</strong><br>
+            <span class="u-meta-co">Generated upon request</span>
+          </div>
+        </div>
+
+        <div class="pane-header no-print">
+          <h2>Worksheet Answer Key & Scoring Guide</h2>
+          <div class="pane-header-actions">
+            <button class="btn btn-translate btn-sm translate-tab-btn" data-tab="tab-worksheet-answers">🌐 മലയാളം</button>
+            <button class="btn btn-secondary btn-sm copy-btn" data-target="worksheet-answers-body">📋 Copy</button>
+            <button class="btn btn-success btn-sm print-tab-btn">🖨️ Print</button>
+          </div>
+        </div>
+        <div id="worksheet-answers-body" class="rendered-markdown">
+          <p style="color: var(--text-muted); font-style: italic;">Model answers will render here.</p>
+        </div>
+      </section>
+
+    </div>
+  </main>
+
+  <!-- ==========================================================================
+       6. JAVASCRIPT ENGINE
+       ========================================================================== -->
+  <script type="module">
+    import { initializeApp } from "https://www.gstatic.com/firebasejs/10.13.0/firebase-app.js";
+    import { 
+      getFirestore, 
+      doc, 
+      getDoc, 
+      setDoc, 
+      collection, 
+      getDocs, 
+      deleteDoc 
+    } from "https://www.gstatic.com/firebasejs/10.13.0/firebase-firestore.js";
+    import { getAuth, signInAnonymously } from "https://www.gstatic.com/firebasejs/10.13.0/firebase-auth.js";
+
+    const firebaseConfig = {
+      apiKey: "AIzaSyAizutSlc9XnjMBVoG3AGRlwNp6ojeanTo",
+      authDomain: "scert-383dd.firebaseapp.com",
+      projectId: "scert-383dd",
+      storageBucket: "scert-383dd.firebasestorage.app",
+      messagingSenderId: "760875235627",
+      appId: "1:760875235627:web:388c1251b5cf82293bed6e",
+      measurementId: "G-5B7SB0HHN6"
+    };
+
+    let GEMINI_API_KEY = localStorage.getItem('SCERT_GEMINI_KEY') || "";
+    const PRIMARY_MODEL = "gemini-3.6-flash";
+    const FALLBACK_MODEL = "gemini-3.5-flash-lite";
+
+    /* IndexedDB Helper */
+    const idb = {
+      db: null,
+      async init() {
+        return new Promise((resolve) => {
+          const req = indexedDB.open("SCERT_STUDIO_DB", 2);
+          req.onupgradeneeded = (e) => {
+            const db = req.result;
+            if (!db.objectStoreNames.contains("books")) db.createObjectStore("books");
+            if (!db.objectStoreNames.contains("saved_packages")) db.createObjectStore("saved_packages", { keyPath: "id" });
+          };
+          req.onsuccess = () => { this.db = req.result; resolve(); };
+          req.onerror = () => resolve();
+        });
+      },
+      async setBook(key, val) {
+        if (!this.db) await this.init();
+        return new Promise((resolve) => {
+          const tx = this.db.transaction("books", "readwrite");
+          tx.objectStore("books").put(val, key);
+          tx.oncomplete = resolve;
+        });
+      },
+      async getBook(key) {
+        if (!this.db) await this.init();
+        return new Promise((resolve) => {
+          const tx = this.db.transaction("books", "readonly");
+          const req = tx.objectStore("books").get(key);
+          req.onsuccess = () => resolve(req.result);
+          req.onerror = () => resolve(null);
+        });
+      },
+      async savePackage(pkgObj) {
+        if (!this.db) await this.init();
+        return new Promise((resolve) => {
+          const tx = this.db.transaction("saved_packages", "readwrite");
+          tx.objectStore("saved_packages").put(pkgObj);
+          tx.oncomplete = resolve;
+        });
+      },
+      async getAllPackages() {
+        if (!this.db) await this.init();
+        return new Promise((resolve) => {
+          const tx = this.db.transaction("saved_packages", "readonly");
+          const req = tx.objectStore("saved_packages").getAll();
+          req.onsuccess = () => resolve(req.result || []);
+          req.onerror = () => resolve([]);
+        });
+      },
+      async deletePackage(id) {
+        if (!this.db) await this.init();
+        return new Promise((resolve) => {
+          const tx = this.db.transaction("saved_packages", "readwrite");
+          tx.objectStore("saved_packages").delete(id);
+          tx.oncomplete = resolve;
+        });
+      }
+    };
+
+    let db = null;
+    let auth = null;
+    if (firebaseConfig.apiKey && !firebaseConfig.apiKey.includes("YOUR_FIREBASE")) {
+      try {
+        const app = initializeApp(firebaseConfig);
+        db = getFirestore(app);
+        auth = getAuth(app);
+        signInAnonymously(auth).catch(() => {});
+      } catch (e) {
+        console.warn("Firebase Init bypassed:", e.message);
+      }
+    }
+
+    const ALL_SLOTS = ['5_part1', '5_part2', '6_part1', '6_part2', '7_part1', '7_part2'];
+    
+    const state = {
+      currentClass: '5',
+      currentPart: 'part1',
+      slotsData: {},
+      slotsBase64: {},
+      currentPackage: null,
+      activePackageId: null,
+      translations: {}
+    };
+
+    // DOM Elements
+    const topControlsPanel = document.getElementById('top-controls-panel');
+    const controlsToggleBtn = document.getElementById('controls-toggle-btn');
+    const toggleIcon = document.getElementById('toggle-icon');
+    const toggleText = document.getElementById('toggle-text');
+
+    const classSelect = document.getElementById('class-select');
+    const partRadios = document.querySelectorAll('input[name="textbook-part"]');
+    const generateBtn = document.getElementById('generate-btn');
+    const resetWorkspaceBtn = document.getElementById('reset-workspace-btn');
+    const quickResetBtn = document.getElementById('quick-reset-btn');
+    const activeStatusBar = document.getElementById('active-status-bar');
+    const activeStatusText = document.getElementById('active-status-text');
+    const pkgArchiveList = document.getElementById('pkg-archive-list');
+    const packageCountBadge = document.getElementById('package-count-badge');
+    const lockedCountLabel = document.getElementById('locked-count');
+    const shareWhatsAppBtn = document.getElementById('share-whatsapp-btn');
+    const headerKeyBtn = document.getElementById('header-key-btn');
+
+    // UI Helpers
+    const spinnerOverlay = document.getElementById('spinner-overlay');
+    const spinnerText = document.getElementById('spinner-text');
+    const modalOverlay = document.getElementById('custom-modal-overlay');
+    const modalTitle = document.getElementById('modal-title');
+    const modalMessage = document.getElementById('modal-message');
+    const modalCloseBtn = document.getElementById('modal-close-btn');
+    const modalOkBtn = document.getElementById('modal-ok-btn');
+    const toastPopup = document.getElementById('toast-popup');
+
+    const keyModalOverlay = document.getElementById('key-modal-overlay');
+    const keyModalInput = document.getElementById('key-modal-input');
+    const keyModalCloseBtn = document.getElementById('key-modal-close-btn');
+    const saveKeyModalBtn = document.getElementById('save-key-modal-btn');
+
+    // Toggle Controls Drawer
+    controlsToggleBtn.addEventListener('click', () => {
+      topControlsPanel.classList.toggle('collapsed');
+      const isHidden = topControlsPanel.classList.contains('collapsed');
+      if (isHidden) {
+        toggleIcon.textContent = '🔽';
+        toggleText.textContent = 'Controls';
+      } else {
+        toggleIcon.textContent = '🔼';
+        toggleText.textContent = 'Controls';
+      }
+    });
+
+    function showSpinner(text = "Processing...") {
+      spinnerText.textContent = text;
+      spinnerOverlay.style.display = "flex";
+    }
+
+    function hideSpinner() {
+      spinnerOverlay.style.display = "none";
+    }
+
+    function showMessageBox(message, title = "Teacher Studio") {
+      modalTitle.textContent = title;
+      modalMessage.textContent = message;
+      modalOverlay.style.display = "flex";
+    }
+
+    function hideMessageBox() {
+      modalOverlay.style.display = "none";
+    }
+
+    modalCloseBtn.addEventListener('click', hideMessageBox);
+    modalOkBtn.addEventListener('click', hideMessageBox);
+
+    function showKeyModal() {
+      keyModalInput.value = GEMINI_API_KEY;
+      keyModalOverlay.style.display = "flex";
+      keyModalInput.focus();
+    }
+
+    function hideKeyModal() {
+      keyModalOverlay.style.display = "none";
+    }
+
+    headerKeyBtn.addEventListener('click', showKeyModal);
+    keyModalCloseBtn.addEventListener('click', hideKeyModal);
+
+    saveKeyModalBtn.addEventListener('click', () => {
+      const val = keyModalInput.value.trim();
+      if (!val) return alert("Please enter a valid Google AI Studio API key.");
+      localStorage.setItem('SCERT_GEMINI_KEY', val);
+      GEMINI_API_KEY = val;
+      hideKeyModal();
+      showToast("Gemini API Key saved!");
+    });
+
+    function showToast(message) {
+      toastPopup.textContent = message;
+      toastPopup.classList.add('visible');
+      setTimeout(() => toastPopup.classList.remove('visible'), 2400);
+    }
+
+    function copyText(text, successMsg = "Copied to Clipboard!") {
+      if (!text) return;
+      if (navigator.clipboard && window.isSecureContext) {
+        navigator.clipboard.writeText(text).then(() => showToast(successMsg)).catch(() => execFallback(text, successMsg));
+      } else {
+        execFallback(text, successMsg);
+      }
+    }
+
+    function execFallback(str, successMsg) {
+      const ta = document.createElement("textarea");
+      ta.value = str; ta.style.position = "fixed"; ta.style.left = "-9999px";
+      document.body.appendChild(ta); ta.focus(); ta.select();
+      try { document.execCommand('copy'); showToast(successMsg); } catch (e) { showToast("Copying blocked."); }
+      document.body.removeChild(ta);
+    }
+
+    // WhatsApp View Switcher
+    const waBtnChat = document.getElementById('wa-btn-chat');
+    const waBtnRaw = document.getElementById('wa-btn-raw');
+    const waStyledContainer = document.getElementById('wa-styled-container');
+    const waRawContainer = document.getElementById('wa-raw-container');
+
+    waBtnChat.addEventListener('click', () => {
+      waBtnChat.classList.add('active'); waBtnRaw.classList.remove('active');
+      waStyledContainer.style.display = 'block'; waRawContainer.style.display = 'none';
+    });
+    waBtnRaw.addEventListener('click', () => {
+      waBtnRaw.classList.add('active'); waBtnChat.classList.remove('active');
+      waStyledContainer.style.display = 'none'; waRawContainer.style.display = 'block';
+    });
+
+    // Copy Blackboard Notes
+    document.getElementById('copy-all-bb-btn').addEventListener('click', () => {
+      if (!state.currentPackage?.blackboardQa?.length) {
+        return copyText(document.getElementById('blackboard-notes-body').innerText, "Copied Blackboard Notes!");
+      }
+      let combined = `*BLACKBOARD APPLICATION NOTES*\n\n`;
+      state.currentPackage.blackboardQa.forEach((item, idx) => {
+        combined += `Q${idx + 1}: ${item.question}\nAns: ${item.answer}\n\n`;
+      });
+      copyText(combined.trim(), "Copied All Blackboard Q&As!");
+    });
+
+    document.getElementById('copy-whatsapp-text-btn').addEventListener('click', () => {
+      copyText(document.getElementById('whatsapp-summary-body').textContent.trim(), "Copied WhatsApp Broadcast Text!");
+    });
+
+    shareWhatsAppBtn.addEventListener('click', () => {
+      const text = document.getElementById('whatsapp-summary-body').textContent.trim();
+      if (!text || text.includes("Parent communication message will render here")) {
+        return showMessageBox("Please generate or load a lesson package first.", "Nothing to Share");
+      }
+      window.open(`https://api.whatsapp.com/send?text=${encodeURIComponent(text)}`, '_blank');
+    });
+
+    function highlightActiveTarget() {
+      const targetSlot = `${state.currentClass}_${state.currentPart}`;
+      ALL_SLOTS.forEach(slotId => {
+        const card = document.getElementById(`card-${slotId}`);
+        if (card) card.classList.toggle('active-target', slotId === targetSlot);
+      });
+    }
+
+    document.querySelectorAll('.slot-card').forEach(card => {
+      card.addEventListener('click', (e) => {
+        if (e.target.tagName === 'INPUT' || e.target.tagName === 'BUTTON') return;
+        const [cls, prt] = card.dataset.slot.split('_');
+        state.currentClass = cls; state.currentPart = prt;
+        classSelect.value = cls;
+        partRadios.forEach(r => r.checked = (r.value === prt));
+        highlightActiveTarget();
+      });
+    });
+
+    const withTimeout = (promise, ms = 2500) => 
+      Promise.race([
+        promise,
+        new Promise((_, reject) => setTimeout(() => reject(new Error("Network timeout")), ms))
+      ]);
+
+    async function syncAllSlots() {
+      highlightActiveTarget();
+      let lockedTotal = 0;
+
+      await Promise.all(ALL_SLOTS.map(async (slotId) => {
+        try {
+          let data = null;
+          if (db) {
+            try {
+              const snap = await withTimeout(getDoc(doc(db, 'curriculum_books', slotId)), 2000);
+              if (snap.exists() && snap.data().isLocked) data = snap.data();
+            } catch (e) {}
+          }
+          const cached = await idb.getBook(slotId);
+          if (cached) {
+            state.slotsBase64[slotId] = typeof cached === 'string' ? cached : cached.base64;
+            if (!data) {
+              data = { 
+                fileName: (typeof cached === 'object' && cached.fileName) ? cached.fileName : "Locally Cached PDF", 
+                isLocked: true 
+              };
+            }
+          }
+          if (data && (data.isLocked || cached)) {
+            lockedTotal++;
+            state.slotsData[slotId] = data;
+            const badge = document.getElementById(`badge-${slotId}`);
+            const nameEl = document.getElementById(`name-${slotId}`);
+            const actionsEl = document.getElementById(`actions-${slotId}`);
+            if (badge) { badge.className = 'slot-badge locked'; badge.textContent = 'Locked'; }
+            if (nameEl) { nameEl.textContent = `📄 ${data.fileName || 'Locked PDF'}`; nameEl.style.color = '#1b5e20'; }
+            if (actionsEl) { actionsEl.innerHTML = `<span style="font-size:0.62rem; color:#2e7d32;">🔒 Ready</span>`; }
+          }
+        } catch (err) {}
+      }));
+      if (lockedCountLabel) lockedCountLabel.textContent = `${lockedTotal}/6 Locked`;
+    }
+
+    function fileToBase64(file) {
+      return new Promise((resolve, reject) => {
+        const reader = new FileReader();
+        reader.onload = () => resolve(reader.result.split(',')[1]);
+        reader.onerror = reject;
+        reader.readAsDataURL(file);
+      });
+    }
+
+    document.querySelectorAll('.slot-btn').forEach(btn => {
+      btn.addEventListener('click', async (e) => {
+        const slotId = e.target.dataset.slot;
+        const file = document.getElementById(`input-${slotId}`)?.files[0];
+        if (!file) return showMessageBox(`Please select a PDF file to lock.`, "Missing File");
+
+        showSpinner(`Reading and locking ${file.name}...`);
+        try {
+          const base64Data = await fileToBase64(file);
+          const fileSizeFormatted = (file.size / (1024 * 1024)).toFixed(2) + " MB";
+          state.slotsBase64[slotId] = base64Data;
+          await idb.setBook(slotId, { base64: base64Data, fileName: file.name, fileSize: fileSizeFormatted });
+
+          const [cls, prt] = slotId.split('_');
+          state.slotsData[slotId] = { fileName: file.name, fileSize: fileSizeFormatted, isLocked: true };
+
+          if (db) {
+            try {
+              if (auth && !auth.currentUser) await signInAnonymously(auth).catch(() => {});
+              await setDoc(doc(db, 'curriculum_books', slotId), {
+                slotId: slotId, classId: cls, partId: prt, fileName: file.name, isLocked: true, uploadedAt: new Date().toISOString()
+              });
+            } catch (e) {}
+          }
+          hideSpinner();
+          showMessageBox(`Textbook locked for Class ${cls} ${prt.toUpperCase()}!`, "Lock Verified");
+          syncAllSlots();
+        } catch (err) {
+          hideSpinner();
+          showMessageBox(`Failed to read file: ${err.message}`, "Error");
+        }
+      });
+    });
+
+    classSelect.addEventListener('change', (e) => { state.currentClass = e.target.value; highlightActiveTarget(); });
+    partRadios.forEach(radio => radio.addEventListener('change', (e) => { state.currentPart = e.target.value; highlightActiveTarget(); }));
+
+    const delay = (ms) => new Promise((resolve) => setTimeout(resolve, ms));
+
+    async function callGemini(modelName, payload) {
+      const endpoint = `https://generativelanguage.googleapis.com/v1beta/models/${modelName}:generateContent`;
+      const response = await fetch(endpoint, {
+        method: "POST",
+        headers: { "Content-Type": "application/json", "x-goog-api-key": GEMINI_API_KEY },
+        body: JSON.stringify(payload)
+      });
+      const data = await response.json();
+      if (response.ok && data.candidates && data.candidates[0]?.content) {
+        return { success: true, data: data };
+      }
+      const errorMsg = data.error?.message || `HTTP ${response.status}`;
+      const msgLower = errorMsg.toLowerCase();
+      const isBusy = response.status === 503 || 
+                     response.status === 429 || 
+                     msgLower.includes("high demand") || 
+                     msgLower.includes("overloaded") || 
+                     msgLower.includes("unavailable") ||
+                     msgLower.includes("quota");
+
+      return { 
+        success: false, 
+        error: errorMsg, 
+        isAuthError: response.status === 400 || response.status === 401 || response.status === 403 || msgLower.includes("key"),
+        isBusy: isBusy,
+        isModelError: response.status === 404 || msgLower.includes("no longer available")
+      };
+    }
+
+    async function executeSmartGeneration(payload) {
+      if (!GEMINI_API_KEY) {
+        showKeyModal();
+        throw new Error("Please enter your Google AI Studio API key to continue.");
+      }
+      showSpinner(`Synthesizing with ${PRIMARY_MODEL}...`);
+      let result = await callGemini(PRIMARY_MODEL, payload);
+      if (result.success) return result.data;
+      if (result.isAuthError) {
+        showKeyModal();
+        throw new Error("Invalid or expired Gemini API key. Please update your key above.");
+      }
+      if (result.isBusy || result.isModelError) {
+        showSpinner(`Server busy. Auto-switching to ${FALLBACK_MODEL}...`);
+        await delay(2000);
+        const fallbackRes = await callGemini(FALLBACK_MODEL, payload);
+        if (fallbackRes.success) return fallbackRes.data;
+      }
+      throw new Error(`Generation error: ${result.error}`);
+    }
+
+    // =========================================================================
+    // MALAYALAM TRANSLATION ENGINE (WITH PERMANENT LOCAL STORAGE CACHING)
+    // =========================================================================
+    async function translateActiveTab(tabId, buttonEl) {
+      const containerMap = {
+        'tab-lesson-plan': 'lesson-plan-body',
+        'tab-media-resources': 'media-resources-body',
+        'tab-blackboard-notes': 'blackboard-notes-body',
+        'tab-whatsapp-summary': 'whatsapp-preview-area',
+        'tab-worksheet-view': 'worksheet-render-area',
+        'tab-worksheet-answers': 'worksheet-answers-body'
+      };
+
+      const containerId = containerMap[tabId];
+      const containerEl = document.getElementById(containerId);
+      if (!containerEl) return;
+
+      const pkgKey = state.activePackageId || document.getElementById('unit-title').value.trim() || 'active_unit';
+      const mlStorageKey = `SCERT_ML_${pkgKey}_${tabId}`;
+      const enStorageKey = `SCERT_EN_${pkgKey}_${tabId}`;
+
+      if (buttonEl.classList.contains('active-ml')) {
+        const originalEnglish = localStorage.getItem(enStorageKey) || state.translations[tabId]?.originalHtml;
+        if (originalEnglish) {
+          containerEl.innerHTML = originalEnglish;
+          containerEl.classList.remove('malayalam-font');
+          buttonEl.classList.remove('active-ml');
+          buttonEl.innerHTML = `🌐 മലയാളം`;
+          showToast("Switched back to English");
+          return;
+        }
+      }
+
+      const cachedMalayalam = localStorage.getItem(mlStorageKey);
+      if (cachedMalayalam) {
+        if (!localStorage.getItem(enStorageKey)) {
+          localStorage.setItem(enStorageKey, containerEl.innerHTML);
+        }
+        containerEl.innerHTML = cachedMalayalam;
+        containerEl.classList.add('malayalam-font');
+        buttonEl.classList.add('active-ml');
+        buttonEl.innerHTML = `🌐 English`;
+        showToast("Loaded Malayalam from memory");
+        return;
+      }
+
+      const contentHtml = containerEl.innerHTML;
+      if (!contentHtml || contentHtml.includes("Generate Package") || contentHtml.includes("No packages")) {
+        return showMessageBox("Please generate or load a lesson package first.", "Nothing to Translate");
+      }
+
+      showSpinner(`Translating to Malayalam (മലയാളം)...`);
+
+      try {
+        const translatePrompt = `
+You are an expert Kerala SCERT Malayalam-medium pedagogical translator.
+Translate the following HTML content accurately and naturally into standard Kerala SCERT educational Malayalam.
+Maintain all HTML structure, classes, tags, and formatting intact.
+Use standard terms like 'പാഠ്യപദ്ധതി ലക്ഷ്യങ്ങൾ', 'പ്രവേശന പ്രവർത്തനം', 'വിലയിരുത്തൽ', 'ബ്ലാക്ക്ബോർഡ് കുറിപ്പുകൾ'.
+
+ORIGINAL CONTENT:
+${contentHtml}
+
+RETURN ONLY THE TRANSLATED HTML. DO NOT WRAP IN BACKTICKS OR MARKDOWN CODE BLOCKS.
+`;
+        const payload = {
+          contents: [{ role: "user", parts: [{ text: translatePrompt }] }],
+          generationConfig: { temperature: 0.1 }
+        };
+
+        let data = null;
+        const liteRes = await callGemini(FALLBACK_MODEL, payload);
+        if (liteRes.success) {
+          data = liteRes.data;
+        } else {
+          data = await executeSmartGeneration(payload);
+        }
+
+        let translatedHtml = data.candidates[0].content.parts[0].text;
+        translatedHtml = translatedHtml.replace(/^```(?:html)?\s*/i, '').replace(/\s*```$/i, '').trim();
+
+        localStorage.setItem(enStorageKey, contentHtml);
+        localStorage.setItem(mlStorageKey, translatedHtml);
+
+        containerEl.innerHTML = translatedHtml;
+        containerEl.classList.add('malayalam-font');
+        buttonEl.classList.add('active-ml');
+        buttonEl.innerHTML = `🌐 English`;
+
+        hideSpinner();
+        showToast("Translated to Malayalam!");
+      } catch (err) {
+        hideSpinner();
+        showMessageBox(`Translation notice: ${err.message}`, "Translation");
+      }
+    }
+
+    document.querySelectorAll('.translate-tab-btn').forEach(btn => {
+      btn.addEventListener('click', () => {
+        translateActiveTab(btn.dataset.tab, btn);
+      });
+    });
+
+    // =========================================================================
+    // UNIVERSAL PRINT HANDLER (ALL TABS IN A4 PORTRAIT)
+    // =========================================================================
+    document.querySelectorAll('.print-tab-btn').forEach(btn => {
+      btn.addEventListener('click', () => {
+        const pane = btn.closest('.tab-pane');
+        document.querySelectorAll('.tab-pane').forEach(p => p.classList.remove('print-active'));
+        pane.classList.add('print-active');
+        document.body.classList.add('has-print-active');
+        setTimeout(() => window.print(), 100);
+      });
+    });
+
+    window.addEventListener('afterprint', () => {
+      document.body.classList.remove('has-print-active');
+      document.querySelectorAll('.tab-pane').forEach(p => p.classList.remove('print-active'));
+    });
+
+    function updateAllUniversalHeaders(unitTitle, dayNumber, totalDays, classId, partId, targetedCO) {
+      document.querySelectorAll('.u-meta-class').forEach(el => el.textContent = classId);
+      document.querySelectorAll('.u-meta-part').forEach(el => el.textContent = (partId === 'part1' ? '1' : '2'));
+      document.querySelectorAll('.u-meta-unit').forEach(el => el.textContent = unitTitle);
+      document.querySelectorAll('.u-meta-day').forEach(el => el.textContent = dayNumber);
+      document.querySelectorAll('.u-meta-total').forEach(el => el.textContent = totalDays);
+      document.querySelectorAll('.u-meta-co').forEach(el => el.textContent = targetedCO || 'SCERT Curricular Competency Targeted');
+    }
+
+    // =========================================================================
+    // RENDER WORKSPACE WITH PACKAGE DATA
+    // =========================================================================
+    function renderPackageToWorkspace(pkgData, unitTitle, dayNumber, totalDays, classId, partId = state.currentPart) {
+      document.querySelectorAll('.translate-tab-btn').forEach(b => {
+        b.classList.remove('active-ml');
+        b.innerHTML = `🌐 മലയാളം`;
+      });
+
+      updateAllUniversalHeaders(unitTitle, dayNumber, totalDays, classId, partId, pkgData.targetedCurricularObjective);
+
+      // 1. Render Lesson Plan
+      let coMasterListHtml = `
+        <div class="co-box-master">
+          <strong>All Curricular Objectives (Unit Master — Comprehensive Coverage of Unit):</strong>
+          <ul style="margin-top:6px; padding-left:20px;">
+      `;
+      (pkgData.allUnitCurricularObjectives || []).forEach(co => {
+        coMasterListHtml += `<li>${co}</li>`;
+      });
+      coMasterListHtml += `</ul></div>`;
+
+      // Wrap table in responsive touch scroll container
+      let tableHtml = pkgData.lessonPlanTableHtml || '';
+      if (!tableHtml.includes('table-scroll-wrapper')) {
+        tableHtml = `<div class="table-scroll-wrapper">${tableHtml}</div>`;
+      }
+
+      document.getElementById('lesson-plan-body').innerHTML = `
+        ${coMasterListHtml}
+        ${pkgData.lessonPlanIntroHtml || ''}
+        <h3 style="margin:14px 0 6px 0; color:var(--primary); font-size:0.9rem;">35-Minute Period Breakdown:</h3>
+        ${tableHtml}
+      `;
+      
+      // 2. Render Media Resources
+      renderMediaResources(pkgData.mediaResources || []);
+
+      // 3. Render Blackboard Notes
+      renderBlackboardNotes(pkgData.blackboardQa || []);
+
+      // 4. Render WhatsApp Broadcast
+      renderWhatsAppBroadcast(pkgData.whatsappSummary, pkgData.blackboardQa || [], unitTitle, dayNumber, totalDays, classId);
+      
+      // 5. Render Printable Worksheet
+      document.getElementById('worksheet-render-area').innerHTML = `
+        <div class="ws-header" style="border-bottom: 2px solid #000; padding-bottom: 8px; margin-bottom: 12px; text-align: center;">
+          <h2 style="font-size: 12pt; text-transform: uppercase; margin-bottom: 3px;">Kerala SCERT Curriculum Worksheet</h2>
+          <div style="font-weight:bold; font-size:9pt; margin-top:2px;">Application-Level Evaluation Activity (Total: 5 Scores)</div>
+          <div class="ws-meta-grid" style="display: grid; grid-template-columns: 2fr 1fr 1fr; gap: 4px; font-size: 8.5pt; margin-top: 6px; text-align: left;">
+            <div class="ws-meta-line" style="border-bottom: 1px dotted #444; padding-bottom: 2px;"><strong>Unit:</strong> ${unitTitle} (Day ${dayNumber}/${totalDays})</div>
+            <div class="ws-meta-line" style="border-bottom: 1px dotted #444; padding-bottom: 2px;"><strong>Class:</strong> Std ${classId}</div>
+            <div class="ws-meta-line" style="border-bottom: 1px dotted #444; padding-bottom: 2px;"><strong>Max Score:</strong> 5</div>
+            <div class="ws-meta-line" style="border-bottom: 1px dotted #444; padding-bottom: 2px;"><strong>Student Name:</strong> ___________________________</div>
+            <div class="ws-meta-line" style="border-bottom: 1px dotted #444; padding-bottom: 2px;"><strong>Roll No:</strong> _______</div>
+            <div class="ws-meta-line" style="border-bottom: 1px dotted #444; padding-bottom: 2px;"><strong>Time:</strong> 20 Mins</div>
+          </div>
+        </div>
+        ${pkgData.worksheetHtml}
+      `;
+
+      // 6. Render Answer Key
+      document.getElementById('worksheet-answers-body').innerHTML = `
+        <div style="margin-bottom:12px; padding:8px 10px; background:#f1f5f9; border-radius:4px; font-size:0.82rem;">
+          <strong>Standard:</strong> SCERT Criteria | <strong>Total Score:</strong> 5 | <strong>Unit:</strong> ${unitTitle} (Day ${dayNumber}/${totalDays})
+        </div>
+        ${pkgData.worksheetAnswerKeyHtml || ''}
+      `;
+    }
+
+    function setPackageActiveState(isActive, pkgTitle = "") {
+      if (isActive) {
+        generateBtn.disabled = true;
+        generateBtn.innerHTML = `🔒 Active Package`;
+        generateBtn.style.background = "#64748b";
+        activeStatusBar.style.display = "flex";
+        activeStatusText.textContent = `Active: ${pkgTitle}`;
+      } else {
+        generateBtn.disabled = false;
+        generateBtn.innerHTML = `⚡ Generate Package`;
+        generateBtn.style.background = "var(--primary)";
+        activeStatusBar.style.display = "none";
+      }
+    }
+
+    function resetWorkspace() {
+      state.currentPackage = null;
+      state.activePackageId = null;
+      setPackageActiveState(false);
+
+      document.querySelectorAll('.translate-tab-btn').forEach(b => {
+        b.classList.remove('active-ml');
+        b.innerHTML = `🌐 മലയാളം`;
+      });
+
+      updateAllUniversalHeaders("Select Unit", "1", "5", state.currentClass, state.currentPart, "Generated upon request");
+
+      document.getElementById('lesson-plan-body').innerHTML = `<p style="color: var(--text-muted); font-style: italic;">Enter details above and tap "Generate Package".</p>`;
+      document.getElementById('media-resources-body').innerHTML = `<p style="color: var(--text-muted); font-style: italic;">Curated media will render here.</p>`;
+      document.getElementById('blackboard-notes-body').innerHTML = `<div class="rendered-markdown"><p style="color: var(--text-muted); font-style: italic;">Application questions and solutions will render here.</p></div>`;
+      document.getElementById('whatsapp-preview-area').innerHTML = `<div class="wa-bubble" style="color: var(--text-muted); font-style: italic;">Parent broadcast message will render here.</div>`;
+      document.getElementById('whatsapp-summary-body').textContent = `Parent communication message will render here.`;
+      document.getElementById('worksheet-render-area').innerHTML = `<div style="text-align: center; color: #777; font-style: italic; padding: 30px;" class="no-print">Worksheet will render inside this container.</div>`;
+      document.getElementById('worksheet-answers-body').innerHTML = `<p style="color: var(--text-muted); font-style: italic;">Model answers will render here.</p>`;
+
+      document.querySelectorAll('.pkg-card').forEach(c => c.classList.remove('active-loaded'));
+      showToast("Workspace Reset!");
+    }
+
+    resetWorkspaceBtn.addEventListener('click', resetWorkspace);
+    quickResetBtn.addEventListener('click', resetWorkspace);
+
+    async function loadSavedPackage(pkgId) {
+      const allPkgs = await idb.getAllPackages();
+      let pkg = allPkgs.find(p => p.id === pkgId);
+
+      if (!pkg && db) {
+        try {
+          const snap = await getDoc(doc(db, 'saved_packages', pkgId));
+          if (snap.exists()) pkg = snap.data();
+        } catch (e) {}
+      }
+
+      if (!pkg) return showMessageBox("Package not found in archive.", "Error");
+
+      state.currentClass = pkg.classId;
+      state.currentPart = pkg.partId;
+      classSelect.value = pkg.classId;
+      partRadios.forEach(r => r.checked = (r.value === pkg.partId));
+      document.getElementById('unit-title').value = pkg.unitTitle;
+      document.getElementById('day-number').value = pkg.dayNumber;
+      document.getElementById('total-days').value = pkg.totalDays;
+      highlightActiveTarget();
+
+      state.currentPackage = pkg.data;
+      state.activePackageId = pkg.id;
+      renderPackageToWorkspace(pkg.data, pkg.unitTitle, pkg.dayNumber, pkg.totalDays, pkg.classId, pkg.partId);
+      setPackageActiveState(true, `Std ${pkg.classId} - ${pkg.unitTitle} (D${pkg.dayNumber})`);
+
+      document.querySelectorAll('.pkg-card').forEach(c => c.classList.toggle('active-loaded', c.dataset.id === pkg.id));
+      document.querySelector('[data-tab="lesson-plan"]').click();
+      showToast(`Loaded: ${pkg.unitTitle}`);
+    }
+
+    // =========================================================================
+    // DUAL-SYNC: REFRESH PACKAGES FROM FIREBASE AND INDEXED-DB
+    // =========================================================================
+    async function refreshPackageArchiveUI() {
+      let cloudPackages = [];
+
+      if (db) {
+        try {
+          if (auth && !auth.currentUser) await signInAnonymously(auth).catch(() => {});
+          const snap = await withTimeout(getDocs(collection(db, 'saved_packages')), 2500);
+          snap.forEach(docSnap => {
+            if (docSnap.exists()) cloudPackages.push(docSnap.data());
+          });
+        } catch (e) {
+          console.warn("Firestore fetch packages:", e.message);
+        }
+      }
+
+      const localPackages = await idb.getAllPackages();
+      const packageMap = new Map();
+      localPackages.forEach(p => packageMap.set(p.id, p));
+      cloudPackages.forEach(p => {
+        packageMap.set(p.id, p);
+        idb.savePackage(p);
+      });
+
+      const packages = Array.from(packageMap.values());
+      packageCountBadge.textContent = packages.length;
+
+      if (packages.length === 0) {
+        pkgArchiveList.innerHTML = `<div style="font-size: 0.7rem; color: var(--text-muted); text-align: center; padding: 6px;">No saved packages yet.</div>`;
+        return;
+      }
+
+      packages.sort((a, b) => b.createdAt - a.createdAt);
+
+      let html = '';
+      packages.forEach(pkg => {
+        const isLoaded = (pkg.id === state.activePackageId);
+        html += `
+          <div class="pkg-card ${isLoaded ? 'active-loaded' : ''}" data-id="${pkg.id}">
+            <button class="pkg-header-btn">
+              <div>
+                <span>📚 Std ${pkg.classId} - ${pkg.unitTitle}</span>
+                <div class="pkg-meta">Day ${pkg.dayNumber}/${pkg.totalDays} • ${pkg.dateFormatted}</div>
+              </div>
+              <span style="font-size:0.75rem;">▾</span>
+            </button>
+            <div class="pkg-body">
+              <div class="pkg-actions-row">
+                <button class="btn btn-primary btn-sm btn-load-pkg" data-id="${pkg.id}">📥 Load</button>
+                <button class="btn btn-outline btn-sm btn-reset-pkg" data-id="${pkg.id}">🔄 Reset</button>
+                <button class="btn btn-outline btn-sm btn-del-pkg" data-id="${pkg.id}" style="color:#ef4444;">🗑️</button>
+              </div>
+            </div>
+          </div>
+        `;
+      });
+      pkgArchiveList.innerHTML = html;
+
+      pkgArchiveList.querySelectorAll('.pkg-header-btn').forEach(btn => {
+        btn.addEventListener('click', (e) => {
+          e.currentTarget.closest('.pkg-card').classList.toggle('expanded');
+        });
+      });
+
+      pkgArchiveList.querySelectorAll('.btn-load-pkg').forEach(btn => {
+        btn.addEventListener('click', (e) => loadSavedPackage(e.currentTarget.dataset.id));
+      });
+
+      pkgArchiveList.querySelectorAll('.btn-reset-pkg').forEach(btn => btn.addEventListener('click', resetWorkspace));
+
+      pkgArchiveList.querySelectorAll('.btn-del-pkg').forEach(btn => {
+        btn.addEventListener('click', async (e) => {
+          const id = e.currentTarget.dataset.id;
+          await idb.deletePackage(id);
+          if (db) {
+            try {
+              await deleteDoc(doc(db, 'saved_packages', id));
+            } catch (err) {}
+          }
+          if (state.activePackageId === id) resetWorkspace();
+          refreshPackageArchiveUI();
+          showToast("Package deleted.");
+        });
+      });
+    }
+
+    // =========================================================================
+    // GENERATE COMPLETE INSTRUCTIONAL PACKAGE
+    // =========================================================================
+    generateBtn.addEventListener('click', async () => {
+      const unitTitle = document.getElementById('unit-title').value.trim();
+      if (!unitTitle) return showMessageBox("Please enter a Chapter or Unit Title before generating.", "Missing Unit");
+
+      const dayNumber = parseInt(document.getElementById('day-number').value, 10);
+      const totalDays = parseInt(document.getElementById('total-days').value, 10);
+
+      if (dayNumber > totalDays) {
+        return showMessageBox("Day in Unit cannot exceed Total Planned Days.", "Invalid Pacing");
+      }
+
+      const activeSlotId = `${state.currentClass}_${state.currentPart}`;
+      const activeBase64 = state.slotsBase64[activeSlotId];
+
+      generateBtn.disabled = true;
+      showSpinner(`Synthesizing Day ${dayNumber} of ${totalDays} for "${unitTitle}"...`);
+
+      try {
+        const prompt = `
+You are an expert pedagogical assistant for Kerala SCERT Classes 5, 6, and 7.
+Formulate a complete daily teaching package calibrated specifically for:
+- Standard: Class ${state.currentClass}
+- Textbook: Part ${state.currentPart === 'part1' ? '1' : '2'}
+- Unit Name: ${unitTitle}
+- UNIT PACING & PROGRESSION: Day ${dayNumber} of ${totalDays} Total Planned Days.
+Focus TODAY's 35-minute period strictly on the designated conceptual slice for Day ${dayNumber}.
+
+CRITICAL PEDAGOGICAL SPECIFICATIONS:
+
+1. ALL CURRICULAR OBJECTIVES (UNIT MASTER) — EXHAUSTIVE AND COMPLETE UNIT SCOPE:
+   - "allUnitCurricularObjectives": You MUST provide a comprehensive, detailed, and exhaustive master list of Curricular Objectives (CO 1, CO 2, CO 3, ... CO N) THAT SYSTEMATICALLY AND RIGOROUSLY COVERS THE ENTIRE CONTENT OF THIS COMPLETE UNIT.
+   - Do NOT abbreviate. Cover every major conceptual domain, scientific inquiry, experiment, activity, process skill, and real-world connection spanning the entire chapter from start to finish.
+   - Number them systematically (e.g., "CO 1: ...", "CO 2: ...", "CO 3: ...", etc.).
+   
+   - "targetedCurricularObjective": Explicitly state the exact Curricular Objective (verbatim from the Master list, e.g., "CO X: ...") targeted specifically in today's pacing slice (Day ${dayNumber} of ${totalDays}).
+
+2. 35-MINUTE ALLOCATION TABLE: HTML <table> with inline borders for LibreOffice/Word.
+   Phases: 0-5 min (Entry Activity), 5-20 min (Concept & Inquiry), 20-25 min (Assessment), 25-35 min (Blackboard Work).
+
+3. BLACKBOARD NOTES (STRICT APPLICATION-LEVEL ONLY):
+   - Provide 2 to 3 Higher-Order Thinking / Application-Level Questions.
+   - For EACH question, provide the Question and the Model Answer as separated properties in an array.
+
+4. WHATSAPP BROADCAST (STRUCTURED & SEPARATED):
+   - Provide a reassuring 100-word daily recap of what the child explored in class.
+   - Include the EXACT same Application-Level Questions & Answers from the Blackboard section.
+   - Provide home study tips and DIKSHA/YouTube search keywords.
+
+5. A4 PRINTABLE WORKSHEET: Exactly 5 total scores, application-level questions with score tags [Score: X] and answer lines.
+6. WORKSHEET ANSWER KEY: Scoring breakdown totaling 5 marks.
+7. DIGITAL MEDIA: 3-4 recommended resources (DIKSHA, KITE Victers, PhET simulations, YouTube).
+
+OUTPUT MUST BE A STRICT JSON OBJECT MATCHING THIS SCHEMA:
+{
+  "allUnitCurricularObjectives": ["CO 1: ...", "CO 2: ...", "CO 3: ...", "CO 4: ...", "CO 5: ..."],
+  "targetedCurricularObjective": "CO X: ...",
+  "lessonPlanIntroHtml": "<p>...</p>",
+  "lessonPlanTableHtml": "<table class='copiable-table' border='1'>...</table>",
+  "mediaResources": [{"title": "...", "type": "video|diksha|sim", "platform": "...", "description": "...", "searchQuery": "..."}],
+  "blackboardQa": [
+    {
+      "qNum": 1,
+      "cognitiveDomain": "Application / HOTS",
+      "question": "Scenario question...",
+      "answer": "Structured answer..."
+    }
+  ],
+  "whatsappSummary": {
+    "dailyRecap": "100-word message...",
+    "studyTip": "Home discussion prompt...",
+    "dikshaKeywords": "Recommended search terms..."
+  },
+  "worksheetHtml": "<div class='ws-content'>...</div>",
+  "worksheetAnswerKeyHtml": "<div class='key-content'>...</div>"
+}`;
+
+        const parts = [{ text: prompt }];
+
+        if (activeBase64) {
+          const sizeInMB = (activeBase64.length * 0.75) / (1024 * 1024);
+          if (sizeInMB <= 15) {
+            parts.unshift({
+              inlineData: {
+                mimeType: "application/pdf",
+                data: activeBase64
+              }
+            });
+          }
+        }
+
+        const payload = {
+          contents: [{ role: "user", parts: parts }],
+          generationConfig: { responseMimeType: "application/json", temperature: 0.2 }
+        };
+
+        const data = await executeSmartGeneration(payload);
+        let rawJson = data.candidates[0].content.parts[0].text;
+        rawJson = rawJson.replace(/^```(?:json)?\s*/i, '').replace(/\s*```$/i, '').trim();
+        const result = JSON.parse(rawJson);
+        state.currentPackage = result;
+
+        renderPackageToWorkspace(result, unitTitle, dayNumber, totalDays, state.currentClass, state.currentPart);
+
+        const now = new Date();
+        const pkgId = 'pkg_' + Date.now();
+        const newPkg = {
+          id: pkgId,
+          classId: state.currentClass,
+          partId: state.currentPart,
+          unitTitle: unitTitle,
+          dayNumber: dayNumber,
+          totalDays: totalDays,
+          createdAt: now.getTime(),
+          dateFormatted: now.toLocaleDateString('en-IN', { day: '2-digit', month: 'short' }) + ' ' + now.toLocaleTimeString('en-IN', { hour: '2-digit', minute: '2-digit' }),
+          data: result
+        };
+
+        await idb.savePackage(newPkg);
+
+        if (db) {
+          try {
+            if (auth && !auth.currentUser) await signInAnonymously(auth).catch(() => {});
+            await setDoc(doc(db, 'saved_packages', pkgId), newPkg);
+          } catch (cloudErr) {
+            console.warn("Firestore save skipped:", cloudErr.message);
+          }
+        }
+
+        state.activePackageId = pkgId;
+        setPackageActiveState(true, `Std ${state.currentClass} - ${unitTitle} (D${dayNumber})`);
+        await refreshPackageArchiveUI();
+
+        hideSpinner();
+        showToast("Package generated & synced!");
+      } catch (err) {
+        hideSpinner();
+        console.error(err);
+        showMessageBox(err.message, "Notice");
+        generateBtn.disabled = false;
+      }
+    });
+
+    function renderBlackboardNotes(qaList) {
+      const container = document.getElementById('blackboard-notes-body');
+      if (!qaList || qaList.length === 0) {
+        container.innerHTML = `<div class="rendered-markdown"><p style="color:var(--text-muted);">No notes generated.</p></div>`;
+        return;
+      }
+
+      let html = `<div class="bb-container">`;
+      qaList.forEach((item, index) => {
+        const qNum = item.qNum || (index + 1);
+        const domain = item.cognitiveDomain || "Application";
+        const cleanAnswer = formatMarkdown(item.answer);
+
+        html += `
+          <div class="bb-card">
+            <div class="bb-card-header">
+              <div class="bb-tag-group">
+                <span class="bb-num-pill">Q${qNum}</span>
+                <span class="bb-cognitive-pill">${domain}</span>
+              </div>
+              <button class="btn btn-outline btn-sm copy-single-bb" data-index="${index}">📋 Copy</button>
+            </div>
+            <div class="bb-card-body">
+              <div class="bb-q-section">
+                <div class="bb-label-q">Question</div>
+                <div class="bb-text-q">${item.question}</div>
+              </div>
+              <div class="bb-a-section">
+                <div class="bb-label-a">Chalkboard Solution</div>
+                <div class="bb-text-a">${cleanAnswer}</div>
+              </div>
+            </div>
+          </div>
+        `;
+      });
+      html += `</div>`;
+      container.innerHTML = html;
+
+      container.querySelectorAll('.copy-single-bb').forEach(btn => {
+        btn.addEventListener('click', (e) => {
+          const idx = parseInt(e.currentTarget.dataset.index, 10);
+          const item = qaList[idx];
+          copyText(`Q${idx + 1}: ${item.question}\n\nAns:\n${item.answer}`, `Copied Q${idx + 1}!`);
+        });
+      });
+    }
+
+    function renderWhatsAppBroadcast(summaryObj, qaList, unitTitle, dayNumber, totalDays, classId = state.currentClass) {
+      const previewArea = document.getElementById('whatsapp-preview-area');
+      const rawBody = document.getElementById('whatsapp-summary-body');
+
+      const recap = summaryObj?.dailyRecap || "Today, students engaged in concept exploration.";
+      const tip = summaryObj?.studyTip || "Discuss today's topic with your child.";
+      const links = summaryObj?.dikshaKeywords || `${unitTitle} SCERT Class ${classId}`;
+
+      let chatHtml = `
+        <div class="wa-bubble wa-bubble-green">
+          <div class="wa-bubble-header">
+            <span>🏫 Daily Classroom Recap (Std ${classId})</span>
+            <span>Day ${dayNumber}/${totalDays}</span>
+          </div>
+          <p style="font-weight:600; margin-bottom:4px;">*Unit:* ${unitTitle}</p>
+          <p>${recap}</p>
+        </div>
+
+        <div class="wa-bubble">
+          <div class="wa-bubble-header" style="color:#1e293b;">
+            <span>📝 Today's Notebook & Blackboard Q&As</span>
+            <span>${qaList.length} Items</span>
+          </div>
+          <div class="wa-qa-list">
+      `;
+
+      qaList.forEach((item, idx) => {
+        chatHtml += `
+          <div class="wa-qa-card">
+            <div class="wa-qa-q">❓ Q${idx + 1}: ${item.question}</div>
+            <div class="wa-qa-a"><strong>Ans:</strong> ${item.answer}</div>
+          </div>
+        `;
+      });
+
+      chatHtml += `
+          </div>
+        </div>
+
+        <div class="wa-bubble wa-bubble-green">
+          <div class="wa-bubble-header">
+            <span>💡 Evening Study & DIKSHA Recommendations</span>
+          </div>
+          <p style="margin-bottom:6px;"><strong>Home Discussion:</strong> ${tip}</p>
+          <div style="font-size:0.76rem; background:#f1f5f9; padding:5px 7px; border-radius:4px;">
+            🔍 <strong>Search on DIKSHA / YouTube:</strong> "${links}"
+          </div>
+        </div>
+      `;
+      previewArea.innerHTML = chatHtml;
+
+      let rawText = `*🏫 SCERT Std ${classId} Daily Update*\n*Unit:* ${unitTitle} (Day ${dayNumber}/${totalDays})\n\n`;
+      rawText += `*🌟 Today's Learning:*\n${recap}\n\n`;
+      rawText += `*📚 Today's Blackboard Q&As:*\n\n`;
+      qaList.forEach((item, idx) => {
+        rawText += `*Q${idx + 1}:* ${item.question}\n*Ans:* ${item.answer}\n\n`;
+      });
+      rawText += `*💡 Home Tip:* ${tip}\n*🔍 DIKSHA Search:* "${links}"`;
+      rawBody.textContent = rawText;
+    }
+
+    function renderMediaResources(mediaList) {
+      const container = document.getElementById('media-resources-body');
+      if (!mediaList || mediaList.length === 0) {
+        container.innerHTML = `<p style="color: var(--text-muted);">No media suggestions found.</p>`;
+        return;
+      }
+
+      let html = `<div class="media-grid">`;
+      mediaList.forEach(item => {
+        const typeClass = `type-${item.type || 'video'}`;
+        const queryEncoded = encodeURIComponent(item.searchQuery || item.title);
+        let searchUrl = `https://www.youtube.com/results?search_query=${queryEncoded}`;
+        let actionLabel = "Search YouTube ↗";
+
+        if (item.type === 'diksha' || item.platform?.toLowerCase().includes('diksha')) {
+          searchUrl = `https://diksha.gov.in/explore?query=${queryEncoded}`;
+          actionLabel = "Open DIKSHA ↗";
+        } else if (item.type === 'sim' || item.platform?.toLowerCase().includes('phet')) {
+          searchUrl = `https://www.google.com/search?q=${encodeURIComponent(item.searchQuery + ' phet simulation')}`;
+          actionLabel = "Open Simulation ↗";
+        }
+
+        html += `
+          <div class="media-card">
+            <div>
+              <span class="media-card-type ${typeClass}">${item.platform || 'Online Media'}</span>
+              <h4>${item.title}</h4>
+              <p>${item.description}</p>
+            </div>
+            <a href="${searchUrl}" target="_blank" rel="noopener noreferrer" class="btn btn-info btn-sm">${actionLabel}</a>
+          </div>
+        `;
+      });
+      html += `</div>`;
+      container.innerHTML = html;
+    }
+
+    function formatMarkdown(md) {
+      if (!md) return "";
+      let html = md
+        .replace(/^### (.*$)/gim, '<h3>$1</h3>')
+        .replace(/^## (.*$)/gim, '<h3>$1</h3>')
+        .replace(/\*\*(.*?)\*\*/gim, '<strong>$1</strong>')
+        .replace(/^[\*\-] (.*$)/gim, '<li>$1</li>');
+      html = html.replace(/(<li>[\s\S]*?<\/li>)/g, '<ul>$1</ul>');
+      return `<p>${html.replace(/\n\n+/g, '</p><p>')}</p>`;
+    }
+
+    // Tabs Navigation
+    document.querySelectorAll('.tab-btn').forEach(btn => {
+      btn.addEventListener('click', () => {
+        document.querySelectorAll('.tab-btn').forEach(b => b.classList.remove('active'));
+        document.querySelectorAll('.tab-pane').forEach(p => p.classList.remove('active'));
+        btn.classList.add('active');
+        document.getElementById(`tab-${btn.dataset.tab}`).classList.add('active');
+      });
+    });
+
+    document.querySelectorAll('.copy-btn').forEach(btn => {
+      btn.addEventListener('click', () => {
+        const target = document.getElementById(btn.dataset.target);
+        if (target) copyText(target.innerText || target.textContent, "Copied content!");
+      });
+    });
+
+    // Startup Initialization
+    window.addEventListener('DOMContentLoaded', async () => {
+      await idb.init();
+      syncAllSlots();
+      refreshPackageArchiveUI();
+      if (!GEMINI_API_KEY) {
+        setTimeout(showKeyModal, 600);
+      }
+    });
+  </script>
+</body>
+</html>
