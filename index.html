@@ -5,28 +5,28 @@
   <meta name="viewport" content="width=device-width, initial-scale=1.0">
   <title>SCERT Kerala Smart Teacher Planner & Worksheet Studio</title>
   
-  <!-- Fonts -->
+  <!-- Fonts: Inter, Merriweather & Malayalam Manjari -->
   <link rel="preconnect" href="https://fonts.googleapis.com">
   <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
-  <link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600;700&family=Merriweather:ital,wght@0,400;0,700;1,400&family=JetBrains+Mono:wght@400;500&display=swap" rel="stylesheet">
+  <link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600;700&family=Manjari:wght@400;700&family=Merriweather:ital,wght@0,400;0,700;1,400&family=JetBrains+Mono:wght@400;500&display=swap" rel="stylesheet">
 
   <style>
     /* ==========================================================================
-       1. MINIMALIST & DEVICE-COMPACT UI STYLESHEET
+       1. MINIMALIST DESIGN SYSTEM & COMPACT CSS
        ========================================================================== */
     :root {
       --primary: #1b5e20;        /* Kerala SCERT Deep Green */
       --primary-hover: #144718;
       --primary-light: #e8f5e9;
-      --secondary: #37474f;
-      --border: #dce3e6;
+      --secondary: #334155;
+      --border: #e2e8f0;
       --bg: #f8fafc;
       --surface: #ffffff;
-      --text: #1e293b;
+      --text: #0f172a;
       --text-muted: #64748b;
-      --accent: #fbc02d;
-      --error: #ef4444;
+      --accent: #f59e0b;
       --success: #16a34a;
+      --error: #ef4444;
       --media-blue: #0284c7;
       --whatsapp-green: #25d366;
       --whatsapp-bg: #efeae2;
@@ -42,220 +42,303 @@
       display: flex;
       flex-direction: column;
       -webkit-font-smoothing: antialiased;
+      overflow-x: hidden;
     }
 
+    .malayalam-font { font-family: 'Manjari', 'Inter', sans-serif !important; }
+
+    /* Main Sticky Header */
     header.app-header {
       background: var(--primary);
       color: #fff;
-      padding: 12px 20px;
+      padding: 10px 20px;
       display: flex;
       justify-content: space-between;
       align-items: center;
       box-shadow: 0 1px 3px rgba(0,0,0,0.1);
+      position: sticky;
+      top: 0;
+      z-index: 1000;
     }
-    .header-brand { display: flex; align-items: center; gap: 10px; }
-    .header-brand h1 { font-size: 1.05rem; font-weight: 600; letter-spacing: -0.01em; }
-    .badge {
+    .header-brand { display: flex; align-items: center; gap: 12px; }
+    .brand-icon {
+      width: 32px; height: 32px;
+      background: rgba(255,255,255,0.2);
+      border-radius: 6px;
+      display: flex; align-items: center; justify-content: center;
+      font-size: 1.25rem;
+    }
+    .header-brand h1 { font-size: 1.02rem; font-weight: 700; letter-spacing: -0.01em; }
+    .badge-tag {
       background: var(--accent);
       color: #000;
-      font-size: 0.7rem;
+      font-size: 0.65rem;
       font-weight: 700;
       padding: 2px 6px;
       border-radius: 4px;
       text-transform: uppercase;
     }
     .header-controls { display: flex; align-items: center; gap: 8px; }
-    .header-status {
-      font-size: 0.75rem;
+
+    .btn-header {
       background: rgba(255, 255, 255, 0.15);
-      padding: 3px 10px;
-      border-radius: 12px;
-    }
-    .btn-key-settings {
-      background: rgba(255, 255, 255, 0.2);
       color: #fff;
-      border: 1px solid rgba(255, 255, 255, 0.4);
-      padding: 3px 8px;
-      border-radius: 4px;
-      font-size: 0.75rem;
+      border: 1px solid rgba(255, 255, 255, 0.35);
+      padding: 6px 12px;
+      border-radius: 6px;
+      font-size: 0.8rem;
+      font-weight: 600;
       cursor: pointer;
+      display: inline-flex;
+      align-items: center;
+      gap: 6px;
+      transition: background 0.15s;
     }
-    .btn-key-settings:hover { background: rgba(255, 255, 255, 0.3); }
+    .btn-header:hover { background: rgba(255, 255, 255, 0.28); }
 
-    /* Two-Column Responsive Layout */
-    .app-container {
-      display: flex;
-      flex: 1;
-      overflow: hidden;
-    }
-
-    /* Left Sidebar */
-    .sidebar {
-      width: 380px;
+    /* ==========================================================================
+       2. TOP COLLAPSIBLE CONTROLS (JUMPS TO TOP WHEN COLLAPSED)
+       ========================================================================== */
+    .top-controls-panel {
       background: var(--surface);
-      border-right: 1px solid var(--border);
-      padding: 16px;
-      overflow-y: auto;
-      display: flex;
-      flex-direction: column;
-      gap: 12px;
-      flex-shrink: 0;
+      border-bottom: 1px solid var(--border);
+      padding: 16px 20px;
+      transition: all 0.25s cubic-bezier(0.4, 0, 0.2, 1);
+      box-shadow: 0 4px 10px rgba(0,0,0,0.03);
+    }
+    .top-controls-panel.collapsed {
+      display: none !important;
     }
 
-    .card {
-      background: var(--surface);
+    .top-controls-grid {
+      display: grid;
+      grid-template-columns: 1.1fr 1.3fr 1fr 1.2fr;
+      gap: 14px;
+      align-items: start;
+    }
+    @media (max-width: 1100px) {
+      .top-controls-grid { grid-template-columns: 1fr 1fr; }
+    }
+    @media (max-width: 640px) {
+      .top-controls-grid { grid-template-columns: 1fr; }
+    }
+
+    .ctrl-card {
+      background: #f8fafc;
       border: 1px solid var(--border);
       border-radius: 6px;
       padding: 12px;
     }
-    .card h3 {
-      font-size: 0.85rem;
-      font-weight: 600;
-      margin-bottom: 8px;
+    .ctrl-card h3 {
+      font-size: 0.82rem;
+      font-weight: 700;
       color: var(--secondary);
-      border-bottom: 1px solid #f1f5f9;
-      padding-bottom: 5px;
+      border-bottom: 1px solid #e2e8f0;
+      padding-bottom: 6px;
+      margin-bottom: 8px;
       display: flex;
       justify-content: space-between;
       align-items: center;
     }
-    .form-group { margin-bottom: 8px; }
+
+    .form-group { margin-bottom: 6px; }
     .form-group label {
       display: block;
-      font-size: 0.75rem;
+      font-size: 0.72rem;
       font-weight: 600;
-      margin-bottom: 3px;
+      margin-bottom: 2px;
       color: var(--text-muted);
     }
     .form-control {
       width: 100%;
-      padding: 7px 9px;
+      padding: 6px 8px;
       border: 1px solid var(--border);
       border-radius: 4px;
       font-size: 0.82rem;
-      color: var(--text);
       background: #fff;
+      color: var(--text);
     }
-    .form-control:focus {
-      outline: none;
-      border-color: var(--primary);
-    }
-    .form-row { display: flex; gap: 8px; }
+    .form-row { display: flex; gap: 6px; }
     .form-row .half { flex: 1; }
-    .radio-toggle { display: flex; gap: 14px; font-size: 0.8rem; }
+    .radio-toggle { display: flex; gap: 12px; font-size: 0.78rem; font-weight: 500; }
 
     /* 6-Slot Master Matrix */
     .matrix-grid {
-      display: flex;
-      flex-direction: column;
-      gap: 6px;
+      display: grid;
+      grid-template-columns: 1fr 1fr;
+      gap: 5px;
     }
     .slot-card {
-      background: #fafafa;
+      background: #ffffff;
       border: 1px solid var(--border);
       border-radius: 4px;
-      padding: 6px 8px;
-      transition: all 0.15s;
+      padding: 5px 7px;
       cursor: pointer;
+      transition: all 0.15s;
     }
-    .slot-card:hover { border-color: #94a3b8; }
     .slot-card.active-target {
-      border: 2px solid var(--primary);
+      border: 1.5px solid var(--primary);
       background: var(--primary-light);
     }
     .slot-header {
       display: flex;
       justify-content: space-between;
       align-items: center;
-      margin-bottom: 3px;
+      margin-bottom: 2px;
     }
-    .slot-title { font-size: 0.78rem; font-weight: 700; color: var(--secondary); }
+    .slot-title { font-size: 0.72rem; font-weight: 700; color: var(--secondary); }
     .slot-badge {
-      font-size: 0.65rem;
-      padding: 2px 5px;
+      font-size: 0.62rem;
+      padding: 1px 4px;
       border-radius: 3px;
       font-weight: 600;
     }
     .slot-badge.locked { background: var(--success); color: #fff; }
     .slot-badge.unlocked { background: var(--error); color: #fff; }
     .slot-file-name {
-      font-size: 0.7rem;
+      font-size: 0.68rem;
       color: var(--text-muted);
       overflow: hidden;
       text-overflow: ellipsis;
       white-space: nowrap;
-      margin-bottom: 3px;
+      margin-bottom: 2px;
     }
-    .slot-actions { display: flex; gap: 4px; align-items: center; }
-    .slot-input { font-size: 0.68rem; flex: 1; }
-    .slot-btn { padding: 3px 6px; font-size: 0.7rem; }
+    .slot-actions { display: flex; gap: 3px; align-items: center; }
+    .slot-input { font-size: 0.64rem; flex: 1; }
+    .slot-btn { padding: 2px 5px; font-size: 0.68rem; }
+
+    /* Saved Packages Archive */
+    .pkg-archive-container {
+      display: flex;
+      flex-direction: column;
+      gap: 5px;
+      max-height: 180px;
+      overflow-y: auto;
+    }
+    .pkg-card {
+      border: 1px solid #cbd5e1;
+      background: #ffffff;
+      border-radius: 4px;
+      overflow: hidden;
+      font-size: 0.78rem;
+    }
+    .pkg-card.active-loaded { border: 1.5px solid var(--primary); background: #f0fdf4; }
+    .pkg-header-btn {
+      width: 100%;
+      text-align: left;
+      padding: 6px 8px;
+      background: transparent;
+      border: none;
+      cursor: pointer;
+      display: flex;
+      justify-content: space-between;
+      align-items: center;
+      font-weight: 600;
+    }
+    .pkg-meta { font-size: 0.66rem; color: var(--text-muted); font-weight: normal; }
+    .pkg-body {
+      padding: 6px 8px;
+      border-top: 1px dashed #cbd5e1;
+      background: #fff;
+      display: none;
+    }
+    .pkg-card.expanded .pkg-body { display: block; }
+    .pkg-actions-row { display: flex; gap: 5px; margin-top: 6px; }
+
+    /* Active Status Bar */
+    .active-status-bar {
+      background: #fef9c3;
+      border: 1px solid #fde047;
+      color: #854d0e;
+      padding: 6px 8px;
+      border-radius: 4px;
+      font-size: 0.74rem;
+      margin-bottom: 6px;
+      display: none;
+      align-items: center;
+      justify-content: space-between;
+    }
 
     /* Buttons */
     .btn {
       cursor: pointer;
       border: none;
-      border-radius: 4px;
-      padding: 7px 12px;
-      font-size: 0.82rem;
+      border-radius: 5px;
+      padding: 6px 12px;
+      font-size: 0.8rem;
       font-weight: 600;
       display: inline-flex;
       align-items: center;
       justify-content: center;
       gap: 5px;
-      transition: background 0.15s, transform 0.05s;
+      transition: background 0.15s;
     }
-    .btn:active { transform: scale(0.98); }
     .btn-primary { background: var(--primary); color: #fff; }
     .btn-primary:hover { background: var(--primary-hover); }
     .btn-secondary { background: var(--secondary); color: #fff; }
     .btn-outline { background: #fff; border: 1px solid var(--border); color: var(--secondary); }
+    .btn-outline:hover { background: #f1f5f9; }
     .btn-success { background: var(--success); color: #fff; }
     .btn-info { background: var(--media-blue); color: #fff; }
+    .btn-danger { background: #dc2626; color: #fff; }
     .btn-whatsapp { background: var(--whatsapp-green); color: #fff; }
     .btn-whatsapp:hover { background: #1eb956; }
+    .btn-translate {
+      background: #fdf2f8;
+      border: 1px solid #f472b6;
+      color: #be185d;
+    }
+    .btn-translate:hover { background: #fce7f3; }
+    .btn-translate.active-ml {
+      background: #be185d;
+      color: #fff;
+    }
     .btn-block { width: 100%; }
-    .btn-sm { padding: 5px 10px; font-size: 0.75rem; }
-    .btn:disabled { opacity: 0.5; cursor: not-allowed; }
+    .btn-sm { padding: 4px 8px; font-size: 0.72rem; }
 
-    /* Canvas Area */
+    /* ==========================================================================
+       3. WORKSPACE CANVAS & TABS
+       ========================================================================== */
     .canvas {
       flex: 1;
       display: flex;
       flex-direction: column;
-      overflow-y: auto;
       background: var(--bg);
     }
     .canvas-tabs {
       background: var(--surface);
       border-bottom: 1px solid var(--border);
       display: flex;
-      padding: 0 12px;
+      padding: 0 16px;
       overflow-x: auto;
       white-space: nowrap;
       position: sticky;
-      top: 0;
-      z-index: 10;
+      top: 52px;
+      z-index: 90;
     }
     .tab-btn {
       background: none;
       border: none;
-      padding: 12px 14px;
+      padding: 11px 16px;
       font-weight: 600;
-      font-size: 0.8rem;
+      font-size: 0.84rem;
       color: var(--text-muted);
       cursor: pointer;
       border-bottom: 2px solid transparent;
       display: inline-flex;
       align-items: center;
-      gap: 6px;
+      gap: 7px;
     }
+    .tab-btn .tab-icon { font-size: 1.15rem; line-height: 1; }
     .tab-btn.active {
       color: var(--primary);
       border-bottom: 2px solid var(--primary);
     }
-    .tab-content-wrapper { padding: 16px 20px; flex: 1; }
+
+    .tab-content-wrapper { padding: 18px 22px; flex: 1; }
     .tab-pane { display: none; }
     .tab-pane.active { display: block; }
+    
     .pane-header {
       display: flex;
       justify-content: space-between;
@@ -264,24 +347,31 @@
       flex-wrap: wrap;
       gap: 8px;
     }
-    .pane-header h2 { font-size: 1rem; color: var(--text); font-weight: 700; }
-    .pane-header-actions { display: flex; gap: 8px; align-items: center; }
+    .pane-header h2 { font-size: 1.05rem; font-weight: 700; color: var(--text); }
+    .pane-header-actions { display: flex; gap: 6px; align-items: center; flex-wrap: wrap; }
 
-    /* Rendered Markdown / Generic */
+    /* ==========================================================================
+       4. UNIVERSAL PRINT HEADER COMPONENT (SHOWN IN PRINT FOR ALL TABS)
+       ========================================================================== */
+    .universal-print-header {
+      display: none;
+    }
+
+    /* Rendered Content Containers */
     .rendered-markdown {
       background: var(--surface);
       padding: 20px 24px;
       border-radius: 6px;
       border: 1px solid var(--border);
-      line-height: 1.6;
-      font-size: 0.9rem;
+      line-height: 1.65;
+      font-size: 0.92rem;
     }
     .co-box-master {
       background: #f1f5f9;
       border-left: 4px solid var(--secondary);
       padding: 10px 14px;
       border-radius: 4px;
-      margin-bottom: 14px;
+      margin-bottom: 12px;
     }
     .co-box-active {
       background: #e8f5e9;
@@ -291,106 +381,60 @@
       margin-bottom: 16px;
       font-weight: 500;
     }
-    .co-box-active strong { color: var(--primary); }
 
     /* Blackboard Notes UI */
-    .bb-container {
-      display: flex;
-      flex-direction: column;
-      gap: 16px;
-    }
+    .bb-container { display: flex; flex-direction: column; gap: 14px; }
     .bb-card {
       background: #ffffff;
       border: 1px solid #cbd5e1;
       border-radius: 8px;
-      box-shadow: 0 2px 6px rgba(0,0,0,0.04);
+      box-shadow: 0 2px 5px rgba(0,0,0,0.03);
       overflow: hidden;
-      transition: transform 0.15s, box-shadow 0.15s;
     }
-    .bb-card:hover { box-shadow: 0 4px 12px rgba(0,0,0,0.08); }
     .bb-card-header {
       background: #f8fafc;
       border-bottom: 1px solid #e2e8f0;
-      padding: 10px 16px;
+      padding: 8px 14px;
       display: flex;
       justify-content: space-between;
       align-items: center;
-      flex-wrap: wrap;
-      gap: 6px;
     }
-    .bb-tag-group { display: flex; align-items: center; gap: 8px; }
+    .bb-tag-group { display: flex; align-items: center; gap: 6px; }
     .bb-num-pill {
       background: var(--secondary);
       color: #fff;
       font-weight: 700;
-      font-size: 0.72rem;
-      padding: 3px 8px;
+      font-size: 0.7rem;
+      padding: 2px 7px;
       border-radius: 12px;
-      text-transform: uppercase;
     }
     .bb-cognitive-pill {
       background: #ede9fe;
       color: #5b21b6;
       font-weight: 600;
-      font-size: 0.7rem;
-      padding: 3px 8px;
+      font-size: 0.68rem;
+      padding: 2px 7px;
       border-radius: 12px;
-      border: 1px solid #ddd6fe;
     }
-    .bb-card-body { padding: 16px; display: flex; flex-direction: column; gap: 12px; }
-    
+    .bb-card-body { padding: 14px; display: flex; flex-direction: column; gap: 10px; }
     .bb-q-section {
       background: #fefce8;
-      border: 1px solid #fef08a;
       border-left: 4px solid #eab308;
-      border-radius: 6px;
-      padding: 12px 14px;
+      border-radius: 4px;
+      padding: 10px 12px;
     }
-    .bb-label-q {
-      font-size: 0.72rem;
-      font-weight: 700;
-      color: #854d0e;
-      text-transform: uppercase;
-      letter-spacing: 0.04em;
-      margin-bottom: 4px;
-      display: flex;
-      align-items: center;
-      gap: 5px;
-    }
-    .bb-text-q {
-      font-size: 0.95rem;
-      font-weight: 600;
-      color: #1e293b;
-      line-height: 1.45;
-    }
-
+    .bb-label-q { font-size: 0.7rem; font-weight: 700; color: #854d0e; text-transform: uppercase; margin-bottom: 3px; }
+    .bb-text-q { font-size: 0.92rem; font-weight: 600; color: #1e293b; }
     .bb-a-section {
       background: #f0fdf4;
-      border: 1px solid #bbf7d0;
       border-left: 4px solid var(--primary);
-      border-radius: 6px;
-      padding: 14px 16px;
+      border-radius: 4px;
+      padding: 12px 14px;
     }
-    .bb-label-a {
-      font-size: 0.72rem;
-      font-weight: 700;
-      color: var(--primary);
-      text-transform: uppercase;
-      letter-spacing: 0.04em;
-      margin-bottom: 6px;
-      display: flex;
-      align-items: center;
-      gap: 5px;
-    }
-    .bb-text-a {
-      font-size: 0.9rem;
-      color: #0f172a;
-      line-height: 1.6;
-    }
-    .bb-text-a p { margin-bottom: 6px; }
-    .bb-text-a ul { padding-left: 18px; margin: 6px 0; }
+    .bb-label-a { font-size: 0.7rem; font-weight: 700; color: var(--primary); text-transform: uppercase; margin-bottom: 4px; }
+    .bb-text-a { font-size: 0.88rem; color: #0f172a; line-height: 1.6; }
 
-    /* WhatsApp Broadcast UI */
+    /* WhatsApp UI */
     .wa-view-switch {
       display: flex;
       gap: 6px;
@@ -409,83 +453,39 @@
       color: var(--text-muted);
       border-radius: 4px;
       cursor: pointer;
-      transition: all 0.15s;
     }
     .wa-switch-btn.active {
       background: #fff;
       color: var(--primary);
       box-shadow: 0 1px 3px rgba(0,0,0,0.1);
     }
-
     .wa-chat-canvas {
       background: var(--whatsapp-bg);
       background-image: radial-gradient(#d1c7b7 1px, transparent 1px);
       background-size: 16px 16px;
       border: 1px solid #d6cfc7;
-      border-radius: 10px;
-      padding: 16px;
+      border-radius: 8px;
+      padding: 14px;
       display: flex;
       flex-direction: column;
-      gap: 12px;
+      gap: 10px;
     }
     .wa-bubble {
       background: #ffffff;
       border-radius: 8px;
       padding: 12px 14px;
-      box-shadow: 0 1px 2px rgba(0,0,0,0.12);
-      position: relative;
-      font-size: 0.88rem;
+      box-shadow: 0 1px 2px rgba(0,0,0,0.1);
+      font-size: 0.86rem;
       line-height: 1.5;
     }
-    .wa-bubble-green {
-      background: var(--whatsapp-bubble);
-      border-left: 4px solid var(--whatsapp-green);
-    }
-    .wa-bubble-header {
-      font-size: 0.72rem;
-      font-weight: 700;
-      color: #047857;
-      text-transform: uppercase;
-      margin-bottom: 6px;
-      display: flex;
-      justify-content: space-between;
-      align-items: center;
-    }
-    .wa-qa-list {
-      display: flex;
-      flex-direction: column;
-      gap: 10px;
-      margin-top: 8px;
-    }
-    .wa-qa-card {
-      background: #ffffff;
-      border: 1px solid #cbd5e1;
-      border-radius: 6px;
-      padding: 10px 12px;
-    }
-    .wa-qa-q {
-      font-weight: 700;
-      color: #1e293b;
-      margin-bottom: 4px;
-      font-size: 0.86rem;
-    }
-    .wa-qa-a {
-      color: #334155;
-      font-size: 0.83rem;
-      background: #f8fafc;
-      padding: 8px 10px;
-      border-radius: 4px;
-      border-left: 3px solid var(--primary);
-    }
-    .wa-links-box {
-      margin-top: 8px;
-      padding: 8px 10px;
-      background: #f1f5f9;
-      border-radius: 6px;
-      font-size: 0.8rem;
-    }
+    .wa-bubble-green { background: var(--whatsapp-bubble); border-left: 4px solid var(--whatsapp-green); }
+    .wa-qa-list { display: flex; flex-direction: column; gap: 8px; margin-top: 6px; }
+    .wa-qa-card { background: #ffffff; border: 1px solid #cbd5e1; border-radius: 5px; padding: 8px 10px; }
+    .wa-qa-q { font-weight: 700; font-size: 0.84rem; margin-bottom: 3px; }
+    .wa-qa-a { font-size: 0.81rem; background: #f8fafc; padding: 6px 8px; border-radius: 4px; border-left: 3px solid var(--primary); }
+    .wa-box-raw { background: #fff; padding: 14px; border: 1px solid #cbd5e1; border-radius: 6px; font-family: monospace; white-space: pre-wrap; font-size: 0.84rem; line-height: 1.5; }
 
-    /* Worksheet & Print Layout */
+    /* Printable Worksheet Container */
     .worksheet-preview-container {
       background: #64748b;
       padding: 16px;
@@ -502,22 +502,6 @@
       color: #000;
       font-family: 'Merriweather', serif;
     }
-    .ws-header {
-      border-bottom: 2px solid #000;
-      padding-bottom: 8px;
-      margin-bottom: 14px;
-      text-align: center;
-    }
-    .ws-header h2 { font-size: 13pt; text-transform: uppercase; margin-bottom: 4px; }
-    .ws-meta-grid {
-      display: grid;
-      grid-template-columns: 2fr 1fr 1fr;
-      gap: 6px;
-      font-size: 9.5pt;
-      margin-top: 8px;
-      text-align: left;
-    }
-    .ws-meta-line { border-bottom: 1px dotted #444; padding-bottom: 2px; }
     .score-badge {
       display: inline-block;
       background: #f1f5f9;
@@ -528,18 +512,8 @@
       font-weight: 700;
       float: right;
     }
-    .question-block {
-      margin-bottom: 16px;
-      font-size: 10pt;
-      line-height: 1.5;
-    }
-    .answer-line {
-      border-bottom: 1px dashed #666;
-      height: 22px;
-      width: 100%;
-      margin-top: 4px;
-      display: block;
-    }
+    .question-block { margin-bottom: 16px; font-size: 10pt; line-height: 1.5; }
+    .answer-line { border-bottom: 1px dashed #666; height: 22px; width: 100%; margin-top: 4px; display: block; }
 
     /* Media Cards */
     .media-grid {
@@ -568,18 +542,8 @@
     .type-video { background: #fee2e2; color: #b91c1c; }
     .type-diksha { background: #e0f2fe; color: #0369a1; }
     .type-sim { background: #ede9fe; color: #6d28d9; }
-
-    .media-card h4 { font-size: 0.9rem; margin-bottom: 4px; color: var(--text); }
-    .media-card p { font-size: 0.8rem; color: var(--text-muted); margin-bottom: 10px; line-height: 1.4; }
-    .media-card a {
-      display: inline-block;
-      text-align: center;
-      padding: 6px 10px;
-      text-decoration: none;
-      font-size: 0.78rem;
-      font-weight: 600;
-      border-radius: 4px;
-    }
+    .media-card h4 { font-size: 0.9rem; margin-bottom: 4px; }
+    .media-card p { font-size: 0.78rem; color: var(--text-muted); margin-bottom: 10px; }
 
     /* Copiable Table */
     .copiable-table {
@@ -595,131 +559,96 @@
       text-align: left;
       vertical-align: top;
     }
-    .copiable-table th {
-      background-color: #f1f5f9;
-      font-weight: 700;
-      color: #1e293b;
-    }
-    .copiable-table tr:nth-child(even) {
-      background-color: #f8fafc;
-    }
+    .copiable-table th { background-color: #f1f5f9; font-weight: 700; color: #1e293b; }
 
-    /* Spinner & Modal Overlays */
+    /* Spinner & Modals */
     .spinner-overlay {
       position: fixed;
       top: 0; left: 0; width: 100vw; height: 100vh;
       background: rgba(0, 0, 0, 0.4);
       backdrop-filter: blur(2px);
-      display: flex;
-      align-items: center;
-      justify-content: center;
+      display: flex; align-items: center; justify-content: center;
       z-index: 99999;
     }
     .spinner-card {
       background: #ffffff;
-      padding: 26px 40px;
+      padding: 24px 36px;
       border-radius: 8px;
-      display: flex;
-      flex-direction: column;
-      align-items: center;
-      gap: 16px;
+      display: flex; flex-direction: column; align-items: center; gap: 14px;
       box-shadow: 0 10px 30px rgba(0,0,0,0.2);
     }
     .yt-spinner-8px {
-      width: 52px;
-      height: 52px;
-      border: 8px solid #e2e8f0;
-      border-top: 8px solid var(--primary);
+      width: 48px; height: 48px;
+      border: 6px solid #e2e8f0;
+      border-top: 6px solid var(--primary);
       border-radius: 50%;
       animation: yt-spin 0.8s linear infinite;
     }
-    @keyframes yt-spin {
-      0% { transform: rotate(0deg); }
-      100% { transform: rotate(360deg); }
-    }
-    .spinner-text { font-weight: 600; font-size: 0.9rem; color: var(--secondary); text-align: center; max-width: 280px; }
+    @keyframes yt-spin { 0% { transform: rotate(0deg); } 100% { transform: rotate(360deg); } }
+    .spinner-text { font-weight: 600; font-size: 0.88rem; color: var(--secondary); text-align: center; max-width: 280px; }
 
     .modal-overlay {
       position: fixed;
       top: 0; left: 0; width: 100vw; height: 100vh;
       background: rgba(0, 0, 0, 0.45);
-      display: flex;
-      align-items: center;
-      justify-content: center;
+      display: flex; align-items: center; justify-content: center;
       z-index: 100000;
     }
     .modal-box {
-      background: #fff;
-      width: 90%;
-      max-width: 440px;
-      border-radius: 8px;
-      box-shadow: 0 10px 30px rgba(0,0,0,0.25);
+      background: #fff; width: 90%; max-width: 440px;
+      border-radius: 8px; box-shadow: 0 10px 30px rgba(0,0,0,0.25);
       overflow: hidden;
     }
     .modal-header {
-      background: var(--primary);
-      color: #fff;
-      padding: 10px 16px;
-      display: flex;
-      justify-content: space-between;
-      align-items: center;
+      background: var(--primary); color: #fff;
+      padding: 10px 16px; display: flex; justify-content: space-between; align-items: center;
     }
     .modal-header h4 { font-size: 0.9rem; font-weight: 600; }
-    .modal-close {
-      background: none; border: none; color: #fff; font-size: 1.2rem; cursor: pointer;
-    }
-    .modal-body { padding: 18px 16px; font-size: 0.88rem; line-height: 1.5; color: var(--text); }
+    .modal-close { background: none; border: none; color: #fff; font-size: 1.2rem; cursor: pointer; }
+    .modal-body { padding: 16px; font-size: 0.88rem; line-height: 1.5; }
     .modal-footer {
-      padding: 10px 16px;
-      background: #f8fafc;
-      display: flex;
-      justify-content: flex-end;
-      gap: 8px;
-      border-top: 1px solid var(--border);
+      padding: 10px 16px; background: #f8fafc;
+      display: flex; justify-content: flex-end; gap: 8px; border-top: 1px solid var(--border);
     }
 
     .toast-popup {
-      position: fixed;
-      bottom: 20px;
-      right: 20px;
-      background: #1e293b;
-      color: #fff;
-      padding: 10px 18px;
-      border-radius: 6px;
-      font-size: 0.82rem;
-      font-weight: 500;
+      position: fixed; bottom: 20px; right: 20px;
+      background: #1e293b; color: #fff; padding: 10px 18px;
+      border-radius: 6px; font-size: 0.82rem; font-weight: 500;
       box-shadow: 0 4px 12px rgba(0,0,0,0.2);
-      z-index: 100001;
-      opacity: 0;
-      transform: translateY(10px);
+      z-index: 100001; opacity: 0; transform: translateY(10px);
       transition: all 0.2s ease-out;
     }
     .toast-popup.visible { opacity: 1; transform: translateY(0); }
 
-    /* Responsive */
-    @media (max-width: 960px) {
-      .app-container { flex-direction: column; overflow: auto; }
-      .sidebar { width: 100%; border-right: none; border-bottom: 1px solid var(--border); }
-      .worksheet-preview-container { padding: 8px; }
-      .worksheet-page { width: 100%; padding: 10mm; min-height: auto; }
-    }
-
-    /* Print Stylesheet (A4 Portrait) */
+    /* ==========================================================================
+       5. STRICT A4 PORTRAIT 100% WIDTH PAGE-BREAK VIEW PRINT STYLESHEET
+       ========================================================================== */
     @media print {
       @page {
         size: A4 portrait;
-        margin: 15mm;
+        margin: 14mm 12mm 14mm 12mm;
+      }
+      *, *::before, *::after {
+        box-shadow: none !important;
+        text-shadow: none !important;
       }
       html, body {
-        width: 210mm;
-        height: auto;
+        width: 100% !important;
+        max-width: 100% !important;
+        margin: 0 !important;
+        padding: 0 !important;
         background: #ffffff !important;
         color: #000000 !important;
         font-family: 'Merriweather', 'Times New Roman', serif;
-        font-size: 10pt;
-        line-height: 1.4;
+        font-size: 9.5pt;
+        line-height: 1.45;
+        -webkit-print-color-adjust: exact;
+        print-color-adjust: exact;
       }
-      .no-print, header, nav, .sidebar, button, .pane-header, .spinner-overlay, .modal-overlay, .toast-popup, .wa-view-switch {
+      .no-print, header, .top-controls-panel, nav, button, .pane-header,
+      .pane-header-actions, .spinner-overlay, .modal-overlay, .toast-popup,
+      .wa-view-switch {
         display: none !important;
       }
       .canvas, .tab-content-wrapper, .worksheet-preview-container {
@@ -727,13 +656,69 @@
         margin: 0 !important;
         background: transparent !important;
         overflow: visible !important;
-      }
-      .tab-pane { display: none !important; }
-      .tab-pane.print-active { display: block !important; }
-      body:not(.has-print-active) #tab-worksheet-view { display: block !important; }
-
-      .worksheet-page, #worksheet-answers-body {
         width: 100% !important;
+        max-width: 100% !important;
+      }
+      .tab-pane {
+        display: none !important;
+      }
+      .tab-pane.print-active {
+        display: block !important;
+        width: 100% !important;
+      }
+
+      /* Formal Universal Print Header */
+      .universal-print-header {
+        display: block !important;
+        border-bottom: 2px solid #000;
+        padding-bottom: 6px;
+        margin-bottom: 14px;
+        text-align: center;
+        width: 100% !important;
+      }
+      .u-print-title {
+        font-size: 10pt;
+        font-weight: 700;
+        letter-spacing: 0.05em;
+        text-transform: uppercase;
+      }
+      .u-print-sub {
+        font-size: 8.5pt;
+        font-weight: 600;
+        margin-bottom: 3px;
+      }
+      .u-print-section-badge {
+        display: inline-block;
+        border: 1px solid #000;
+        padding: 1px 8px;
+        font-size: 8pt;
+        font-weight: 700;
+        text-transform: uppercase;
+        margin: 3px 0 6px 0;
+      }
+      .u-print-grid {
+        display: grid;
+        grid-template-columns: 1.2fr 2fr 1.2fr;
+        gap: 3px 8px;
+        font-size: 8.5pt;
+        text-align: left;
+        border-top: 1px solid #000;
+        padding-top: 5px;
+        margin-top: 4px;
+      }
+      .u-meta-co-box {
+        grid-column: 1 / -1;
+        border-top: 1px dashed #666;
+        padding-top: 4px;
+        margin-top: 3px;
+        font-size: 8.5pt;
+        line-height: 1.35;
+      }
+
+      /* Clean Full A4 Containers */
+      .worksheet-page, .rendered-markdown, .bb-container, .wa-chat-canvas, #media-resources-body {
+        width: 100% !important;
+        max-width: 100% !important;
         min-height: auto !important;
         margin: 0 !important;
         padding: 0 !important;
@@ -742,13 +727,24 @@
         background: #fff !important;
         color: #000 !important;
       }
-      .question-block {
+
+      /* Avoid breaking questions, cards, and tables across pages */
+      .question-block, .bb-card, .wa-bubble, .media-card, .copiable-table tr {
         page-break-inside: avoid !important;
         break-inside: avoid !important;
-        margin-bottom: 14px;
-        padding-bottom: 4px;
       }
-      .answer-line { border-bottom: 1px dashed #333333 !important; }
+      .copiable-table {
+        page-break-inside: auto !important;
+        width: 100% !important;
+      }
+      .copiable-table th, .copiable-table td {
+        padding: 5px 7px !important;
+        font-size: 8.5pt !important;
+        border: 1px solid #333 !important;
+      }
+      .answer-line {
+        border-bottom: 1px dashed #333333 !important;
+      }
     }
   </style>
 </head>
@@ -785,10 +781,10 @@
       </div>
       <div class="modal-body">
         <p style="font-size:0.84rem; color:var(--text-muted); margin-bottom:12px;">
-          To use AI generation, enter your free Gemini key from <a href="https://aistudio.google.com/apikey" target="_blank" rel="noopener" style="color:var(--primary); font-weight:700;">Google AI Studio ↗</a>.
+          Enter your free Gemini key from <a href="https://aistudio.google.com/apikey" target="_blank" rel="noopener" style="color:var(--primary); font-weight:700;">Google AI Studio ↗</a>.
         </p>
         <p style="font-size:0.75rem; color:#16a34a; margin-bottom:8px;">
-          🔒 Your key stays strictly in your browser's private storage. It is never saved to GitHub.
+          🔒 Your key is securely stored in your private browser memory.
         </p>
         <input type="password" id="key-modal-input" class="form-control" placeholder="Paste your AIza... or AQ... key here">
       </div>
@@ -801,47 +797,53 @@
   <!-- Floating Toast -->
   <div id="toast-popup" class="toast-popup no-print">Notification</div>
 
-  <!-- Top Header Navigation -->
+  <!-- Top Sticky Header -->
   <header class="app-header no-print">
     <div class="header-brand">
-      <span class="badge">Kerala SCERT</span>
-      <h1>Smart Teacher Planner & Worksheet Studio</h1>
+      <button id="controls-toggle-btn" class="btn-header" title="Toggle Top Controls Drawer">
+        <span id="toggle-icon">🔼</span> <span id="toggle-text">Hide Controls</span>
+      </button>
+      <div class="brand-icon">🎓</div>
+      <div>
+        <h1>Teacher Planner & Worksheet Studio</h1>
+      </div>
+      <span class="badge-tag">Kerala SCERT</span>
     </div>
     <div class="header-controls">
-      <span class="header-status">Standards 5, 6, 7 (Part 1 & 2)</span>
-      <button id="header-key-btn" class="btn-key-settings" title="Change Gemini API Key">🔑 Key</button>
+      <button id="header-key-btn" class="btn-header" title="Change Gemini API Key">🔑 Key</button>
     </div>
   </header>
 
-  <!-- Main Container -->
-  <div class="app-container">
-
-    <!-- Left Sidebar -->
-    <aside class="sidebar no-print">
+  <!-- ==========================================================================
+       TOP COLLAPSIBLE CONTROLS DRAWER (JUMPS TO TOP WHEN HIDDEN)
+       ========================================================================== -->
+  <section class="top-controls-panel no-print" id="top-controls-panel">
+    <div class="top-controls-grid">
       
-      <!-- Pacing Settings -->
-      <section class="card">
-        <h3>1. Instructional Pacing Target</h3>
-        <div class="form-group">
-          <label>Standard (Class):</label>
-          <select id="class-select" class="form-control">
-            <option value="5">Class 5</option>
-            <option value="6">Class 6</option>
-            <option value="7">Class 7</option>
-          </select>
-        </div>
-
-        <div class="form-group">
-          <label>Textbook Part:</label>
-          <div class="radio-toggle">
-            <label><input type="radio" name="textbook-part" value="part1" checked> Part 1</label>
-            <label><input type="radio" name="textbook-part" value="part2"> Part 2</label>
+      <!-- Card 1: Pacing Target -->
+      <div class="ctrl-card">
+        <h3><span>1. Pacing Target</span></h3>
+        <div class="form-row">
+          <div class="form-group half">
+            <label>Standard:</label>
+            <select id="class-select" class="form-control">
+              <option value="5">Class 5</option>
+              <option value="6">Class 6</option>
+              <option value="7">Class 7</option>
+            </select>
+          </div>
+          <div class="form-group half">
+            <label>Part:</label>
+            <div class="radio-toggle" style="margin-top:6px;">
+              <label><input type="radio" name="textbook-part" value="part1" checked> Pt 1</label>
+              <label><input type="radio" name="textbook-part" value="part2"> Pt 2</label>
+            </div>
           </div>
         </div>
 
         <div class="form-group">
           <label>Chapter / Unit Title:</label>
-          <input type="text" id="unit-title" class="form-control" placeholder="e.g., Reflection of Light, Medieval India">
+          <input type="text" id="unit-title" class="form-control" placeholder="e.g. Reflection of Light">
         </div>
 
         <div class="form-row">
@@ -850,248 +852,316 @@
             <input type="number" id="day-number" class="form-control" value="1" min="1" max="15">
           </div>
           <div class="form-group half">
-            <label>Pacing (Total Days):</label>
+            <label>Pacing (Total):</label>
             <input type="number" id="total-days" class="form-control" value="5" min="1" max="15">
           </div>
         </div>
+      </div>
 
-        <div class="form-group">
-          <label>Period Duration:</label>
-          <input type="text" class="form-control" value="35 Minutes (SCERT Fixed)" disabled>
-        </div>
-      </section>
-
-      <!-- 6-Slot Master Matrix -->
-      <section class="card">
+      <!-- Card 2: 6 Locked Textbooks -->
+      <div class="ctrl-card">
         <h3>
-          <span>2. Locked Textbooks (6 Core Slots)</span>
-          <span style="font-size: 0.7rem; font-weight: normal; color: var(--text-muted);" id="locked-count">0/6 Locked</span>
+          <span>2. Locked Textbooks</span>
+          <span style="font-size:0.68rem; color:var(--text-muted);" id="locked-count">0/6 Locked</span>
         </h3>
         
         <div class="matrix-grid">
-          <!-- Class 5 Slots -->
           <div class="slot-card" id="card-5_part1" data-slot="5_part1">
-            <div class="slot-header">
-              <span class="slot-title">Class 5 - Part 1</span>
-              <span class="slot-badge unlocked" id="badge-5_part1">Unlocked</span>
-            </div>
-            <div class="slot-file-name" id="name-5_part1">No PDF Attached</div>
-            <div class="slot-actions" id="actions-5_part1">
-              <input type="file" accept="application/pdf" class="slot-input" id="input-5_part1">
-              <button class="btn btn-outline slot-btn" data-slot="5_part1">Lock</button>
-            </div>
+            <div class="slot-header"><span class="slot-title">Std 5 - Pt 1</span><span class="slot-badge unlocked" id="badge-5_part1">Unlocked</span></div>
+            <div class="slot-file-name" id="name-5_part1">No PDF</div>
+            <div class="slot-actions"><input type="file" accept="application/pdf" class="slot-input" id="input-5_part1"><button class="btn btn-outline slot-btn" data-slot="5_part1">Lock</button></div>
           </div>
-
           <div class="slot-card" id="card-5_part2" data-slot="5_part2">
-            <div class="slot-header">
-              <span class="slot-title">Class 5 - Part 2</span>
-              <span class="slot-badge unlocked" id="badge-5_part2">Unlocked</span>
-            </div>
-            <div class="slot-file-name" id="name-5_part2">No PDF Attached</div>
-            <div class="slot-actions" id="actions-5_part2">
-              <input type="file" accept="application/pdf" class="slot-input" id="input-5_part2">
-              <button class="btn btn-outline slot-btn" data-slot="5_part2">Lock</button>
-            </div>
+            <div class="slot-header"><span class="slot-title">Std 5 - Pt 2</span><span class="slot-badge unlocked" id="badge-5_part2">Unlocked</span></div>
+            <div class="slot-file-name" id="name-5_part2">No PDF</div>
+            <div class="slot-actions"><input type="file" accept="application/pdf" class="slot-input" id="input-5_part2"><button class="btn btn-outline slot-btn" data-slot="5_part2">Lock</button></div>
           </div>
 
-          <!-- Class 6 Slots -->
           <div class="slot-card" id="card-6_part1" data-slot="6_part1">
-            <div class="slot-header">
-              <span class="slot-title">Class 6 - Part 1</span>
-              <span class="slot-badge unlocked" id="badge-6_part1">Unlocked</span>
-            </div>
-            <div class="slot-file-name" id="name-6_part1">No PDF Attached</div>
-            <div class="slot-actions" id="actions-6_part1">
-              <input type="file" accept="application/pdf" class="slot-input" id="input-6_part1">
-              <button class="btn btn-outline slot-btn" data-slot="6_part1">Lock</button>
-            </div>
+            <div class="slot-header"><span class="slot-title">Std 6 - Pt 1</span><span class="slot-badge unlocked" id="badge-6_part1">Unlocked</span></div>
+            <div class="slot-file-name" id="name-6_part1">No PDF</div>
+            <div class="slot-actions"><input type="file" accept="application/pdf" class="slot-input" id="input-6_part1"><button class="btn btn-outline slot-btn" data-slot="6_part1">Lock</button></div>
           </div>
-
           <div class="slot-card" id="card-6_part2" data-slot="6_part2">
-            <div class="slot-header">
-              <span class="slot-title">Class 6 - Part 2</span>
-              <span class="slot-badge unlocked" id="badge-6_part2">Unlocked</span>
-            </div>
-            <div class="slot-file-name" id="name-6_part2">No PDF Attached</div>
-            <div class="slot-actions" id="actions-6_part2">
-              <input type="file" accept="application/pdf" class="slot-input" id="input-6_part2">
-              <button class="btn btn-outline slot-btn" data-slot="6_part2">Lock</button>
-            </div>
+            <div class="slot-header"><span class="slot-title">Std 6 - Pt 2</span><span class="slot-badge unlocked" id="badge-6_part2">Unlocked</span></div>
+            <div class="slot-file-name" id="name-6_part2">No PDF</div>
+            <div class="slot-actions"><input type="file" accept="application/pdf" class="slot-input" id="input-6_part2"><button class="btn btn-outline slot-btn" data-slot="6_part2">Lock</button></div>
           </div>
 
-          <!-- Class 7 Slots -->
           <div class="slot-card" id="card-7_part1" data-slot="7_part1">
-            <div class="slot-header">
-              <span class="slot-title">Class 7 - Part 1</span>
-              <span class="slot-badge unlocked" id="badge-7_part1">Unlocked</span>
-            </div>
-            <div class="slot-file-name" id="name-7_part1">No PDF Attached</div>
-            <div class="slot-actions" id="actions-7_part1">
-              <input type="file" accept="application/pdf" class="slot-input" id="input-7_part1">
-              <button class="btn btn-outline slot-btn" data-slot="7_part1">Lock</button>
+            <div class="slot-header"><span class="slot-title">Std 7 - Pt 1</span><span class="slot-badge unlocked" id="badge-7_part1">Unlocked</span></div>
+            <div class="slot-file-name" id="name-7_part1">No PDF</div>
+            <div class="slot-actions"><input type="file" accept="application/pdf" class="slot-input" id="input-7_part1"><button class="btn btn-outline slot-btn" data-slot="7_part1">Lock</button></div>
+          </div>
+          <div class="slot-card" id="card-7_part2" data-slot="7_part2">
+            <div class="slot-header"><span class="slot-title">Std 7 - Pt 2</span><span class="slot-badge unlocked" id="badge-7_part2">Unlocked</span></div>
+            <div class="slot-file-name" id="name-7_part2">No PDF</div>
+            <div class="slot-actions"><input type="file" accept="application/pdf" class="slot-input" id="input-7_part2"><button class="btn btn-outline slot-btn" data-slot="7_part2">Lock</button></div>
+          </div>
+        </div>
+      </div>
+
+      <!-- Card 3: Generator & Reset -->
+      <div class="ctrl-card">
+        <h3><span>3. Generator Control</span></h3>
+        <div id="active-status-bar" class="active-status-bar">
+          <span id="active-status-text">🔒 Active</span>
+          <button id="quick-reset-btn" class="btn btn-danger btn-sm">Reset</button>
+        </div>
+        <button id="generate-btn" class="btn btn-primary btn-block" style="padding: 10px; margin-bottom: 6px;">
+          ⚡ Generate Package
+        </button>
+        <button id="reset-workspace-btn" class="btn btn-outline btn-block btn-sm">
+          🔄 Reset / New Setup
+        </button>
+      </div>
+
+      <!-- Card 4: Saved Packages Collapsible Archive -->
+      <div class="ctrl-card">
+        <h3>
+          <span>4. Saved Packages</span>
+          <span class="badge-tag" id="package-count-badge" style="background:#cbd5e1; color:#0f172a;">0</span>
+        </h3>
+        <div id="pkg-archive-list" class="pkg-archive-container">
+          <div style="font-size: 0.72rem; color: var(--text-muted); text-align: center; padding: 8px;">
+            No packages generated yet.
+          </div>
+        </div>
+      </div>
+
+    </div>
+  </section>
+
+  <!-- ==========================================================================
+       MAIN WORKSPACE CANVAS (JUMPS TO TOP WHEN CONTROLS ARE HIDDEN)
+       ========================================================================== -->
+  <main class="canvas">
+    
+    <!-- Medium-Sized Navigation Tabs with Icons & Names -->
+    <nav class="canvas-tabs no-print">
+      <button class="tab-btn active" data-tab="lesson-plan">
+        <span class="tab-icon">📋</span> <span>Lesson Plan (35m)</span>
+      </button>
+      <button class="tab-btn" data-tab="media-resources">
+        <span class="tab-icon">🌐</span> <span>Digital Media</span>
+      </button>
+      <button class="tab-btn" data-tab="blackboard-notes">
+        <span class="tab-icon">✍️</span> <span>Blackboard Notes</span>
+      </button>
+      <button class="tab-btn" data-tab="whatsapp-summary">
+        <span class="tab-icon">💬</span> <span>WhatsApp Broadcast</span>
+      </button>
+      <button class="tab-btn" data-tab="worksheet-view">
+        <span class="tab-icon">📄</span> <span>A4 Worksheet (5s)</span>
+      </button>
+      <button class="tab-btn" data-tab="worksheet-answers">
+        <span class="tab-icon">🔑</span> <span>Answer Key</span>
+      </button>
+    </nav>
+
+    <div class="tab-content-wrapper">
+      
+      <!-- Tab 1: Lesson Plan -->
+      <section id="tab-lesson-plan" class="tab-pane active">
+        <!-- Formal Universal Print Header -->
+        <div class="universal-print-header">
+          <div class="u-print-title">TDTTI THURAVOOR</div>
+          <div class="u-print-sub">SOCIAL SCIENCE</div>
+          <div class="u-print-section-badge">Daily Instructional Lesson Plan (35-Minute Period)</div>
+          <div class="u-print-grid">
+            <div><strong>Class:</strong> Std <span class="u-meta-class">5</span> (Part <span class="u-meta-part">1</span>)</div>
+            <div><strong>Chapter / Unit:</strong> <span class="u-meta-unit">Select Unit</span></div>
+            <div><strong>Pacing:</strong> Day <span class="u-meta-day">1</span> of <span class="u-meta-total">5</span></div>
+            <div class="u-meta-co-box"><strong>Targeted Curricular Objective (CO):</strong> <span class="u-meta-co">To be specified</span></div>
+          </div>
+        </div>
+
+        <div class="pane-header no-print">
+          <h2>35-Minute Daily Instructional Lesson Plan</h2>
+          <div class="pane-header-actions">
+            <button class="btn btn-translate btn-sm translate-tab-btn" data-tab="tab-lesson-plan">🌐 മലയാളം (Translate)</button>
+            <button class="btn btn-secondary btn-sm copy-btn" data-target="lesson-plan-body">📋 Copy</button>
+            <button class="btn btn-success btn-sm print-tab-btn">🖨️ Print / Save to PDF</button>
+          </div>
+        </div>
+        <div id="lesson-plan-body" class="rendered-markdown">
+          <p style="color: var(--text-muted); font-style: italic;">Enter your unit and pacing details above, then click "Generate Package".</p>
+        </div>
+      </section>
+
+      <!-- Tab 2: Digital Media -->
+      <section id="tab-media-resources" class="tab-pane">
+        <!-- Formal Universal Print Header -->
+        <div class="universal-print-header">
+          <div class="u-print-title">Department of General Education — Government of Kerala</div>
+          <div class="u-print-sub">State Council of Educational Research and Training (SCERT)</div>
+          <div class="u-print-section-badge">Digital & Internet Learning Resources (DIKSHA / Victers / PhET)</div>
+          <div class="u-print-grid">
+            <div><strong>Class:</strong> Std <span class="u-meta-class">5</span> (Part <span class="u-meta-part">1</span>)</div>
+            <div><strong>Chapter / Unit:</strong> <span class="u-meta-unit">Select Unit</span></div>
+            <div><strong>Pacing:</strong> Day <span class="u-meta-day">1</span> of <span class="u-meta-total">5</span></div>
+            <div class="u-meta-co-box"><strong>Targeted Curricular Objective (CO):</strong> <span class="u-meta-co">To be specified</span></div>
+          </div>
+        </div>
+
+        <div class="pane-header no-print">
+          <h2>Digital & Internet Media Recommendations (DIKSHA / Victers)</h2>
+          <div class="pane-header-actions">
+            <button class="btn btn-translate btn-sm translate-tab-btn" data-tab="tab-media-resources">🌐 മലയാളം (Translate)</button>
+            <button class="btn btn-secondary btn-sm copy-btn" data-target="media-resources-body">📋 Copy</button>
+            <button class="btn btn-success btn-sm print-tab-btn">🖨️ Print / Save to PDF</button>
+          </div>
+        </div>
+        <div id="media-resources-body">
+          <p style="color: var(--text-muted); font-style: italic;">Curated media, simulations, and search keywords will render here.</p>
+        </div>
+      </section>
+
+      <!-- Tab 3: Blackboard Notes -->
+      <section id="tab-blackboard-notes" class="tab-pane">
+        <!-- Formal Universal Print Header -->
+        <div class="universal-print-header">
+          <div class="u-print-title">Department of General Education — Government of Kerala</div>
+          <div class="u-print-sub">State Council of Educational Research and Training (SCERT)</div>
+          <div class="u-print-section-badge">Blackboard Notes (Strict Application-Level HOTs Q&A)</div>
+          <div class="u-print-grid">
+            <div><strong>Class:</strong> Std <span class="u-meta-class">5</span> (Part <span class="u-meta-part">1</span>)</div>
+            <div><strong>Chapter / Unit:</strong> <span class="u-meta-unit">Select Unit</span></div>
+            <div><strong>Pacing:</strong> Day <span class="u-meta-day">1</span> of <span class="u-meta-total">5</span></div>
+            <div class="u-meta-co-box"><strong>Targeted Curricular Objective (CO):</strong> <span class="u-meta-co">To be specified</span></div>
+          </div>
+        </div>
+
+        <div class="pane-header no-print">
+          <h2>Blackboard Notes (Strict Application-Level Q&A Only)</h2>
+          <div class="pane-header-actions">
+            <button class="btn btn-translate btn-sm translate-tab-btn" data-tab="tab-blackboard-notes">🌐 മലയാളം (Translate)</button>
+            <button class="btn btn-secondary btn-sm" id="copy-all-bb-btn">📋 Copy All</button>
+            <button class="btn btn-success btn-sm print-tab-btn">🖨️ Print / Save to PDF</button>
+          </div>
+        </div>
+        <div id="blackboard-notes-body">
+          <div class="rendered-markdown">
+            <p style="color: var(--text-muted); font-style: italic;">Application-level questions and solutions structured for classroom board work will render here.</p>
+          </div>
+        </div>
+      </section>
+
+      <!-- Tab 4: WhatsApp Broadcast -->
+      <section id="tab-whatsapp-summary" class="tab-pane">
+        <!-- Formal Universal Print Header -->
+        <div class="universal-print-header">
+          <div class="u-print-title">Department of General Education — Government of Kerala</div>
+          <div class="u-print-sub">State Council of Educational Research and Training (SCERT)</div>
+          <div class="u-print-section-badge">Daily Parent Communication & Home Learning Broadcast</div>
+          <div class="u-print-grid">
+            <div><strong>Class:</strong> Std <span class="u-meta-class">5</span> (Part <span class="u-meta-part">1</span>)</div>
+            <div><strong>Chapter / Unit:</strong> <span class="u-meta-unit">Select Unit</span></div>
+            <div><strong>Pacing:</strong> Day <span class="u-meta-day">1</span> of <span class="u-meta-total">5</span></div>
+            <div class="u-meta-co-box"><strong>Targeted Curricular Objective (CO):</strong> <span class="u-meta-co">To be specified</span></div>
+          </div>
+        </div>
+
+        <div class="pane-header no-print">
+          <h2>Daily WhatsApp Parent Communication Broadcast</h2>
+          <div class="pane-header-actions">
+            <button class="btn btn-translate btn-sm translate-tab-btn" data-tab="tab-whatsapp-summary">🌐 മലയാളം (Translate)</button>
+            <button id="share-whatsapp-btn" class="btn btn-whatsapp btn-sm">📲 WhatsApp Group</button>
+            <button class="btn btn-secondary btn-sm" id="copy-whatsapp-text-btn">📋 Copy Text</button>
+            <button class="btn btn-success btn-sm print-tab-btn">🖨️ Print / Save to PDF</button>
+          </div>
+        </div>
+
+        <div class="wa-view-switch no-print">
+          <button class="wa-switch-btn active" id="wa-btn-chat">📱 Styled Card View</button>
+          <button class="wa-switch-btn" id="wa-btn-raw">📋 Plaintext Copy-Ready</button>
+        </div>
+
+        <div id="wa-styled-container">
+          <div class="wa-chat-canvas" id="whatsapp-preview-area">
+            <div class="wa-bubble" style="color: var(--text-muted); font-style: italic;">
+              Parent broadcast message will render here in structured conversational card layout.
             </div>
           </div>
+        </div>
 
-          <div class="slot-card" id="card-7_part2" data-slot="7_part2">
-            <div class="slot-header">
-              <span class="slot-title">Class 7 - Part 2</span>
-              <span class="slot-badge unlocked" id="badge-7_part2">Unlocked</span>
-            </div>
-            <div class="slot-file-name" id="name-7_part2">No PDF Attached</div>
-            <div class="slot-actions" id="actions-7_part2">
-              <input type="file" accept="application/pdf" class="slot-input" id="input-7_part2">
-              <button class="btn btn-outline slot-btn" data-slot="7_part2">Lock</button>
+        <div id="wa-raw-container" style="display:none;">
+          <div id="whatsapp-summary-body" class="wa-box-raw">Parent communication message will render here.</div>
+        </div>
+      </section>
+
+      <!-- Tab 5: Printable Worksheet -->
+      <section id="tab-worksheet-view" class="tab-pane">
+        <!-- Formal Universal Print Header -->
+        <div class="universal-print-header">
+          <div class="u-print-title">Department of General Education — Government of Kerala</div>
+          <div class="u-print-sub">State Council of Educational Research and Training (SCERT)</div>
+          <div class="u-print-section-badge">Application-Level Evaluation Worksheet (Total: 5 Scores)</div>
+          <div class="u-print-grid">
+            <div><strong>Class:</strong> Std <span class="u-meta-class">5</span> (Part <span class="u-meta-part">1</span>)</div>
+            <div><strong>Chapter / Unit:</strong> <span class="u-meta-unit">Select Unit</span></div>
+            <div><strong>Max Score:</strong> 5 (Time: 20 Mins)</div>
+            <div class="u-meta-co-box"><strong>Targeted Curricular Objective (CO):</strong> <span class="u-meta-co">To be specified</span></div>
+          </div>
+        </div>
+
+        <div class="pane-header no-print">
+          <h2>A4 Portrait Printable Worksheet (Total: 5 Scores)</h2>
+          <div class="pane-header-actions">
+            <button class="btn btn-translate btn-sm translate-tab-btn" data-tab="tab-worksheet-view">🌐 മലയാളം (Translate)</button>
+            <button class="btn btn-secondary btn-sm copy-btn" data-target="worksheet-render-area">📋 Copy</button>
+            <button class="btn btn-success btn-sm print-tab-btn">🖨️ Print / Save to PDF</button>
+          </div>
+        </div>
+        
+        <div class="worksheet-preview-container">
+          <div id="worksheet-render-area" class="worksheet-page">
+            <div style="text-align: center; color: #777; font-style: italic; padding: 40px;" class="no-print">
+              Worksheet will render inside this portrait A4 container.
             </div>
           </div>
         </div>
       </section>
 
-      <!-- Generate Button -->
-      <section class="card">
-        <button id="generate-btn" class="btn btn-primary btn-block" style="padding: 10px;">
-          ⚡ Generate Lesson Package
-        </button>
+      <!-- Tab 6: Worksheet Answers -->
+      <section id="tab-worksheet-answers" class="tab-pane">
+        <!-- Formal Universal Print Header -->
+        <div class="universal-print-header">
+          <div class="u-print-title">Department of General Education — Government of Kerala</div>
+          <div class="u-print-sub">State Council of Educational Research and Training (SCERT)</div>
+          <div class="u-print-section-badge">Worksheet Model Answer Key & Scoring Guide (Total: 5 Scores)</div>
+          <div class="u-print-grid">
+            <div><strong>Class:</strong> Std <span class="u-meta-class">5</span> (Part <span class="u-meta-part">1</span>)</div>
+            <div><strong>Chapter / Unit:</strong> <span class="u-meta-unit">Select Unit</span></div>
+            <div><strong>Max Score:</strong> 5</div>
+            <div class="u-meta-co-box"><strong>Targeted Curricular Objective (CO):</strong> <span class="u-meta-co">To be specified</span></div>
+          </div>
+        </div>
+
+        <div class="pane-header no-print">
+          <h2>Worksheet Answer Key & Scoring Guide (Total: 5 Scores)</h2>
+          <div class="pane-header-actions">
+            <button class="btn btn-translate btn-sm translate-tab-btn" data-tab="tab-worksheet-answers">🌐 മലയാളം (Translate)</button>
+            <button class="btn btn-secondary btn-sm copy-btn" data-target="worksheet-answers-body">📋 Copy</button>
+            <button class="btn btn-success btn-sm print-tab-btn">🖨️ Print / Save to PDF</button>
+          </div>
+        </div>
+        <div id="worksheet-answers-body" class="rendered-markdown">
+          <p style="color: var(--text-muted); font-style: italic;">Model answers and scoring breakdown will render here.</p>
+        </div>
       </section>
-    </aside>
 
-    <!-- Right Workspace Area -->
-    <main class="canvas">
-      
-      <!-- Navigation Tabs -->
-      <nav class="canvas-tabs no-print">
-        <button class="tab-btn active" data-tab="lesson-plan">📋 35-Min Lesson Plan</button>
-        <button class="tab-btn" data-tab="media-resources">🌐 Digital & Internet Media</button>
-        <button class="tab-btn" data-tab="blackboard-notes">✍️ Blackboard Notes (Application)</button>
-        <button class="tab-btn" data-tab="whatsapp-summary">💬 WhatsApp Broadcast</button>
-        <button class="tab-btn" data-tab="worksheet-view">📄 A4 Worksheet (5 Scores)</button>
-        <button class="tab-btn" data-tab="worksheet-answers">🔑 Worksheet Answer Key</button>
-      </nav>
-
-      <div class="tab-content-wrapper">
-        
-        <!-- Tab 1: Lesson Plan -->
-        <section id="tab-lesson-plan" class="tab-pane active">
-          <div class="pane-header no-print">
-            <h2>35-Minute Daily Instructional Lesson Plan</h2>
-            <button class="btn btn-secondary btn-sm copy-btn" data-target="lesson-plan-body">Copy Lesson Plan</button>
-          </div>
-          <div id="lesson-plan-body" class="rendered-markdown">
-            <p style="color: var(--text-muted); font-style: italic;">Enter your unit and pacing details on the left, then click "Generate Lesson Package".</p>
-          </div>
-        </section>
-
-        <!-- Tab 2: Digital Media -->
-        <section id="tab-media-resources" class="tab-pane">
-          <div class="pane-header no-print">
-            <h2>Digital & Internet Media Recommendations (DIKSHA / YouTube / KITE Victers)</h2>
-            <button class="btn btn-secondary btn-sm copy-btn" data-target="media-resources-body">Copy Media Resources</button>
-          </div>
-          <div id="media-resources-body">
-            <p style="color: var(--text-muted); font-style: italic;">Curated media, simulations, and search keywords will render here.</p>
-          </div>
-        </section>
-
-        <!-- Tab 3: Blackboard Notes -->
-        <section id="tab-blackboard-notes" class="tab-pane">
-          <div class="pane-header no-print">
-            <div>
-              <h2>Blackboard Notes (Strict Application-Level Q&A Only)</h2>
-              <span style="font-size:0.75rem; color:var(--text-muted);">Organized for clear, separate teacher board notes and student notebooks.</span>
-            </div>
-            <button class="btn btn-secondary btn-sm" id="copy-all-bb-btn">📋 Copy All Blackboard Notes</button>
-          </div>
-          <div id="blackboard-notes-body">
-            <div class="rendered-markdown">
-              <p style="color: var(--text-muted); font-style: italic;">Application-level questions and solutions structured for classroom board work will render here.</p>
-            </div>
-          </div>
-        </section>
-
-        <!-- Tab 4: WhatsApp Broadcast -->
-        <section id="tab-whatsapp-summary" class="tab-pane">
-          <div class="pane-header no-print">
-            <div>
-              <h2>Daily WhatsApp Parent Communication Broadcast</h2>
-              <span style="font-size:0.75rem; color:var(--text-muted);">Separated recap, distinct Q&A cards, and home study links.</span>
-            </div>
-            <div class="pane-header-actions">
-              <button id="share-whatsapp-btn" class="btn btn-whatsapp btn-sm">📲 Share to WhatsApp Group</button>
-              <button class="btn btn-secondary btn-sm" id="copy-whatsapp-text-btn">Copy Text</button>
-            </div>
-          </div>
-
-          <!-- View Switcher -->
-          <div class="wa-view-switch no-print">
-            <button class="wa-switch-btn active" id="wa-btn-chat">📱 Styled WhatsApp Card View</button>
-            <button class="wa-switch-btn" id="wa-btn-raw">📋 Raw Plaintext (Copy-Ready)</button>
-          </div>
-
-          <!-- Card/Chat Styled View -->
-          <div id="wa-styled-container">
-            <div class="wa-chat-canvas" id="whatsapp-preview-area">
-              <div class="wa-bubble" style="color: var(--text-muted); font-style: italic;">
-                Parent broadcast message will render here in structured conversational card layout.
-              </div>
-            </div>
-          </div>
-
-          <!-- Raw Plaintext View -->
-          <div id="wa-raw-container" style="display:none;">
-            <div id="whatsapp-summary-body" class="whatsapp-box" style="background:#fff; border:1px solid #cbd5e1; color:#1e293b;">
-              Parent communication message will render here.
-            </div>
-          </div>
-        </section>
-
-        <!-- Tab 5: Printable Worksheet -->
-        <section id="tab-worksheet-view" class="tab-pane">
-          <div class="pane-header no-print">
-            <h2>A4 Portrait Printable Worksheet (Total: 5 Scores)</h2>
-            <div class="pane-header-actions">
-              <button class="btn btn-secondary btn-sm copy-btn" data-target="worksheet-render-area">Copy Worksheet</button>
-              <button id="print-btn" class="btn btn-success btn-sm">🖨️ Print / Save to PDF</button>
-            </div>
-          </div>
-          
-          <div class="worksheet-preview-container">
-            <div id="worksheet-render-area" class="worksheet-page">
-              <div style="text-align: center; color: #777; font-style: italic; padding: 40px;" class="no-print">
-                Worksheet will render inside this portrait A4 container.
-              </div>
-            </div>
-          </div>
-        </section>
-
-        <!-- Tab 6: Worksheet Answers -->
-        <section id="tab-worksheet-answers" class="tab-pane">
-          <div class="pane-header no-print">
-            <h2>Worksheet Answer Key & Scoring Guide (Total: 5 Scores)</h2>
-            <div class="pane-header-actions">
-              <button class="btn btn-secondary btn-sm copy-btn" data-target="worksheet-answers-body">Copy Answer Key</button>
-              <button id="print-answers-btn" class="btn btn-success btn-sm">🖨️ Print / Save to PDF</button>
-            </div>
-          </div>
-          <div id="worksheet-answers-body" class="rendered-markdown">
-            <p style="color: var(--text-muted); font-style: italic;">Model answers and scoring breakdown will render here.</p>
-          </div>
-        </section>
-
-      </div>
-    </main>
-
-  </div>
+    </div>
+  </main>
 
   <!-- ==========================================================================
-       3. MODULAR JAVASCRIPT ENGINE (SANITIZED & GITHUB-READY)
+       6. JAVASCRIPT ENGINE
        ========================================================================== -->
   <script type="module">
     import { initializeApp } from "https://www.gstatic.com/firebasejs/10.13.0/firebase-app.js";
     import { getFirestore, doc, getDoc, setDoc } from "https://www.gstatic.com/firebasejs/10.13.0/firebase-firestore.js";
     import { getAuth, signInAnonymously } from "https://www.gstatic.com/firebasejs/10.13.0/firebase-auth.js";
 
-    /* =========================================================================
-       FIREBASE CLIENT CONFIGURATION
-       ========================================================================= */
     const firebaseConfig = {
       apiKey: "AIzaSyAizutSlc9XnjMBVoG3AGRlwNp6ojeanTo",
       authDomain: "scert-383dd.firebaseapp.com",
@@ -1102,53 +1172,72 @@
       measurementId: "G-5B7SB0HHN6"
     };
 
-    /* =========================================================================
-       DYNAMIC GEMINI KEY MANAGEMENT (NO KEYS STORED IN SOURCE CODE)
-       ========================================================================= */
     let GEMINI_API_KEY = localStorage.getItem('SCERT_GEMINI_KEY') || "";
     const PRIMARY_MODEL = "gemini-3.6-flash";
     const FALLBACK_MODEL = "gemini-3.5-flash-lite";
 
-    /* =========================================================================
-       INDEXED-DB LOCAL STORAGE (Keeps locked PDFs across page reloads)
-       ========================================================================= */
+    /* IndexedDB Helper */
     const idb = {
       db: null,
       async init() {
         return new Promise((resolve) => {
-          const req = indexedDB.open("SCERT_PDF_CACHE", 1);
-          req.onupgradeneeded = () => req.result.createObjectStore("books");
+          const req = indexedDB.open("SCERT_STUDIO_DB", 2);
+          req.onupgradeneeded = (e) => {
+            const db = req.result;
+            if (!db.objectStoreNames.contains("books")) db.createObjectStore("books");
+            if (!db.objectStoreNames.contains("saved_packages")) db.createObjectStore("saved_packages", { keyPath: "id" });
+          };
           req.onsuccess = () => { this.db = req.result; resolve(); };
           req.onerror = () => resolve();
         });
       },
-      async set(key, val) {
+      async setBook(key, val) {
         if (!this.db) await this.init();
         return new Promise((resolve) => {
-          if (!this.db) return resolve();
           const tx = this.db.transaction("books", "readwrite");
           tx.objectStore("books").put(val, key);
           tx.oncomplete = resolve;
         });
       },
-      async get(key) {
+      async getBook(key) {
         if (!this.db) await this.init();
         return new Promise((resolve) => {
-          if (!this.db) return resolve(null);
           const tx = this.db.transaction("books", "readonly");
           const req = tx.objectStore("books").get(key);
           req.onsuccess = () => resolve(req.result);
           req.onerror = () => resolve(null);
         });
+      },
+      async savePackage(pkgObj) {
+        if (!this.db) await this.init();
+        return new Promise((resolve) => {
+          const tx = this.db.transaction("saved_packages", "readwrite");
+          tx.objectStore("saved_packages").put(pkgObj);
+          tx.oncomplete = resolve;
+        });
+      },
+      async getAllPackages() {
+        if (!this.db) await this.init();
+        return new Promise((resolve) => {
+          const tx = this.db.transaction("saved_packages", "readonly");
+          const req = tx.objectStore("saved_packages").getAll();
+          req.onsuccess = () => resolve(req.result || []);
+          req.onerror = () => resolve([]);
+        });
+      },
+      async deletePackage(id) {
+        if (!this.db) await this.init();
+        return new Promise((resolve) => {
+          const tx = this.db.transaction("saved_packages", "readwrite");
+          tx.objectStore("saved_packages").delete(id);
+          tx.oncomplete = resolve;
+        });
       }
     };
 
-    // Firebase Safe Initialization
     let db = null;
     let auth = null;
-    const isFirebaseConfigured = firebaseConfig.apiKey && !firebaseConfig.apiKey.includes("YOUR_FIREBASE");
-
-    if (isFirebaseConfigured) {
+    if (firebaseConfig.apiKey && !firebaseConfig.apiKey.includes("YOUR_FIREBASE")) {
       try {
         const app = initializeApp(firebaseConfig);
         db = getFirestore(app);
@@ -1161,25 +1250,35 @@
 
     const ALL_SLOTS = ['5_part1', '5_part2', '6_part1', '6_part2', '7_part1', '7_part2'];
     
-    // State
     const state = {
       currentClass: '5',
       currentPart: 'part1',
       slotsData: {},
       slotsBase64: {},
-      currentPackage: null
+      currentPackage: null,
+      activePackageId: null,
+      translations: {}
     };
 
     // DOM Elements
+    const topControlsPanel = document.getElementById('top-controls-panel');
+    const controlsToggleBtn = document.getElementById('controls-toggle-btn');
+    const toggleIcon = document.getElementById('toggle-icon');
+    const toggleText = document.getElementById('toggle-text');
+
     const classSelect = document.getElementById('class-select');
     const partRadios = document.querySelectorAll('input[name="textbook-part"]');
     const generateBtn = document.getElementById('generate-btn');
-    const printBtn = document.getElementById('print-btn');
-    const printAnswersBtn = document.getElementById('print-answers-btn');
+    const resetWorkspaceBtn = document.getElementById('reset-workspace-btn');
+    const quickResetBtn = document.getElementById('quick-reset-btn');
+    const activeStatusBar = document.getElementById('active-status-bar');
+    const activeStatusText = document.getElementById('active-status-text');
+    const pkgArchiveList = document.getElementById('pkg-archive-list');
+    const packageCountBadge = document.getElementById('package-count-badge');
     const lockedCountLabel = document.getElementById('locked-count');
     const shareWhatsAppBtn = document.getElementById('share-whatsapp-btn');
     const headerKeyBtn = document.getElementById('header-key-btn');
-    
+
     // UI Helpers
     const spinnerOverlay = document.getElementById('spinner-overlay');
     const spinnerText = document.getElementById('spinner-text');
@@ -1190,11 +1289,25 @@
     const modalOkBtn = document.getElementById('modal-ok-btn');
     const toastPopup = document.getElementById('toast-popup');
 
-    // Key Recovery Modal Elements
     const keyModalOverlay = document.getElementById('key-modal-overlay');
     const keyModalInput = document.getElementById('key-modal-input');
     const keyModalCloseBtn = document.getElementById('key-modal-close-btn');
     const saveKeyModalBtn = document.getElementById('save-key-modal-btn');
+
+    // =========================================================================
+    // TOP DRAWER TOGGLE (JUMPS TO TOP WHEN HIDDEN)
+    // =========================================================================
+    controlsToggleBtn.addEventListener('click', () => {
+      topControlsPanel.classList.toggle('collapsed');
+      const isHidden = topControlsPanel.classList.contains('collapsed');
+      if (isHidden) {
+        toggleIcon.textContent = '🔽';
+        toggleText.textContent = 'Show Controls';
+      } else {
+        toggleIcon.textContent = '🔼';
+        toggleText.textContent = 'Hide Controls';
+      }
+    });
 
     function showSpinner(text = "Processing...") {
       spinnerText.textContent = text;
@@ -1237,7 +1350,7 @@
       localStorage.setItem('SCERT_GEMINI_KEY', val);
       GEMINI_API_KEY = val;
       hideKeyModal();
-      showToast("Gemini API Key saved securely in your browser!");
+      showToast("Gemini API Key saved!");
     });
 
     function showToast(message) {
@@ -1249,9 +1362,7 @@
     function copyText(text, successMsg = "Copied to Clipboard!") {
       if (!text) return;
       if (navigator.clipboard && window.isSecureContext) {
-        navigator.clipboard.writeText(text)
-          .then(() => showToast(successMsg))
-          .catch(() => execFallback(text, successMsg));
+        navigator.clipboard.writeText(text).then(() => showToast(successMsg)).catch(() => execFallback(text, successMsg));
       } else {
         execFallback(text, successMsg);
       }
@@ -1259,18 +1370,9 @@
 
     function execFallback(str, successMsg) {
       const ta = document.createElement("textarea");
-      ta.value = str;
-      ta.style.position = "fixed";
-      ta.style.left = "-9999px";
-      document.body.appendChild(ta);
-      ta.focus();
-      ta.select();
-      try {
-        document.execCommand('copy');
-        showToast(successMsg);
-      } catch (e) {
-        showToast("Copying not permitted in this context.");
-      }
+      ta.value = str; ta.style.position = "fixed"; ta.style.left = "-9999px";
+      document.body.appendChild(ta); ta.focus(); ta.select();
+      try { document.execCommand('copy'); showToast(successMsg); } catch (e) { showToast("Copying blocked."); }
       document.body.removeChild(ta);
     }
 
@@ -1281,24 +1383,18 @@
     const waRawContainer = document.getElementById('wa-raw-container');
 
     waBtnChat.addEventListener('click', () => {
-      waBtnChat.classList.add('active');
-      waBtnRaw.classList.remove('active');
-      waStyledContainer.style.display = 'block';
-      waRawContainer.style.display = 'none';
+      waBtnChat.classList.add('active'); waBtnRaw.classList.remove('active');
+      waStyledContainer.style.display = 'block'; waRawContainer.style.display = 'none';
     });
-
     waBtnRaw.addEventListener('click', () => {
-      waBtnRaw.classList.add('active');
-      waBtnChat.classList.remove('active');
-      waStyledContainer.style.display = 'none';
-      waRawContainer.style.display = 'block';
+      waBtnRaw.classList.add('active'); waBtnChat.classList.remove('active');
+      waStyledContainer.style.display = 'none'; waRawContainer.style.display = 'block';
     });
 
     // Copy Blackboard All Notes
     document.getElementById('copy-all-bb-btn').addEventListener('click', () => {
       if (!state.currentPackage?.blackboardQa?.length) {
-        const text = document.getElementById('blackboard-notes-body').innerText;
-        return copyText(text, "Copied Blackboard Notes!");
+        return copyText(document.getElementById('blackboard-notes-body').innerText, "Copied Blackboard Notes!");
       }
       let combined = `*BLACKBOARD APPLICATION NOTES*\n\n`;
       state.currentPackage.blackboardQa.forEach((item, idx) => {
@@ -1307,54 +1403,43 @@
       copyText(combined.trim(), "Copied All Blackboard Q&As!");
     });
 
-    // Copy WhatsApp Broadcast Text
     document.getElementById('copy-whatsapp-text-btn').addEventListener('click', () => {
-      const text = document.getElementById('whatsapp-summary-body').textContent.trim();
-      copyText(text, "Copied WhatsApp Broadcast Text!");
+      copyText(document.getElementById('whatsapp-summary-body').textContent.trim(), "Copied WhatsApp Broadcast Text!");
     });
 
-    // WhatsApp Group Sharing
     shareWhatsAppBtn.addEventListener('click', () => {
       const text = document.getElementById('whatsapp-summary-body').textContent.trim();
       if (!text || text.includes("Parent communication message will render here")) {
-        return showMessageBox("Please generate the lesson package first.", "Nothing to Share");
+        return showMessageBox("Please generate or load a lesson package first.", "Nothing to Share");
       }
-      const whatsappUrl = `https://api.whatsapp.com/send?text=${encodeURIComponent(text)}`;
-      window.open(whatsappUrl, '_blank');
+      window.open(`https://api.whatsapp.com/send?text=${encodeURIComponent(text)}`, '_blank');
     });
 
-    // Highlight target slot in matrix
     function highlightActiveTarget() {
       const targetSlot = `${state.currentClass}_${state.currentPart}`;
       ALL_SLOTS.forEach(slotId => {
         const card = document.getElementById(`card-${slotId}`);
-        if (card) {
-          card.classList.toggle('active-target', slotId === targetSlot);
-        }
+        if (card) card.classList.toggle('active-target', slotId === targetSlot);
       });
     }
 
-    // Bidirectional Slot Selection
     document.querySelectorAll('.slot-card').forEach(card => {
       card.addEventListener('click', (e) => {
         if (e.target.tagName === 'INPUT' || e.target.tagName === 'BUTTON') return;
         const [cls, prt] = card.dataset.slot.split('_');
-        state.currentClass = cls;
-        state.currentPart = prt;
+        state.currentClass = cls; state.currentPart = prt;
         classSelect.value = cls;
         partRadios.forEach(r => r.checked = (r.value === prt));
         highlightActiveTarget();
       });
     });
 
-    // Network timeout wrapper
     const withTimeout = (promise, ms = 2000) => 
       Promise.race([
         promise,
         new Promise((_, reject) => setTimeout(() => reject(new Error("Network timeout")), ms))
       ]);
 
-    // Parallel sync across Firestore & local IndexedDB
     async function syncAllSlots() {
       highlightActiveTarget();
       let lockedTotal = 0;
@@ -1362,61 +1447,35 @@
       await Promise.all(ALL_SLOTS.map(async (slotId) => {
         try {
           let data = null;
-
           if (db) {
             try {
               const snap = await withTimeout(getDoc(doc(db, 'curriculum_books', slotId)), 2000);
-              if (snap.exists() && snap.data().isLocked) {
-                data = snap.data();
-              }
-            } catch (netErr) {
-              console.warn(`Cloud check bypassed for ${slotId}`);
-            }
+              if (snap.exists() && snap.data().isLocked) data = snap.data();
+            } catch (e) {}
           }
-
-          // Restore from IndexedDB
-          const cached = await idb.get(slotId);
+          const cached = await idb.getBook(slotId);
           if (cached) {
-            const base64Str = typeof cached === 'string' ? cached : cached.base64;
-            state.slotsBase64[slotId] = base64Str;
+            state.slotsBase64[slotId] = typeof cached === 'string' ? cached : cached.base64;
             if (!data) {
               data = { 
                 fileName: (typeof cached === 'object' && cached.fileName) ? cached.fileName : "Locally Cached PDF", 
-                fileSize: (typeof cached === 'object' && cached.fileSize) ? cached.fileSize : "Standard",
                 isLocked: true 
               };
             }
           }
-
           if (data && (data.isLocked || cached)) {
             lockedTotal++;
             state.slotsData[slotId] = data;
-
             const badge = document.getElementById(`badge-${slotId}`);
             const nameEl = document.getElementById(`name-${slotId}`);
             const actionsEl = document.getElementById(`actions-${slotId}`);
-
-            if (badge) {
-              badge.className = 'slot-badge locked';
-              badge.textContent = 'Verified & Locked';
-            }
-            if (nameEl) {
-              nameEl.textContent = `📄 ${data.fileName || 'Locked SCERT PDF'}`;
-              nameEl.style.color = '#1b5e20';
-              nameEl.style.fontWeight = '600';
-            }
-            if (actionsEl) {
-              actionsEl.innerHTML = `<span style="font-size:0.7rem; color:#2e7d32;">🔒 Ready</span>`;
-            }
+            if (badge) { badge.className = 'slot-badge locked'; badge.textContent = 'Locked'; }
+            if (nameEl) { nameEl.textContent = `📄 ${data.fileName || 'Locked PDF'}`; nameEl.style.color = '#1b5e20'; }
+            if (actionsEl) { actionsEl.innerHTML = `<span style="font-size:0.65rem; color:#2e7d32;">🔒 Ready</span>`; }
           }
-        } catch (err) {
-          console.warn(`Sync check for ${slotId}:`, err.message);
-        }
+        } catch (err) {}
       }));
-
-      if (lockedCountLabel) {
-        lockedCountLabel.textContent = `${lockedTotal}/6 Locked`;
-      }
+      if (lockedCountLabel) lockedCountLabel.textContent = `${lockedTotal}/6 Locked`;
     }
 
     function fileToBase64(file) {
@@ -1428,106 +1487,72 @@
       });
     }
 
-    // Lock Slot Button Handler (Cloud + Offline-Safe)
     document.querySelectorAll('.slot-btn').forEach(btn => {
       btn.addEventListener('click', async (e) => {
         const slotId = e.target.dataset.slot;
-        const fileInput = document.getElementById(`input-${slotId}`);
-        const file = fileInput?.files[0];
-
-        if (!file) {
-          return showMessageBox(`Please select a PDF file to lock for ${slotId.replace('_', ' ').toUpperCase()}`, "Missing File");
-        }
+        const file = document.getElementById(`input-${slotId}`)?.files[0];
+        if (!file) return showMessageBox(`Please select a PDF file to lock.`, "Missing File");
 
         showSpinner(`Reading and locking ${file.name}...`);
-
         try {
           const base64Data = await fileToBase64(file);
           const fileSizeFormatted = (file.size / (1024 * 1024)).toFixed(2) + " MB";
-          
           state.slotsBase64[slotId] = base64Data;
-          await idb.set(slotId, {
-            base64: base64Data,
-            fileName: file.name,
-            fileSize: fileSizeFormatted
-          });
+          await idb.setBook(slotId, { base64: base64Data, fileName: file.name, fileSize: fileSizeFormatted });
 
           const [cls, prt] = slotId.split('_');
-          state.slotsData[slotId] = {
-            fileName: file.name,
-            fileSize: fileSizeFormatted,
-            isLocked: true
-          };
+          state.slotsData[slotId] = { fileName: file.name, fileSize: fileSizeFormatted, isLocked: true };
 
           if (db) {
             try {
-              if (auth && !auth.currentUser) {
-                await signInAnonymously(auth).catch(() => {});
-              }
+              if (auth && !auth.currentUser) await signInAnonymously(auth).catch(() => {});
               await setDoc(doc(db, 'curriculum_books', slotId), {
-                slotId: slotId,
-                classId: cls,
-                partId: prt,
-                fileName: file.name,
-                fileSize: fileSizeFormatted,
-                isLocked: true,
-                uploadedAt: new Date().toISOString()
+                slotId: slotId, classId: cls, partId: prt, fileName: file.name, isLocked: true, uploadedAt: new Date().toISOString()
               });
-            } catch (cloudErr) {
-              console.warn(`Firestore sync skipped (${cloudErr.message}). Saved locally in IndexedDB.`);
-            }
+            } catch (e) {}
           }
-
           hideSpinner();
-          showMessageBox(`Textbook verified and locked permanently for Class ${cls} ${prt.toUpperCase()}!`, "Lock Verified");
+          showMessageBox(`Textbook locked for Class ${cls} ${prt.toUpperCase()}!`, "Lock Verified");
           syncAllSlots();
         } catch (err) {
           hideSpinner();
-          console.error(err);
           showMessageBox(`Failed to read file: ${err.message}`, "Error");
         }
       });
     });
 
-    classSelect.addEventListener('change', (e) => {
-      state.currentClass = e.target.value;
-      highlightActiveTarget();
-    });
+    classSelect.addEventListener('change', (e) => { state.currentClass = e.target.value; highlightActiveTarget(); });
+    partRadios.forEach(radio => radio.addEventListener('change', (e) => { state.currentPart = e.target.value; highlightActiveTarget(); }));
 
-    partRadios.forEach(radio => {
-      radio.addEventListener('change', (e) => {
-        state.currentPart = e.target.value;
-        highlightActiveTarget();
-      });
-    });
-
-    // =========================================================================
-    // API CALLS & ERROR HANDLING (Uses x-goog-api-key header for AQ. / AIza)
-    // =========================================================================
     const delay = (ms) => new Promise((resolve) => setTimeout(resolve, ms));
 
     async function callGemini(modelName, payload) {
       const endpoint = `https://generativelanguage.googleapis.com/v1beta/models/${modelName}:generateContent`;
       const response = await fetch(endpoint, {
         method: "POST",
-        headers: { 
-          "Content-Type": "application/json",
-          "x-goog-api-key": GEMINI_API_KEY 
-        },
+        headers: { "Content-Type": "application/json", "x-goog-api-key": GEMINI_API_KEY },
         body: JSON.stringify(payload)
       });
-
       const data = await response.json();
       if (response.ok && data.candidates && data.candidates[0]?.content) {
         return { success: true, data: data };
       }
-
       const errorMsg = data.error?.message || `HTTP ${response.status}`;
-      const isAuthError = response.status === 400 || response.status === 401 || response.status === 403 || errorMsg.toLowerCase().includes("key");
-      const isQuota = response.status === 429 || errorMsg.includes("quota");
-      const isModelError = response.status === 404 || errorMsg.includes("no longer available");
+      const msgLower = errorMsg.toLowerCase();
+      const isBusy = response.status === 503 || 
+                     response.status === 429 || 
+                     msgLower.includes("high demand") || 
+                     msgLower.includes("overloaded") || 
+                     msgLower.includes("unavailable") ||
+                     msgLower.includes("quota");
 
-      return { success: false, error: errorMsg, isAuthError, isQuota, isModelError, status: response.status };
+      return { 
+        success: false, 
+        error: errorMsg, 
+        isAuthError: response.status === 400 || response.status === 401 || response.status === 403 || msgLower.includes("key"),
+        isBusy: isBusy,
+        isModelError: response.status === 404 || msgLower.includes("no longer available")
+      };
     }
 
     async function executeSmartGeneration(payload) {
@@ -1535,25 +1560,353 @@
         showKeyModal();
         throw new Error("Please enter your Google AI Studio API key to continue.");
       }
-
       showSpinner(`Synthesizing with ${PRIMARY_MODEL}...`);
       let result = await callGemini(PRIMARY_MODEL, payload);
-
       if (result.success) return result.data;
-
       if (result.isAuthError) {
         showKeyModal();
         throw new Error("Invalid or expired Gemini API key. Please update your key above.");
       }
-
-      if (result.isQuota || result.status === 503 || result.isModelError) {
-        showSpinner(`Switching to backup model (${FALLBACK_MODEL})...`);
-        await delay(1500);
+      if (result.isBusy || result.isModelError) {
+        showSpinner(`Server busy. Auto-switching to ${FALLBACK_MODEL}...`);
+        await delay(2000);
         const fallbackRes = await callGemini(FALLBACK_MODEL, payload);
         if (fallbackRes.success) return fallbackRes.data;
       }
-
       throw new Error(`Generation error: ${result.error}`);
+    }
+
+    // =========================================================================
+    // MALAYALAM TRANSLATION ENGINE (IN ALL TABS WITH FALLBACK PRIORITY)
+    // =========================================================================
+    async function translateActiveTab(tabId, buttonEl) {
+      const containerMap = {
+        'tab-lesson-plan': 'lesson-plan-body',
+        'tab-media-resources': 'media-resources-body',
+        'tab-blackboard-notes': 'blackboard-notes-body',
+        'tab-whatsapp-summary': 'whatsapp-preview-area',
+        'tab-worksheet-view': 'worksheet-render-area',
+        'tab-worksheet-answers': 'worksheet-answers-body'
+      };
+
+      const containerId = containerMap[tabId];
+      const containerEl = document.getElementById(containerId);
+      if (!containerEl) return;
+
+      // Unique storage keys based on the active package ID and tab
+      const pkgKey = state.activePackageId || document.getElementById('unit-title').value.trim() || 'default';
+      const mlStorageKey = `SCERT_ML_${pkgKey}_${tabId}`;
+      const enStorageKey = `SCERT_EN_${pkgKey}_${tabId}`;
+
+      // 1. Toggle back to English if Malayalam is currently active
+      if (buttonEl.classList.contains('active-ml')) {
+        const originalEnglish = localStorage.getItem(enStorageKey) || state.translations[tabId]?.originalHtml;
+        if (originalEnglish) {
+          containerEl.innerHTML = originalEnglish;
+          containerEl.classList.remove('malayalam-font');
+          buttonEl.classList.remove('active-ml');
+          buttonEl.innerHTML = `🌐 മലയാളം (Translate)`;
+          showToast("Switched back to English");
+          return;
+        }
+      }
+
+      // 2. Check Local Memory (localStorage) first before making any network call
+      const cachedMalayalam = localStorage.getItem(mlStorageKey);
+      if (cachedMalayalam) {
+        // Save current English in memory if not already saved
+        if (!localStorage.getItem(enStorageKey)) {
+          localStorage.setItem(enStorageKey, containerEl.innerHTML);
+        }
+        containerEl.innerHTML = cachedMalayalam;
+        containerEl.classList.add('malayalam-font');
+        buttonEl.classList.add('active-ml');
+        buttonEl.innerHTML = `🌐 English (Original)`;
+        showToast("Loaded from Local Memory (മലയാളം)");
+        return;
+      }
+
+      // 3. If not in local memory, translate via Gemini
+      const contentHtml = containerEl.innerHTML;
+      if (!contentHtml || contentHtml.includes("Generate Package") || contentHtml.includes("No packages")) {
+        return showMessageBox("Please generate or load a lesson package first before translating.", "Nothing to Translate");
+      }
+
+      showSpinner(`Translating section to Malayalam (മലയാളം)...`);
+
+      try {
+        const translatePrompt = `
+You are an expert Kerala SCERT Malayalam-medium pedagogical translator.
+Translate the following HTML content accurately and naturally into standard Kerala SCERT educational Malayalam.
+Maintain all HTML structure, classes, tags, and formatting intact.
+Use standard terms like 'പാഠ്യപദ്ധതി ലക്ഷ്യങ്ങൾ', 'പ്രവേശന പ്രവർത്തനം', 'വിലയിരുത്തൽ', 'ബ്ലാക്ക്ബോർഡ് കുറിപ്പുകൾ'.
+
+ORIGINAL CONTENT:
+${contentHtml}
+
+RETURN ONLY THE TRANSLATED HTML. DO NOT WRAP IN BACKTICKS OR MARKDOWN CODE BLOCKS.
+`;
+        const payload = {
+          contents: [{ role: "user", parts: [{ text: translatePrompt }] }],
+          generationConfig: { temperature: 0.1 }
+        };
+
+        // Use fast fallback model
+        let data = null;
+        const liteRes = await callGemini(FALLBACK_MODEL, payload);
+        if (liteRes.success) {
+          data = liteRes.data;
+        } else {
+          data = await executeSmartGeneration(payload);
+        }
+
+        let translatedHtml = data.candidates[0].content.parts[0].text;
+        translatedHtml = translatedHtml.replace(/^```(?:html)?\s*/i, '').replace(/\s*```$/i, '').trim();
+
+        // 4. Save both English and Malayalam permanently into localStorage
+        localStorage.setItem(enStorageKey, contentHtml);
+        localStorage.setItem(mlStorageKey, translatedHtml);
+
+        containerEl.innerHTML = translatedHtml;
+        containerEl.classList.add('malayalam-font');
+        buttonEl.classList.add('active-ml');
+        buttonEl.innerHTML = `🌐 English (Original)`;
+
+        hideSpinner();
+        showToast("Translated & Saved to Local Memory!");
+      } catch (err) {
+        hideSpinner();
+        showMessageBox(`Translation notice: ${err.message}`, "Translation");
+      }
+    }
+
+    document.querySelectorAll('.translate-tab-btn').forEach(btn => {
+      btn.addEventListener('click', () => {
+        translateActiveTab(btn.dataset.tab, btn);
+      });
+    });
+
+    // =========================================================================
+    // UNIVERSAL PRINT HANDLER (ALL TABS IN A4 PORTRAIT 100% WIDTH)
+    // =========================================================================
+    document.querySelectorAll('.print-tab-btn').forEach(btn => {
+      btn.addEventListener('click', () => {
+        const pane = btn.closest('.tab-pane');
+        document.querySelectorAll('.tab-pane').forEach(p => p.classList.remove('print-active'));
+        pane.classList.add('print-active');
+        document.body.classList.add('has-print-active');
+        setTimeout(() => window.print(), 100);
+      });
+    });
+
+    window.addEventListener('afterprint', () => {
+      document.body.classList.remove('has-print-active');
+      document.querySelectorAll('.tab-pane').forEach(p => p.classList.remove('print-active'));
+    });
+
+    // Update Universal Print Headers across all tabs
+    function updateAllPrintHeaders(unitTitle, dayNumber, totalDays, classId, partId, targetedCO) {
+      document.querySelectorAll('.u-meta-class').forEach(el => el.textContent = classId);
+      document.querySelectorAll('.u-meta-part').forEach(el => el.textContent = (partId === 'part1' ? '1' : '2'));
+      document.querySelectorAll('.u-meta-unit').forEach(el => el.textContent = unitTitle);
+      document.querySelectorAll('.u-meta-day').forEach(el => el.textContent = dayNumber);
+      document.querySelectorAll('.u-meta-total').forEach(el => el.textContent = totalDays);
+      document.querySelectorAll('.u-meta-co').forEach(el => el.textContent = targetedCO || 'SCERT Primary Competency Targeted');
+    }
+
+    // =========================================================================
+    // RENDER WORKSPACE WITH PACKAGE DATA
+    // =========================================================================
+    function renderPackageToWorkspace(pkgData, unitTitle, dayNumber, totalDays, classId, partId = state.currentPart) {
+      state.translations = {};
+      document.querySelectorAll('.translate-tab-btn').forEach(b => {
+        b.classList.remove('active-ml');
+        b.innerHTML = `🌐 മലയാളം (Translate)`;
+      });
+
+      // Update all universal print headers with Chapter Name and CO
+      updateAllPrintHeaders(unitTitle, dayNumber, totalDays, classId, partId, pkgData.targetedCurricularObjective);
+
+      // 1. Render Lesson Plan
+      let coMasterListHtml = `<div class="co-box-master"><strong>All Curricular Objectives (Unit Master):</strong><ul style="margin-top:6px; padding-left:20px;">`;
+      (pkgData.allUnitCurricularObjectives || []).forEach(co => {
+        coMasterListHtml += `<li>${co}</li>`;
+      });
+      coMasterListHtml += `</ul></div>`;
+
+      const coActiveHtml = `
+        <div class="co-box-active">
+          🎯 <strong>Curricular Objective(s) Targeted (Day ${dayNumber} of ${totalDays}):</strong><br>
+          <span>${pkgData.targetedCurricularObjective || ''}</span>
+        </div>
+      `;
+
+      document.getElementById('lesson-plan-body').innerHTML = `
+        ${coMasterListHtml}
+        ${coActiveHtml}
+        ${pkgData.lessonPlanIntroHtml || ''}
+        <h3 style="margin:16px 0 8px 0; color:var(--primary);">35-Minute Period Breakdown:</h3>
+        ${pkgData.lessonPlanTableHtml}
+      `;
+      
+      // 2. Render Media Resources
+      renderMediaResources(pkgData.mediaResources || []);
+
+      // 3. Render Blackboard Notes
+      renderBlackboardNotes(pkgData.blackboardQa || []);
+
+      // 4. Render WhatsApp Broadcast
+      renderWhatsAppBroadcast(pkgData.whatsappSummary, pkgData.blackboardQa || [], unitTitle, dayNumber, totalDays, classId);
+      
+      // 5. Render Printable Worksheet
+      document.getElementById('worksheet-render-area').innerHTML = `
+        <div class="ws-header">
+          <h2>Kerala SCERT Curriculum Worksheet</h2>
+          <div style="font-weight:bold; font-size:10pt; margin-top:2px;">Application-Level Evaluation Activity (Total: 5 Scores)</div>
+          <div class="ws-meta-grid">
+            <div class="ws-meta-line"><strong>Unit:</strong> ${unitTitle} (Day ${dayNumber}/${totalDays})</div>
+            <div class="ws-meta-line"><strong>Class:</strong> Std ${classId}</div>
+            <div class="ws-meta-line"><strong>Max Score:</strong> 5</div>
+            <div class="ws-meta-line"><strong>Student Name:</strong> ___________________________</div>
+            <div class="ws-meta-line"><strong>Roll No:</strong> _______</div>
+            <div class="ws-meta-line"><strong>Time:</strong> 20 Mins</div>
+          </div>
+        </div>
+        ${pkgData.worksheetHtml}
+      `;
+
+      // 6. Render Answer Key
+      document.getElementById('worksheet-answers-body').innerHTML = `
+        <div style="margin-bottom:14px; padding:10px; background:#f1f5f9; border-radius:4px;">
+          <strong>Standard:</strong> SCERT Criteria | <strong>Total Score:</strong> 5 | <strong>Unit:</strong> ${unitTitle} (Day ${dayNumber}/${totalDays})
+        </div>
+        ${pkgData.worksheetAnswerKeyHtml || ''}
+      `;
+    }
+
+    function setPackageActiveState(isActive, pkgTitle = "") {
+      if (isActive) {
+        generateBtn.disabled = true;
+        generateBtn.innerHTML = `🔒 Package Active`;
+        generateBtn.style.background = "#64748b";
+        activeStatusBar.style.display = "flex";
+        activeStatusText.textContent = `Active: ${pkgTitle}`;
+      } else {
+        generateBtn.disabled = false;
+        generateBtn.innerHTML = `⚡ Generate Package`;
+        generateBtn.style.background = "var(--primary)";
+        activeStatusBar.style.display = "none";
+      }
+    }
+
+    function resetWorkspace() {
+      state.currentPackage = null;
+      state.activePackageId = null;
+      state.translations = {};
+      setPackageActiveState(false);
+
+      document.querySelectorAll('.translate-tab-btn').forEach(b => {
+        b.classList.remove('active-ml');
+        b.innerHTML = `🌐 മലയാളം (Translate)`;
+      });
+
+      updateAllPrintHeaders("Select Unit", "1", "5", state.currentClass, state.currentPart, "To be specified");
+
+      document.getElementById('lesson-plan-body').innerHTML = `<p style="color: var(--text-muted); font-style: italic;">Enter your unit and pacing details above, then click "Generate Package".</p>`;
+      document.getElementById('media-resources-body').innerHTML = `<p style="color: var(--text-muted); font-style: italic;">Curated media, simulations, and search keywords will render here.</p>`;
+      document.getElementById('blackboard-notes-body').innerHTML = `<div class="rendered-markdown"><p style="color: var(--text-muted); font-style: italic;">Application-level questions and solutions structured for classroom board work will render here.</p></div>`;
+      document.getElementById('whatsapp-preview-area').innerHTML = `<div class="wa-bubble" style="color: var(--text-muted); font-style: italic;">Parent broadcast message will render here in structured conversational card layout.</div>`;
+      document.getElementById('whatsapp-summary-body').textContent = `Parent communication message will render here.`;
+      document.getElementById('worksheet-render-area').innerHTML = `<div style="text-align: center; color: #777; font-style: italic; padding: 40px;" class="no-print">Worksheet will render inside this portrait A4 container.</div>`;
+      document.getElementById('worksheet-answers-body').innerHTML = `<p style="color: var(--text-muted); font-style: italic;">Model answers and scoring breakdown will render here.</p>`;
+
+      document.querySelectorAll('.pkg-card').forEach(c => c.classList.remove('active-loaded'));
+      showToast("Workspace Reset! Configure new details above.");
+    }
+
+    resetWorkspaceBtn.addEventListener('click', resetWorkspace);
+    quickResetBtn.addEventListener('click', resetWorkspace);
+
+    async function loadSavedPackage(pkgId) {
+      const allPkgs = await idb.getAllPackages();
+      const pkg = allPkgs.find(p => p.id === pkgId);
+      if (!pkg) return showMessageBox("Package not found in archive.", "Error");
+
+      state.currentClass = pkg.classId;
+      state.currentPart = pkg.partId;
+      classSelect.value = pkg.classId;
+      partRadios.forEach(r => r.checked = (r.value === pkg.partId));
+      document.getElementById('unit-title').value = pkg.unitTitle;
+      document.getElementById('day-number').value = pkg.dayNumber;
+      document.getElementById('total-days').value = pkg.totalDays;
+      highlightActiveTarget();
+
+      state.currentPackage = pkg.data;
+      state.activePackageId = pkg.id;
+      renderPackageToWorkspace(pkg.data, pkg.unitTitle, pkg.dayNumber, pkg.totalDays, pkg.classId, pkg.partId);
+      setPackageActiveState(true, `Std ${pkg.classId} - ${pkg.unitTitle} (Day ${pkg.dayNumber})`);
+
+      document.querySelectorAll('.pkg-card').forEach(c => c.classList.toggle('active-loaded', c.dataset.id === pkg.id));
+      document.querySelector('[data-tab="lesson-plan"]').click();
+      showToast(`Loaded: ${pkg.unitTitle}`);
+    }
+
+    async function refreshPackageArchiveUI() {
+      const packages = await idb.getAllPackages();
+      packageCountBadge.textContent = packages.length;
+
+      if (packages.length === 0) {
+        pkgArchiveList.innerHTML = `<div style="font-size: 0.72rem; color: var(--text-muted); text-align: center; padding: 8px;">No packages generated yet.</div>`;
+        return;
+      }
+
+      packages.sort((a, b) => b.createdAt - a.createdAt);
+
+      let html = '';
+      packages.forEach(pkg => {
+        const isLoaded = (pkg.id === state.activePackageId);
+        html += `
+          <div class="pkg-card ${isLoaded ? 'active-loaded' : ''}" data-id="${pkg.id}">
+            <button class="pkg-header-btn">
+              <div>
+                <span>📚 Std ${pkg.classId} - ${pkg.unitTitle}</span>
+                <div class="pkg-meta">Day ${pkg.dayNumber}/${pkg.totalDays} • ${pkg.dateFormatted}</div>
+              </div>
+              <span>▾</span>
+            </button>
+            <div class="pkg-body">
+              <div class="pkg-actions-row">
+                <button class="btn btn-primary btn-sm btn-load-pkg" data-id="${pkg.id}">📥 Load</button>
+                <button class="btn btn-outline btn-sm btn-reset-pkg" data-id="${pkg.id}">🔄 Reset</button>
+                <button class="btn btn-outline btn-sm btn-del-pkg" data-id="${pkg.id}" style="color:#ef4444;">🗑️</button>
+              </div>
+            </div>
+          </div>
+        `;
+      });
+      pkgArchiveList.innerHTML = html;
+
+      pkgArchiveList.querySelectorAll('.pkg-header-btn').forEach(btn => {
+        btn.addEventListener('click', (e) => {
+          e.currentTarget.closest('.pkg-card').classList.toggle('expanded');
+        });
+      });
+
+      pkgArchiveList.querySelectorAll('.btn-load-pkg').forEach(btn => {
+        btn.addEventListener('click', (e) => loadSavedPackage(e.currentTarget.dataset.id));
+      });
+
+      pkgArchiveList.querySelectorAll('.btn-reset-pkg').forEach(btn => btn.addEventListener('click', resetWorkspace));
+
+      pkgArchiveList.querySelectorAll('.btn-del-pkg').forEach(btn => {
+        btn.addEventListener('click', async (e) => {
+          const id = e.currentTarget.dataset.id;
+          await idb.deletePackage(id);
+          if (state.activePackageId === id) resetWorkspace();
+          refreshPackageArchiveUI();
+          showToast("Package deleted.");
+        });
+      });
     }
 
     // =========================================================================
@@ -1590,17 +1943,13 @@ PEDAGOGICAL SPECIFICATIONS:
 1. CURRICULAR OBJECTIVES (COs): Provide all unit COs (CO 1, CO 2, ...) and highlight the specific CO for Day ${dayNumber}.
 2. 35-MINUTE ALLOCATION TABLE: HTML <table> with inline borders for LibreOffice/Word.
    Phases: 0-5 min (Entry Activity), 5-20 min (Concept & Inquiry), 20-25 min (Assessment), 25-35 min (Blackboard Work).
-
 3. BLACKBOARD NOTES (STRICT APPLICATION-LEVEL ONLY):
    - Provide 2 to 3 Higher-Order Thinking / Application-Level Questions.
    - For EACH question, provide the Question and the Model Answer as separated properties in an array.
-   - Focus on problem solving, daily life scenarios, or deductive reasoning.
-
 4. WHATSAPP BROADCAST (STRUCTURED & SEPARATED):
    - Provide a reassuring 100-word daily recap of what the child explored in class.
    - Include the EXACT same Application-Level Questions & Answers from the Blackboard section.
    - Provide home study tips and DIKSHA/YouTube search keywords.
-
 5. A4 PRINTABLE WORKSHEET: Exactly 5 total scores, application-level questions with score tags [Score: X] and answer lines.
 6. WORKSHEET ANSWER KEY: Scoring breakdown totaling 5 marks.
 7. DIGITAL MEDIA: 3-4 recommended resources (DIKSHA, KITE Victers, PhET simulations, YouTube).
@@ -1645,74 +1994,35 @@ OUTPUT MUST BE A STRICT JSON OBJECT MATCHING THIS SCHEMA:
 
         const payload = {
           contents: [{ role: "user", parts: parts }],
-          generationConfig: {
-            responseMimeType: "application/json",
-            temperature: 0.2
-          }
+          generationConfig: { responseMimeType: "application/json", temperature: 0.2 }
         };
 
         const data = await executeSmartGeneration(payload);
         let rawJson = data.candidates[0].content.parts[0].text;
-        
         rawJson = rawJson.replace(/^```(?:json)?\s*/i, '').replace(/\s*```$/i, '').trim();
         const result = JSON.parse(rawJson);
         state.currentPackage = result;
 
-        // 1. Render Lesson Plan
-        let coMasterListHtml = `<div class="co-box-master"><strong>All Curricular Objectives (Unit Master):</strong><ul style="margin-top:6px; padding-left:20px;">`;
-        (result.allUnitCurricularObjectives || []).forEach(co => {
-          coMasterListHtml += `<li>${co}</li>`;
-        });
-        coMasterListHtml += `</ul></div>`;
+        renderPackageToWorkspace(result, unitTitle, dayNumber, totalDays, state.currentClass, state.currentPart);
 
-        const coActiveHtml = `
-          <div class="co-box-active">
-            🎯 <strong>Curricular Objective(s) Targeted (Day ${dayNumber} of ${totalDays}):</strong><br>
-            <span>${result.targetedCurricularObjective || ''}</span>
-          </div>
-        `;
+        const now = new Date();
+        const pkgId = 'pkg_' + Date.now();
+        const newPkg = {
+          id: pkgId,
+          classId: state.currentClass,
+          partId: state.currentPart,
+          unitTitle: unitTitle,
+          dayNumber: dayNumber,
+          totalDays: totalDays,
+          createdAt: now.getTime(),
+          dateFormatted: now.toLocaleDateString('en-IN', { day: '2-digit', month: 'short' }) + ' ' + now.toLocaleTimeString('en-IN', { hour: '2-digit', minute: '2-digit' }),
+          data: result
+        };
 
-        document.getElementById('lesson-plan-body').innerHTML = `
-          ${coMasterListHtml}
-          ${coActiveHtml}
-          ${result.lessonPlanIntroHtml || ''}
-          <h3 style="margin:16px 0 8px 0; color:var(--primary);">35-Minute Period Breakdown:</h3>
-          ${result.lessonPlanTableHtml}
-        `;
-        
-        // 2. Render Media Resources
-        renderMediaResources(result.mediaResources || []);
-
-        // 3. Render Blackboard Notes
-        renderBlackboardNotes(result.blackboardQa || []);
-
-        // 4. Render WhatsApp Broadcast
-        renderWhatsAppBroadcast(result.whatsappSummary, result.blackboardQa || [], unitTitle, dayNumber, totalDays);
-        
-        // 5. Render Printable Worksheet
-        document.getElementById('worksheet-render-area').innerHTML = `
-          <div class="ws-header">
-            <h2>Kerala SCERT Curriculum Worksheet</h2>
-            <div style="font-weight:bold; font-size:10pt; margin-top:2px;">Application-Level Evaluation Activity (Total: 5 Scores)</div>
-            <div class="ws-meta-grid">
-              <div class="ws-meta-line"><strong>Unit:</strong> ${unitTitle} (Day ${dayNumber}/${totalDays})</div>
-              <div class="ws-meta-line"><strong>Class:</strong> Std ${state.currentClass}</div>
-              <div class="ws-meta-line"><strong>Max Score:</strong> 5</div>
-              <div class="ws-meta-line"><strong>Student Name:</strong> ___________________________</div>
-              <div class="ws-meta-line"><strong>Roll No:</strong> _______</div>
-              <div class="ws-meta-line"><strong>Time:</strong> 20 Mins</div>
-            </div>
-          </div>
-          ${result.worksheetHtml}
-        `;
-
-        // 6. Render Answer Key
-        document.getElementById('worksheet-answers-body').innerHTML = `
-          <div style="margin-bottom:14px; padding:10px; background:#f1f5f9; border-radius:4px;">
-            <strong>Standard:</strong> SCERT Criteria | <strong>Total Score:</strong> 5 | <strong>Unit:</strong> ${unitTitle} (Day ${dayNumber}/${totalDays})
-          </div>
-          ${result.worksheetAnswerKeyHtml || ''}
-        `;
+        await idb.savePackage(newPkg);
+        state.activePackageId = pkgId;
+        setPackageActiveState(true, `Std ${state.currentClass} - ${unitTitle} (Day ${dayNumber})`);
+        await refreshPackageArchiveUI();
 
         hideSpinner();
         showToast("Lesson package generated successfully!");
@@ -1720,19 +2030,14 @@ OUTPUT MUST BE A STRICT JSON OBJECT MATCHING THIS SCHEMA:
         hideSpinner();
         console.error(err);
         showMessageBox(err.message, "Notice");
-      } finally {
         generateBtn.disabled = false;
       }
     });
 
-    // =========================================================================
-    // RENDERER: BLACKBOARD NOTES
-    // =========================================================================
     function renderBlackboardNotes(qaList) {
       const container = document.getElementById('blackboard-notes-body');
-      
       if (!qaList || qaList.length === 0) {
-        container.innerHTML = `<div class="rendered-markdown"><p style="color:var(--text-muted);">No structured blackboard notes generated.</p></div>`;
+        container.innerHTML = `<div class="rendered-markdown"><p style="color:var(--text-muted);">No notes generated.</p></div>`;
         return;
       }
 
@@ -1746,25 +2051,18 @@ OUTPUT MUST BE A STRICT JSON OBJECT MATCHING THIS SCHEMA:
           <div class="bb-card">
             <div class="bb-card-header">
               <div class="bb-tag-group">
-                <span class="bb-num-pill">Question ${qNum}</span>
-                <span class="bb-cognitive-pill">🎯 ${domain}</span>
+                <span class="bb-num-pill">Q${qNum}</span>
+                <span class="bb-cognitive-pill">${domain}</span>
               </div>
-              <button class="btn btn-outline btn-sm copy-single-bb" data-index="${index}">
-                📋 Copy Q&A
-              </button>
+              <button class="btn btn-outline btn-sm copy-single-bb" data-index="${index}">📋 Copy</button>
             </div>
             <div class="bb-card-body">
               <div class="bb-q-section">
-                <div class="bb-label-q">
-                  <span>❓ Blackboard Question</span>
-                </div>
+                <div class="bb-label-q">Question</div>
                 <div class="bb-text-q">${item.question}</div>
               </div>
-
               <div class="bb-a-section">
-                <div class="bb-label-a">
-                  <span>✍️ Chalkboard Solution / Student Notebook Note</span>
-                </div>
+                <div class="bb-label-a">Chalkboard Solution</div>
                 <div class="bb-text-a">${cleanAnswer}</div>
               </div>
             </div>
@@ -1778,27 +2076,23 @@ OUTPUT MUST BE A STRICT JSON OBJECT MATCHING THIS SCHEMA:
         btn.addEventListener('click', (e) => {
           const idx = parseInt(e.currentTarget.dataset.index, 10);
           const item = qaList[idx];
-          const text = `Q${idx + 1}: ${item.question}\n\nAns:\n${item.answer}`;
-          copyText(text, `Copied Question ${idx + 1}!`);
+          copyText(`Q${idx + 1}: ${item.question}\n\nAns:\n${item.answer}`, `Copied Q${idx + 1}!`);
         });
       });
     }
 
-    // =========================================================================
-    // RENDERER: WHATSAPP BROADCAST
-    // =========================================================================
-    function renderWhatsAppBroadcast(summaryObj, qaList, unitTitle, dayNumber, totalDays) {
+    function renderWhatsAppBroadcast(summaryObj, qaList, unitTitle, dayNumber, totalDays, classId = state.currentClass) {
       const previewArea = document.getElementById('whatsapp-preview-area');
       const rawBody = document.getElementById('whatsapp-summary-body');
 
-      const recap = summaryObj?.dailyRecap || "Today, our students engaged in interactive concept exploration and hands-on reasoning.";
-      const tip = summaryObj?.studyTip || "Ask your child to explain today's classroom example in their own words.";
-      const links = summaryObj?.dikshaKeywords || `${unitTitle} SCERT Class ${state.currentClass}`;
+      const recap = summaryObj?.dailyRecap || "Today, students engaged in concept exploration.";
+      const tip = summaryObj?.studyTip || "Discuss today's topic with your child.";
+      const links = summaryObj?.dikshaKeywords || `${unitTitle} SCERT Class ${classId}`;
 
       let chatHtml = `
         <div class="wa-bubble wa-bubble-green">
           <div class="wa-bubble-header">
-            <span>🏫 Daily Classroom Recap (Std ${state.currentClass})</span>
+            <span>🏫 Daily Classroom Recap (Std ${classId})</span>
             <span>Day ${dayNumber}/${totalDays}</span>
           </div>
           <p style="font-weight:600; margin-bottom:4px;">*Unit:* ${unitTitle}</p>
@@ -1810,10 +2104,6 @@ OUTPUT MUST BE A STRICT JSON OBJECT MATCHING THIS SCHEMA:
             <span>📝 Today's Notebook & Blackboard Q&As</span>
             <span>${qaList.length} Items</span>
           </div>
-          <p style="font-size:0.78rem; color:var(--text-muted); margin-bottom:8px;">
-            Please ensure your child has copied and revised these application questions in their science/social notebook:
-          </p>
-          
           <div class="wa-qa-list">
       `;
 
@@ -1835,32 +2125,23 @@ OUTPUT MUST BE A STRICT JSON OBJECT MATCHING THIS SCHEMA:
             <span>💡 Evening Study & DIKSHA Recommendations</span>
           </div>
           <p style="margin-bottom:6px;"><strong>Home Discussion:</strong> ${tip}</p>
-          <div class="wa-links-box">
-            🔍 <strong>Recommended Search Terms (DIKSHA / YouTube):</strong><br>
-            <span style="font-family: monospace; color:#0369a1;">"${links}"</span>
+          <div style="font-size:0.8rem; background:#f1f5f9; padding:6px 8px; border-radius:4px;">
+            🔍 <strong>Search on DIKSHA / YouTube:</strong> "${links}"
           </div>
         </div>
       `;
       previewArea.innerHTML = chatHtml;
 
-      let rawText = `*🏫 SCERT Std ${state.currentClass} Daily Learning Update*\n`;
-      rawText += `*Unit:* ${unitTitle} (Day ${dayNumber}/${totalDays})\n\n`;
-      rawText += `*🌟 What we learned today:*\n${recap}\n\n`;
-      rawText += `*📚 Today's Blackboard Q&As (Check Child's Notebook):*\n\n`;
-
+      let rawText = `*🏫 SCERT Std ${classId} Daily Update*\n*Unit:* ${unitTitle} (Day ${dayNumber}/${totalDays})\n\n`;
+      rawText += `*🌟 Today's Learning:*\n${recap}\n\n`;
+      rawText += `*📚 Today's Blackboard Q&As:*\n\n`;
       qaList.forEach((item, idx) => {
-        rawText += `*Q${idx + 1}:* ${item.question}\n`;
-        rawText += `*Ans:* ${item.answer}\n\n`;
+        rawText += `*Q${idx + 1}:* ${item.question}\n*Ans:* ${item.answer}\n\n`;
       });
-
-      rawText += `*💡 Home Engagement Tip:*\n${tip}\n\n`;
-      rawText += `*🔍 Suggested DIKSHA & Victers Search:*\n"${links}"\n\n`;
-      rawText += `_— Sent via Kerala SCERT Teacher Studio_`;
-
+      rawText += `*💡 Home Tip:* ${tip}\n*🔍 DIKSHA Search:* "${links}"`;
       rawBody.textContent = rawText;
     }
 
-    // Render Digital Media Cards
     function renderMediaResources(mediaList) {
       const container = document.getElementById('media-resources-body');
       if (!mediaList || mediaList.length === 0) {
@@ -1919,44 +2200,18 @@ OUTPUT MUST BE A STRICT JSON OBJECT MATCHING THIS SCHEMA:
       });
     });
 
-    // Dual-Engine Copy Handlers
     document.querySelectorAll('.copy-btn').forEach(btn => {
       btn.addEventListener('click', () => {
         const target = document.getElementById(btn.dataset.target);
-        if (target) {
-          copyText(target.innerText || target.textContent, "Copied content!");
-        }
+        if (target) copyText(target.innerText || target.textContent, "Copied content!");
       });
     });
 
-    // Print Worksheet Button
-    printBtn.addEventListener('click', () => {
-      document.querySelector('[data-tab="worksheet-view"]').click();
-      document.querySelectorAll('.tab-pane').forEach(p => p.classList.remove('print-active'));
-      document.getElementById('tab-worksheet-view').classList.add('print-active');
-      document.body.classList.add('has-print-active');
-      setTimeout(() => window.print(), 100);
-    });
-
-    // Print Answer Key Button
-    if (printAnswersBtn) {
-      printAnswersBtn.addEventListener('click', () => {
-        document.querySelector('[data-tab="worksheet-answers"]').click();
-        document.querySelectorAll('.tab-pane').forEach(p => p.classList.remove('print-active'));
-        document.getElementById('tab-worksheet-answers').classList.add('print-active');
-        document.body.classList.add('has-print-active');
-        setTimeout(() => window.print(), 100);
-      });
-    }
-
-    window.addEventListener('afterprint', () => {
-      document.body.classList.remove('has-print-active');
-      document.querySelectorAll('.tab-pane').forEach(p => p.classList.remove('print-active'));
-    });
-
-    // Prompt user for API key if missing on first launch
-    window.addEventListener('DOMContentLoaded', () => {
+    // Startup Initialization
+    window.addEventListener('DOMContentLoaded', async () => {
+      await idb.init();
       syncAllSlots();
+      refreshPackageArchiveUI();
       if (!GEMINI_API_KEY) {
         setTimeout(showKeyModal, 600);
       }
