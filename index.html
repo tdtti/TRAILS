@@ -230,7 +230,6 @@
     .form-row .half { flex: 1; min-width: 0; }
     .radio-toggle { display: flex; gap: 10px; font-size: 0.76rem; font-weight: 500; }
 
-    /* Pacing Mode Selector Box */
     .pacing-mode-box {
       background: #f1f5f9;
       border: 1px solid #cbd5e1;
@@ -248,7 +247,6 @@
       font-weight: 600;
     }
 
-    /* Chapter Roadmap Lock Status Pill */
     .roadmap-status-pill {
       background: #e0f2fe;
       border: 1px solid #bae6fd;
@@ -370,7 +368,6 @@
     }
     .pkg-actions-row { display: flex; gap: 4px; margin-top: 2px; align-items: center; }
 
-    /* Active Generator Controls */
     .active-status-bar {
       background: #fef9c3;
       border: 1px solid #fde047;
@@ -413,7 +410,6 @@
     .btn-translate { background: #fdf2f8; border: 1px solid #f472b6; color: #be185d; }
     .btn-translate.active-ml { background: #be185d; color: #fff; }
     
-    /* Speaking/TTS Pulsing Button */
     .btn-tts { background: #f0fdfa; border: 1px solid #99f6e4; color: #0d9488; }
     .btn-tts:hover { background: #ccfbf1; }
     .btn-tts.speaking {
@@ -544,7 +540,7 @@
     .pane-header h2 { font-size: 0.92rem; font-weight: 700; color: var(--text); }
     .pane-header-actions { display: flex; gap: 4px; align-items: center; flex-wrap: wrap; }
 
-    /* Universal Chapter & CO Header (Screen & Print) */
+    /* Universal Chapter & CO Header */
     .universal-header-card {
       background: #ffffff;
       border: 1px solid var(--border);
@@ -614,9 +610,107 @@
     .co-box-master ul { margin-top: 4px; padding-left: 18px; }
     .co-box-master li { margin-bottom: 3px; line-height: 1.4; font-size: 0.8rem; }
 
-    /* Blackboard Notes UI */
-    .bb-container { display: flex; flex-direction: column; gap: 10px; width: 100%; }
-    .bb-card {
+    /* ==========================================================================
+       DE-CONGESTED 35-MINUTE PERIOD BREAKDOWN TIMELINE
+       ========================================================================== */
+    .period-timeline {
+      display: flex;
+      flex-direction: column;
+      gap: 10px;
+      margin-top: 8px;
+      width: 100%;
+    }
+    .period-card {
+      background: #ffffff;
+      border: 1px solid #e2e8f0;
+      border-left: 4px solid var(--primary);
+      border-radius: 6px;
+      padding: 10px 12px;
+      box-shadow: 0 1px 3px rgba(0,0,0,0.02);
+      transition: transform 0.1s ease;
+    }
+    .period-card-header {
+      display: flex;
+      justify-content: space-between;
+      align-items: center;
+      margin-bottom: 6px;
+      flex-wrap: wrap;
+      gap: 4px;
+    }
+    .period-badge-time {
+      background: #e8f5e9;
+      color: #1b5e20;
+      font-weight: 700;
+      font-size: 0.68rem;
+      padding: 2px 6px;
+      border-radius: 4px;
+      display: inline-flex;
+      align-items: center;
+      gap: 3px;
+    }
+    .period-phase-title {
+      font-size: 0.82rem;
+      font-weight: 700;
+      color: #1e293b;
+    }
+    .period-card-body {
+      display: grid;
+      grid-template-columns: 1fr 1fr;
+      gap: 8px;
+      background: #f8fafc;
+      padding: 8px 10px;
+      border-radius: 5px;
+      border: 1px solid #edf2f7;
+    }
+    @media (max-width: 640px) {
+      .period-card-body { grid-template-columns: 1fr; }
+    }
+    .period-col h4 {
+      font-size: 0.68rem;
+      text-transform: uppercase;
+      letter-spacing: 0.03em;
+      color: #64748b;
+      margin-bottom: 3px;
+    }
+    .period-col p, .period-col div {
+      font-size: 0.78rem;
+      color: #1e293b;
+      line-height: 1.45;
+    }
+
+    /* Spacious Table Fallback */
+    .table-scroll-wrapper {
+      width: 100%;
+      overflow-x: auto;
+      margin: 10px 0;
+      -webkit-overflow-scrolling: touch;
+      border: 1px solid var(--border);
+      border-radius: 6px;
+      background: #fff;
+    }
+    .copiable-table {
+      width: 100%;
+      min-width: 640px;
+      border-collapse: collapse;
+      font-size: 0.82rem;
+      background: #fff;
+    }
+    .copiable-table th, .copiable-table td {
+      border: 1px solid #e2e8f0;
+      padding: 10px 12px;
+      text-align: left;
+      vertical-align: top;
+      line-height: 1.5;
+    }
+    .copiable-table th { background-color: #f8fafc; font-weight: 700; color: #1e293b; }
+    .copiable-table tr:nth-child(even) td { background-color: #fafbfc; }
+
+    /* ==========================================================================
+       UNIFIED MODERN CARD TYPE SYSTEM: BOARD, WORKSHEET & ANSWER KEY
+       ========================================================================== */
+    .cards-stack-container { display: flex; flex-direction: column; gap: 10px; width: 100%; }
+    
+    .unified-card {
       background: #ffffff;
       border: 1px solid #cbd5e1;
       border-radius: 6px;
@@ -624,50 +718,100 @@
       overflow: hidden;
       width: 100%;
     }
-    .bb-card-header {
+    .unified-card-header {
       background: #f8fafc;
       border-bottom: 1px solid #e2e8f0;
-      padding: 6px 10px;
+      padding: 7px 10px;
       display: flex;
       justify-content: space-between;
       align-items: center;
       flex-wrap: wrap;
       gap: 4px;
     }
-    .bb-tag-group { display: flex; align-items: center; gap: 4px; }
-    .bb-num-pill {
+    .card-tag-group { display: flex; align-items: center; gap: 5px; }
+    
+    .pill-qnum {
       background: var(--secondary);
       color: #fff;
       font-weight: 700;
-      font-size: 0.64rem;
-      padding: 1px 5px;
+      font-size: 0.65rem;
+      padding: 1px 6px;
       border-radius: 8px;
     }
-    .bb-cognitive-pill {
+    .pill-score {
+      background: #fef3c7;
+      color: #92400e;
+      border: 1px solid #fde68a;
+      font-weight: 700;
+      font-size: 0.65rem;
+      padding: 1px 6px;
+      border-radius: 8px;
+    }
+    .pill-cognitive {
       background: #ede9fe;
       color: #5b21b6;
       font-weight: 600;
-      font-size: 0.64rem;
-      padding: 1px 5px;
+      font-size: 0.65rem;
+      padding: 1px 6px;
       border-radius: 8px;
     }
-    .bb-card-body { padding: 10px; display: flex; flex-direction: column; gap: 6px; }
-    .bb-q-section {
+
+    .unified-card-body { padding: 10px 12px; display: flex; flex-direction: column; gap: 8px; }
+
+    /* Yellow Question Block */
+    .section-q {
       background: #fefce8;
       border-left: 3px solid #eab308;
       border-radius: 3px;
-      padding: 7px 9px;
+      padding: 8px 10px;
     }
-    .bb-label-q { font-size: 0.64rem; font-weight: 700; color: #854d0e; text-transform: uppercase; margin-bottom: 2px; }
-    .bb-text-q { font-size: 0.86rem; font-weight: 600; color: #1e293b; }
-    .bb-a-section {
+    .label-q { font-size: 0.64rem; font-weight: 700; color: #854d0e; text-transform: uppercase; margin-bottom: 3px; }
+    .text-q { font-size: 0.86rem; font-weight: 600; color: #1e293b; line-height: 1.45; }
+
+    /* Green Solution Block */
+    .section-a {
       background: #f0fdf4;
       border-left: 3px solid var(--primary);
       border-radius: 3px;
       padding: 8px 10px;
     }
-    .bb-label-a { font-size: 0.64rem; font-weight: 700; color: var(--primary); text-transform: uppercase; margin-bottom: 2px; }
-    .bb-text-a { font-size: 0.84rem; color: #0f172a; line-height: 1.5; }
+    .label-a { font-size: 0.64rem; font-weight: 700; color: var(--primary); text-transform: uppercase; margin-bottom: 3px; }
+    .text-a { font-size: 0.84rem; color: #0f172a; line-height: 1.5; }
+
+    /* Purple Rubric / Criteria Block */
+    .section-rubric {
+      background: #f5f3ff;
+      border-left: 3px solid #8b5cf6;
+      border-radius: 3px;
+      padding: 8px 10px;
+    }
+    .label-rubric { font-size: 0.64rem; font-weight: 700; color: #6d28d9; text-transform: uppercase; margin-bottom: 3px; }
+    .text-rubric { font-size: 0.82rem; color: #334155; line-height: 1.45; }
+
+    /* Worksheet Student Chalk / Writing Lines */
+    .section-write-space {
+      background: #fafafa;
+      border: 1px dashed #cbd5e1;
+      border-radius: 4px;
+      padding: 8px 10px;
+    }
+    .label-write { font-size: 0.64rem; font-weight: 700; color: #64748b; text-transform: uppercase; margin-bottom: 4px; }
+    .answer-line { border-bottom: 1px dashed #94a3b8; height: 18px; width: 100%; margin-top: 4px; display: block; }
+
+    /* Summary Meta Banner */
+    .meta-overview-banner {
+      display: flex;
+      justify-content: space-between;
+      align-items: center;
+      background: #f8fafc;
+      border: 1px solid #cbd5e1;
+      padding: 8px 12px;
+      border-radius: 6px;
+      margin-bottom: 10px;
+      font-size: 0.78rem;
+      font-weight: 600;
+      color: #334155;
+    }
 
     /* WhatsApp UI */
     .wa-view-switch {
@@ -733,39 +877,6 @@
       word-break: break-word;
     }
 
-    /* Screen Adaptive Fluid Worksheet */
-    .worksheet-preview-container {
-      background: #64748b;
-      padding: 10px;
-      border-radius: 6px;
-      width: 100%;
-      box-sizing: border-box;
-    }
-    .worksheet-page {
-      background: #ffffff;
-      width: 100%;
-      max-width: 800px;
-      padding: 20px 16px;
-      margin: 0 auto;
-      box-shadow: 0 2px 8px rgba(0,0,0,0.1);
-      color: #000;
-      font-family: 'Merriweather', serif;
-      border-radius: 4px;
-      box-sizing: border-box;
-    }
-    .score-badge {
-      display: inline-block;
-      background: #f1f5f9;
-      border: 1px solid #cbd5e1;
-      padding: 1px 4px;
-      border-radius: 3px;
-      font-size: 7.5pt;
-      font-weight: 700;
-      float: right;
-    }
-    .question-block { margin-bottom: 12px; font-size: 9pt; line-height: 1.45; word-break: break-word; }
-    .answer-line { border-bottom: 1px dashed #666; height: 18px; width: 100%; margin-top: 4px; display: block; }
-
     /* Media Cards Grid */
     .media-grid {
       display: grid;
@@ -795,30 +906,6 @@
     .type-sim { background: #ede9fe; color: #6d28d9; }
     .media-card h4 { font-size: 0.84rem; margin-bottom: 3px; }
     .media-card p { font-size: 0.74rem; color: var(--text-muted); margin-bottom: 6px; }
-
-    /* Touch-Scrollable Table Container */
-    .table-scroll-wrapper {
-      width: 100%;
-      overflow-x: auto;
-      margin: 10px 0;
-      -webkit-overflow-scrolling: touch;
-      border: 1px solid var(--border);
-      border-radius: 4px;
-    }
-    .copiable-table {
-      width: 100%;
-      min-width: 480px;
-      border-collapse: collapse;
-      font-size: 0.8rem;
-      background: #fff;
-    }
-    .copiable-table th, .copiable-table td {
-      border: 1px solid #cbd5e1;
-      padding: 6px 8px;
-      text-align: left;
-      vertical-align: top;
-    }
-    .copiable-table th { background-color: #f1f5f9; font-weight: 700; color: #1e293b; }
 
     /* Modals & Overlays */
     .spinner-overlay {
@@ -909,7 +996,7 @@
       .wa-view-switch {
         display: none !important;
       }
-      .canvas, .tab-content-wrapper, .worksheet-preview-container {
+      .canvas, .tab-content-wrapper {
         padding: 0 !important;
         margin: 0 !important;
         background: transparent !important;
@@ -934,7 +1021,7 @@
       .u-badge { border: 1px solid #000 !important; background: #f1f5f9 !important; color: #000 !important; }
       .u-header-co { background: #fff !important; border: 1px solid #666 !important; color: #000 !important; }
 
-      .worksheet-page, .rendered-markdown, .bb-container, .wa-chat-canvas, #media-resources-body {
+      .rendered-markdown, .cards-stack-container, .wa-chat-canvas, #media-resources-body {
         width: 100% !important;
         max-width: 100% !important;
         min-height: auto !important;
@@ -946,13 +1033,15 @@
         color: #000 !important;
       }
 
-      .question-block, .bb-card, .wa-bubble, .media-card, .copiable-table tr {
+      .unified-card, .period-card, .wa-bubble, .media-card, .copiable-table tr {
         page-break-inside: avoid !important;
         break-inside: avoid !important;
+        border: 1px solid #475569 !important;
+        margin-bottom: 8px !important;
       }
       .copiable-table { width: 100% !important; min-width: auto !important; }
       .copiable-table th, .copiable-table td {
-        padding: 4px 6px !important;
+        padding: 6px 8px !important;
         font-size: 8.5pt !important;
         border: 1px solid #333 !important;
       }
@@ -1042,7 +1131,7 @@
     </div>
   </div>
 
-  <!-- Warning Modal (For Existing / Already Created Packages) -->
+  <!-- Warning Modal -->
   <div id="warning-modal-overlay" class="modal-overlay no-print" style="display:none;">
     <div class="modal-box">
       <div class="modal-header" style="background: #b45309;">
@@ -1073,7 +1162,7 @@
         <p style="font-size:0.8rem; color:var(--text-muted); margin-bottom:8px;">
           Enter your free key from <a href="https://aistudio.google.com/apikey" target="_blank" rel="noopener" style="color:var(--primary); font-weight:700;">Google AI Studio ↗</a>.
         </p>
-        <input type="password" id="key-modal-input" class="form-control" placeholder="Paste AIza... or AQ... key">
+        <input type="password" id="key-modal-input" class="form-control" placeholder="Paste AIza... key">
       </div>
       <div class="modal-footer">
         <button id="save-key-modal-btn" class="btn btn-primary btn-sm">Save Key</button>
@@ -1084,7 +1173,7 @@
   <!-- Floating Toast Notification -->
   <div id="toast-popup" class="toast-popup no-print">Notification</div>
 
-  <!-- Fluid Responsive Header -->
+  <!-- Header -->
   <header class="app-header no-print">
     <div class="header-brand">
       <button id="controls-toggle-btn" class="btn-header" title="Toggle Controls">
@@ -1097,7 +1186,6 @@
       </div>
     </div>
     <div class="header-controls">
-      <!-- Voice & Speed Header Button -->
       <button id="header-voice-btn" class="btn-header" title="Speech Voice Gender & Speed">
         🎙️ <span id="hdr-voice-text">👩 1.0x</span>
       </button>
@@ -1105,12 +1193,8 @@
     </div>
   </header>
 
-  <!-- ==========================================================================
-       TOP DRAWER (WITH MOBILE SEGMENTED CONTROL & DESKTOP GRID)
-       ========================================================================== -->
+  <!-- Top Controls Panel -->
   <section class="top-controls-panel no-print" id="top-controls-panel">
-    
-    <!-- Mobile Segmented Navigation Bar -->
     <div class="mobile-drawer-nav">
       <button class="mob-tab-btn active" data-drawer-tab="pacing">🎯 Pacing</button>
       <button class="mob-tab-btn" data-drawer-tab="books">📚 Books <span id="mob-locked-pill" class="pill-mini">0/6</span></button>
@@ -1119,18 +1203,14 @@
     </div>
 
     <div class="top-controls-grid">
-      
-      <!-- Card 1: Pacing Target with Chapter CO Locking Roadmap & Full Unit Mode -->
+      <!-- Card 1: Pacing Target -->
       <div class="ctrl-card mob-active" data-section="pacing">
         <h3><span>1. Pacing Target</span></h3>
-
-        <!-- Locked Chapter Roadmap Status Banner -->
         <div id="roadmap-status-pill" class="roadmap-status-pill">
           <span id="roadmap-status-text">🔒 Chapter Plan: Locked</span>
           <button id="unlock-roadmap-btn" class="btn btn-danger btn-sm" style="padding: 1px 5px; font-size:0.64rem;">🔓 Unlock</button>
         </div>
 
-        <!-- Single Day vs Whole Unit Plan Mode Selector -->
         <div class="pacing-mode-box">
           <label>
             <input type="radio" name="pacing-generation-scope" value="single" checked id="scope-single-day">
@@ -1138,7 +1218,7 @@
           </label>
           <label>
             <input type="radio" name="pacing-generation-scope" value="unit" id="scope-whole-unit">
-            <span>📦 Entire Unit Plan (All Total Days)</span>
+            <span>📦 Entire Unit Plan (All Days)</span>
           </label>
         </div>
 
@@ -1177,7 +1257,7 @@
         </div>
       </div>
 
-      <!-- Card 2: 6 Locked Textbooks (With IDs and Overflow-Proof Pickers) -->
+      <!-- Card 2: 6 Locked Textbooks -->
       <div class="ctrl-card" data-section="books">
         <h3>
           <span>2. Locked Textbooks</span>
@@ -1257,7 +1337,6 @@
           <span id="active-status-text">🔒 Active</span>
           <button id="quick-reset-btn" class="btn btn-danger btn-sm">Reset</button>
         </div>
-        <!-- ALWAYS VISIBLE & ENABLED GENERATE BUTTON -->
         <button id="generate-btn" class="btn btn-primary btn-block" style="padding: 9px 10px; margin-bottom: 5px;">
           ⚡ Generate Package
         </button>
@@ -1287,7 +1366,6 @@
        ========================================================================== -->
   <main class="canvas">
     
-    <!-- Touch-Friendly Tab Bar -->
     <nav class="canvas-tabs no-print">
       <button class="tab-btn active" data-tab="lesson-plan">
         <span class="tab-icon">📋</span> <span>Lesson Plan</span>
@@ -1463,15 +1541,15 @@
         </div>
       </section>
 
-      <!-- Tab 5: Printable Worksheet -->
+      <!-- Tab 5: Printable Worksheet (RESET TO SAME CONSISTENT CARD TYPE AS MEDIA & BOARD) -->
       <section id="tab-worksheet-view" class="tab-pane">
         <div class="pane-header no-print">
-          <h2>A4 Printable Worksheet (Total: 5 Scores)</h2>
+          <h2>Application Activity Worksheet (Total: 5 Scores)</h2>
           <div class="pane-header-actions">
             <button class="btn btn-translate btn-sm translate-tab-btn" data-tab="tab-worksheet-view">🌐 മലയാളം</button>
             <button class="btn btn-tts btn-sm tts-tab-btn" data-tab="tab-worksheet-view">🔊 Read Aloud</button>
             <button class="btn btn-outline btn-sm tts-cfg-btn" title="Voice Gender & Speed">⚙️ <span class="cfg-spd-lbl">1.0x</span></button>
-            <button class="btn btn-secondary btn-sm copy-btn" data-target="worksheet-render-area">📋 Copy</button>
+            <button class="btn btn-secondary btn-sm" id="copy-all-ws-btn">📋 Copy All</button>
             <button class="btn btn-success btn-sm print-tab-btn">🖨️ Print</button>
           </div>
         </div>
@@ -1491,17 +1569,15 @@
             </div>
           </div>
           
-          <div class="worksheet-preview-container">
-            <div id="worksheet-render-area" class="worksheet-page">
-              <div style="text-align: center; color: #777; font-style: italic; padding: 30px;" class="no-print">
-                Worksheet will render inside this container.
-              </div>
+          <div id="worksheet-render-area">
+            <div class="rendered-markdown">
+              <p style="color: var(--text-muted); font-style: italic;">Evaluation activities will render here.</p>
             </div>
           </div>
         </div>
       </section>
 
-      <!-- Tab 6: Worksheet Answers -->
+      <!-- Tab 6: Worksheet Answers (RESET TO SAME CONSISTENT CARD TYPE AS MEDIA & BOARD) -->
       <section id="tab-worksheet-answers" class="tab-pane">
         <div class="pane-header no-print">
           <h2>Worksheet Answer Key & Scoring Guide</h2>
@@ -1509,7 +1585,7 @@
             <button class="btn btn-translate btn-sm translate-tab-btn" data-tab="tab-worksheet-answers">🌐 മലയാളം</button>
             <button class="btn btn-tts btn-sm tts-tab-btn" data-tab="tab-worksheet-answers">🔊 Read Aloud</button>
             <button class="btn btn-outline btn-sm tts-cfg-btn" title="Voice Gender & Speed">⚙️ <span class="cfg-spd-lbl">1.0x</span></button>
-            <button class="btn btn-secondary btn-sm copy-btn" data-target="worksheet-answers-body">📋 Copy</button>
+            <button class="btn btn-secondary btn-sm" id="copy-all-ak-btn">📋 Copy All</button>
             <button class="btn btn-success btn-sm print-tab-btn">🖨️ Print</button>
           </div>
         </div>
@@ -1529,8 +1605,10 @@
             </div>
           </div>
 
-          <div id="worksheet-answers-body" class="rendered-markdown">
-            <p style="color: var(--text-muted); font-style: italic;">Model answers will render here.</p>
+          <div id="worksheet-answers-body">
+            <div class="rendered-markdown">
+              <p style="color: var(--text-muted); font-style: italic;">Model answers and scoring criteria will render here.</p>
+            </div>
           </div>
         </div>
       </section>
@@ -1565,8 +1643,8 @@
     };
 
     let GEMINI_API_KEY = localStorage.getItem('SCERT_GEMINI_KEY') || "";
-    const PRIMARY_MODEL = "gemini-3.6-flash";
-    const FALLBACK_MODEL = "gemini-3.5-flash-lite";
+    const PRIMARY_MODEL = "gemini-2.5-flash";
+    const FALLBACK_MODEL = "gemini-2.5-flash-lite";
 
     /* IndexedDB Database Helper */
     const idb = {
@@ -1668,7 +1746,6 @@
     const dayNumberInput = document.getElementById('day-number');
     const totalDaysInput = document.getElementById('total-days');
     const dayNumberContainer = document.getElementById('day-number-container');
-
     const scopeRadios = document.querySelectorAll('input[name="pacing-generation-scope"]');
 
     const roadmapStatusPill = document.getElementById('roadmap-status-pill');
@@ -1705,7 +1782,6 @@
     const keyModalCloseBtn = document.getElementById('key-modal-close-btn');
     const saveKeyModalBtn = document.getElementById('save-key-modal-btn');
 
-    // Warning Modal
     const warningModalOverlay = document.getElementById('warning-modal-overlay');
     const warningModalMessage = document.getElementById('warning-modal-message');
     const warningModalCloseBtn = document.getElementById('warning-modal-close-btn');
@@ -1713,7 +1789,6 @@
     const warningCancelBtn = document.getElementById('warning-cancel-btn');
     const warningContinueBtn = document.getElementById('warning-continue-btn');
 
-    // Voice Settings Modal Elements
     const voiceModalOverlay = document.getElementById('voice-modal-overlay');
     const voiceModalCloseBtn = document.getElementById('voice-modal-close-btn');
     const voiceOptFemale = document.getElementById('voice-opt-female');
@@ -1751,7 +1826,6 @@
       if (cb) cb();
     });
 
-    // Pacing Mode Switcher (Single Day vs Whole Unit)
     scopeRadios.forEach(radio => {
       radio.addEventListener('change', () => {
         const isWholeUnit = document.getElementById('scope-whole-unit').checked;
@@ -1765,9 +1839,7 @@
       });
     });
 
-    // =========================================================================
-    // VOICE & SPEED SETTINGS MODAL LOGIC
-    // =========================================================================
+    // Voice & Speed UI
     function updateVoiceUIElements() {
       const isFemale = (state.ttsGender === 'female');
       voiceOptFemale.classList.toggle('selected', isFemale);
@@ -1841,7 +1913,7 @@
       speechEngine.speak("Welcome to Kerala SCERT Teacher Studio. This is a voice test.", testEnSpeechBtn, state.ttsGender, state.ttsSpeed);
     });
 
-    // Mobile Drawer Navigation (Segmented Switcher)
+    // Mobile Drawer Navigation
     document.querySelectorAll('.mob-tab-btn').forEach(btn => {
       btn.addEventListener('click', () => {
         document.querySelectorAll('.mob-tab-btn').forEach(b => b.classList.remove('active'));
@@ -1853,7 +1925,7 @@
       });
     });
 
-    // Toggle Controls Drawer
+    // Drawer Toggle
     controlsToggleBtn.addEventListener('click', () => {
       topControlsPanel.classList.toggle('collapsed');
       const isHidden = topControlsPanel.classList.contains('collapsed');
@@ -1928,9 +2000,7 @@
       document.body.removeChild(ta);
     }
 
-    // =========================================================================
-    // CHAPTER MASTER CO ROADMAP & LOCKING (MULTIPLE COs PER DAY SUPPORT)
-    // =========================================================================
+    // Roadmap logic
     function getRoadmapStorageKey(cls, unit) {
       const clean = (unit || '').toLowerCase().trim().replace(/[^a-z0-9]/g, '_');
       return `SCERT_ROADMAP_${cls}_${clean}`;
@@ -2006,7 +2076,7 @@
       showToast("Chapter COs unlocked! Next generation will calculate a fresh pacing roadmap.");
     });
 
-    // WhatsApp View Switcher
+    // WhatsApp Switcher
     const waBtnChat = document.getElementById('wa-btn-chat');
     const waBtnRaw = document.getElementById('wa-btn-raw');
     const waStyledContainer = document.getElementById('wa-styled-container');
@@ -2021,7 +2091,7 @@
       waStyledContainer.style.display = 'none'; waRawContainer.style.display = 'block';
     });
 
-    // Copy Blackboard Notes
+    // Copy All buttons
     document.getElementById('copy-all-bb-btn').addEventListener('click', () => {
       if (!state.currentPackage?.blackboardQa?.length) {
         return copyText(document.getElementById('blackboard-notes-body').innerText, "Copied Blackboard Notes!");
@@ -2031,6 +2101,30 @@
         combined += `Q${idx + 1}: ${item.question}\nAns: ${item.answer}\n\n`;
       });
       copyText(combined.trim(), "Copied All Blackboard Q&As!");
+    });
+
+    document.getElementById('copy-all-ws-btn').addEventListener('click', () => {
+      const wsList = state.currentPackage?.worksheetQuestions || state.currentPackage?.blackboardQa;
+      if (!wsList || wsList.length === 0) {
+        return copyText(document.getElementById('worksheet-render-area').innerText, "Copied Worksheet!");
+      }
+      let text = `*SCERT EVALUATION WORKSHEET (5 SCORES)*\n\n`;
+      wsList.forEach((q, i) => {
+        text += `Question ${i + 1} [Score: ${q.score || 1}]:\n${q.question}\n\n`;
+      });
+      copyText(text.trim(), "Copied All Worksheet Activities!");
+    });
+
+    document.getElementById('copy-all-ak-btn').addEventListener('click', () => {
+      const akList = state.currentPackage?.worksheetAnswers || state.currentPackage?.blackboardQa;
+      if (!akList || akList.length === 0) {
+        return copyText(document.getElementById('worksheet-answers-body').innerText, "Copied Answer Key!");
+      }
+      let text = `*SCERT WORKSHEET ANSWER KEY & SCORING RUBRIC*\n\n`;
+      akList.forEach((a, i) => {
+        text += `Q${i + 1} [Max Score: ${a.score || 1}]:\nCriteria: ${a.rubric || 'Accuracy and scientific reasoning'}\nKey: ${a.answer || a.modelAnswer}\n\n`;
+      });
+      copyText(text.trim(), "Copied Complete Answer Key!");
     });
 
     document.getElementById('copy-whatsapp-text-btn').addEventListener('click', () => {
@@ -2214,80 +2308,49 @@
       }
       if (result.isBusy || result.isModelError) {
         showSpinner(`Server busy. Auto-switching to ${FALLBACK_MODEL}...`);
-        await delay(2000);
+        await delay(1800);
         const fallbackRes = await callGemini(FALLBACK_MODEL, payload);
         if (fallbackRes.success) return fallbackRes.data;
       }
       throw new Error(`Generation error: ${result.error}`);
     }
 
-    // =========================================================================
-    // DUAL-ENGINE SPEECH WITH TRUE MALE/FEMALE AUDIO SHIFTING
-    // =========================================================================
+    // TTS Engine
     class DualSpeechEngine {
       constructor() {
         this.audio = new Audio();
-        this.audio.crossOrigin = "anonymous";
         this.queue = [];
         this.currentIndex = 0;
         this.isPlaying = false;
         this.activeBtn = null;
-
-        // Web Audio Context for Formant & Pitch Tuning
-        this.audioCtx = null;
-        this.sourceNode = null;
-        this.filterNode = null;
-        this.gainNode = null;
+        this.currentLang = 'en';
 
         this.audio.addEventListener('ended', () => this.playNextChunk());
         this.audio.addEventListener('error', (e) => {
-          console.warn("Audio stream error, continuing...", e);
-          this.playNextChunk();
+          console.warn("Audio chunk error, progressing...", e);
+          setTimeout(() => this.playNextChunk(), 100);
         });
       }
 
-      initAudioNodes() {
-        if (!this.audioCtx) {
-          const AudioContext = window.AudioContext || window.webkitAudioContext;
-          if (AudioContext) {
-            this.audioCtx = new AudioContext();
-            try {
-              this.sourceNode = this.audioCtx.createMediaElementSource(this.audio);
-              this.filterNode = this.audioCtx.createBiquadFilter();
-              this.gainNode = this.audioCtx.createGain();
-              
-              this.sourceNode.connect(this.filterNode);
-              this.filterNode.connect(this.gainNode);
-              this.gainNode.connect(this.audioCtx.destination);
-            } catch (e) {
-              console.warn("Web Audio Routing:", e);
-            }
-          }
-        }
-        if (this.audioCtx && this.audioCtx.state === 'suspended') {
-          this.audioCtx.resume();
-        }
-      }
-
-      chunkText(text, maxLen = 140) {
+      chunkText(text, maxLen = 45) {
         const clean = text
           .replace(/[#*_~`]/g, '')
-          .replace(/[-]{2,}/g, '')
-          .replace(/[_]{2,}/g, ' _____ ')
+          .replace(/[-]{2,}/g, ' ')
+          .replace(/[_]{2,}/g, ' ')
           .replace(/\s+/g, ' ')
           .trim();
 
-        const sentences = clean.split(/([.!?।;\n\u0D3D]+|\s*—\s*)/g).filter(s => s.trim().length > 0);
+        const rawPhrases = clean.split(/([.!?।;,:\n\u0D3D]+|\s*—\s*)/g).filter(s => s.trim().length > 0);
         const chunks = [];
         let current = '';
 
-        for (let s of sentences) {
-          if ((current + ' ' + s).length <= maxLen) {
-            current = current ? current + ' ' + s : s;
+        for (let phrase of rawPhrases) {
+          if ((current + ' ' + phrase).length <= maxLen) {
+            current = current ? current + ' ' + phrase : phrase;
           } else {
             if (current) chunks.push(current.trim());
-            if (s.length > maxLen) {
-              const words = s.split(/\s+/);
+            if (phrase.length > maxLen) {
+              const words = phrase.split(/\s+/);
               let sub = '';
               for (let w of words) {
                 if ((sub + ' ' + w).length <= maxLen) {
@@ -2299,7 +2362,7 @@
               }
               if (sub) current = sub;
             } else {
-              current = s;
+              current = phrase;
             }
           }
         }
@@ -2312,47 +2375,30 @@
         this.activeBtn = buttonEl;
 
         const isMalayalam = /[\u0D00-\u0D7F]/.test(text);
+        this.currentLang = isMalayalam ? 'ml' : 'en';
 
-        if (isMalayalam) {
-          // Engine A: Streaming Malayalam with true formant pitch compensation
-          this.queue = this.chunkText(text, 120);
+        const voices = ('speechSynthesis' in window) ? window.speechSynthesis.getVoices() : [];
+        const nativeMlVoice = voices.find(v => v.lang && (v.lang.startsWith('ml') || v.lang.includes('ml-') || v.lang.includes('malayalam')));
+
+        if (isMalayalam && !nativeMlVoice) {
+          this.queue = this.chunkText(text, 40);
           if (this.queue.length === 0) return;
 
           this.isPlaying = true;
           this.currentIndex = 0;
           this.setSpeakingUI(true, `മലയാളം ${gender === 'male' ? '👨' : '👩'}`);
-
-          this.initAudioNodes();
           this.playNextChunk();
         } else {
-          // Engine B: Web Speech API for English
           if (!('speechSynthesis' in window)) {
             return showMessageBox("Speech synthesis is not supported on this browser.", "Not Supported");
           }
 
           this.isPlaying = true;
-          this.setSpeakingUI(true, `English ${gender === 'male' ? '👨' : '👩'}`);
+          this.setSpeakingUI(true, isMalayalam ? `മലയാളം ${gender === 'male' ? '👨' : '👩'}` : `English ${gender === 'male' ? '👨' : '👩'}`);
 
-          const utterance = new SpeechSynthesisUtterance(text);
-          utterance.lang = 'en-IN';
-          utterance.rate = speed;
-          
-          const voices = window.speechSynthesis.getVoices();
-          let matchedVoice = null;
-          if (gender === 'male') {
-            matchedVoice = voices.find(v => (v.lang.startsWith('en') || v.lang === 'en-IN') && 
-              (v.name.toLowerCase().includes('male') || v.name.toLowerCase().includes('david') || v.name.toLowerCase().includes('ravi') || v.name.toLowerCase().includes('george')));
-            utterance.pitch = 0.75;
-          } else {
-            matchedVoice = voices.find(v => (v.lang.startsWith('en') || v.lang === 'en-IN') && 
-              (v.name.toLowerCase().includes('female') || v.name.toLowerCase().includes('zira') || v.name.toLowerCase().includes('kavya') || v.name.toLowerCase().includes('susan')));
-            utterance.pitch = 1.25;
-          }
-          if (matchedVoice) utterance.voice = matchedVoice;
-
-          utterance.onend = () => this.stop();
-          utterance.onerror = () => this.stop();
-          window.speechSynthesis.speak(utterance);
+          this.queue = this.chunkText(text, 120);
+          this.currentIndex = 0;
+          this.playWebSpeechChunk(isMalayalam, nativeMlVoice, gender, speed);
         }
       }
 
@@ -2367,32 +2413,56 @@
         const url = `https://translate.google.com/translate_tts?ie=UTF-8&client=tw-ob&tl=ml&q=${encodeURIComponent(chunk)}`;
         this.audio.src = url;
 
-        // Formant Filter Modulation for Genuine Male Voice
-        if (this.filterNode) {
-          if (state.ttsGender === 'male') {
-            // Low-frequency chest resonance & formant dampening
-            this.filterNode.type = "lowshelf";
-            this.filterNode.frequency.value = 220;
-            this.filterNode.gain.value = 8.5;
-            // Detune slightly for deeper vocal acoustic
-            this.audio.playbackRate = Math.max(0.25, Math.min(2.0, state.ttsSpeed * 0.88));
-          } else {
-            // High-pass clarity boost for Female voice
-            this.filterNode.type = "highshelf";
-            this.filterNode.frequency.value = 2600;
-            this.filterNode.gain.value = 4.0;
-            this.audio.playbackRate = state.ttsSpeed;
-          }
+        if (state.ttsGender === 'male') {
+          this.audio.playbackRate = Math.max(0.25, Math.min(2.0, state.ttsSpeed * 0.85));
         } else {
-          this.audio.playbackRate = state.ttsGender === 'male' 
-            ? Math.max(0.25, Math.min(2.0, state.ttsSpeed * 0.88))
-            : state.ttsSpeed;
+          this.audio.playbackRate = Math.max(0.25, Math.min(2.0, state.ttsSpeed));
         }
 
         this.audio.play().catch(err => {
-          console.warn("Audio stream interrupted...", err);
-          this.playNextChunk();
+          console.warn("Audio interrupted:", err);
+          setTimeout(() => this.playNextChunk(), 150);
         });
+      }
+
+      playWebSpeechChunk(isMalayalam, mlVoice, gender, speed) {
+        if (!this.isPlaying) return;
+        if (this.currentIndex >= this.queue.length) {
+          this.stop();
+          return;
+        }
+
+        const chunk = this.queue[this.currentIndex++];
+        const utterance = new SpeechSynthesisUtterance(chunk);
+        utterance.rate = speed;
+
+        if (isMalayalam) {
+          utterance.lang = 'ml-IN';
+          if (mlVoice) utterance.voice = mlVoice;
+          utterance.pitch = (gender === 'male') ? 0.70 : 1.25;
+        } else {
+          utterance.lang = 'en-IN';
+          const voices = window.speechSynthesis.getVoices();
+          let matchedVoice = null;
+          if (gender === 'male') {
+            matchedVoice = voices.find(v => (v.lang.startsWith('en') || v.lang === 'en-IN') && 
+              (v.name.toLowerCase().includes('male') || v.name.toLowerCase().includes('david') || v.name.toLowerCase().includes('ravi') || v.name.toLowerCase().includes('george')));
+            utterance.pitch = 0.75;
+          } else {
+            matchedVoice = voices.find(v => (v.lang.startsWith('en') || v.lang === 'en-IN') && 
+              (v.name.toLowerCase().includes('female') || v.name.toLowerCase().includes('zira') || v.name.toLowerCase().includes('kavya') || v.name.toLowerCase().includes('susan')));
+            utterance.pitch = 1.25;
+          }
+          if (matchedVoice) utterance.voice = matchedVoice;
+        }
+
+        utterance.onend = () => this.playWebSpeechChunk(isMalayalam, mlVoice, gender, speed);
+        utterance.onerror = (e) => {
+          console.warn("TTS error:", e);
+          this.playWebSpeechChunk(isMalayalam, mlVoice, gender, speed);
+        };
+
+        window.speechSynthesis.speak(utterance);
       }
 
       setSpeakingUI(speaking, lang = "") {
@@ -2412,6 +2482,7 @@
         this.isPlaying = false;
         this.audio.pause();
         this.audio.currentTime = 0;
+        this.audio.src = "";
         this.queue = [];
         this.currentIndex = 0;
 
@@ -2456,9 +2527,7 @@
       });
     });
 
-    // =========================================================================
-    // SYNCHRONIZED MALAYALAM TRANSLATION (HEADER + BODY TOGETHER)
-    // =========================================================================
+    // Translation Engine
     async function translateActiveTab(tabId, buttonEl) {
       speechEngine.stop();
 
@@ -2469,7 +2538,6 @@
       const mlStorageKey = `SCERT_ML_${pkgKey}_${tabId}`;
       const enStorageKey = `SCERT_EN_${pkgKey}_${tabId}`;
 
-      // Toggle back to English
       if (buttonEl.classList.contains('active-ml')) {
         const originalEnglish = localStorage.getItem(enStorageKey) || state.translations[tabId]?.originalHtml;
         if (originalEnglish) {
@@ -2482,7 +2550,6 @@
         }
       }
 
-      // Check Local Memory (localStorage) first
       const cachedMalayalam = localStorage.getItem(mlStorageKey);
       if (cachedMalayalam) {
         if (!localStorage.getItem(enStorageKey)) {
@@ -2506,17 +2573,10 @@
       try {
         const translatePrompt = `
 You are an expert Kerala SCERT Malayalam-medium pedagogical translator.
-Translate the following HTML content (which contains both the Universal Header Card and instructional body) into natural, official educational Malayalam (മലയാളം).
-
-STRICT RULES:
-1. Translate the Chapter Name, Targeted Curricular Objective, badges, headings, tables, questions, and model answers into proper Malayalam.
-2. DO NOT modify, break, or translate HTML tags, CSS class names (e.g. class="u-badge", class="universal-header-card"), or element IDs.
-3. Use official Kerala SCERT terms:
-   - 'പാഠ്യപദ്ധതി ലക്ഷ്യങ്ങൾ' (Curricular Objectives)
-   - 'പ്രവേശന പ്രവർത്തനം' (Entry Activity)
-   - 'ക്ലാസ്സ് റൂം വിലയിരുത്തൽ' (Assessment)
-   - 'ബ്ലാക്ക്ബോർഡ് കുറിപ്പുകൾ' (Blackboard Notes)
-4. OUTPUT PURE HTML ONLY. DO NOT WRAP IN BACKTICKS OR MARKDOWN CODE FENCES.
+Translate the following HTML content into natural, official educational Malayalam (മലയാളം).
+Maintain all HTML structure, classes (e.g. class="unified-card", class="section-q", class="period-card"), and tag layout.
+Use standard terms: 'പാഠ്യപദ്ധതി ലക്ഷ്യങ്ങൾ', 'പ്രവേശന പ്രവർത്തനം', 'ക്ലാസ്സ് റൂം വിലയിരുത്തൽ', 'ബ്ലാക്ക്ബോർഡ് കുറിപ്പുകൾ', 'പ്രവർത്തന പത്രിക'.
+OUTPUT PURE HTML ONLY. DO NOT WRAP IN BACKTICKS OR CODE FENCES.
 
 ORIGINAL HTML:
 ${contentHtml}
@@ -2538,14 +2598,10 @@ ${contentHtml}
         const codeBlockMatch = rawResponse.match(/```(?:html)?([\s\S]*?)```/i);
         let translatedHtml = codeBlockMatch ? codeBlockMatch[1].trim() : rawResponse.replace(/```[a-z]*\n?/gi, '').replace(/```/g, '').trim();
 
-        // Save English and Malayalam to local memory
         localStorage.setItem(enStorageKey, contentHtml);
         localStorage.setItem(mlStorageKey, translatedHtml);
 
-        state.translations[tabId] = {
-          originalHtml: contentHtml,
-          malayalamHtml: translatedHtml
-        };
+        state.translations[tabId] = { originalHtml: contentHtml, malayalamHtml: translatedHtml };
 
         contentWrapperEl.innerHTML = translatedHtml;
         contentWrapperEl.classList.add('malayalam-font');
@@ -2566,9 +2622,7 @@ ${contentHtml}
       });
     });
 
-    // =========================================================================
-    // UNIVERSAL PRINT HANDLER
-    // =========================================================================
+    // Universal Print
     document.querySelectorAll('.print-tab-btn').forEach(btn => {
       btn.addEventListener('click', () => {
         const pane = btn.closest('.tab-pane');
@@ -2594,7 +2648,7 @@ ${contentHtml}
     }
 
     // =========================================================================
-    // RENDER WORKSPACE WITH PACKAGE DATA
+    // RENDER WORKSPACE (NOW FEATURING UNIFIED CARDS ACROSS BOARD, WS & KEY)
     // =========================================================================
     function renderPackageToWorkspace(pkgData, unitTitle, dayNumber, totalDays, classId, partId = state.currentPart) {
       document.querySelectorAll('.translate-tab-btn').forEach(b => {
@@ -2606,7 +2660,7 @@ ${contentHtml}
       const targetedCO = pkgData.targetedCurricularObjectives || pkgData.targetedCurricularObjective;
       updateAllUniversalHeaders(unitTitle, dayNumber, totalDays, classId, partId, targetedCO);
 
-      // 1. Render Lesson Plan
+      // 1. Render Lesson Plan (With spacious period breakdown)
       let coMasterListHtml = `
         <div class="co-box-master">
           <strong>All Curricular Objectives (Unit Master — Exhaustive Chapter Coverage):</strong>
@@ -2617,504 +2671,65 @@ ${contentHtml}
       });
       coMasterListHtml += `</ul></div>`;
 
-      let tableHtml = pkgData.lessonPlanTableHtml || '';
-      if (!tableHtml.includes('table-scroll-wrapper')) {
-        tableHtml = `<div class="table-scroll-wrapper">${tableHtml}</div>`;
+      // Render Period Breakdown cleanly (Cards timeline or spacious table)
+      let breakdownHtml = '';
+      if (pkgData.periodBreakdown && Array.isArray(pkgData.periodBreakdown)) {
+        breakdownHtml = `<div class="period-timeline">`;
+        pkgData.periodBreakdown.forEach(phase => {
+          breakdownHtml += `
+            <div class="period-card">
+              <div class="period-card-header">
+                <span class="period-badge-time">⏱️ ${phase.time || 'Phase'}</span>
+                <span class="period-phase-title">${phase.phaseTitle || phase.phase || ''}</span>
+              </div>
+              <div class="period-card-body">
+                <div class="period-col">
+                  <h4>Teacher Activity / Inquiry Prompt</h4>
+                  <p>${phase.teacherActivity || phase.activity || ''}</p>
+                </div>
+                <div class="period-col">
+                  <h4>Learner Response & Cognitive Skill</h4>
+                  <p>${phase.studentActivity || phase.evaluation || ''}</p>
+                </div>
+              </div>
+            </div>
+          `;
+        });
+        breakdownHtml += `</div>`;
+      } else {
+        let tableHtml = pkgData.lessonPlanTableHtml || '';
+        if (!tableHtml.includes('table-scroll-wrapper')) {
+          tableHtml = `<div class="table-scroll-wrapper">${tableHtml}</div>`;
+        }
+        breakdownHtml = tableHtml;
       }
 
       document.getElementById('lesson-plan-body').innerHTML = `
         ${coMasterListHtml}
         ${pkgData.lessonPlanIntroHtml || ''}
-        <h3 style="margin:12px 0 5px 0; color:var(--primary); font-size:0.86rem;">35-Minute Period Breakdown:</h3>
-        ${tableHtml}
+        <h3 style="margin:14px 0 6px 0; color:var(--primary); font-size:0.88rem; font-weight:700;">
+          ⏱️ 35-Minute Daily Instructional Timeline & Period Allocation:
+        </h3>
+        ${breakdownHtml}
       `;
       
       // 2. Render Media Resources
       renderMediaResources(pkgData.mediaResources || []);
 
-      // 3. Render Blackboard Notes
+      // 3. Render Blackboard Notes (Unified Card System)
       renderBlackboardNotes(pkgData.blackboardQa || []);
 
       // 4. Render WhatsApp Broadcast
       renderWhatsAppBroadcast(pkgData.whatsappSummary, pkgData.blackboardQa || [], unitTitle, dayNumber, totalDays, classId);
       
-      // 5. Render Printable Worksheet
-      document.getElementById('worksheet-render-area').innerHTML = `
-        <div class="ws-header" style="border-bottom: 2px solid #000; padding-bottom: 6px; margin-bottom: 10px; text-align: center;">
-          <h2 style="font-size: 11pt; text-transform: uppercase; margin-bottom: 2px;">Kerala SCERT Curriculum Worksheet</h2>
-          <div style="font-weight:bold; font-size:8.5pt; margin-top:2px;">Application-Level Evaluation Activity (Total: 5 Scores)</div>
-          <div class="ws-meta-grid" style="display: grid; grid-template-columns: 2fr 1fr 1fr; gap: 4px; font-size: 8pt; margin-top: 6px; text-align: left;">
-            <div class="ws-meta-line" style="border-bottom: 1px dotted #444; padding-bottom: 2px;"><strong>Unit:</strong> ${unitTitle} (Day ${dayNumber}/${totalDays})</div>
-            <div class="ws-meta-line" style="border-bottom: 1px dotted #444; padding-bottom: 2px;"><strong>Class:</strong> Std ${classId}</div>
-            <div class="ws-meta-line" style="border-bottom: 1px dotted #444; padding-bottom: 2px;"><strong>Max Score:</strong> 5</div>
-            <div class="ws-meta-line" style="border-bottom: 1px dotted #444; padding-bottom: 2px;"><strong>Student Name:</strong> ___________________________</div>
-            <div class="ws-meta-line" style="border-bottom: 1px dotted #444; padding-bottom: 2px;"><strong>Roll No:</strong> _______</div>
-            <div class="ws-meta-line" style="border-bottom: 1px dotted #444; padding-bottom: 2px;"><strong>Time:</strong> 20 Mins</div>
-          </div>
-        </div>
-        ${pkgData.worksheetHtml}
-      `;
+      // 5. Render Evaluation Worksheet (Unified Card System matching Board & Media)
+      renderWorksheetCards(pkgData.worksheetQuestions || pkgData.blackboardQa || [], unitTitle, dayNumber, totalDays, classId);
 
-      // 6. Render Answer Key
-      document.getElementById('worksheet-answers-body').innerHTML = `
-        <div style="margin-bottom:10px; padding:7px 9px; background:#f1f5f9; border-radius:4px; font-size:0.78rem;">
-          <strong>Standard:</strong> SCERT Criteria | <strong>Total Score:</strong> 5 | <strong>Unit:</strong> ${unitTitle} (Day ${dayNumber}/${totalDays})
-        </div>
-        ${pkgData.worksheetAnswerKeyHtml || ''}
-      `;
+      // 6. Render Answer Key (Unified Card System matching Board & Media)
+      renderAnswerKeyCards(pkgData.worksheetAnswers || pkgData.blackboardQa || [], unitTitle, dayNumber, totalDays);
     }
 
-    function updateGeneratorUIStatus(pkgTitle = "") {
-      if (state.currentPackage) {
-        activeStatusBar.style.display = "flex";
-        activeStatusText.textContent = `Active: ${pkgTitle || state.currentPackage.targetedCurricularObjective || 'Current'}`;
-      } else {
-        activeStatusBar.style.display = "none";
-      }
-    }
-
-    function resetWorkspace() {
-      state.currentPackage = null;
-      state.activePackageId = null;
-      updateGeneratorUIStatus();
-      speechEngine.stop();
-
-      document.querySelectorAll('.translate-tab-btn').forEach(b => {
-        b.classList.remove('active-ml');
-        b.innerHTML = `🌐 മലയാളം`;
-      });
-
-      updateAllUniversalHeaders("Select Unit", "1", "5", state.currentClass, state.currentPart, "Generated upon request");
-
-      document.getElementById('lesson-plan-body').innerHTML = `<p style="color: var(--text-muted); font-style: italic;">Enter details above and tap "Generate Package".</p>`;
-      document.getElementById('media-resources-body').innerHTML = `<p style="color: var(--text-muted); font-style: italic;">Curated media will render here.</p>`;
-      document.getElementById('blackboard-notes-body').innerHTML = `<div class="rendered-markdown"><p style="color: var(--text-muted); font-style: italic;">Application questions and solutions will render here.</p></div>`;
-      document.getElementById('whatsapp-preview-area').innerHTML = `<div class="wa-bubble" style="color: var(--text-muted); font-style: italic;">Parent broadcast message will render here.</div>`;
-      document.getElementById('whatsapp-summary-body').textContent = `Parent communication message will render here.`;
-      document.getElementById('worksheet-render-area').innerHTML = `<div style="text-align: center; color: #777; font-style: italic; padding: 20px;" class="no-print">Worksheet will render inside this container.</div>`;
-      document.getElementById('worksheet-answers-body').innerHTML = `<p style="color: var(--text-muted); font-style: italic;">Model answers will render here.</p>`;
-
-      document.querySelectorAll('.pkg-card').forEach(c => c.classList.remove('active-loaded'));
-      showToast("Workspace Reset!");
-    }
-
-    resetWorkspaceBtn.addEventListener('click', resetWorkspace);
-    quickResetBtn.addEventListener('click', resetWorkspace);
-
-    async function loadSavedPackage(pkgId) {
-      const allPkgs = await idb.getAllPackages();
-      let pkg = allPkgs.find(p => p.id === pkgId);
-
-      if (!pkg && db) {
-        try {
-          const snap = await getDoc(doc(db, 'saved_packages', pkgId));
-          if (snap.exists()) pkg = snap.data();
-        } catch (e) {}
-      }
-
-      if (!pkg) return showMessageBox("Package not found in archive.", "Error");
-
-      state.currentClass = pkg.classId;
-      state.currentPart = pkg.partId;
-      classSelect.value = pkg.classId;
-      partRadios.forEach(r => r.checked = (r.value === pkg.partId));
-      unitTitleInput.value = pkg.unitTitle;
-      dayNumberInput.value = pkg.dayNumber;
-      totalDaysInput.value = pkg.totalDays;
-      highlightActiveTarget();
-      checkAndLoadChapterRoadmap();
-
-      state.currentPackage = pkg.data;
-      state.activePackageId = pkg.id;
-      renderPackageToWorkspace(pkg.data, pkg.unitTitle, pkg.dayNumber, pkg.totalDays, pkg.classId, pkg.partId);
-      updateGeneratorUIStatus(`Std ${pkg.classId} - ${pkg.unitTitle} (D${pkg.dayNumber})`);
-
-      document.querySelectorAll('.pkg-card').forEach(c => c.classList.toggle('active-loaded', c.dataset.id === pkg.id));
-      document.querySelector('[data-tab="lesson-plan"]').click();
-      showToast(`Loaded: ${pkg.unitTitle} (Day ${pkg.dayNumber})`);
-    }
-
-    // =========================================================================
-    // DUAL-SYNC: REFRESH PACKAGES (PROMINENT LOAD, RESET & DELETE)
-    // =========================================================================
-    async function refreshPackageArchiveUI() {
-      let cloudPackages = [];
-
-      if (db) {
-        try {
-          if (auth && !auth.currentUser) await signInAnonymously(auth).catch(() => {});
-          const snap = await withTimeout(getDocs(collection(db, 'saved_packages')), 2500);
-          snap.forEach(docSnap => {
-            if (docSnap.exists()) cloudPackages.push(docSnap.data());
-          });
-        } catch (e) {
-          console.warn("Firestore fetch packages:", e.message);
-        }
-      }
-
-      const localPackages = await idb.getAllPackages();
-      const packageMap = new Map();
-      localPackages.forEach(p => packageMap.set(p.id, p));
-      cloudPackages.forEach(p => {
-        packageMap.set(p.id, p);
-        idb.savePackage(p);
-      });
-
-      state.savedPackages = Array.from(packageMap.values());
-      packageCountBadge.textContent = state.savedPackages.length;
-      if (mobPkgPill) mobPkgPill.textContent = state.savedPackages.length;
-
-      if (state.savedPackages.length === 0) {
-        pkgArchiveList.innerHTML = `<div style="font-size: 0.68rem; color: var(--text-muted); text-align: center; padding: 6px;">No saved packages yet.</div>`;
-        return;
-      }
-
-      // Sort chronological by day & unit
-      state.savedPackages.sort((a, b) => b.createdAt - a.createdAt);
-
-      let html = '';
-      state.savedPackages.forEach(pkg => {
-        const isLoaded = (pkg.id === state.activePackageId);
-        const coSnippet = pkg.data?.targetedCurricularObjective || 'Standard SCERT Lesson';
-
-        html += `
-          <div class="pkg-card ${isLoaded ? 'active-loaded' : ''}" data-id="${pkg.id}">
-            <div class="pkg-card-top">
-              <div>
-                <div class="pkg-title-text">📚 Std ${pkg.classId} - ${pkg.unitTitle} (Day ${pkg.dayNumber}/${pkg.totalDays})</div>
-                <div class="pkg-meta-text">${pkg.dateFormatted}</div>
-              </div>
-              <span class="badge-tag" style="background:${isLoaded ? 'var(--primary)' : '#e2e8f0'}; color:${isLoaded ? '#fff' : '#334155'}; font-size:0.6rem;">
-                ${isLoaded ? 'ACTIVE' : 'SAVED'}
-              </span>
-            </div>
-
-            <div class="pkg-co-preview" title="${coSnippet}">
-              🎯 ${coSnippet}
-            </div>
-
-            <div class="pkg-actions-row">
-              <button class="btn btn-primary btn-sm btn-load-pkg" data-id="${pkg.id}">📥 Load</button>
-              <button class="btn btn-outline btn-sm btn-reset-pkg" data-id="${pkg.id}">🔄 Reset</button>
-              <button class="btn btn-outline btn-sm btn-del-pkg" data-id="${pkg.id}" style="color:#ef4444; border-color:#fca5a5;">🗑️ Delete</button>
-            </div>
-          </div>
-        `;
-      });
-      pkgArchiveList.innerHTML = html;
-
-      pkgArchiveList.querySelectorAll('.btn-load-pkg').forEach(btn => {
-        btn.addEventListener('click', (e) => loadSavedPackage(e.currentTarget.dataset.id));
-      });
-
-      pkgArchiveList.querySelectorAll('.btn-reset-pkg').forEach(btn => btn.addEventListener('click', resetWorkspace));
-
-      pkgArchiveList.querySelectorAll('.btn-del-pkg').forEach(btn => {
-        btn.addEventListener('click', async (e) => {
-          const id = e.currentTarget.dataset.id;
-          if (!confirm("Delete this daily lesson package from Firebase and local storage?")) return;
-          await idb.deletePackage(id);
-          if (db) {
-            try {
-              await deleteDoc(doc(db, 'saved_packages', id));
-            } catch (err) {}
-          }
-          if (state.activePackageId === id) resetWorkspace();
-          refreshPackageArchiveUI();
-          showToast("Package deleted.");
-        });
-      });
-    }
-
-    // =========================================================================
-    // GENERATE INSTRUCTIONAL PACKAGE: SINGLE-DAY OR COMPLETE UNIT BATCH
-    // =========================================================================
-    generateBtn.addEventListener('click', () => {
-      const unitTitle = unitTitleInput.value.trim();
-      if (!unitTitle) return showMessageBox("Please enter a Chapter or Unit Title before generating.", "Missing Unit");
-
-      const totalDays = parseInt(totalDaysInput.value, 10);
-      const isWholeUnit = document.getElementById('scope-whole-unit').checked;
-      const dayNumber = isWholeUnit ? 1 : parseInt(dayNumberInput.value, 10);
-
-      if (dayNumber > totalDays) {
-        return showMessageBox("Day in Unit cannot exceed Total Planned Days.", "Invalid Pacing");
-      }
-
-      // Check duplicate
-      const isAlreadyActive = state.currentPackage !== null;
-      const isAlreadySaved = state.savedPackages.some(p => 
-        p.classId === state.currentClass && 
-        p.unitTitle.toLowerCase() === unitTitle.toLowerCase() && 
-        parseInt(p.dayNumber, 10) === dayNumber
-      );
-
-      if (isAlreadyActive || isAlreadySaved) {
-        showWarningModal(
-          `A lesson package for <strong>Std ${state.currentClass} - ${unitTitle} (${isWholeUnit ? 'Full Unit' : 'Day ' + dayNumber})</strong> already exists. <br><br>Do you want to reset workspace or continue and overwrite?`,
-          () => executeGenerationProcess(unitTitle, dayNumber, totalDays, isWholeUnit)
-        );
-      } else {
-        executeGenerationProcess(unitTitle, dayNumber, totalDays, isWholeUnit);
-      }
-    });
-
-    async function executeGenerationProcess(unitTitle, dayNumber, totalDays, isWholeUnit) {
-      const activeSlotId = `${state.currentClass}_${state.currentPart}`;
-      const activeBase64 = state.slotsBase64[activeSlotId];
-
-      const roadmapKey = getRoadmapStorageKey(state.currentClass, unitTitle);
-      const existingRoadmap = state.lockedRoadmap;
-
-      showSpinner(isWholeUnit 
-        ? `Synthesizing Entire Unit Plan (${totalDays} Days) for "${unitTitle}"...` 
-        : `Synthesizing Day ${dayNumber} of ${totalDays} for "${unitTitle}"...`
-      );
-
-      let roadmapInstruction = "";
-      if (existingRoadmap && existingRoadmap.dailyDistribution) {
-        roadmapInstruction = `
-LOCKED CHAPTER PACING ROADMAP ACTIVE:
-Master Curricular Objectives for the whole unit:
-${JSON.stringify(existingRoadmap.allUnitCurricularObjectives, null, 2)}
-Pre-allocated Daily Distribution across days:
-${JSON.stringify(existingRoadmap.dailyDistribution, null, 2)}
-DO NOT alter the master objectives. Ensure strict continuity.
-`;
-      } else {
-        roadmapInstruction = `
-NEW COMPLETE CHAPTER PACING ROADMAP REQUIRED:
-1. "allUnitCurricularObjectives": You MUST generate an EXHAUSTIVE master list of Curricular Objectives (CO 1, CO 2, ... CO N) covering THE ENTIRE CONTENT OF THIS FULL TEXTBOOK CHAPTER from start to finish.
-2. "chapterPacingRoadmap": Rigorously distribute ALL master Curricular Objectives across the ${totalDays} Total Planned Days so 100% of chapter competencies are covered across Day 1 to Day ${totalDays}.
-   - CRITICAL PACING RULE: There is NO DEMAND for equality between the number of COs and the Total Days! If COs are more than total days, you MUST include MULTIPLE COs in each day as appropriate (e.g. Day 1: ["CO 1: ...", "CO 2: ..."], Day 2: ["CO 3: ..."], etc.).
-`;
-      }
-
-      let scopeInstruction = "";
-      let responseSchemaDescription = "";
-
-      if (isWholeUnit) {
-        scopeInstruction = `
-WHOLE UNIT BATCH GENERATION MODE:
-Generate complete, dedicated instructional packages for EVERY SINGLE DAY from Day 1 to Day ${totalDays}.
-Provide an array of daily packages under the key "dailyPackages", where each element is a complete self-contained package for that day.
-`;
-        responseSchemaDescription = `
-OUTPUT MUST BE A STRICT JSON OBJECT MATCHING THIS SCHEMA:
-{
-  "allUnitCurricularObjectives": ["CO 1: ...", "CO 2: ...", "CO 3: ..."],
-  "chapterPacingRoadmap": {
-    "totalDays": ${totalDays},
-    "dailyDistribution": {
-      "1": ["CO 1: ..."],
-      "2": ["CO 2: ..."]
-    }
-  },
-  "dailyPackages": [
-    {
-      "dayNumber": 1,
-      "targetedCurricularObjectives": ["CO 1: ..."],
-      "targetedCurricularObjective": "CO 1: ...",
-      "lessonPlanIntroHtml": "<p>...</p>",
-      "lessonPlanTableHtml": "<table class='copiable-table' border='1'>...</table>",
-      "mediaResources": [{"title": "...", "type": "video|diksha|sim", "platform": "...", "description": "...", "searchQuery": "..."}],
-      "blackboardQa": [{"qNum": 1, "cognitiveDomain": "HOTS", "question": "...", "answer": "..."}],
-      "whatsappSummary": {"dailyRecap": "...", "studyTip": "...", "dikshaKeywords": "..."},
-      "worksheetHtml": "<div class='ws-content'>...</div>",
-      "worksheetAnswerKeyHtml": "<div class='key-content'>...</div>"
-    }
-  ]
-}
-`;
-      } else {
-        scopeInstruction = `
-SINGLE DAY PERIOD MODE:
-Generate today's package specifically for Day ${dayNumber} of ${totalDays}. Target today's allocated CO(s).
-`;
-        responseSchemaDescription = `
-OUTPUT MUST BE A STRICT JSON OBJECT MATCHING THIS SCHEMA:
-{
-  "allUnitCurricularObjectives": ["CO 1: ...", "CO 2: ...", "CO 3: ..."],
-  "chapterPacingRoadmap": {
-    "totalDays": ${totalDays},
-    "dailyDistribution": {
-      "1": ["CO 1: ..."],
-      "2": ["CO 2: ..."]
-    }
-  },
-  "targetedCurricularObjectives": ["CO 1: ..."],
-  "targetedCurricularObjective": "CO 1: ...",
-  "lessonPlanIntroHtml": "<p>...</p>",
-  "lessonPlanTableHtml": "<table class='copiable-table' border='1'>...</table>",
-  "mediaResources": [{"title": "...", "type": "video|diksha|sim", "platform": "...", "description": "...", "searchQuery": "..."}],
-  "blackboardQa": [{"qNum": 1, "cognitiveDomain": "HOTS", "question": "...", "answer": "..."}],
-  "whatsappSummary": {"dailyRecap": "...", "studyTip": "...", "dikshaKeywords": "..."},
-  "worksheetHtml": "<div class='ws-content'>...</div>",
-  "worksheetAnswerKeyHtml": "<div class='key-content'>...</div>"
-}
-`;
-      }
-
-      try {
-        const prompt = `
-You are an expert pedagogical assistant for Kerala SCERT Classes 5, 6, and 7.
-Formulate a teaching package calibrated specifically for:
-- Standard: Class ${state.currentClass}
-- Textbook: Part ${state.currentPart === 'part1' ? '1' : '2'}
-- Unit Name: ${unitTitle}
-- Total Planned Days: ${totalDays} Days.
-
-${roadmapInstruction}
-${scopeInstruction}
-
-CRITICAL PEDAGOGICAL SPECIFICATIONS FOR EVERY PERIOD:
-1. 35-MINUTE TABLE: HTML <table> with inline borders for LibreOffice/Word.
-   Phases: 0-5 min (Entry Activity), 5-20 min (Concept & Inquiry), 20-25 min (Assessment), 25-35 min (Blackboard Work).
-2. BLACKBOARD NOTES (STRICT APPLICATION-LEVEL): 2-3 HOTs questions and answers.
-3. WHATSAPP BROADCAST: 100-word reassuring message with exact blackboard Q&As.
-4. A4 PRINTABLE WORKSHEET: Exactly 5 scores, application-level.
-5. ANSWER KEY: Scoring breakdown totaling 5 marks.
-
-${responseSchemaDescription}
-`;
-
-        const parts = [{ text: prompt }];
-
-        if (activeBase64) {
-          const sizeInMB = (activeBase64.length * 0.75) / (1024 * 1024);
-          if (sizeInMB <= 15) {
-            parts.unshift({
-              inlineData: {
-                mimeType: "application/pdf",
-                data: activeBase64
-              }
-            });
-          }
-        }
-
-        const payload = {
-          contents: [{ role: "user", parts: parts }],
-          generationConfig: { responseMimeType: "application/json", temperature: 0.2 }
-        };
-
-        const data = await executeSmartGeneration(payload);
-        let rawJson = data.candidates[0].content.parts[0].text;
-        rawJson = rawJson.replace(/^```(?:json)?\s*/i, '').replace(/\s*```$/i, '').trim();
-        const result = JSON.parse(rawJson);
-
-        // Lock chapter roadmap if new
-        if (!existingRoadmap && result.chapterPacingRoadmap) {
-          const roadmapToSave = {
-            totalDays: totalDays,
-            allUnitCurricularObjectives: result.allUnitCurricularObjectives || [],
-            dailyDistribution: result.chapterPacingRoadmap.dailyDistribution || {}
-          };
-          localStorage.setItem(roadmapKey, JSON.stringify(roadmapToSave));
-          state.lockedRoadmap = roadmapToSave;
-          roadmapStatusPill.style.display = 'flex';
-          roadmapStatusText.textContent = `🔒 Chapter COs Locked (${totalDays} Days Roadmap)`;
-        }
-
-        const now = new Date();
-
-        if (isWholeUnit && Array.isArray(result.dailyPackages)) {
-          // =========================================================================
-          // SAVE EACH DAY AS AN INDIVIDUAL DAILY CLASS PACKAGE IN ARCHIVE
-          // =========================================================================
-          let firstDayPkg = null;
-
-          // Parallel async map eliminates the 400ms sequential loop timer
-          await Promise.all(result.dailyPackages.map(async (dayPkg) => {
-            const currentDayNum = dayPkg.dayNumber || 1;
-            const fullDayData = {
-              ...dayPkg,
-              allUnitCurricularObjectives: result.allUnitCurricularObjectives || []
-            };
-
-            const pkgId = `pkg_${now.getTime()}_d${currentDayNum}`;
-            const dailyClassPackage = {
-              id: pkgId,
-              classId: state.currentClass,
-              partId: state.currentPart,
-              unitTitle: unitTitle,
-              dayNumber: currentDayNum,
-              totalDays: totalDays,
-              createdAt: now.getTime() + currentDayNum,
-              dateFormatted: now.toLocaleDateString('en-IN', { day: '2-digit', month: 'short' }) + ` (Day ${currentDayNum}/${totalDays})`,
-              data: fullDayData
-            };
-
-            // Save each day into IndexedDB
-            await idb.savePackage(dailyClassPackage);
-
-            // Save each day into Firestore
-            if (db) {
-              try {
-                if (auth && !auth.currentUser) await signInAnonymously(auth).catch(() => {});
-                await setDoc(doc(db, 'saved_packages', pkgId), dailyClassPackage);
-              } catch (e) {}
-            }
-
-            if (currentDayNum === 1) {
-              firstDayPkg = dailyClassPackage;
-            }
-          }));
-
-          // Render Day 1 in workspace by default
-          if (firstDayPkg) {
-            state.currentPackage = firstDayPkg.data;
-            state.activePackageId = firstDayPkg.id;
-            dayNumberInput.value = 1;
-            renderPackageToWorkspace(firstDayPkg.data, unitTitle, 1, totalDays, state.currentClass, state.currentPart);
-            updateGeneratorUIStatus(`Std ${state.currentClass} - ${unitTitle} (Day 1/${totalDays})`);
-          }
-
-          await refreshPackageArchiveUI();
-          hideSpinner();
-          showMessageBox(`All ${totalDays} daily class packages for "${unitTitle}" have been successfully generated and saved into the Archive!`, "Full Unit Generated");
-        } else {
-          // Single Day Generation
-          state.currentPackage = result;
-          renderPackageToWorkspace(result, unitTitle, dayNumber, totalDays, state.currentClass, state.currentPart);
-
-          const pkgId = 'pkg_' + Date.now();
-          const newPkg = {
-            id: pkgId,
-            classId: state.currentClass,
-            partId: state.currentPart,
-            unitTitle: unitTitle,
-            dayNumber: dayNumber,
-            totalDays: totalDays,
-            createdAt: now.getTime(),
-            dateFormatted: now.toLocaleDateString('en-IN', { day: '2-digit', month: 'short' }) + ' ' + now.toLocaleTimeString('en-IN', { hour: '2-digit', minute: '2-digit' }),
-            data: result
-          };
-
-          await idb.savePackage(newPkg);
-
-          if (db) {
-            try {
-              if (auth && !auth.currentUser) await signInAnonymously(auth).catch(() => {});
-              await setDoc(doc(db, 'saved_packages', pkgId), newPkg);
-            } catch (cloudErr) {
-              console.warn("Firestore save skipped:", cloudErr.message);
-            }
-          }
-
-          state.activePackageId = pkgId;
-          updateGeneratorUIStatus(`Std ${state.currentClass} - ${unitTitle} (D${dayNumber})`);
-          await refreshPackageArchiveUI();
-
-          hideSpinner();
-          showToast("Daily lesson package generated & saved!");
-        }
-      } catch (err) {
-        hideSpinner();
-        console.error(err);
-        showMessageBox(err.message, "Notice");
-      }
-    }
-
+    // Modern Cards Renderer for Blackboard Notes
     function renderBlackboardNotes(qaList) {
       const container = document.getElementById('blackboard-notes-body');
       if (!qaList || qaList.length === 0) {
@@ -3122,29 +2737,29 @@ ${responseSchemaDescription}
         return;
       }
 
-      let html = `<div class="bb-container">`;
+      let html = `<div class="cards-stack-container">`;
       qaList.forEach((item, index) => {
         const qNum = item.qNum || (index + 1);
         const domain = item.cognitiveDomain || "Application";
         const cleanAnswer = formatMarkdown(item.answer);
 
         html += `
-          <div class="bb-card">
-            <div class="bb-card-header">
-              <div class="bb-tag-group">
-                <span class="bb-num-pill">Q${qNum}</span>
-                <span class="bb-cognitive-pill">${domain}</span>
+          <div class="unified-card">
+            <div class="unified-card-header">
+              <div class="card-tag-group">
+                <span class="pill-qnum">Q${qNum}</span>
+                <span class="pill-cognitive">${domain}</span>
               </div>
-              <button class="btn btn-outline btn-sm copy-single-bb" data-index="${index}">📋 Copy</button>
+              <button class="btn btn-outline btn-sm copy-single-item" data-text="Q${qNum}: ${escapeHtml(item.question)}\n\nAns:\n${escapeHtml(item.answer)}">📋 Copy</button>
             </div>
-            <div class="bb-card-body">
-              <div class="bb-q-section">
-                <div class="bb-label-q">Question</div>
-                <div class="bb-text-q">${item.question}</div>
+            <div class="unified-card-body">
+              <div class="section-q">
+                <div class="label-q">Question</div>
+                <div class="text-q">${item.question}</div>
               </div>
-              <div class="bb-a-section">
-                <div class="bb-label-a">Chalkboard Solution</div>
-                <div class="bb-text-a">${cleanAnswer}</div>
+              <div class="section-a">
+                <div class="label-a">Chalkboard Solution</div>
+                <div class="text-a">${cleanAnswer}</div>
               </div>
             </div>
           </div>
@@ -3152,12 +2767,120 @@ ${responseSchemaDescription}
       });
       html += `</div>`;
       container.innerHTML = html;
+      attachSingleCopyListeners(container);
+    }
 
-      container.querySelectorAll('.copy-single-bb').forEach(btn => {
+    // Modern Cards Renderer for Worksheet (Identical clean card style)
+    function renderWorksheetCards(qList, unitTitle, dayNumber, totalDays, classId) {
+      const container = document.getElementById('worksheet-render-area');
+      if (!qList || qList.length === 0) {
+        container.innerHTML = `<div class="rendered-markdown"><p style="color:var(--text-muted);">No worksheet activities generated.</p></div>`;
+        return;
+      }
+
+      let html = `
+        <div class="meta-overview-banner">
+          <div>📚 Class ${classId} • ${unitTitle} (Day ${dayNumber}/${totalDays})</div>
+          <div>🎯 Total: 5 Scores • Time: 20 Mins</div>
+        </div>
+        <div class="cards-stack-container">
+      `;
+
+      qList.forEach((item, index) => {
+        const qNum = item.qNum || (index + 1);
+        const score = item.score || (index === 0 ? 2 : 1);
+        const domain = item.cognitiveDomain || "HOTS Inquiry";
+
+        html += `
+          <div class="unified-card">
+            <div class="unified-card-header">
+              <div class="card-tag-group">
+                <span class="pill-qnum">Activity ${qNum}</span>
+                <span class="pill-score">[Score: ${score}]</span>
+                <span class="pill-cognitive">${domain}</span>
+              </div>
+              <button class="btn btn-outline btn-sm copy-single-item" data-text="Activity ${qNum} [Score: ${score}]:\n${escapeHtml(item.question)}">📋 Copy</button>
+            </div>
+            <div class="unified-card-body">
+              <div class="section-q">
+                <div class="label-q">Task / Application Activity</div>
+                <div class="text-q">${item.question}</div>
+              </div>
+              <div class="section-write-space">
+                <div class="label-write">Student Response Area / Reasoning</div>
+                <div class="answer-line"></div>
+                <div class="answer-line"></div>
+              </div>
+            </div>
+          </div>
+        `;
+      });
+
+      html += `</div>`;
+      container.innerHTML = html;
+      attachSingleCopyListeners(container);
+    }
+
+    // Modern Cards Renderer for Answer Key & Scoring Guide
+    function renderAnswerKeyCards(aList, unitTitle, dayNumber, totalDays) {
+      const container = document.getElementById('worksheet-answers-body');
+      if (!aList || aList.length === 0) {
+        container.innerHTML = `<div class="rendered-markdown"><p style="color:var(--text-muted);">No answer key generated.</p></div>`;
+        return;
+      }
+
+      let html = `
+        <div class="meta-overview-banner">
+          <div>🔑 Kerala SCERT Evaluation Criteria & Scoring Matrix</div>
+          <div>Unit: ${unitTitle} • Day ${dayNumber}/${totalDays}</div>
+        </div>
+        <div class="cards-stack-container">
+      `;
+
+      aList.forEach((item, index) => {
+        const qNum = item.qNum || (index + 1);
+        const score = item.score || (index === 0 ? 2 : 1);
+        const rubric = item.rubric || "Scientific accuracy, logical inference, and conceptual clarity.";
+        const modelSolution = formatMarkdown(item.answer || item.modelAnswer || item.solution || '');
+
+        html += `
+          <div class="unified-card">
+            <div class="unified-card-header">
+              <div class="card-tag-group">
+                <span class="pill-qnum">Activity ${qNum} Solution</span>
+                <span class="pill-score">Max Score: ${score}</span>
+              </div>
+              <button class="btn btn-outline btn-sm copy-single-item" data-text="Activity ${qNum} Solution [Score: ${score}]:\nRubric: ${escapeHtml(rubric)}\nKey: ${escapeHtml(item.answer || item.modelAnswer)}">📋 Copy</button>
+            </div>
+            <div class="unified-card-body">
+              <div class="section-rubric">
+                <div class="label-rubric">Scoring Criteria & Value Points</div>
+                <div class="text-rubric">${rubric}</div>
+              </div>
+              <div class="section-a">
+                <div class="label-a">Model Answer / Expected Points</div>
+                <div class="text-a">${modelSolution}</div>
+              </div>
+            </div>
+          </div>
+        `;
+      });
+
+      html += `</div>`;
+      container.innerHTML = html;
+      attachSingleCopyListeners(container);
+    }
+
+    function escapeHtml(str) {
+      if (!str) return '';
+      return str.replace(/"/g, '&quot;').replace(/'/g, '&#39;');
+    }
+
+    function attachSingleCopyListeners(parentEl) {
+      parentEl.querySelectorAll('.copy-single-item').forEach(btn => {
         btn.addEventListener('click', (e) => {
-          const idx = parseInt(e.currentTarget.dataset.index, 10);
-          const item = qaList[idx];
-          copyText(`Q${idx + 1}: ${item.question}\n\nAns:\n${item.answer}`, `Copied Q${idx + 1}!`);
+          const txt = e.currentTarget.dataset.text;
+          copyText(txt, "Copied card content!");
         });
       });
     }
@@ -3172,18 +2895,16 @@ ${responseSchemaDescription}
 
       let chatHtml = `
         <div class="wa-bubble wa-bubble-green">
-          <div class="wa-bubble-header">
-            <span>🏫 Daily Classroom Recap (Std ${classId})</span>
-            <span>Day ${dayNumber}/${totalDays}</span>
+          <div class="wa-bubble-header" style="font-weight:700; color:var(--primary); margin-bottom:4px; font-size:0.75rem;">
+            🏫 Daily Classroom Recap (Std ${classId} • Day ${dayNumber}/${totalDays})
           </div>
           <p style="font-weight:600; margin-bottom:4px;">*Unit:* ${unitTitle}</p>
           <p>${recap}</p>
         </div>
 
         <div class="wa-bubble">
-          <div class="wa-bubble-header" style="color:#1e293b;">
-            <span>📝 Today's Notebook & Blackboard Q&As</span>
-            <span>${qaList.length} Items</span>
+          <div class="wa-bubble-header" style="font-weight:700; color:#1e293b; margin-bottom:4px; font-size:0.75rem;">
+            📝 Today's Notebook & Blackboard Q&As (${qaList.length} Items)
           </div>
           <div class="wa-qa-list">
       `;
@@ -3202,8 +2923,8 @@ ${responseSchemaDescription}
         </div>
 
         <div class="wa-bubble wa-bubble-green">
-          <div class="wa-bubble-header">
-            <span>💡 Evening Study & DIKSHA Recommendations</span>
+          <div class="wa-bubble-header" style="font-weight:700; color:var(--primary); margin-bottom:4px; font-size:0.75rem;">
+            💡 Evening Study & DIKSHA Recommendations
           </div>
           <p style="margin-bottom:6px;"><strong>Home Discussion:</strong> ${tip}</p>
           <div style="font-size:0.76rem; background:#f1f5f9; padding:5px 7px; border-radius:4px;">
@@ -3269,6 +2990,425 @@ ${responseSchemaDescription}
         .replace(/^[\*\-] (.*$)/gim, '<li>$1</li>');
       html = html.replace(/(<li>[\s\S]*?<\/li>)/g, '<ul>$1</ul>');
       return `<p>${html.replace(/\n\n+/g, '</p><p>')}</p>`;
+    }
+
+    function updateGeneratorUIStatus(pkgTitle = "") {
+      if (state.currentPackage) {
+        activeStatusBar.style.display = "flex";
+        activeStatusText.textContent = `Active: ${pkgTitle || state.currentPackage.targetedCurricularObjective || 'Current'}`;
+      } else {
+        activeStatusBar.style.display = "none";
+      }
+    }
+
+    function resetWorkspace() {
+      state.currentPackage = null;
+      state.activePackageId = null;
+      updateGeneratorUIStatus();
+      speechEngine.stop();
+
+      document.querySelectorAll('.translate-tab-btn').forEach(b => {
+        b.classList.remove('active-ml');
+        b.innerHTML = `🌐 മലയാളം`;
+      });
+
+      updateAllUniversalHeaders("Select Unit", "1", "5", state.currentClass, state.currentPart, "Generated upon request");
+
+      document.getElementById('lesson-plan-body').innerHTML = `<p style="color: var(--text-muted); font-style: italic;">Enter details above and tap "Generate Package".</p>`;
+      document.getElementById('media-resources-body').innerHTML = `<p style="color: var(--text-muted); font-style: italic;">Curated media will render here.</p>`;
+      document.getElementById('blackboard-notes-body').innerHTML = `<div class="rendered-markdown"><p style="color: var(--text-muted); font-style: italic;">Application questions and solutions will render here.</p></div>`;
+      document.getElementById('whatsapp-preview-area').innerHTML = `<div class="wa-bubble" style="color: var(--text-muted); font-style: italic;">Parent broadcast message will render here.</div>`;
+      document.getElementById('whatsapp-summary-body').textContent = `Parent communication message will render here.`;
+      document.getElementById('worksheet-render-area').innerHTML = `<div class="rendered-markdown"><p style="color: var(--text-muted); font-style: italic;">Evaluation activities will render here.</p></div>`;
+      document.getElementById('worksheet-answers-body').innerHTML = `<div class="rendered-markdown"><p style="color: var(--text-muted); font-style: italic;">Model answers and scoring criteria will render here.</p></div>`;
+
+      document.querySelectorAll('.pkg-card').forEach(c => c.classList.remove('active-loaded'));
+      showToast("Workspace Reset!");
+    }
+
+    resetWorkspaceBtn.addEventListener('click', resetWorkspace);
+    quickResetBtn.addEventListener('click', resetWorkspace);
+
+    async function loadSavedPackage(pkgId) {
+      const allPkgs = await idb.getAllPackages();
+      let pkg = allPkgs.find(p => p.id === pkgId);
+
+      if (!pkg && db) {
+        try {
+          const snap = await getDoc(doc(db, 'saved_packages', pkgId));
+          if (snap.exists()) pkg = snap.data();
+        } catch (e) {}
+      }
+
+      if (!pkg) return showMessageBox("Package not found in archive.", "Error");
+
+      state.currentClass = pkg.classId;
+      state.currentPart = pkg.partId;
+      classSelect.value = pkg.classId;
+      partRadios.forEach(r => r.checked = (r.value === pkg.partId));
+      unitTitleInput.value = pkg.unitTitle;
+      dayNumberInput.value = pkg.dayNumber;
+      totalDaysInput.value = pkg.totalDays;
+      highlightActiveTarget();
+      checkAndLoadChapterRoadmap();
+
+      state.currentPackage = pkg.data;
+      state.activePackageId = pkg.id;
+      renderPackageToWorkspace(pkg.data, pkg.unitTitle, pkg.dayNumber, pkg.totalDays, pkg.classId, pkg.partId);
+      updateGeneratorUIStatus(`Std ${pkg.classId} - ${pkg.unitTitle} (D${pkg.dayNumber})`);
+
+      document.querySelectorAll('.pkg-card').forEach(c => c.classList.toggle('active-loaded', c.dataset.id === pkg.id));
+      document.querySelector('[data-tab="lesson-plan"]').click();
+      showToast(`Loaded: ${pkg.unitTitle} (Day ${pkg.dayNumber})`);
+    }
+
+    async function refreshPackageArchiveUI() {
+      let cloudPackages = [];
+
+      if (db) {
+        try {
+          if (auth && !auth.currentUser) await signInAnonymously(auth).catch(() => {});
+          const snap = await withTimeout(getDocs(collection(db, 'saved_packages')), 2500);
+          snap.forEach(docSnap => {
+            if (docSnap.exists()) cloudPackages.push(docSnap.data());
+          });
+        } catch (e) {
+          console.warn("Firestore fetch packages:", e.message);
+        }
+      }
+
+      const localPackages = await idb.getAllPackages();
+      const packageMap = new Map();
+      localPackages.forEach(p => packageMap.set(p.id, p));
+      cloudPackages.forEach(p => {
+        packageMap.set(p.id, p);
+        idb.savePackage(p);
+      });
+
+      state.savedPackages = Array.from(packageMap.values());
+      packageCountBadge.textContent = state.savedPackages.length;
+      if (mobPkgPill) mobPkgPill.textContent = state.savedPackages.length;
+
+      if (state.savedPackages.length === 0) {
+        pkgArchiveList.innerHTML = `<div style="font-size: 0.68rem; color: var(--text-muted); text-align: center; padding: 6px;">No saved packages yet.</div>`;
+        return;
+      }
+
+      state.savedPackages.sort((a, b) => b.createdAt - a.createdAt);
+
+      let html = '';
+      state.savedPackages.forEach(pkg => {
+        const isLoaded = (pkg.id === state.activePackageId);
+        const coSnippet = pkg.data?.targetedCurricularObjective || 'Standard SCERT Lesson';
+
+        html += `
+          <div class="pkg-card ${isLoaded ? 'active-loaded' : ''}" data-id="${pkg.id}">
+            <div class="pkg-card-top">
+              <div>
+                <div class="pkg-title-text">📚 Std ${pkg.classId} - ${pkg.unitTitle} (Day ${pkg.dayNumber}/${pkg.totalDays})</div>
+                <div class="pkg-meta-text">${pkg.dateFormatted}</div>
+              </div>
+              <span class="badge-tag" style="background:${isLoaded ? 'var(--primary)' : '#e2e8f0'}; color:${isLoaded ? '#fff' : '#334155'}; font-size:0.6rem;">
+                ${isLoaded ? 'ACTIVE' : 'SAVED'}
+              </span>
+            </div>
+
+            <div class="pkg-co-preview" title="${coSnippet}">
+              🎯 ${coSnippet}
+            </div>
+
+            <div class="pkg-actions-row">
+              <button class="btn btn-primary btn-sm btn-load-pkg" data-id="${pkg.id}">📥 Load</button>
+              <button class="btn btn-outline btn-sm btn-reset-pkg" data-id="${pkg.id}">🔄 Reset</button>
+              <button class="btn btn-outline btn-sm btn-del-pkg" data-id="${pkg.id}" style="color:#ef4444; border-color:#fca5a5;">🗑️ Delete</button>
+            </div>
+          </div>
+        `;
+      });
+      pkgArchiveList.innerHTML = html;
+
+      pkgArchiveList.querySelectorAll('.btn-load-pkg').forEach(btn => {
+        btn.addEventListener('click', (e) => loadSavedPackage(e.currentTarget.dataset.id));
+      });
+
+      pkgArchiveList.querySelectorAll('.btn-reset-pkg').forEach(btn => btn.addEventListener('click', resetWorkspace));
+
+      pkgArchiveList.querySelectorAll('.btn-del-pkg').forEach(btn => {
+        btn.addEventListener('click', async (e) => {
+          const id = e.currentTarget.dataset.id;
+          if (!confirm("Delete this daily lesson package from Firebase and local storage?")) return;
+          await idb.deletePackage(id);
+          if (db) {
+            try {
+              await deleteDoc(doc(db, 'saved_packages', id));
+            } catch (err) {}
+          }
+          if (state.activePackageId === id) resetWorkspace();
+          refreshPackageArchiveUI();
+          showToast("Package deleted.");
+        });
+      });
+    }
+
+    // Generator Trigger
+    generateBtn.addEventListener('click', () => {
+      const unitTitle = unitTitleInput.value.trim();
+      if (!unitTitle) return showMessageBox("Please enter a Chapter or Unit Title before generating.", "Missing Unit");
+
+      const totalDays = parseInt(totalDaysInput.value, 10);
+      const isWholeUnit = document.getElementById('scope-whole-unit').checked;
+      const dayNumber = isWholeUnit ? 1 : parseInt(dayNumberInput.value, 10);
+
+      if (dayNumber > totalDays) {
+        return showMessageBox("Day in Unit cannot exceed Total Planned Days.", "Invalid Pacing");
+      }
+
+      const isAlreadyActive = state.currentPackage !== null;
+      const isAlreadySaved = state.savedPackages.some(p => 
+        p.classId === state.currentClass && 
+        p.unitTitle.toLowerCase() === unitTitle.toLowerCase() && 
+        parseInt(p.dayNumber, 10) === dayNumber
+      );
+
+      if (isAlreadyActive || isAlreadySaved) {
+        showWarningModal(
+          `A lesson package for <strong>Std ${state.currentClass} - ${unitTitle} (${isWholeUnit ? 'Full Unit' : 'Day ' + dayNumber})</strong> already exists. <br><br>Do you want to reset workspace or continue and overwrite?`,
+          () => executeGenerationProcess(unitTitle, dayNumber, totalDays, isWholeUnit)
+        );
+      } else {
+        executeGenerationProcess(unitTitle, dayNumber, totalDays, isWholeUnit);
+      }
+    });
+
+    async function executeGenerationProcess(unitTitle, dayNumber, totalDays, isWholeUnit) {
+      const activeSlotId = `${state.currentClass}_${state.currentPart}`;
+      const activeBase64 = state.slotsBase64[activeSlotId];
+
+      const roadmapKey = getRoadmapStorageKey(state.currentClass, unitTitle);
+      const existingRoadmap = state.lockedRoadmap;
+
+      showSpinner(isWholeUnit 
+        ? `Synthesizing Entire Unit Plan (${totalDays} Days) for "${unitTitle}"...` 
+        : `Synthesizing Day ${dayNumber} of ${totalDays} for "${unitTitle}"...`
+      );
+
+      let roadmapInstruction = "";
+      if (existingRoadmap && existingRoadmap.dailyDistribution) {
+        roadmapInstruction = `
+LOCKED CHAPTER PACING ROADMAP ACTIVE:
+Master Curricular Objectives for the whole unit:
+${JSON.stringify(existingRoadmap.allUnitCurricularObjectives, null, 2)}
+Pre-allocated Daily Distribution across days:
+${JSON.stringify(existingRoadmap.dailyDistribution, null, 2)}
+DO NOT alter the master objectives. Ensure strict continuity.
+`;
+      } else {
+        roadmapInstruction = `
+NEW COMPLETE CHAPTER PACING ROADMAP REQUIRED:
+1. "allUnitCurricularObjectives": You MUST generate an EXHAUSTIVE master list of Curricular Objectives (CO 1, CO 2, ... CO N) covering THE ENTIRE CONTENT OF THIS FULL TEXTBOOK CHAPTER from start to finish.
+2. "chapterPacingRoadmap": Rigorously distribute ALL master Curricular Objectives across the ${totalDays} Total Planned Days so 100% of chapter competencies are covered across Day 1 to Day ${totalDays}.
+   - CRITICAL PACING RULE: If COs exceed days, group multiple COs per day.
+`;
+      }
+
+      let scopeInstruction = "";
+      let responseSchemaDescription = "";
+
+      const singleDayPackageSchema = `
+      "periodBreakdown": [
+        {"time": "0-5 min", "phaseTitle": "Entry Activity / Pre-requisite Hook", "teacherActivity": "...", "studentActivity": "..."},
+        {"time": "5-20 min", "phaseTitle": "Concept Exploration & Inquiry", "teacherActivity": "...", "studentActivity": "..."},
+        {"time": "20-25 min", "phaseTitle": "Formative Evaluation & Synthesis", "teacherActivity": "...", "studentActivity": "..."},
+        {"time": "25-35 min", "phaseTitle": "Blackboard Work & Journal Writing", "teacherActivity": "...", "studentActivity": "..."}
+      ],
+      "lessonPlanTableHtml": "<table class='copiable-table' border='1'>...</table>",
+      "lessonPlanIntroHtml": "<p>...</p>",
+      "mediaResources": [{"title": "...", "type": "video|diksha|sim", "platform": "...", "description": "...", "searchQuery": "..."}],
+      "blackboardQa": [{"qNum": 1, "cognitiveDomain": "HOTS", "question": "...", "answer": "..."}],
+      "whatsappSummary": {"dailyRecap": "...", "studyTip": "...", "dikshaKeywords": "..."},
+      "worksheetQuestions": [{"qNum": 1, "score": 2, "cognitiveDomain": "Application", "question": "..."}],
+      "worksheetAnswers": [{"qNum": 1, "score": 2, "rubric": "...", "answer": "..."}]
+`;
+
+      if (isWholeUnit) {
+        scopeInstruction = `WHOLE UNIT BATCH: Generate instructional packages for EVERY SINGLE DAY from Day 1 to Day ${totalDays}.`;
+        responseSchemaDescription = `
+{
+  "allUnitCurricularObjectives": ["CO 1: ...", "CO 2: ..."],
+  "chapterPacingRoadmap": {
+    "totalDays": ${totalDays},
+    "dailyDistribution": {"1": ["CO 1: ..."], "2": ["CO 2: ..."]}
+  },
+  "dailyPackages": [
+    {
+      "dayNumber": 1,
+      "targetedCurricularObjectives": ["CO 1: ..."],
+      "targetedCurricularObjective": "CO 1: ...",
+      ${singleDayPackageSchema}
+    }
+  ]
+}`;
+      } else {
+        scopeInstruction = `SINGLE DAY PERIOD MODE: Target Day ${dayNumber} of ${totalDays}.`;
+        responseSchemaDescription = `
+{
+  "allUnitCurricularObjectives": ["CO 1: ...", "CO 2: ..."],
+  "chapterPacingRoadmap": {
+    "totalDays": ${totalDays},
+    "dailyDistribution": {"1": ["CO 1: ..."], "2": ["CO 2: ..."]}
+  },
+  "targetedCurricularObjectives": ["CO 1: ..."],
+  "targetedCurricularObjective": "CO 1: ...",
+  ${singleDayPackageSchema}
+}`;
+      }
+
+      try {
+        const prompt = `
+You are an expert pedagogical assistant for Kerala SCERT Classes 5, 6, and 7.
+Formulate a teaching package calibrated specifically for:
+- Standard: Class ${state.currentClass}
+- Textbook: Part ${state.currentPart === 'part1' ? '1' : '2'}
+- Unit Name: ${unitTitle}
+- Total Planned Days: ${totalDays} Days.
+
+${roadmapInstruction}
+${scopeInstruction}
+
+CRITICAL PEDAGOGICAL SPECIFICATIONS:
+1. 35-MINUTE TIMELINE: Formulate spacious breakdown stages (0-5, 5-20, 20-25, 25-35 min) with detailed teacher inquiry and learner responses.
+2. BLACKBOARD NOTES: 2-3 HOTS questions and chalkboard answers.
+3. WORKSHEET & ANSWER KEY: Distinct application-level activities totalling 5 scores with explicit scoring criteria rubric points.
+4. WHATSAPP BROADCAST: 100-word daily recap with exact Blackboard Q&As.
+
+OUTPUT MUST BE A STRICT JSON OBJECT MATCHING THIS SCHEMA:
+${responseSchemaDescription}
+`;
+
+        const parts = [{ text: prompt }];
+
+        if (activeBase64) {
+          const sizeInMB = (activeBase64.length * 0.75) / (1024 * 1024);
+          if (sizeInMB <= 15) {
+            parts.unshift({
+              inlineData: {
+                mimeType: "application/pdf",
+                data: activeBase64
+              }
+            });
+          }
+        }
+
+        const payload = {
+          contents: [{ role: "user", parts: parts }],
+          generationConfig: { responseMimeType: "application/json", temperature: 0.2 }
+        };
+
+        const data = await executeSmartGeneration(payload);
+        let rawJson = data.candidates[0].content.parts[0].text;
+        rawJson = rawJson.replace(/^```(?:json)?\s*/i, '').replace(/\s*```$/i, '').trim();
+        const result = JSON.parse(rawJson);
+
+        if (!existingRoadmap && result.chapterPacingRoadmap) {
+          const roadmapToSave = {
+            totalDays: totalDays,
+            allUnitCurricularObjectives: result.allUnitCurricularObjectives || [],
+            dailyDistribution: result.chapterPacingRoadmap.dailyDistribution || {}
+          };
+          localStorage.setItem(roadmapKey, JSON.stringify(roadmapToSave));
+          state.lockedRoadmap = roadmapToSave;
+          roadmapStatusPill.style.display = 'flex';
+          roadmapStatusText.textContent = `🔒 Chapter COs Locked (${totalDays} Days Roadmap)`;
+        }
+
+        const now = new Date();
+
+        if (isWholeUnit && Array.isArray(result.dailyPackages)) {
+          let firstDayPkg = null;
+
+          for (const dayPkg of result.dailyPackages) {
+            const currentDayNum = dayPkg.dayNumber || 1;
+            const fullDayData = {
+              ...dayPkg,
+              allUnitCurricularObjectives: result.allUnitCurricularObjectives || []
+            };
+
+            const pkgId = `pkg_${now.getTime()}_d${currentDayNum}`;
+            const dailyClassPackage = {
+              id: pkgId,
+              classId: state.currentClass,
+              partId: state.currentPart,
+              unitTitle: unitTitle,
+              dayNumber: currentDayNum,
+              totalDays: totalDays,
+              createdAt: now.getTime() + currentDayNum,
+              dateFormatted: now.toLocaleDateString('en-IN', { day: '2-digit', month: 'short' }) + ` (Day ${currentDayNum}/${totalDays})`,
+              data: fullDayData
+            };
+
+            await idb.savePackage(dailyClassPackage);
+
+            if (db) {
+              try {
+                if (auth && !auth.currentUser) await signInAnonymously(auth).catch(() => {});
+                await setDoc(doc(db, 'saved_packages', pkgId), dailyClassPackage);
+              } catch (e) {}
+            }
+
+            if (currentDayNum === 1) firstDayPkg = dailyClassPackage;
+          }
+
+          if (firstDayPkg) {
+            state.currentPackage = firstDayPkg.data;
+            state.activePackageId = firstDayPkg.id;
+            dayNumberInput.value = 1;
+            renderPackageToWorkspace(firstDayPkg.data, unitTitle, 1, totalDays, state.currentClass, state.currentPart);
+            updateGeneratorUIStatus(`Std ${state.currentClass} - ${unitTitle} (Day 1/${totalDays})`);
+          }
+
+          await refreshPackageArchiveUI();
+          hideSpinner();
+          showMessageBox(`All ${totalDays} daily class packages for "${unitTitle}" have been generated with unified card layouts!`, "Full Unit Generated");
+        } else {
+          state.currentPackage = result;
+          renderPackageToWorkspace(result, unitTitle, dayNumber, totalDays, state.currentClass, state.currentPart);
+
+          const pkgId = 'pkg_' + Date.now();
+          const newPkg = {
+            id: pkgId,
+            classId: state.currentClass,
+            partId: state.currentPart,
+            unitTitle: unitTitle,
+            dayNumber: dayNumber,
+            totalDays: totalDays,
+            createdAt: now.getTime(),
+            dateFormatted: now.toLocaleDateString('en-IN', { day: '2-digit', month: 'short' }) + ' ' + now.toLocaleTimeString('en-IN', { hour: '2-digit', minute: '2-digit' }),
+            data: result
+          };
+
+          await idb.savePackage(newPkg);
+
+          if (db) {
+            try {
+              if (auth && !auth.currentUser) await signInAnonymously(auth).catch(() => {});
+              await setDoc(doc(db, 'saved_packages', pkgId), newPkg);
+            } catch (cloudErr) {
+              console.warn("Firestore save skipped:", cloudErr.message);
+            }
+          }
+
+          state.activePackageId = pkgId;
+          updateGeneratorUIStatus(`Std ${state.currentClass} - ${unitTitle} (D${dayNumber})`);
+          await refreshPackageArchiveUI();
+
+          hideSpinner();
+          showToast("Daily lesson package generated & saved!");
+        }
+      } catch (err) {
+        hideSpinner();
+        console.error(err);
+        showMessageBox(err.message, "Notice");
+      }
     }
 
     // Tabs Navigation
