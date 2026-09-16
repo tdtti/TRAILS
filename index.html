@@ -3023,7 +3023,8 @@ ${responseSchemaDescription}
           // =========================================================================
           let firstDayPkg = null;
 
-          for (const dayPkg of result.dailyPackages) {
+          // Parallel async map eliminates the 400ms sequential loop timer
+          await Promise.all(result.dailyPackages.map(async (dayPkg) => {
             const currentDayNum = dayPkg.dayNumber || 1;
             const fullDayData = {
               ...dayPkg,
@@ -3038,7 +3039,7 @@ ${responseSchemaDescription}
               unitTitle: unitTitle,
               dayNumber: currentDayNum,
               totalDays: totalDays,
-              createdAt: now.getTime() + currentDayNum, // ensure unique sorting
+              createdAt: now.getTime() + currentDayNum,
               dateFormatted: now.toLocaleDateString('en-IN', { day: '2-digit', month: 'short' }) + ` (Day ${currentDayNum}/${totalDays})`,
               data: fullDayData
             };
@@ -3054,8 +3055,10 @@ ${responseSchemaDescription}
               } catch (e) {}
             }
 
-            if (currentDayNum === 1) firstDayPkg = dailyClassPackage;
-          }
+            if (currentDayNum === 1) {
+              firstDayPkg = dailyClassPackage;
+            }
+          }));
 
           // Render Day 1 in workspace by default
           if (firstDayPkg) {
