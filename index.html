@@ -166,14 +166,14 @@
 
     .top-controls-grid {
       display: grid;
-      grid-template-columns: 1.15fr 1.3fr 1fr 1.1fr;
+      grid-template-columns: 1.15fr 1.4fr 0.95fr 1.1fr;
       gap: 12px;
       align-items: stretch;
-      max-width: 1440px;
+      max-width: 1480px;
       margin: 0 auto;
       width: 100%;
     }
-    @media (max-width: 1024px) {
+    @media (max-width: 1100px) {
       .top-controls-grid { grid-template-columns: 1fr 1fr; }
     }
     @media (max-width: 640px) {
@@ -261,71 +261,117 @@
       justify-content: space-between;
     }
 
-    /* Matrix Slots */
-    .matrix-grid {
-      display: grid;
-      grid-template-columns: 1fr 1fr;
+    /* ==========================================================================
+       CARD 2: DYNAMIC TEXTBOOK LIBRARY (SUPPORTS 100+ UPLOADS ACROSS ALL SUBJECTS)
+       ========================================================================== */
+    .tb-library-toolbar {
+      display: flex;
       gap: 5px;
+      margin-bottom: 6px;
+      align-items: center;
+      flex-wrap: wrap;
     }
-    .slot-card {
-      background: #ffffff;
+    .tb-search-input {
+      flex: 1;
+      min-width: 100px;
+      padding: 4px 7px;
+      font-size: 0.72rem;
       border: 1px solid var(--border);
       border-radius: 4px;
-      padding: 5px 6px;
-      cursor: pointer;
+    }
+    .tb-filter-select {
+      padding: 4px 5px;
+      font-size: 0.72rem;
+      border: 1px solid var(--border);
+      border-radius: 4px;
+      background: #fff;
+      max-width: 90px;
+    }
+    .tb-library-scroll {
+      display: flex;
+      flex-direction: column;
+      gap: 5px;
+      max-height: 180px;
+      overflow-y: auto;
+      padding-right: 2px;
+    }
+    .tb-card-item {
+      background: #ffffff;
+      border: 1px solid #cbd5e1;
+      border-radius: 5px;
+      padding: 6px 8px;
+      display: flex;
+      flex-direction: column;
+      gap: 4px;
       transition: all 0.15s;
-      min-width: 0;
     }
-    .slot-card.active-target {
+    .tb-card-item.is-active-target {
       border: 1.5px solid var(--primary);
-      background: var(--primary-light);
+      background: #f0fdf4;
     }
-    .slot-header {
+    .tb-card-top {
       display: flex;
       justify-content: space-between;
       align-items: center;
-      margin-bottom: 2px;
+      gap: 4px;
     }
-    .slot-title { font-size: 0.68rem; font-weight: 700; color: var(--secondary); white-space: nowrap; }
-    .slot-badge {
+    .tb-subject-badge {
+      font-size: 0.66rem;
+      font-weight: 700;
+      color: #0f172a;
+      display: flex;
+      align-items: center;
+      gap: 4px;
+    }
+    .tb-lock-pill {
       font-size: 0.58rem;
-      padding: 1px 4px;
+      font-weight: 700;
+      padding: 1px 5px;
       border-radius: 3px;
-      font-weight: 600;
+      text-transform: uppercase;
     }
-    .slot-badge.locked { background: var(--success); color: #fff; }
-    .slot-badge.unlocked { background: var(--error); color: #fff; }
-    .slot-file-name {
-      font-size: 0.64rem;
+    .tb-lock-pill.locked { background: var(--success); color: #fff; }
+    .tb-lock-pill.unlocked { background: #e2e8f0; color: #475569; }
+
+    .tb-card-mid {
+      font-size: 0.65rem;
       color: var(--text-muted);
+      display: flex;
+      justify-content: space-between;
+      align-items: center;
       overflow: hidden;
       text-overflow: ellipsis;
       white-space: nowrap;
-      margin-bottom: 3px;
     }
-    .slot-actions { display: flex; gap: 3px; align-items: center; }
-
-    .btn-file-select {
-      flex: 1;
-      min-width: 0;
+    .tb-card-actions {
+      display: flex;
+      justify-content: space-between;
+      align-items: center;
+      padding-top: 3px;
+      border-top: 1px dashed #e2e8f0;
+      margin-top: 2px;
+    }
+    .tb-icon-btn-group { display: flex; gap: 3px; align-items: center; }
+    .tb-btn-icon {
       background: #f1f5f9;
-      border: 1px dashed #cbd5e1;
+      border: 1px solid #cbd5e1;
       border-radius: 3px;
-      padding: 2px 4px;
-      font-size: 0.64rem;
-      font-weight: 600;
-      color: var(--secondary);
+      padding: 2px 6px;
+      font-size: 0.68rem;
       cursor: pointer;
       display: inline-flex;
       align-items: center;
-      justify-content: center;
-      gap: 3px;
-      white-space: nowrap;
-      overflow: hidden;
-      text-overflow: ellipsis;
+      gap: 2px;
+      font-weight: 600;
+      transition: background 0.15s;
     }
-    .btn-file-select:hover { background: #e2e8f0; }
-    .slot-btn { padding: 2px 6px; font-size: 0.64rem; flex-shrink: 0; }
+    .tb-btn-icon:hover { background: #e2e8f0; }
+    .tb-btn-icon.active-use {
+      background: var(--primary-light);
+      border-color: var(--primary);
+      color: var(--primary);
+    }
+    .tb-btn-icon.del-btn { color: #dc2626; border-color: #fca5a5; }
 
     /* Saved Packages Archive */
     .pkg-archive-container {
@@ -610,9 +656,7 @@
     .co-box-master ul { margin-top: 4px; padding-left: 18px; }
     .co-box-master li { margin-bottom: 3px; line-height: 1.4; font-size: 0.8rem; }
 
-    /* ==========================================================================
-       DE-CONGESTED 35-MINUTE PERIOD BREAKDOWN TIMELINE
-       ========================================================================== */
+    /* Spacious 35-Minute Period Breakdown Timeline */
     .period-timeline {
       display: flex;
       flex-direction: column;
@@ -678,7 +722,6 @@
       line-height: 1.45;
     }
 
-    /* Spacious Table Fallback */
     .table-scroll-wrapper {
       width: 100%;
       overflow-x: auto;
@@ -705,9 +748,7 @@
     .copiable-table th { background-color: #f8fafc; font-weight: 700; color: #1e293b; }
     .copiable-table tr:nth-child(even) td { background-color: #fafbfc; }
 
-    /* ==========================================================================
-       UNIFIED MODERN CARD TYPE SYSTEM: BOARD, WORKSHEET & ANSWER KEY
-       ========================================================================== */
+    /* Unified Modern Card Type System: Board, Worksheet & Answer Key */
     .cards-stack-container { display: flex; flex-direction: column; gap: 10px; width: 100%; }
     
     .unified-card {
@@ -758,7 +799,6 @@
 
     .unified-card-body { padding: 10px 12px; display: flex; flex-direction: column; gap: 8px; }
 
-    /* Yellow Question Block */
     .section-q {
       background: #fefce8;
       border-left: 3px solid #eab308;
@@ -768,7 +808,6 @@
     .label-q { font-size: 0.64rem; font-weight: 700; color: #854d0e; text-transform: uppercase; margin-bottom: 3px; }
     .text-q { font-size: 0.86rem; font-weight: 600; color: #1e293b; line-height: 1.45; }
 
-    /* Green Solution Block */
     .section-a {
       background: #f0fdf4;
       border-left: 3px solid var(--primary);
@@ -778,7 +817,6 @@
     .label-a { font-size: 0.64rem; font-weight: 700; color: var(--primary); text-transform: uppercase; margin-bottom: 3px; }
     .text-a { font-size: 0.84rem; color: #0f172a; line-height: 1.5; }
 
-    /* Purple Rubric / Criteria Block */
     .section-rubric {
       background: #f5f3ff;
       border-left: 3px solid #8b5cf6;
@@ -788,7 +826,6 @@
     .label-rubric { font-size: 0.64rem; font-weight: 700; color: #6d28d9; text-transform: uppercase; margin-bottom: 3px; }
     .text-rubric { font-size: 0.82rem; color: #334155; line-height: 1.45; }
 
-    /* Worksheet Student Chalk / Writing Lines */
     .section-write-space {
       background: #fafafa;
       border: 1px dashed #cbd5e1;
@@ -798,7 +835,6 @@
     .label-write { font-size: 0.64rem; font-weight: 700; color: #64748b; text-transform: uppercase; margin-bottom: 4px; }
     .answer-line { border-bottom: 1px dashed #94a3b8; height: 18px; width: 100%; margin-top: 4px; display: block; }
 
-    /* Summary Meta Banner */
     .meta-overview-banner {
       display: flex;
       justify-content: space-between;
@@ -813,101 +849,7 @@
       color: #334155;
     }
 
-    /* WhatsApp UI */
-    .wa-view-switch {
-      display: flex;
-      gap: 4px;
-      background: #e2e8f0;
-      padding: 3px;
-      border-radius: 5px;
-      margin-bottom: 8px;
-    }
-    .wa-switch-btn {
-      flex: 1;
-      padding: 5px 8px;
-      border: none;
-      background: transparent;
-      font-size: 0.72rem;
-      font-weight: 600;
-      color: var(--text-muted);
-      border-radius: 3px;
-      cursor: pointer;
-    }
-    .wa-switch-btn.active {
-      background: #fff;
-      color: var(--primary);
-      box-shadow: 0 1px 2px rgba(0,0,0,0.06);
-    }
-    .wa-chat-canvas {
-      background: var(--whatsapp-bg);
-      background-image: radial-gradient(#d1c7b7 1px, transparent 1px);
-      background-size: 16px 16px;
-      border: 1px solid #d6cfc7;
-      border-radius: 6px;
-      padding: 10px;
-      display: flex;
-      flex-direction: column;
-      gap: 8px;
-      width: 100%;
-    }
-    .wa-bubble {
-      background: #ffffff;
-      border-radius: 6px;
-      padding: 8px 10px;
-      box-shadow: 0 1px 2px rgba(0,0,0,0.06);
-      font-size: 0.8rem;
-      line-height: 1.45;
-      word-break: break-word;
-    }
-    .wa-bubble-green { background: var(--whatsapp-bubble); border-left: 3px solid var(--whatsapp-green); }
-    .wa-qa-list { display: flex; flex-direction: column; gap: 5px; margin-top: 5px; }
-    .wa-qa-card { background: #ffffff; border: 1px solid #cbd5e1; border-radius: 4px; padding: 6px 8px; }
-    .wa-qa-q { font-weight: 700; font-size: 0.78rem; margin-bottom: 2px; }
-    .wa-qa-a { font-size: 0.76rem; background: #f8fafc; padding: 4px 6px; border-radius: 3px; border-left: 2px solid var(--primary); }
-    .wa-box-raw {
-      background: #fff;
-      padding: 10px;
-      border: 1px solid #cbd5e1;
-      border-radius: 5px;
-      font-family: monospace;
-      white-space: pre-wrap;
-      font-size: 0.78rem;
-      line-height: 1.4;
-      overflow-x: auto;
-      word-break: break-word;
-    }
-
-    /* Media Cards Grid */
-    .media-grid {
-      display: grid;
-      grid-template-columns: repeat(auto-fill, minmax(220px, 1fr));
-      gap: 8px;
-    }
-    .media-card {
-      background: var(--surface);
-      border: 1px solid var(--border);
-      border-radius: 5px;
-      padding: 10px;
-      display: flex;
-      flex-direction: column;
-      justify-content: space-between;
-    }
-    .media-card-type {
-      font-size: 0.62rem;
-      font-weight: 700;
-      text-transform: uppercase;
-      padding: 1px 4px;
-      border-radius: 3px;
-      display: inline-block;
-      margin-bottom: 4px;
-    }
-    .type-video { background: #fee2e2; color: #b91c1c; }
-    .type-diksha { background: #e0f2fe; color: #0369a1; }
-    .type-sim { background: #ede9fe; color: #6d28d9; }
-    .media-card h4 { font-size: 0.84rem; margin-bottom: 3px; }
-    .media-card p { font-size: 0.74rem; color: var(--text-muted); margin-bottom: 6px; }
-
-    /* Modals & Overlays */
+    /* Modals */
     .spinner-overlay {
       position: fixed;
       top: 0; left: 0; width: 100vw; height: 100vh;
@@ -941,7 +883,7 @@
       z-index: 100000;
     }
     .modal-box {
-      background: #fff; width: 92%; max-width: 400px;
+      background: #fff; width: 92%; max-width: 440px;
       border-radius: 8px; box-shadow: 0 10px 25px rgba(0,0,0,0.25);
       overflow: hidden;
     }
@@ -968,9 +910,7 @@
     }
     .toast-popup.visible { opacity: 1; transform: translateY(0); }
 
-    /* ==========================================================================
-       5. STRICT A4 PORTRAIT 100% WIDTH PRINT STYLESHEET
-       ========================================================================== */
+    /* Print Styles */
     @media print {
       @page {
         size: A4 portrait;
@@ -1073,6 +1013,83 @@
     </div>
   </div>
 
+  <!-- ==========================================================================
+       TEXTBOOK UPLOAD & MODIFY MODAL (SUPPORTS 100+ BOOKS ACROSS ALL SUBJECTS)
+       ========================================================================== -->
+  <div id="book-modal-overlay" class="modal-overlay no-print" style="display:none;">
+    <div class="modal-box">
+      <div class="modal-header" style="background: var(--primary);">
+        <h4 id="book-modal-title">📚 Add New Textbook</h4>
+        <button id="book-modal-close-btn" class="modal-close">&times;</button>
+      </div>
+      <div class="modal-body">
+        <input type="hidden" id="edit-book-id" value="">
+        
+        <div class="form-row">
+          <div class="form-group half">
+            <label for="modal-book-class">Class (Standard):</label>
+            <select id="modal-book-class" class="form-control">
+              <option value="1">Class 1</option>
+              <option value="2">Class 2</option>
+              <option value="3">Class 3</option>
+              <option value="4">Class 4</option>
+              <option value="5" selected>Class 5</option>
+              <option value="6">Class 6</option>
+              <option value="7">Class 7</option>
+              <option value="8">Class 8</option>
+              <option value="9">Class 9</option>
+              <option value="10">Class 10</option>
+            </select>
+          </div>
+          <div class="form-group half">
+            <label for="modal-book-part">Part / Volume:</label>
+            <select id="modal-book-part" class="form-control">
+              <option value="part1" selected>Part 1</option>
+              <option value="part2">Part 2</option>
+              <option value="full">Full Book</option>
+            </select>
+          </div>
+        </div>
+
+        <div class="form-group">
+          <label for="modal-book-subject">Subject:</label>
+          <input type="text" id="modal-book-subject" class="form-control" placeholder="e.g. Basic Science, Social Science, Mathematics" list="scert-subjects-list">
+          <datalist id="scert-subjects-list">
+            <option value="Basic Science">
+            <option value="Social Science">
+            <option value="Mathematics">
+            <option value="Malayalam">
+            <option value="English">
+            <option value="Hindi">
+            <option value="ICT">
+            <option value="Environmental Studies">
+            <option value="Arabic">
+            <option value="Sanskrit">
+          </datalist>
+        </div>
+
+        <div class="form-group">
+          <label for="modal-book-file">Textbook PDF File:</label>
+          <input type="file" id="modal-book-file" accept="application/pdf" class="form-control">
+          <div id="modal-file-status" style="font-size: 0.68rem; color: var(--text-muted); margin-top: 3px;">
+            Choose a PDF (Max 15MB recommended for direct AI inline upload).
+          </div>
+        </div>
+
+        <div class="form-group" style="margin-top: 10px;">
+          <label style="display:flex; align-items:center; gap:6px; cursor:pointer; font-weight:600;">
+            <input type="checkbox" id="modal-book-lock" checked>
+            <span>Lock into Active AI Synthesis Context</span>
+          </label>
+        </div>
+      </div>
+      <div class="modal-footer">
+        <button id="book-modal-cancel-btn" class="btn btn-outline btn-sm">Cancel</button>
+        <button id="save-book-modal-btn" class="btn btn-primary btn-sm">💾 Save Textbook</button>
+      </div>
+    </div>
+  </div>
+
   <!-- Voice & Speed Settings Modal -->
   <div id="voice-modal-overlay" class="modal-overlay no-print" style="display:none;">
     <div class="modal-box">
@@ -1131,26 +1148,6 @@
     </div>
   </div>
 
-  <!-- Warning Modal -->
-  <div id="warning-modal-overlay" class="modal-overlay no-print" style="display:none;">
-    <div class="modal-box">
-      <div class="modal-header" style="background: #b45309;">
-        <h4>⚠️ Existing Package Notice</h4>
-        <button id="warning-modal-close-btn" class="modal-close">&times;</button>
-      </div>
-      <div class="modal-body" id="warning-modal-message">
-        A lesson package for this day and chapter already exists. Generating will create a new package for this session.
-      </div>
-      <div class="modal-footer" style="display: flex; justify-content: space-between; gap: 6px; flex-wrap: wrap;">
-        <button id="warning-reset-btn" class="btn btn-outline btn-sm">🔄 Reset Workspace</button>
-        <div style="display: flex; gap: 5px;">
-          <button id="warning-cancel-btn" class="btn btn-outline btn-sm">Cancel</button>
-          <button id="warning-continue-btn" class="btn btn-primary btn-sm">⚡ Continue / Overwrite</button>
-        </div>
-      </div>
-    </div>
-  </div>
-
   <!-- Dedicated API Key Modal -->
   <div id="key-modal-overlay" class="modal-overlay no-print" style="display:none;">
     <div class="modal-box">
@@ -1197,7 +1194,7 @@
   <section class="top-controls-panel no-print" id="top-controls-panel">
     <div class="mobile-drawer-nav">
       <button class="mob-tab-btn active" data-drawer-tab="pacing">🎯 Pacing</button>
-      <button class="mob-tab-btn" data-drawer-tab="books">📚 Books <span id="mob-locked-pill" class="pill-mini">0/6</span></button>
+      <button class="mob-tab-btn" data-drawer-tab="books">📚 Books <span id="mob-locked-pill" class="pill-mini">0</span></button>
       <button class="mob-tab-btn" data-drawer-tab="generate">⚡ Action</button>
       <button class="mob-tab-btn" data-drawer-tab="archive">💾 Saved <span id="mob-pkg-pill" class="pill-mini">0</span></button>
     </div>
@@ -1207,8 +1204,8 @@
       <div class="ctrl-card mob-active" data-section="pacing">
         <h3><span>1. Pacing Target</span></h3>
         <div id="roadmap-status-pill" class="roadmap-status-pill">
-          <span id="roadmap-status-text">🔒 Chapter Plan: Locked</span>
-          <button id="unlock-roadmap-btn" class="btn btn-danger btn-sm" style="padding: 1px 5px; font-size:0.64rem;">🔓 Unlock</button>
+          <span id="roadmap-status-text"> Chapter Plan: 🔒 </span>
+          <button id="unlock-roadmap-btn" class="btn btn-danger btn-sm" style="padding: 1px 5px; font-size:0.64rem;">🔓 </button>
         </div>
 
         <div class="pacing-mode-box">
@@ -1224,18 +1221,29 @@
 
         <div class="form-row">
           <div class="form-group half">
-            <label>Class:</label>
-            <select id="class-select" class="form-control">
-              <option value="5">Class 5</option>
-              <option value="6">Class 6</option>
-              <option value="7">Class 7</option>
-            </select>
+            <label>Subject:</label>
+            <input type="text" id="target-subject" class="form-control" value="Basic Science" placeholder="e.g. Basic Science">
           </div>
           <div class="form-group half">
-            <label>Part:</label>
-            <div class="radio-toggle" style="margin-top:6px;">
-              <label><input type="radio" name="textbook-part" value="part1" checked> Pt 1</label>
-              <label><input type="radio" name="textbook-part" value="part2"> Pt 2</label>
+            <label>Class & Part:</label>
+            <div class="form-row">
+              <select id="class-select" class="form-control" style="flex:1;">
+                <option value="1">Std 1</option>
+                <option value="2">Std 2</option>
+                <option value="3">Std 3</option>
+                <option value="4">Std 4</option>
+                <option value="5" selected>Std 5</option>
+                <option value="6">Std 6</option>
+                <option value="7">Std 7</option>
+                <option value="8">Std 8</option>
+                <option value="9">Std 9</option>
+                <option value="10">Std 10</option>
+              </select>
+              <select id="part-select" class="form-control" style="flex:1;">
+                <option value="part1" selected>Pt 1</option>
+                <option value="part2">Pt 2</option>
+                <option value="full">Full</option>
+              </select>
             </div>
           </div>
         </div>
@@ -1248,84 +1256,40 @@
         <div class="form-row">
           <div class="form-group half" id="day-number-container">
             <label>Day in Unit:</label>
-            <input type="number" id="day-number" class="form-control" value="1" min="1" max="15">
+            <input type="number" id="day-number" class="form-control" value="1" min="1" max="25">
           </div>
           <div class="form-group half" id="total-days-container">
             <label>Total Days:</label>
-            <input type="number" id="total-days" class="form-control" value="5" min="1" max="15">
+            <input type="number" id="total-days" class="form-control" value="5" min="1" max="25">
           </div>
         </div>
       </div>
 
-      <!-- Card 2: 6 Locked Textbooks -->
+      <!-- Card 2: 100+ Books Management (Unlock, Modify, Delete) -->
       <div class="ctrl-card" data-section="books">
         <h3>
-          <span>2. Locked Textbooks</span>
-          <span style="font-size:0.65rem; color:var(--text-muted);" id="locked-count">0/6 Locked</span>
+          <span>2. Locked Textbooks (<span id="locked-count">0</span>)</span>
+          <button id="add-textbook-btn" class="btn btn-primary btn-sm" style="padding: 2px 7px; font-size: 0.68rem;">+ Add Book</button>
         </h3>
         
-        <div class="matrix-grid">
-          <!-- Std 5 -->
-          <div class="slot-card" id="card-5_part1" data-slot="5_part1">
-            <div class="slot-header"><span class="slot-title">Std 5 - Pt 1</span><span class="slot-badge unlocked" id="badge-5_part1">Unlocked</span></div>
-            <div class="slot-file-name" id="name-5_part1">No PDF Attached</div>
-            <div class="slot-actions" id="actions-5_part1">
-              <input type="file" accept="application/pdf" id="input-5_part1" data-slot="5_part1" class="slot-input-hidden" style="display:none;">
-              <label for="input-5_part1" class="btn-file-select" id="label-5_part1">📎 <span id="label-text-5_part1">Choose</span></label>
-              <button class="btn btn-outline slot-btn" data-slot="5_part1">Lock</button>
-            </div>
-          </div>
+        <!-- Filter Toolbar -->
+        <div class="tb-library-toolbar">
+          <input type="text" id="tb-search-box" class="tb-search-input" placeholder="🔍 Search 100+ Books...">
+          <select id="tb-filter-class" class="tb-filter-select">
+            <option value="all">All Stds</option>
+            <option value="5">Std 5</option>
+            <option value="6">Std 6</option>
+            <option value="7">Std 7</option>
+            <option value="8">Std 8</option>
+            <option value="9">Std 9</option>
+            <option value="10">Std 10</option>
+          </select>
+        </div>
 
-          <div class="slot-card" id="card-5_part2" data-slot="5_part2">
-            <div class="slot-header"><span class="slot-title">Std 5 - Pt 2</span><span class="slot-badge unlocked" id="badge-5_part2">Unlocked</span></div>
-            <div class="slot-file-name" id="name-5_part2">No PDF Attached</div>
-            <div class="slot-actions" id="actions-5_part2">
-              <input type="file" accept="application/pdf" id="input-5_part2" data-slot="5_part2" class="slot-input-hidden" style="display:none;">
-              <label for="input-5_part2" class="btn-file-select" id="label-5_part2">📎 <span id="label-text-5_part2">Choose</span></label>
-              <button class="btn btn-outline slot-btn" data-slot="5_part2">Lock</button>
-            </div>
-          </div>
-
-          <!-- Std 6 -->
-          <div class="slot-card" id="card-6_part1" data-slot="6_part1">
-            <div class="slot-header"><span class="slot-title">Std 6 - Pt 1</span><span class="slot-badge unlocked" id="badge-6_part1">Unlocked</span></div>
-            <div class="slot-file-name" id="name-6_part1">No PDF Attached</div>
-            <div class="slot-actions" id="actions-6_part1">
-              <input type="file" accept="application/pdf" id="input-6_part1" data-slot="6_part1" class="slot-input-hidden" style="display:none;">
-              <label for="input-6_part1" class="btn-file-select" id="label-6_part1">📎 <span id="label-text-6_part1">Choose</span></label>
-              <button class="btn btn-outline slot-btn" data-slot="6_part1">Lock</button>
-            </div>
-          </div>
-
-          <div class="slot-card" id="card-6_part2" data-slot="6_part2">
-            <div class="slot-header"><span class="slot-title">Std 6 - Pt 2</span><span class="slot-badge unlocked" id="badge-6_part2">Unlocked</span></div>
-            <div class="slot-file-name" id="name-6_part2">No PDF Attached</div>
-            <div class="slot-actions" id="actions-6_part2">
-              <input type="file" accept="application/pdf" id="input-6_part2" data-slot="6_part2" class="slot-input-hidden" style="display:none;">
-              <label for="input-6_part2" class="btn-file-select" id="label-6_part2">📎 <span id="label-text-6_part2">Choose</span></label>
-              <button class="btn btn-outline slot-btn" data-slot="6_part2">Lock</button>
-            </div>
-          </div>
-
-          <!-- Std 7 -->
-          <div class="slot-card" id="card-7_part1" data-slot="7_part1">
-            <div class="slot-header"><span class="slot-title">Std 7 - Pt 1</span><span class="slot-badge unlocked" id="badge-7_part1">Unlocked</span></div>
-            <div class="slot-file-name" id="name-7_part1">No PDF Attached</div>
-            <div class="slot-actions" id="actions-7_part1">
-              <input type="file" accept="application/pdf" id="input-7_part1" data-slot="7_part1" class="slot-input-hidden" style="display:none;">
-              <label for="input-7_part1" class="btn-file-select" id="label-7_part1">📎 <span id="label-text-7_part1">Choose</span></label>
-              <button class="btn btn-outline slot-btn" data-slot="7_part1">Lock</button>
-            </div>
-          </div>
-
-          <div class="slot-card" id="card-7_part2" data-slot="7_part2">
-            <div class="slot-header"><span class="slot-title">Std 7 - Pt 2</span><span class="slot-badge unlocked" id="badge-7_part2">Unlocked</span></div>
-            <div class="slot-file-name" id="name-7_part2">No PDF Attached</div>
-            <div class="slot-actions" id="actions-7_part2">
-              <input type="file" accept="application/pdf" id="input-7_part2" data-slot="7_part2" class="slot-input-hidden" style="display:none;">
-              <label for="input-7_part2" class="btn-file-select" id="label-7_part2">📎 <span id="label-text-7_part2">Choose</span></label>
-              <button class="btn btn-outline slot-btn" data-slot="7_part2">Lock</button>
-            </div>
+        <!-- 100+ Books Scroll Container -->
+        <div id="tb-library-list" class="tb-library-scroll">
+          <div style="font-size: 0.7rem; color: var(--text-muted); text-align: center; padding: 12px;">
+            Loading textbook library...
           </div>
         </div>
       </div>
@@ -1334,7 +1298,7 @@
       <div class="ctrl-card" data-section="generate">
         <h3><span>3. Generator Control</span></h3>
         <div id="active-status-bar" class="active-status-bar">
-          <span id="active-status-text">🔒 Active</span>
+          <span id="active-status-text">🔒 Active Reference</span>
           <button id="quick-reset-btn" class="btn btn-danger btn-sm">Reset</button>
         </div>
         <button id="generate-btn" class="btn btn-primary btn-block" style="padding: 9px 10px; margin-bottom: 5px;">
@@ -1406,7 +1370,7 @@
           <div class="universal-header-card" id="header-tab-lesson-plan">
             <div class="u-header-top">
               <span class="u-badge">TDTTI • LESSON PLAN</span>
-              <span class="u-meta-pacing">Std <span class="u-meta-class">5</span> (Pt <span class="u-meta-part">1</span>) • Day <span class="u-meta-day">1</span>/<span class="u-meta-total">5</span></span>
+              <span class="u-meta-pacing"><span class="u-meta-subject">Basic Science</span> • Std <span class="u-meta-class">5</span> (Pt <span class="u-meta-part">1</span>) • Day <span class="u-meta-day">1</span>/<span class="u-meta-total">5</span></span>
             </div>
             <div class="u-header-unit">
               <strong>Chapter:</strong> <span class="u-meta-unit">Select Unit</span>
@@ -1440,7 +1404,7 @@
           <div class="universal-header-card" id="header-tab-media-resources">
             <div class="u-header-top">
               <span class="u-badge">TDTTI • DIGITAL MEDIA</span>
-              <span class="u-meta-pacing">Std <span class="u-meta-class">5</span> (Pt <span class="u-meta-part">1</span>) • Day <span class="u-meta-day">1</span>/<span class="u-meta-total">5</span></span>
+              <span class="u-meta-pacing"><span class="u-meta-subject">Basic Science</span> • Std <span class="u-meta-class">5</span> (Pt <span class="u-meta-part">1</span>) • Day <span class="u-meta-day">1</span>/<span class="u-meta-total">5</span></span>
             </div>
             <div class="u-header-unit">
               <strong>Chapter:</strong> <span class="u-meta-unit">Select Unit</span>
@@ -1474,7 +1438,7 @@
           <div class="universal-header-card" id="header-tab-blackboard-notes">
             <div class="u-header-top">
               <span class="u-badge">TDTTI • BLACKBOARD WORK</span>
-              <span class="u-meta-pacing">Std <span class="u-meta-class">5</span> (Pt <span class="u-meta-part">1</span>) • Day <span class="u-meta-day">1</span>/<span class="u-meta-total">5</span></span>
+              <span class="u-meta-pacing"><span class="u-meta-subject">Basic Science</span> • Std <span class="u-meta-class">5</span> (Pt <span class="u-meta-part">1</span>) • Day <span class="u-meta-day">1</span>/<span class="u-meta-total">5</span></span>
             </div>
             <div class="u-header-unit">
               <strong>Chapter:</strong> <span class="u-meta-unit">Select Unit</span>
@@ -1511,7 +1475,7 @@
           <div class="universal-header-card" id="header-tab-whatsapp-summary">
             <div class="u-header-top">
               <span class="u-badge">TDTTI • PARENT BROADCAST</span>
-              <span class="u-meta-pacing">Std <span class="u-meta-class">5</span> (Pt <span class="u-meta-part">1</span>) • Day <span class="u-meta-day">1</span>/<span class="u-meta-total">5</span></span>
+              <span class="u-meta-pacing"><span class="u-meta-subject">Basic Science</span> • Std <span class="u-meta-class">5</span> (Pt <span class="u-meta-part">1</span>) • Day <span class="u-meta-day">1</span>/<span class="u-meta-total">5</span></span>
             </div>
             <div class="u-header-unit">
               <strong>Chapter:</strong> <span class="u-meta-unit">Select Unit</span>
@@ -1547,7 +1511,7 @@
           <h2>Application Activity Worksheet (Total: 5 Scores)</h2>
           <div class="pane-header-actions">
             <button class="btn btn-translate btn-sm translate-tab-btn" data-tab="tab-worksheet-view">🌐 മലയാളം</button>
-            <button class="btn btn-tts btn-sm tts-tab-btn" data-tab="tab-worksheet-view">🔊</button>
+            <button class="btn btn-tts btn-sm tts-tab-btn" data-tab="tab-worksheet-view">🔊 </button>
             <button class="btn btn-outline btn-sm tts-cfg-btn" title="Voice Gender & Speed">⚙️ <span class="cfg-spd-lbl">1.0x</span></button>
             <button class="btn btn-secondary btn-sm" id="copy-all-ws-btn">📋 Copy All</button>
             <button class="btn btn-success btn-sm print-tab-btn">🖨️ Print</button>
@@ -1558,7 +1522,7 @@
           <div class="universal-header-card" id="header-tab-worksheet-view">
             <div class="u-header-top">
               <span class="u-badge">TDTTI • EVALUATION WORKSHEET</span>
-              <span class="u-meta-pacing">Std <span class="u-meta-class">5</span> (Pt <span class="u-meta-part">1</span>) • Day <span class="u-meta-day">1</span>/<span class="u-meta-total">5</span></span>
+              <span class="u-meta-pacing"><span class="u-meta-subject">Basic Science</span> • Std <span class="u-meta-class">5</span> (Pt <span class="u-meta-part">1</span>) • Day <span class="u-meta-day">1</span>/<span class="u-meta-total">5</span></span>
             </div>
             <div class="u-header-unit">
               <strong>Chapter:</strong> <span class="u-meta-unit">Select Unit</span>
@@ -1594,7 +1558,7 @@
           <div class="universal-header-card" id="header-tab-worksheet-answers">
             <div class="u-header-top">
               <span class="u-badge">TDTTI • ANSWER KEY</span>
-              <span class="u-meta-pacing">Std <span class="u-meta-class">5</span> (Pt <span class="u-meta-part">1</span>) • Day <span class="u-meta-day">1</span>/<span class="u-meta-total">5</span></span>
+              <span class="u-meta-pacing"><span class="u-meta-subject">Basic Science</span> • Std <span class="u-meta-class">5</span> (Pt <span class="u-meta-part">1</span>) • Day <span class="u-meta-day">1</span>/<span class="u-meta-total">5</span></span>
             </div>
             <div class="u-header-unit">
               <strong>Chapter:</strong> <span class="u-meta-unit">Select Unit</span>
@@ -1643,7 +1607,7 @@
     };
 
     let GEMINI_API_KEY = localStorage.getItem('SCERT_GEMINI_KEY') || "";
-    // Mandatory 2026 flagship and fallback endpoints
+    // Flagship and Fallback Models
     const PRIMARY_MODEL = "gemini-3.6-flash";
     const FALLBACK_MODEL = "gemini-3.5-flash-lite";
 
@@ -1652,7 +1616,7 @@
       db: null,
       async init() {
         return new Promise((resolve) => {
-          const req = indexedDB.open("SCERT_STUDIO_DB", 2);
+          const req = indexedDB.open("SCERT_STUDIO_DB", 3);
           req.onupgradeneeded = (e) => {
             const db = req.result;
             if (!db.objectStoreNames.contains("books")) db.createObjectStore("books");
@@ -1677,6 +1641,34 @@
           const req = tx.objectStore("books").get(key);
           req.onsuccess = () => resolve(req.result);
           req.onerror = () => resolve(null);
+        });
+      },
+      async getAllBooks() {
+        if (!this.db) await this.init();
+        return new Promise((resolve) => {
+          const tx = this.db.transaction("books", "readonly");
+          const store = tx.objectStore("books");
+          const req = store.openCursor();
+          const items = [];
+          req.onsuccess = (e) => {
+            const cursor = e.target.result;
+            if (cursor) {
+              const val = cursor.value;
+              items.push({ id: cursor.key, ...(typeof val === 'object' ? val : { base64: val }) });
+              cursor.continue();
+            } else {
+              resolve(items);
+            }
+          };
+          req.onerror = () => resolve([]);
+        });
+      },
+      async deleteBook(key) {
+        if (!this.db) await this.init();
+        return new Promise((resolve) => {
+          const tx = this.db.transaction("books", "readwrite");
+          tx.objectStore("books").delete(key);
+          tx.oncomplete = resolve;
         });
       },
       async savePackage(pkgObj) {
@@ -1719,13 +1711,12 @@
       }
     }
 
-    const ALL_SLOTS = ['5_part1', '5_part2', '6_part1', '6_part2', '7_part1', '7_part2'];
-    
     const state = {
       currentClass: '5',
       currentPart: 'part1',
-      slotsData: {},
-      slotsBase64: {},
+      currentSubject: 'Basic Science',
+      activeBookId: null,
+      books: [], // Stores 100+ textbooks
       currentPackage: null,
       activePackageId: null,
       lockedRoadmap: null,
@@ -1742,7 +1733,8 @@
     const toggleText = document.getElementById('toggle-text');
 
     const classSelect = document.getElementById('class-select');
-    const partRadios = document.querySelectorAll('input[name="textbook-part"]');
+    const partSelect = document.getElementById('part-select');
+    const targetSubjectInput = document.getElementById('target-subject');
     const unitTitleInput = document.getElementById('unit-title');
     const dayNumberInput = document.getElementById('day-number');
     const totalDaysInput = document.getElementById('total-days');
@@ -1768,7 +1760,27 @@
     const headerVoiceBtn = document.getElementById('header-voice-btn');
     const hdrVoiceText = document.getElementById('hdr-voice-text');
 
-    // Modals
+    // Textbook Library Controls
+    const addTextbookBtn = document.getElementById('add-textbook-btn');
+    const tbSearchBox = document.getElementById('tb-search-box');
+    const tbFilterClass = document.getElementById('tb-filter-class');
+    const tbLibraryList = document.getElementById('tb-library-list');
+
+    // Textbook Modal
+    const bookModalOverlay = document.getElementById('book-modal-overlay');
+    const bookModalTitle = document.getElementById('book-modal-title');
+    const bookModalCloseBtn = document.getElementById('book-modal-close-btn');
+    const bookModalCancelBtn = document.getElementById('book-modal-cancel-btn');
+    const saveBookModalBtn = document.getElementById('save-book-modal-btn');
+    const editBookIdInput = document.getElementById('edit-book-id');
+    const modalBookClass = document.getElementById('modal-book-class');
+    const modalBookPart = document.getElementById('modal-book-part');
+    const modalBookSubject = document.getElementById('modal-book-subject');
+    const modalBookFile = document.getElementById('modal-book-file');
+    const modalBookLock = document.getElementById('modal-book-lock');
+    const modalFileStatus = document.getElementById('modal-file-status');
+
+    // General Modals
     const spinnerOverlay = document.getElementById('spinner-overlay');
     const spinnerText = document.getElementById('spinner-text');
     const modalOverlay = document.getElementById('custom-modal-overlay');
@@ -1783,13 +1795,6 @@
     const keyModalCloseBtn = document.getElementById('key-modal-close-btn');
     const saveKeyModalBtn = document.getElementById('save-key-modal-btn');
 
-    const warningModalOverlay = document.getElementById('warning-modal-overlay');
-    const warningModalMessage = document.getElementById('warning-modal-message');
-    const warningModalCloseBtn = document.getElementById('warning-modal-close-btn');
-    const warningResetBtn = document.getElementById('warning-reset-btn');
-    const warningCancelBtn = document.getElementById('warning-cancel-btn');
-    const warningContinueBtn = document.getElementById('warning-continue-btn');
-
     const voiceModalOverlay = document.getElementById('voice-modal-overlay');
     const voiceModalCloseBtn = document.getElementById('voice-modal-close-btn');
     const voiceOptFemale = document.getElementById('voice-opt-female');
@@ -1800,121 +1805,7 @@
     const testEnSpeechBtn = document.getElementById('test-en-speech-btn');
     const saveVoiceModalBtn = document.getElementById('save-voice-modal-btn');
 
-    let onWarningContinueCallback = null;
-
-    function showWarningModal(msg, onContinue) {
-      warningModalMessage.innerHTML = msg;
-      onWarningContinueCallback = onContinue;
-      warningModalOverlay.style.display = 'flex';
-    }
-
-    function hideWarningModal() {
-      warningModalOverlay.style.display = 'none';
-      onWarningContinueCallback = null;
-    }
-
-    warningModalCloseBtn.addEventListener('click', hideWarningModal);
-    warningCancelBtn.addEventListener('click', hideWarningModal);
-    
-    warningResetBtn.addEventListener('click', () => {
-      hideWarningModal();
-      resetWorkspace();
-    });
-
-    warningContinueBtn.addEventListener('click', () => {
-      const cb = onWarningContinueCallback;
-      hideWarningModal();
-      if (cb) cb();
-    });
-
-    scopeRadios.forEach(radio => {
-      radio.addEventListener('change', () => {
-        const isWholeUnit = document.getElementById('scope-whole-unit').checked;
-        if (isWholeUnit) {
-          dayNumberContainer.style.display = 'none';
-          generateBtn.innerHTML = `⚡ Generate Full Unit Package`;
-        } else {
-          dayNumberContainer.style.display = 'block';
-          generateBtn.innerHTML = `⚡ Generate Package`;
-        }
-      });
-    });
-
-    // Voice & Speed UI
-    function updateVoiceUIElements() {
-      const isFemale = (state.ttsGender === 'female');
-      voiceOptFemale.classList.toggle('selected', isFemale);
-      voiceOptMale.classList.toggle('selected', !isFemale);
-
-      speedRangeSlider.value = state.ttsSpeed.toFixed(2);
-      speedDisplayLabel.textContent = `${state.ttsSpeed.toFixed(2)}x`;
-
-      document.querySelectorAll('.preset-pill').forEach(p => {
-        p.classList.toggle('active', parseFloat(p.dataset.speed) === state.ttsSpeed);
-      });
-
-      const icon = isFemale ? '👩' : '👨';
-      const spd = `${state.ttsSpeed.toFixed(1)}x`;
-      hdrVoiceText.textContent = `${icon} ${spd}`;
-      document.querySelectorAll('.cfg-spd-lbl').forEach(el => el.textContent = spd);
-    }
-
-    function openVoiceModal() {
-      updateVoiceUIElements();
-      voiceModalOverlay.style.display = 'flex';
-    }
-
-    function hideVoiceModal() {
-      voiceModalOverlay.style.display = 'none';
-      speechEngine.stop();
-    }
-
-    headerVoiceBtn.addEventListener('click', openVoiceModal);
-    document.querySelectorAll('.tts-cfg-btn').forEach(b => b.addEventListener('click', openVoiceModal));
-    voiceModalCloseBtn.addEventListener('click', hideVoiceModal);
-
-    voiceOptFemale.addEventListener('click', () => {
-      state.ttsGender = 'female';
-      updateVoiceUIElements();
-    });
-
-    voiceOptMale.addEventListener('click', () => {
-      state.ttsGender = 'male';
-      updateVoiceUIElements();
-    });
-
-    speedRangeSlider.addEventListener('input', (e) => {
-      state.ttsSpeed = parseFloat(e.target.value);
-      speedDisplayLabel.textContent = `${state.ttsSpeed.toFixed(2)}x`;
-      document.querySelectorAll('.preset-pill').forEach(p => {
-        p.classList.toggle('active', Math.abs(parseFloat(p.dataset.speed) - state.ttsSpeed) < 0.05);
-      });
-    });
-
-    document.querySelectorAll('.preset-pill').forEach(pill => {
-      pill.addEventListener('click', () => {
-        state.ttsSpeed = parseFloat(pill.dataset.speed);
-        updateVoiceUIElements();
-      });
-    });
-
-    saveVoiceModalBtn.addEventListener('click', () => {
-      localStorage.setItem('SCERT_TTS_GENDER', state.ttsGender);
-      localStorage.setItem('SCERT_TTS_SPEED', state.ttsSpeed.toString());
-      updateVoiceUIElements();
-      hideVoiceModal();
-      showToast(`Saved Voice: ${state.ttsGender === 'female' ? '👩 Female' : '👨 Male'} at ${state.ttsSpeed.toFixed(2)}x`);
-    });
-
-    testMlSpeechBtn.addEventListener('click', () => {
-      speechEngine.speak("കേരള പാഠ്യപദ്ധതി അധ്യാപക സഹായിയിലേക്ക് സ്വാഗതം. ഇത് പരീക്ഷണ ശബ്ദമാണ്.", testMlSpeechBtn, state.ttsGender, state.ttsSpeed);
-    });
-
-    testEnSpeechBtn.addEventListener('click', () => {
-      speechEngine.speak("Welcome to Kerala SCERT Teacher Studio. This is a voice test.", testEnSpeechBtn, state.ttsGender, state.ttsSpeed);
-    });
-
-    // Mobile Drawer Navigation
+    // Drawer Mobile Switcher
     document.querySelectorAll('.mob-tab-btn').forEach(btn => {
       btn.addEventListener('click', () => {
         document.querySelectorAll('.mob-tab-btn').forEach(b => b.classList.remove('active'));
@@ -1926,7 +1817,6 @@
       });
     });
 
-    // Drawer Toggle
     controlsToggleBtn.addEventListener('click', () => {
       topControlsPanel.classList.toggle('collapsed');
       const isHidden = topControlsPanel.classList.contains('collapsed');
@@ -2001,10 +1891,375 @@
       document.body.removeChild(ta);
     }
 
-    // Roadmap logic
-    function getRoadmapStorageKey(cls, unit) {
-      const clean = (unit || '').toLowerCase().trim().replace(/[^a-z0-9]/g, '_');
-      return `SCERT_ROADMAP_${cls}_${clean}`;
+    // =========================================================================
+    // DYNAMIC 100+ TEXTBOOK MANAGEMENT (UNLOCK, MODIFY, DELETE)
+    // =========================================================================
+    function openBookModal(book = null) {
+      if (book) {
+        bookModalTitle.textContent = "✏️ Modify Textbook";
+        editBookIdInput.value = book.id;
+        modalBookClass.value = book.classId || "5";
+        modalBookPart.value = book.partId || "part1";
+        modalBookSubject.value = book.subject || "Basic Science";
+        modalBookLock.checked = (book.isLocked !== false);
+        modalFileStatus.textContent = `Current File: ${book.fileName || 'Attached PDF'} (${book.fileSize || 'Size N/A'}). Upload new file to replace.`;
+      } else {
+        bookModalTitle.textContent = "📚 Add New Textbook";
+        editBookIdInput.value = "";
+        modalBookClass.value = classSelect.value || "5";
+        modalBookPart.value = partSelect.value || "part1";
+        modalBookSubject.value = targetSubjectInput.value || "Basic Science";
+        modalBookLock.checked = true;
+        modalFileStatus.textContent = "Choose a PDF (Max 15MB recommended).";
+      }
+      modalBookFile.value = "";
+      bookModalOverlay.style.display = "flex";
+    }
+
+    function hideBookModal() {
+      bookModalOverlay.style.display = "none";
+      editBookIdInput.value = "";
+    }
+
+    addTextbookBtn.addEventListener('click', () => openBookModal(null));
+    bookModalCloseBtn.addEventListener('click', hideBookModal);
+    bookModalCancelBtn.addEventListener('click', hideBookModal);
+
+    function fileToBase64(file) {
+      return new Promise((resolve, reject) => {
+        const reader = new FileReader();
+        reader.onload = () => resolve(reader.result.split(',')[1]);
+        reader.onerror = reject;
+        reader.readAsDataURL(file);
+      });
+    }
+
+    saveBookModalBtn.addEventListener('click', async () => {
+      const bookId = editBookIdInput.value.trim() || `book_${Date.now()}`;
+      const cls = modalBookClass.value;
+      const part = modalBookPart.value;
+      const subject = modalBookSubject.value.trim() || "General";
+      const isLocked = modalBookLock.checked;
+      const file = modalBookFile.files[0];
+
+      let existing = state.books.find(b => b.id === bookId);
+
+      if (!existing && !file) {
+        return showMessageBox("Please select a PDF file for this new textbook.", "Missing PDF");
+      }
+
+      showSpinner("Saving textbook to repository...");
+
+      try {
+        let base64Data = null;
+        let fileName = existing ? existing.fileName : file.name;
+        let fileSize = existing ? existing.fileSize : (file.size / (1024 * 1024)).toFixed(2) + " MB";
+
+        if (file) {
+          base64Data = await fileToBase64(file);
+          fileName = file.name;
+          fileSize = (file.size / (1024 * 1024)).toFixed(2) + " MB";
+        } else if (existing) {
+          const cached = await idb.getBook(bookId);
+          base64Data = cached?.base64 || cached;
+        }
+
+        const bookObj = {
+          id: bookId,
+          classId: cls,
+          partId: part,
+          subject: subject,
+          fileName: fileName,
+          fileSize: fileSize,
+          isLocked: isLocked,
+          updatedAt: new Date().toISOString()
+        };
+
+        // 1. Save Full Object with Binary in IndexedDB
+        await idb.setBook(bookId, { ...bookObj, base64: base64Data });
+
+        // 2. Sync Metadata with Firebase (Omit large base64 to protect 1MB Firestore doc limits)
+        if (db) {
+          try {
+            if (auth && !auth.currentUser) await signInAnonymously(auth).catch(() => {});
+            await setDoc(doc(db, 'curriculum_books', bookId), bookObj);
+          } catch (e) {
+            console.warn("Firebase book sync skipped:", e.message);
+          }
+        }
+
+        hideSpinner();
+        hideBookModal();
+        showToast(`Textbook saved: ${subject} Std ${cls}`);
+        await loadAndRenderBooks();
+      } catch (err) {
+        hideSpinner();
+        showMessageBox(`Failed to save book: ${err.message}`, "Error");
+      }
+    });
+
+    async function loadAndRenderBooks() {
+      let localBooks = await idb.getAllBooks();
+      let cloudBooks = [];
+
+      if (db) {
+        try {
+          const snap = await withTimeout(getDocs(collection(db, 'curriculum_books')), 2500);
+          snap.forEach(d => {
+            if (d.exists()) cloudBooks.push({ id: d.id, ...d.data() });
+          });
+        } catch (e) {}
+      }
+
+      const bookMap = new Map();
+      localBooks.forEach(b => bookMap.set(b.id, b));
+      cloudBooks.forEach(b => {
+        const existing = bookMap.get(b.id) || {};
+        bookMap.set(b.id, { ...existing, ...b });
+      });
+
+      state.books = Array.from(bookMap.values());
+      renderBooksList();
+    }
+
+    function renderBooksList() {
+      const searchTerm = tbSearchBox.value.trim().toLowerCase();
+      const filterClass = tbFilterClass.value;
+
+      let filtered = state.books.filter(b => {
+        const matchesSearch = !searchTerm || 
+          (b.subject && b.subject.toLowerCase().includes(searchTerm)) || 
+          (b.fileName && b.fileName.toLowerCase().includes(searchTerm)) ||
+          (`std ${b.classId}`.includes(searchTerm));
+        const matchesClass = (filterClass === 'all') || (b.classId === filterClass);
+        return matchesSearch && matchesClass;
+      });
+
+      const lockedCount = state.books.filter(b => b.isLocked).length;
+      lockedCountLabel.textContent = `${lockedCount} Locked`;
+      mobLockedPill.textContent = lockedCount;
+
+      if (filtered.length === 0) {
+        tbLibraryList.innerHTML = `
+          <div style="font-size: 0.7rem; color: var(--text-muted); text-align: center; padding: 14px;">
+            ${state.books.length === 0 ? 'No textbooks uploaded yet. Click "+ Add Book" to begin building your 100+ collection.' : 'No textbooks match your search/filter criteria.'}
+          </div>
+        `;
+        return;
+      }
+
+      // Sort by class then subject
+      filtered.sort((a, b) => parseInt(a.classId || 0) - parseInt(b.classId || 0));
+
+      let html = '';
+      filtered.forEach(book => {
+        const isTarget = (state.activeBookId === book.id) || 
+          (state.currentClass === book.classId && state.currentPart === book.partId && state.currentSubject.toLowerCase() === (book.subject || '').toLowerCase());
+        const isLocked = book.isLocked !== false;
+
+        html += `
+          <div class="tb-card-item ${isTarget ? 'is-active-target' : ''}" data-id="${book.id}">
+            <div class="tb-card-top">
+              <span class="tb-subject-badge">
+                📖 ${escapeHtml(book.subject || 'Subject')} • Std ${book.classId} (${book.partId === 'part2' ? 'Pt 2' : book.partId === 'full' ? 'Full' : 'Pt 1'})
+              </span>
+              <span class="tb-lock-pill ${isLocked ? 'locked' : 'unlocked'}">
+                ${isLocked ? '🔒 ' : '🔓 '}
+              </span>
+            </div>
+            <div class="tb-card-mid">
+              <span title="${escapeHtml(book.fileName || '')}">📄 ${escapeHtml(book.fileName || 'PDF')}</span>
+              <span>${book.fileSize || ''}</span>
+            </div>
+            <div class="tb-card-actions">
+              <button class="tb-btn-icon tb-use-btn ${isTarget ? 'active-use' : ''}" data-id="${book.id}" title="Select this textbook for Day planning in Card 1">
+                🎯 ${isTarget ? 'Active' : 'Use'}
+              </button>
+              <div class="tb-icon-btn-group">
+                <!-- Toggle Lock / Unlock -->
+                <button class="tb-btn-icon tb-lock-toggle-btn" data-id="${book.id}" title="${isLocked ? 'Unlock Textbook' : 'Lock Textbook'}">
+                  ${isLocked ? '🔓 ' : '🔒 '}
+                </button>
+                <!-- Modify Button -->
+                <button class="tb-btn-icon tb-edit-btn" data-id="${book.id}" title="Modify Title, Subject, Class or File">
+                  ✏️ 
+                </button>
+                <!-- Delete Button -->
+                <button class="tb-btn-icon del-btn tb-delete-btn" data-id="${book.id}" title="Delete from Database">
+                  🗑️
+                </button>
+              </div>
+            </div>
+          </div>
+        `;
+      });
+      tbLibraryList.innerHTML = html;
+
+      // Attach Event Handlers to Library Cards
+      tbLibraryList.querySelectorAll('.tb-use-btn').forEach(btn => {
+        btn.addEventListener('click', (e) => {
+          const bId = e.currentTarget.dataset.id;
+          const book = state.books.find(b => b.id === bId);
+          if (book) {
+            state.activeBookId = book.id;
+            state.currentClass = book.classId;
+            state.currentPart = book.partId;
+            state.currentSubject = book.subject;
+
+            classSelect.value = book.classId;
+            partSelect.value = book.partId;
+            targetSubjectInput.value = book.subject;
+            
+            checkAndLoadChapterRoadmap();
+            renderBooksList();
+            showToast(`Active Target: ${book.subject} Std ${book.classId}`);
+          }
+        });
+      });
+
+      tbLibraryList.querySelectorAll('.tb-lock-toggle-btn').forEach(btn => {
+        btn.addEventListener('click', async (e) => {
+          const bId = e.currentTarget.dataset.id;
+          const book = state.books.find(b => b.id === bId);
+          if (!book) return;
+
+          book.isLocked = !book.isLocked;
+          const cached = await idb.getBook(bId);
+          await idb.setBook(bId, { ...cached, ...book, isLocked: book.isLocked });
+
+          if (db) {
+            try {
+              await setDoc(doc(db, 'curriculum_books', bId), { isLocked: book.isLocked }, { merge: true });
+            } catch (err) {}
+          }
+          showToast(`Textbook ${book.isLocked ? 'Locked' : 'Unlocked'}`);
+          renderBooksList();
+        });
+      });
+
+      tbLibraryList.querySelectorAll('.tb-edit-btn').forEach(btn => {
+        btn.addEventListener('click', (e) => {
+          const bId = e.currentTarget.dataset.id;
+          const book = state.books.find(b => b.id === bId);
+          if (book) openBookModal(book);
+        });
+      });
+
+      tbLibraryList.querySelectorAll('.tb-delete-btn').forEach(btn => {
+        btn.addEventListener('click', async (e) => {
+          const bId = e.currentTarget.dataset.id;
+          const book = state.books.find(b => b.id === bId);
+          if (!book) return;
+          if (!confirm(`Delete "${book.subject} Std ${book.classId} (${book.fileName})" from textbook library?`)) return;
+
+          await idb.deleteBook(bId);
+          if (db) {
+            try {
+              await deleteDoc(doc(db, 'curriculum_books', bId));
+            } catch (err) {}
+          }
+          if (state.activeBookId === bId) state.activeBookId = null;
+          state.books = state.books.filter(b => b.id !== bId);
+          renderBooksList();
+          showToast("Textbook deleted.");
+        });
+      });
+    }
+
+    tbSearchBox.addEventListener('input', renderBooksList);
+    tbFilterClass.addEventListener('change', renderBooksList);
+
+    // Sync Pacing Inputs to State
+    classSelect.addEventListener('change', (e) => { 
+      state.currentClass = e.target.value; 
+      checkAndLoadChapterRoadmap();
+      renderBooksList();
+    });
+    partSelect.addEventListener('change', (e) => { 
+      state.currentPart = e.target.value; 
+      checkAndLoadChapterRoadmap();
+      renderBooksList();
+    });
+    targetSubjectInput.addEventListener('input', (e) => { 
+      state.currentSubject = e.target.value; 
+      checkAndLoadChapterRoadmap();
+      renderBooksList();
+    });
+
+    const withTimeout = (promise, ms = 2500) => 
+      Promise.race([
+        promise,
+        new Promise((_, reject) => setTimeout(() => reject(new Error("Network timeout")), ms))
+      ]);
+
+    // =========================================================================
+    // VOICE & SPEED SETTINGS
+    // =========================================================================
+    function updateVoiceUIElements() {
+      const isFemale = (state.ttsGender === 'female');
+      voiceOptFemale.classList.toggle('selected', isFemale);
+      voiceOptMale.classList.toggle('selected', !isFemale);
+
+      speedRangeSlider.value = state.ttsSpeed.toFixed(2);
+      speedDisplayLabel.textContent = `${state.ttsSpeed.toFixed(2)}x`;
+
+      document.querySelectorAll('.preset-pill').forEach(p => {
+        p.classList.toggle('active', parseFloat(p.dataset.speed) === state.ttsSpeed);
+      });
+
+      const icon = isFemale ? '👩' : '👨';
+      const spd = `${state.ttsSpeed.toFixed(1)}x`;
+      hdrVoiceText.textContent = `${icon} ${spd}`;
+      document.querySelectorAll('.cfg-spd-lbl').forEach(el => el.textContent = spd);
+    }
+
+    function openVoiceModal() {
+      updateVoiceUIElements();
+      voiceModalOverlay.style.display = 'flex';
+    }
+
+    function hideVoiceModal() {
+      voiceModalOverlay.style.display = 'none';
+      speechEngine.stop();
+    }
+
+    headerVoiceBtn.addEventListener('click', openVoiceModal);
+    document.querySelectorAll('.tts-cfg-btn').forEach(b => b.addEventListener('click', openVoiceModal));
+    voiceModalCloseBtn.addEventListener('click', hideVoiceModal);
+
+    voiceOptFemale.addEventListener('click', () => { state.ttsGender = 'female'; updateVoiceUIElements(); });
+    voiceOptMale.addEventListener('click', () => { state.ttsGender = 'male'; updateVoiceUIElements(); });
+
+    speedRangeSlider.addEventListener('input', (e) => {
+      state.ttsSpeed = parseFloat(e.target.value);
+      speedDisplayLabel.textContent = `${state.ttsSpeed.toFixed(2)}x`;
+      document.querySelectorAll('.preset-pill').forEach(p => {
+        p.classList.toggle('active', Math.abs(parseFloat(p.dataset.speed) - state.ttsSpeed) < 0.05);
+      });
+    });
+
+    document.querySelectorAll('.preset-pill').forEach(pill => {
+      pill.addEventListener('click', () => {
+        state.ttsSpeed = parseFloat(pill.dataset.speed);
+        updateVoiceUIElements();
+      });
+    });
+
+    saveVoiceModalBtn.addEventListener('click', () => {
+      localStorage.setItem('SCERT_TTS_GENDER', state.ttsGender);
+      localStorage.setItem('SCERT_TTS_SPEED', state.ttsSpeed.toString());
+      updateVoiceUIElements();
+      hideVoiceModal();
+      showToast(`Saved Voice: ${state.ttsGender === 'female' ? '👩 Female' : '👨 Male'} at ${state.ttsSpeed.toFixed(2)}x`);
+    });
+
+    // =========================================================================
+    // CHAPTER ROADMAP LOCKING (SUPPORTS MULTIPLE COS PER DAY)
+    // =========================================================================
+    function getRoadmapStorageKey(cls, subject, unit) {
+      const cleanSub = (subject || '').toLowerCase().trim().replace(/[^a-z0-9]/g, '_');
+      const cleanUnit = (unit || '').toLowerCase().trim().replace(/[^a-z0-9]/g, '_');
+      return `SCERT_ROADMAP_${cls}_${cleanSub}_${cleanUnit}`;
     }
 
     function formatCODisplay(coData) {
@@ -2022,7 +2277,7 @@
         state.lockedRoadmap = null;
         return;
       }
-      const key = getRoadmapStorageKey(state.currentClass, unit);
+      const key = getRoadmapStorageKey(state.currentClass, state.currentSubject, unit);
       const saved = localStorage.getItem(key);
       if (saved) {
         try {
@@ -2045,17 +2300,6 @@
     }
 
     unitTitleInput.addEventListener('input', checkAndLoadChapterRoadmap);
-    classSelect.addEventListener('change', (e) => { 
-      state.currentClass = e.target.value; 
-      highlightActiveTarget(); 
-      checkAndLoadChapterRoadmap();
-    });
-
-    partRadios.forEach(radio => radio.addEventListener('change', (e) => { 
-      state.currentPart = e.target.value; 
-      highlightActiveTarget(); 
-    }));
-
     dayNumberInput.addEventListener('input', () => {
       if (state.lockedRoadmap) {
         const day = dayNumberInput.value;
@@ -2070,14 +2314,14 @@
       const unit = unitTitleInput.value.trim();
       if (!unit) return;
       if (!confirm(`Unlock and recalculate Curricular Objectives for "${unit}"?`)) return;
-      const key = getRoadmapStorageKey(state.currentClass, unit);
+      const key = getRoadmapStorageKey(state.currentClass, state.currentSubject, unit);
       localStorage.removeItem(key);
       state.lockedRoadmap = null;
       roadmapStatusPill.style.display = 'none';
       showToast("Chapter COs unlocked! Next generation will calculate a fresh pacing roadmap.");
     });
 
-    // WhatsApp Switcher
+    // WhatsApp View Switcher
     const waBtnChat = document.getElementById('wa-btn-chat');
     const waBtnRaw = document.getElementById('wa-btn-raw');
     const waStyledContainer = document.getElementById('wa-styled-container');
@@ -2092,7 +2336,7 @@
       waStyledContainer.style.display = 'none'; waRawContainer.style.display = 'block';
     });
 
-    // Copy All buttons
+    // Copy All Buttons
     document.getElementById('copy-all-bb-btn').addEventListener('click', () => {
       if (!state.currentPackage?.blackboardQa?.length) {
         return copyText(document.getElementById('blackboard-notes-body').innerText, "Copied Blackboard Notes!");
@@ -2140,132 +2384,20 @@
       window.open(`https://api.whatsapp.com/send?text=${encodeURIComponent(text)}`, '_blank');
     });
 
-    function highlightActiveTarget() {
-      const targetSlot = `${state.currentClass}_${state.currentPart}`;
-      ALL_SLOTS.forEach(slotId => {
-        const card = document.getElementById(`card-${slotId}`);
-        if (card) card.classList.toggle('active-target', slotId === targetSlot);
-      });
-    }
-
-    document.querySelectorAll('.slot-card').forEach(card => {
-      card.addEventListener('click', (e) => {
-        if (e.target.closest('input, button, label')) return;
-        const [cls, prt] = card.dataset.slot.split('_');
-        state.currentClass = cls; state.currentPart = prt;
-        classSelect.value = cls;
-        partRadios.forEach(r => r.checked = (r.value === prt));
-        highlightActiveTarget();
-        checkAndLoadChapterRoadmap();
-      });
-    });
-
-    const withTimeout = (promise, ms = 2500) => 
-      Promise.race([
-        promise,
-        new Promise((_, reject) => setTimeout(() => reject(new Error("Network timeout")), ms))
-      ]);
-
-    async function syncAllSlots() {
-      highlightActiveTarget();
-      let lockedTotal = 0;
-
-      await Promise.all(ALL_SLOTS.map(async (slotId) => {
-        try {
-          let data = null;
-          if (db) {
-            try {
-              const snap = await withTimeout(getDoc(doc(db, 'curriculum_books', slotId)), 2000);
-              if (snap.exists() && snap.data().isLocked) data = snap.data();
-            } catch (e) {}
-          }
-          const cached = await idb.getBook(slotId);
-          if (cached) {
-            state.slotsBase64[slotId] = typeof cached === 'string' ? cached : cached.base64;
-            if (!data) {
-              data = { 
-                fileName: (typeof cached === 'object' && cached.fileName) ? cached.fileName : "Locally Cached PDF", 
-                isLocked: true 
-              };
-            }
-          }
-          if (data && (data.isLocked || cached)) {
-            lockedTotal++;
-            state.slotsData[slotId] = data;
-            const badge = document.getElementById(`badge-${slotId}`);
-            const nameEl = document.getElementById(`name-${slotId}`);
-            const actionsEl = document.getElementById(`actions-${slotId}`);
-            const labelText = document.getElementById(`label-text-${slotId}`);
-
-            if (badge) { badge.className = 'slot-badge locked'; badge.textContent = 'Locked'; }
-            if (nameEl) { nameEl.textContent = `📄 ${data.fileName || 'Locked PDF'}`; nameEl.style.color = '#1b5e20'; }
-            if (labelText) { labelText.textContent = 'Locked'; }
-            if (actionsEl) { actionsEl.innerHTML = `<span style="font-size:0.68rem; color:#2e7d32; font-weight:700;">🔒 Ready</span>`; }
-          }
-        } catch (err) {}
-      }));
-      if (lockedCountLabel) lockedCountLabel.textContent = `${lockedTotal}/6 Locked`;
-      if (mobLockedPill) mobLockedPill.textContent = `${lockedTotal}/6`;
-    }
-
-    function fileToBase64(file) {
-      return new Promise((resolve, reject) => {
-        const reader = new FileReader();
-        reader.onload = () => resolve(reader.result.split(',')[1]);
-        reader.onerror = reject;
-        reader.readAsDataURL(file);
-      });
-    }
-
-    document.querySelectorAll('.slot-input-hidden').forEach(input => {
-      input.addEventListener('change', (e) => {
-        const slotId = e.target.dataset.slot;
-        const file = e.target.files[0];
-        const nameEl = document.getElementById(`name-${slotId}`);
-        const labelText = document.getElementById(`label-text-${slotId}`);
-        if (file) {
-          if (nameEl) { nameEl.textContent = `📎 ${file.name}`; nameEl.style.color = '#0284c7'; }
-          if (labelText) { labelText.textContent = 'Selected'; }
-        }
-      });
-    });
-
-    document.querySelectorAll('.slot-btn').forEach(btn => {
-      btn.addEventListener('click', async (e) => {
-        const slotId = e.target.dataset.slot;
-        const file = document.getElementById(`input-${slotId}`)?.files[0];
-        if (!file) return showMessageBox(`Please tap 'Choose' and select a PDF file first.`, "Missing File");
-
-        showSpinner(`Reading and locking ${file.name}...`);
-        try {
-          const base64Data = await fileToBase64(file);
-          const fileSizeFormatted = (file.size / (1024 * 1024)).toFixed(2) + " MB";
-          state.slotsBase64[slotId] = base64Data;
-          await idb.setBook(slotId, { base64: base64Data, fileName: file.name, fileSize: fileSizeFormatted });
-
-          const [cls, prt] = slotId.split('_');
-          state.slotsData[slotId] = { fileName: file.name, fileSize: fileSizeFormatted, isLocked: true };
-
-          if (db) {
-            try {
-              if (auth && !auth.currentUser) await signInAnonymously(auth).catch(() => {});
-              await setDoc(doc(db, 'curriculum_books', slotId), {
-                slotId: slotId, classId: cls, partId: prt, fileName: file.name, isLocked: true, uploadedAt: new Date().toISOString()
-              });
-            } catch (e) {}
-          }
-          hideSpinner();
-          showMessageBox(`Textbook locked for Class ${cls} ${prt.toUpperCase()}!`, "Lock Verified");
-          syncAllSlots();
-        } catch (err) {
-          hideSpinner();
-          showMessageBox(`Failed to read file: ${err.message}`, "Error");
-        }
+    // Pacing scope switcher
+    scopeRadios.forEach(radio => {
+      radio.addEventListener('change', () => {
+        const isWholeUnit = document.getElementById('scope-whole-unit').checked;
+        dayNumberContainer.style.display = isWholeUnit ? 'none' : 'block';
+        generateBtn.innerHTML = isWholeUnit ? `⚡ Generate Full Unit Package` : `⚡ Generate Package`;
       });
     });
 
     const delay = (ms) => new Promise((resolve) => setTimeout(resolve, ms));
 
+    // =========================================================================
+    // GEMINI 3.6 FLASH CLIENT
+    // =========================================================================
     async function callGemini(modelName, payload) {
       const endpoint = `https://generativelanguage.googleapis.com/v1beta/models/${modelName}:generateContent`;
       const response = await fetch(endpoint, {
@@ -2308,7 +2440,7 @@
         throw new Error("Invalid or expired Gemini API key. Please update your key above.");
       }
       if (result.isBusy || result.isModelError) {
-        showSpinner(`Server busy or updating. Auto-switching to ${FALLBACK_MODEL}...`);
+        showSpinner(`Server updating. Auto-switching to ${FALLBACK_MODEL}...`);
         await delay(1500);
         const fallbackRes = await callGemini(FALLBACK_MODEL, payload);
         if (fallbackRes.success) return fallbackRes.data;
@@ -2317,8 +2449,7 @@
     }
 
     // =========================================================================
-    // COMPLETELY RESTRUCTURED, SINGLE-THREADED READ ALOUD ENGINE
-    // ZERO CONCURRENT VOICES | STRICT SESSION ISOLATION
+    // SINGLE-THREADED READ ALOUD (ELIMINATES DUAL VOICES)
     // =========================================================================
     class RobustSpeechEngine {
       constructor() {
@@ -2329,40 +2460,28 @@
         this.queue = [];
         this.currentIndex = 0;
 
-        this.audio.addEventListener('ended', () => {
-          this.playNextAudioChunk(this.currentSessionId);
-        });
-
-        this.audio.addEventListener('error', (e) => {
-          console.warn("Audio stream notice, progressing...", e);
-          setTimeout(() => {
-            if (this.isPlaying) this.playNextAudioChunk(this.currentSessionId);
-          }, 80);
+        this.audio.addEventListener('ended', () => this.playNextAudioChunk(this.currentSessionId));
+        this.audio.addEventListener('error', () => {
+          setTimeout(() => { if (this.isPlaying) this.playNextAudioChunk(this.currentSessionId); }, 80);
         });
       }
 
       stop() {
-        // Invalidate current playback session immediately
         this.currentSessionId++;
         this.isPlaying = false;
         this.queue = [];
         this.currentIndex = 0;
 
-        // 1. Force halt HTML5 Audio
         try {
           this.audio.pause();
           this.audio.removeAttribute('src');
           this.audio.load();
         } catch (e) {}
 
-        // 2. Force halt Web Speech API
         if ('speechSynthesis' in window) {
-          try {
-            window.speechSynthesis.cancel();
-          } catch (e) {}
+          try { window.speechSynthesis.cancel(); } catch (e) {}
         }
 
-        // 3. Reset Button UI
         if (this.activeBtn) {
           this.activeBtn.classList.remove('speaking');
           this.activeBtn.innerHTML = `🔊 `;
@@ -2409,7 +2528,6 @@
       }
 
       speak(text, buttonEl, gender = state.ttsGender, speed = state.ttsSpeed) {
-        // Complete single-instance reset
         this.stop();
 
         const activeSession = this.currentSessionId;
@@ -2417,8 +2535,6 @@
         this.isPlaying = true;
 
         const isMalayalam = /[\u0D00-\u0D7F]/.test(text);
-
-        // UI state indication
         this.activeBtn.classList.add('speaking');
         this.activeBtn.innerHTML = `⏹️ `;
         showToast(`Reading aloud (${isMalayalam ? 'മലയാളം' : 'English'} at ${speed.toFixed(1)}x)...`);
@@ -2427,16 +2543,14 @@
         const nativeMlVoice = voices.find(v => v.lang && (v.lang.startsWith('ml') || v.lang.includes('ml-') || v.lang.includes('malayalam')));
 
         if (isMalayalam && !nativeMlVoice) {
-          // Malayalam Online Audio Stream Fallback
           this.queue = this.chunkText(text, 40);
           if (this.queue.length === 0) return this.stop();
           this.currentIndex = 0;
           this.playNextAudioChunk(activeSession);
         } else {
-          // Web Speech API (English or Native Malayalam)
           if (!('speechSynthesis' in window)) {
             this.stop();
-            return showMessageBox("Speech synthesis is not supported on this device.", "Not Supported");
+            return showMessageBox("Speech synthesis is not supported on this browser.", "Not Supported");
           }
           this.queue = this.chunkText(text, 140);
           if (this.queue.length === 0) return this.stop();
@@ -2447,10 +2561,7 @@
 
       playNextAudioChunk(sessionId) {
         if (!this.isPlaying || sessionId !== this.currentSessionId) return;
-        if (this.currentIndex >= this.queue.length) {
-          this.stop();
-          return;
-        }
+        if (this.currentIndex >= this.queue.length) { this.stop(); return; }
 
         const chunk = this.queue[this.currentIndex++];
         const url = `https://translate.google.com/translate_tts?ie=UTF-8&client=tw-ob&tl=ml&q=${encodeURIComponent(chunk)}`;
@@ -2462,7 +2573,7 @@
           this.audio.playbackRate = Math.max(0.25, Math.min(2.0, state.ttsSpeed));
         }
 
-        this.audio.play().catch(err => {
+        this.audio.play().catch(() => {
           if (this.isPlaying && sessionId === this.currentSessionId) {
             setTimeout(() => this.playNextAudioChunk(sessionId), 120);
           }
@@ -2470,12 +2581,8 @@
       }
 
       playNextSpeechUtterance(sessionId, isMalayalam, mlVoice, gender, speed) {
-        // Strict session guard: prevents dual voices if canceled
         if (!this.isPlaying || sessionId !== this.currentSessionId) return;
-        if (this.currentIndex >= this.queue.length) {
-          this.stop();
-          return;
-        }
+        if (this.currentIndex >= this.queue.length) { this.stop(); return; }
 
         const chunk = this.queue[this.currentIndex++];
         const utterance = new SpeechSynthesisUtterance(chunk);
@@ -2508,7 +2615,6 @@
         };
 
         utterance.onerror = (e) => {
-          // Suppress cancelled/interrupted events so they do not trigger a second reader
           if (!e || e.error === 'canceled' || e.error === 'interrupted') return;
           if (this.isPlaying && sessionId === this.currentSessionId) {
             this.playNextSpeechUtterance(sessionId, isMalayalam, mlVoice, gender, speed);
@@ -2524,12 +2630,11 @@
     function toggleReadAloud(tabId, buttonEl) {
       if (speechEngine.isPlaying && speechEngine.activeBtn === buttonEl) {
         speechEngine.stop();
-        showToast("Stopped 🔊.");
+        showToast("Stopped 🔊 ");
         return;
       }
 
       speechEngine.stop();
-
       const containerEl = document.getElementById(`content-${tabId}`);
       if (!containerEl) return;
 
@@ -2539,20 +2644,18 @@
       if (!cleanText || cleanText.includes("Enter details above") || cleanText.includes("No packages")) {
         return showMessageBox("Please generate or load a lesson package first.", "Nothing to Read");
       }
-
       speechEngine.speak(cleanText, buttonEl, state.ttsGender, state.ttsSpeed);
     }
 
     document.querySelectorAll('.tts-tab-btn').forEach(btn => {
-      btn.addEventListener('click', () => {
-        toggleReadAloud(btn.dataset.tab, btn);
-      });
+      btn.addEventListener('click', () => toggleReadAloud(btn.dataset.tab, btn));
     });
 
-    // Translation Engine (Powered by Gemini 3.6 Flash)
+    // =========================================================================
+    // MALAYALAM TRANSLATION ENGINE (POWERED BY GEMINI 3.6 FLASH)
+    // =========================================================================
     async function translateActiveTab(tabId, buttonEl) {
       speechEngine.stop();
-
       const contentWrapperEl = document.getElementById(`content-${tabId}`);
       if (!contentWrapperEl) return;
 
@@ -2609,7 +2712,6 @@ ${contentHtml}
         };
 
         const data = await executeSmartGeneration(payload);
-
         let rawResponse = data.candidates[0].content.parts[0].text.trim();
         const codeBlockMatch = rawResponse.match(/```(?:html)?([\s\S]*?)```/i);
         let translatedHtml = codeBlockMatch ? codeBlockMatch[1].trim() : rawResponse.replace(/```[a-z]*\n?/gi, '').replace(/```/g, '').trim();
@@ -2633,12 +2735,10 @@ ${contentHtml}
     }
 
     document.querySelectorAll('.translate-tab-btn').forEach(btn => {
-      btn.addEventListener('click', () => {
-        translateActiveTab(btn.dataset.tab, btn);
-      });
+      btn.addEventListener('click', () => translateActiveTab(btn.dataset.tab, btn));
     });
 
-    // Universal Print
+    // Print
     document.querySelectorAll('.print-tab-btn').forEach(btn => {
       btn.addEventListener('click', () => {
         const pane = btn.closest('.tab-pane');
@@ -2654,9 +2754,10 @@ ${contentHtml}
       document.querySelectorAll('.tab-pane').forEach(p => p.classList.remove('print-active'));
     });
 
-    function updateAllUniversalHeaders(unitTitle, dayNumber, totalDays, classId, partId, targetedCO) {
+    function updateAllUniversalHeaders(subject, unitTitle, dayNumber, totalDays, classId, partId, targetedCO) {
+      document.querySelectorAll('.u-meta-subject').forEach(el => el.textContent = subject || 'Curriculum');
       document.querySelectorAll('.u-meta-class').forEach(el => el.textContent = classId);
-      document.querySelectorAll('.u-meta-part').forEach(el => el.textContent = (partId === 'part1' ? '1' : '2'));
+      document.querySelectorAll('.u-meta-part').forEach(el => el.textContent = (partId === 'part2' ? '2' : partId === 'full' ? 'Full' : '1'));
       document.querySelectorAll('.u-meta-unit').forEach(el => el.textContent = unitTitle);
       document.querySelectorAll('.u-meta-day').forEach(el => el.textContent = dayNumber);
       document.querySelectorAll('.u-meta-total').forEach(el => el.textContent = totalDays);
@@ -2664,7 +2765,7 @@ ${contentHtml}
     }
 
     // =========================================================================
-    // RENDER WORKSPACE (NOW FEATURING UNIFIED CARDS ACROSS BOARD, WS & KEY)
+    // WORKSPACE RENDERING (SPACIOUS 35-MIN BREAKDOWN & UNIFIED CARDS)
     // =========================================================================
     function renderPackageToWorkspace(pkgData, unitTitle, dayNumber, totalDays, classId, partId = state.currentPart) {
       document.querySelectorAll('.translate-tab-btn').forEach(b => {
@@ -2674,12 +2775,12 @@ ${contentHtml}
       speechEngine.stop();
 
       const targetedCO = pkgData.targetedCurricularObjectives || pkgData.targetedCurricularObjective;
-      updateAllUniversalHeaders(unitTitle, dayNumber, totalDays, classId, partId, targetedCO);
+      updateAllUniversalHeaders(state.currentSubject, unitTitle, dayNumber, totalDays, classId, partId, targetedCO);
 
-      // 1. Render Lesson Plan (With spacious period breakdown)
+      // 1. Render Lesson Plan
       let coMasterListHtml = `
         <div class="co-box-master">
-          <strong>All Curricular Objectives (Unit Master — Exhaustive Chapter Coverage):</strong>
+          <strong>All Curricular Objectives (Unit Master — Exhaustive Coverage):</strong>
           <ul style="margin-top:5px; padding-left:18px;">
       `;
       (pkgData.allUnitCurricularObjectives || []).forEach(co => {
@@ -2687,7 +2788,6 @@ ${contentHtml}
       });
       coMasterListHtml += `</ul></div>`;
 
-      // Render Period Breakdown cleanly (Cards timeline or spacious table)
       let breakdownHtml = '';
       if (pkgData.periodBreakdown && Array.isArray(pkgData.periodBreakdown)) {
         breakdownHtml = `<div class="period-timeline">`;
@@ -2724,7 +2824,7 @@ ${contentHtml}
         ${coMasterListHtml}
         ${pkgData.lessonPlanIntroHtml || ''}
         <h3 style="margin:14px 0 6px 0; color:var(--primary); font-size:0.88rem; font-weight:700;">
-          ⏱️ 35-Minute Daily Instructional Timeline & Period Allocation:
+          ⏱️ 35-Minute Daily Instructional Timeline:
         </h3>
         ${breakdownHtml}
       `;
@@ -2732,20 +2832,19 @@ ${contentHtml}
       // 2. Render Media Resources
       renderMediaResources(pkgData.mediaResources || []);
 
-      // 3. Render Blackboard Notes (Unified Card System)
+      // 3. Render Blackboard Notes
       renderBlackboardNotes(pkgData.blackboardQa || []);
 
       // 4. Render WhatsApp Broadcast
       renderWhatsAppBroadcast(pkgData.whatsappSummary, pkgData.blackboardQa || [], unitTitle, dayNumber, totalDays, classId);
       
-      // 5. Render Evaluation Worksheet (Unified Card System matching Board & Media)
+      // 5. Render Evaluation Worksheet (Unified Cards)
       renderWorksheetCards(pkgData.worksheetQuestions || pkgData.blackboardQa || [], unitTitle, dayNumber, totalDays, classId);
 
-      // 6. Render Answer Key (Unified Card System matching Board & Media)
+      // 6. Render Answer Key (Unified Cards)
       renderAnswerKeyCards(pkgData.worksheetAnswers || pkgData.blackboardQa || [], unitTitle, dayNumber, totalDays);
     }
 
-    // Modern Cards Renderer for Blackboard Notes
     function renderBlackboardNotes(qaList) {
       const container = document.getElementById('blackboard-notes-body');
       if (!qaList || qaList.length === 0) {
@@ -2786,7 +2885,6 @@ ${contentHtml}
       attachSingleCopyListeners(container);
     }
 
-    // Modern Cards Renderer for Worksheet (Identical clean card style)
     function renderWorksheetCards(qList, unitTitle, dayNumber, totalDays, classId) {
       const container = document.getElementById('worksheet-render-area');
       if (!qList || qList.length === 0) {
@@ -2831,13 +2929,11 @@ ${contentHtml}
           </div>
         `;
       });
-
       html += `</div>`;
       container.innerHTML = html;
       attachSingleCopyListeners(container);
     }
 
-    // Modern Cards Renderer for Answer Key & Scoring Guide
     function renderAnswerKeyCards(aList, unitTitle, dayNumber, totalDays) {
       const container = document.getElementById('worksheet-answers-body');
       if (!aList || aList.length === 0) {
@@ -2881,7 +2977,6 @@ ${contentHtml}
           </div>
         `;
       });
-
       html += `</div>`;
       container.innerHTML = html;
       attachSingleCopyListeners(container);
@@ -2907,12 +3002,12 @@ ${contentHtml}
 
       const recap = summaryObj?.dailyRecap || "Today, students engaged in concept exploration.";
       const tip = summaryObj?.studyTip || "Discuss today's topic with your child.";
-      const links = summaryObj?.dikshaKeywords || `${unitTitle} SCERT Class ${classId}`;
+      const links = summaryObj?.dikshaKeywords || `${state.currentSubject} ${unitTitle} SCERT Class ${classId}`;
 
       let chatHtml = `
         <div class="wa-bubble wa-bubble-green">
           <div class="wa-bubble-header" style="font-weight:700; color:var(--primary); margin-bottom:4px; font-size:0.75rem;">
-            🏫 Daily Classroom Recap (Std ${classId} • Day ${dayNumber}/${totalDays})
+            🏫 Daily Classroom Recap (${state.currentSubject} • Std ${classId} • Day ${dayNumber}/${totalDays})
           </div>
           <p style="font-weight:600; margin-bottom:4px;">*Unit:* ${unitTitle}</p>
           <p>${recap}</p>
@@ -2950,7 +3045,7 @@ ${contentHtml}
       `;
       previewArea.innerHTML = chatHtml;
 
-      let rawText = `*🏫 SCERT Std ${classId} Daily Update*\n*Unit:* ${unitTitle} (Day ${dayNumber}/${totalDays})\n\n`;
+      let rawText = `*🏫 SCERT ${state.currentSubject} Std ${classId} Daily Update*\n*Unit:* ${unitTitle} (Day ${dayNumber}/${totalDays})\n\n`;
       rawText += `*🌟 Today's Learning:*\n${recap}\n\n`;
       rawText += `*📚 Today's Blackboard Q&As:*\n\n`;
       qaList.forEach((item, idx) => {
@@ -3028,7 +3123,7 @@ ${contentHtml}
         b.innerHTML = `🌐 മലയാളം`;
       });
 
-      updateAllUniversalHeaders("Select Unit", "1", "5", state.currentClass, state.currentPart, "Generated upon request");
+      updateAllUniversalHeaders(state.currentSubject, "Select Unit", "1", "5", state.currentClass, state.currentPart, "Generated upon request");
 
       document.getElementById('lesson-plan-body').innerHTML = `<p style="color: var(--text-muted); font-style: italic;">Enter details above and tap "Generate Package".</p>`;
       document.getElementById('media-resources-body').innerHTML = `<p style="color: var(--text-muted); font-style: italic;">Curated media will render here.</p>`;
@@ -3060,13 +3155,17 @@ ${contentHtml}
 
       state.currentClass = pkg.classId;
       state.currentPart = pkg.partId;
+      state.currentSubject = pkg.subject || state.currentSubject;
+
       classSelect.value = pkg.classId;
-      partRadios.forEach(r => r.checked = (r.value === pkg.partId));
+      partSelect.value = pkg.partId;
+      targetSubjectInput.value = state.currentSubject;
       unitTitleInput.value = pkg.unitTitle;
       dayNumberInput.value = pkg.dayNumber;
       totalDaysInput.value = pkg.totalDays;
-      highlightActiveTarget();
+
       checkAndLoadChapterRoadmap();
+      renderBooksList();
 
       state.currentPackage = pkg.data;
       state.activePackageId = pkg.id;
@@ -3088,9 +3187,7 @@ ${contentHtml}
           snap.forEach(docSnap => {
             if (docSnap.exists()) cloudPackages.push(docSnap.data());
           });
-        } catch (e) {
-          console.warn("Firestore fetch packages:", e.message);
-        }
+        } catch (e) {}
       }
 
       const localPackages = await idb.getAllPackages();
@@ -3122,17 +3219,13 @@ ${contentHtml}
             <div class="pkg-card-top">
               <div>
                 <div class="pkg-title-text">📚 Std ${pkg.classId} - ${pkg.unitTitle} (Day ${pkg.dayNumber}/${pkg.totalDays})</div>
-                <div class="pkg-meta-text">${pkg.dateFormatted}</div>
+                <div class="pkg-meta-text">${pkg.dateFormatted} • ${escapeHtml(pkg.subject || 'SCERT')}</div>
               </div>
               <span class="badge-tag" style="background:${isLoaded ? 'var(--primary)' : '#e2e8f0'}; color:${isLoaded ? '#fff' : '#334155'}; font-size:0.6rem;">
                 ${isLoaded ? 'ACTIVE' : 'SAVED'}
               </span>
             </div>
-
-            <div class="pkg-co-preview" title="${coSnippet}">
-              🎯 ${coSnippet}
-            </div>
-
+            <div class="pkg-co-preview" title="${coSnippet}">🎯 ${coSnippet}</div>
             <div class="pkg-actions-row">
               <button class="btn btn-primary btn-sm btn-load-pkg" data-id="${pkg.id}">📥 Load</button>
               <button class="btn btn-outline btn-sm btn-reset-pkg" data-id="${pkg.id}">🔄 Reset</button>
@@ -3152,12 +3245,10 @@ ${contentHtml}
       pkgArchiveList.querySelectorAll('.btn-del-pkg').forEach(btn => {
         btn.addEventListener('click', async (e) => {
           const id = e.currentTarget.dataset.id;
-          if (!confirm("Delete this daily lesson package from Firebase and local storage?")) return;
+          if (!confirm("Delete this daily lesson package from database?")) return;
           await idb.deletePackage(id);
           if (db) {
-            try {
-              await deleteDoc(doc(db, 'saved_packages', id));
-            } catch (err) {}
+            try { await deleteDoc(doc(db, 'saved_packages', id)); } catch (err) {}
           }
           if (state.activePackageId === id) resetWorkspace();
           refreshPackageArchiveUI();
@@ -3166,8 +3257,10 @@ ${contentHtml}
       });
     }
 
-    // Generator Trigger
-    generateBtn.addEventListener('click', () => {
+    // =========================================================================
+    // COMPLETE INSTRUCTIONAL GENERATOR (LINKED WITH ACTIVE/LOCKED BOOK)
+    // =========================================================================
+    generateBtn.addEventListener('click', async () => {
       const unitTitle = unitTitleInput.value.trim();
       if (!unitTitle) return showMessageBox("Please enter a Chapter or Unit Title before generating.", "Missing Unit");
 
@@ -3179,32 +3272,27 @@ ${contentHtml}
         return showMessageBox("Day in Unit cannot exceed Total Planned Days.", "Invalid Pacing");
       }
 
-      const isAlreadyActive = state.currentPackage !== null;
-      const isAlreadySaved = state.savedPackages.some(p => 
-        p.classId === state.currentClass && 
-        p.unitTitle.toLowerCase() === unitTitle.toLowerCase() && 
-        parseInt(p.dayNumber, 10) === dayNumber
-      );
-
-      if (isAlreadyActive || isAlreadySaved) {
-        showWarningModal(
-          `A lesson package for <strong>Std ${state.currentClass} - ${unitTitle} (${isWholeUnit ? 'Full Unit' : 'Day ' + dayNumber})</strong> already exists. <br><br>Do you want to reset workspace or continue and overwrite?`,
-          () => executeGenerationProcess(unitTitle, dayNumber, totalDays, isWholeUnit)
+      // Check for an active locked textbook from 100+ book repository
+      let activeBook = state.books.find(b => b.id === state.activeBookId);
+      if (!activeBook) {
+        activeBook = state.books.find(b => 
+          b.isLocked && 
+          b.classId === state.currentClass && 
+          (b.subject || '').toLowerCase() === state.currentSubject.toLowerCase()
         );
-      } else {
-        executeGenerationProcess(unitTitle, dayNumber, totalDays, isWholeUnit);
       }
-    });
 
-    async function executeGenerationProcess(unitTitle, dayNumber, totalDays, isWholeUnit) {
-      const activeSlotId = `${state.currentClass}_${state.currentPart}`;
-      const activeBase64 = state.slotsBase64[activeSlotId];
+      let activeBase64 = null;
+      if (activeBook) {
+        const cached = await idb.getBook(activeBook.id);
+        activeBase64 = cached?.base64 || cached;
+      }
 
-      const roadmapKey = getRoadmapStorageKey(state.currentClass, unitTitle);
+      const roadmapKey = getRoadmapStorageKey(state.currentClass, state.currentSubject, unitTitle);
       const existingRoadmap = state.lockedRoadmap;
 
       showSpinner(isWholeUnit 
-        ? `Synthesizing Entire Unit Plan (${totalDays} Days) for "${unitTitle}"...` 
+        ? `Synthesizing Entire ${state.currentSubject} Unit Plan (${totalDays} Days)...` 
         : `Synthesizing Day ${dayNumber} of ${totalDays} for "${unitTitle}"...`
       );
 
@@ -3227,9 +3315,6 @@ NEW COMPLETE CHAPTER PACING ROADMAP REQUIRED:
 `;
       }
 
-      let scopeInstruction = "";
-      let responseSchemaDescription = "";
-
       const singleDayPackageSchema = `
       "periodBreakdown": [
         {"time": "0-5 min", "phaseTitle": "Entry Activity / Pre-requisite Hook", "teacherActivity": "...", "studentActivity": "..."},
@@ -3246,8 +3331,8 @@ NEW COMPLETE CHAPTER PACING ROADMAP REQUIRED:
       "worksheetAnswers": [{"qNum": 1, "score": 2, "rubric": "...", "answer": "..."}]
 `;
 
+      let responseSchemaDescription = "";
       if (isWholeUnit) {
-        scopeInstruction = `WHOLE UNIT BATCH: Generate instructional packages for EVERY SINGLE DAY from Day 1 to Day ${totalDays}.`;
         responseSchemaDescription = `
 {
   "allUnitCurricularObjectives": ["CO 1: ...", "CO 2: ..."],
@@ -3265,7 +3350,6 @@ NEW COMPLETE CHAPTER PACING ROADMAP REQUIRED:
   ]
 }`;
       } else {
-        scopeInstruction = `SINGLE DAY PERIOD MODE: Target Day ${dayNumber} of ${totalDays}.`;
         responseSchemaDescription = `
 {
   "allUnitCurricularObjectives": ["CO 1: ...", "CO 2: ..."],
@@ -3281,18 +3365,19 @@ NEW COMPLETE CHAPTER PACING ROADMAP REQUIRED:
 
       try {
         const prompt = `
-You are an expert pedagogical assistant for Kerala SCERT Classes 5, 6, and 7.
-Formulate a teaching package calibrated specifically for:
+You are an expert pedagogical assistant for Kerala SCERT curriculum.
+Formulate an authentic, practical daily instructional package for:
+- Subject: ${state.currentSubject}
 - Standard: Class ${state.currentClass}
-- Textbook: Part ${state.currentPart === 'part1' ? '1' : '2'}
+- Textbook: Part ${state.currentPart}
 - Unit Name: ${unitTitle}
 - Total Planned Days: ${totalDays} Days.
 
 ${roadmapInstruction}
-${scopeInstruction}
+${isWholeUnit ? `WHOLE UNIT BATCH: Generate instructional packages for EVERY SINGLE DAY from Day 1 to Day ${totalDays}.` : `SINGLE DAY PERIOD MODE: Target Day ${dayNumber} of ${totalDays}.`}
 
 CRITICAL PEDAGOGICAL SPECIFICATIONS:
-1. 35-MINUTE TIMELINE: Formulate spacious breakdown stages (0-5, 5-20, 20-25, 25-35 min) with detailed teacher inquiry and learner responses.
+1. 35-MINUTE TIMELINE: Formulate spacious breakdown stages (0-5, 5-20, 20-25, 25-35 min).
 2. BLACKBOARD NOTES: 2-3 HOTS questions and chalkboard answers.
 3. WORKSHEET & ANSWER KEY: Distinct application-level activities totalling 5 scores with explicit scoring criteria rubric points.
 4. WHATSAPP BROADCAST: 100-word daily recap with exact Blackboard Q&As.
@@ -3303,14 +3388,11 @@ ${responseSchemaDescription}
 
         const parts = [{ text: prompt }];
 
-        if (activeBase64) {
+        if (activeBase64 && typeof activeBase64 === 'string') {
           const sizeInMB = (activeBase64.length * 0.75) / (1024 * 1024);
           if (sizeInMB <= 15) {
             parts.unshift({
-              inlineData: {
-                mimeType: "application/pdf",
-                data: activeBase64
-              }
+              inlineData: { mimeType: "application/pdf", data: activeBase64 }
             });
           }
         }
@@ -3341,7 +3423,6 @@ ${responseSchemaDescription}
 
         if (isWholeUnit && Array.isArray(result.dailyPackages)) {
           let firstDayPkg = null;
-
           for (const dayPkg of result.dailyPackages) {
             const currentDayNum = dayPkg.dayNumber || 1;
             const fullDayData = {
@@ -3354,6 +3435,7 @@ ${responseSchemaDescription}
               id: pkgId,
               classId: state.currentClass,
               partId: state.currentPart,
+              subject: state.currentSubject,
               unitTitle: unitTitle,
               dayNumber: currentDayNum,
               totalDays: totalDays,
@@ -3363,14 +3445,12 @@ ${responseSchemaDescription}
             };
 
             await idb.savePackage(dailyClassPackage);
-
             if (db) {
               try {
                 if (auth && !auth.currentUser) await signInAnonymously(auth).catch(() => {});
                 await setDoc(doc(db, 'saved_packages', pkgId), dailyClassPackage);
               } catch (e) {}
             }
-
             if (currentDayNum === 1) firstDayPkg = dailyClassPackage;
           }
 
@@ -3379,12 +3459,12 @@ ${responseSchemaDescription}
             state.activePackageId = firstDayPkg.id;
             dayNumberInput.value = 1;
             renderPackageToWorkspace(firstDayPkg.data, unitTitle, 1, totalDays, state.currentClass, state.currentPart);
-            updateGeneratorUIStatus(`Std ${state.currentClass} - ${unitTitle} (Day 1/${totalDays})`);
+            updateGeneratorUIStatus(`${state.currentSubject} Std ${state.currentClass} - ${unitTitle} (Day 1/${totalDays})`);
           }
 
           await refreshPackageArchiveUI();
           hideSpinner();
-          showMessageBox(`All ${totalDays} daily class packages for "${unitTitle}" have been generated with unified card layouts!`, "Full Unit Generated");
+          showMessageBox(`All ${totalDays} daily lesson packages for "${unitTitle}" have been generated and archived!`, "Unit Plan Complete");
         } else {
           state.currentPackage = result;
           renderPackageToWorkspace(result, unitTitle, dayNumber, totalDays, state.currentClass, state.currentPart);
@@ -3394,6 +3474,7 @@ ${responseSchemaDescription}
             id: pkgId,
             classId: state.currentClass,
             partId: state.currentPart,
+            subject: state.currentSubject,
             unitTitle: unitTitle,
             dayNumber: dayNumber,
             totalDays: totalDays,
@@ -3403,18 +3484,15 @@ ${responseSchemaDescription}
           };
 
           await idb.savePackage(newPkg);
-
           if (db) {
             try {
               if (auth && !auth.currentUser) await signInAnonymously(auth).catch(() => {});
               await setDoc(doc(db, 'saved_packages', pkgId), newPkg);
-            } catch (cloudErr) {
-              console.warn("Firestore save skipped:", cloudErr.message);
-            }
+            } catch (cloudErr) {}
           }
 
           state.activePackageId = pkgId;
-          updateGeneratorUIStatus(`Std ${state.currentClass} - ${unitTitle} (D${dayNumber})`);
+          updateGeneratorUIStatus(`${state.currentSubject} Std ${state.currentClass} - ${unitTitle} (D${dayNumber})`);
           await refreshPackageArchiveUI();
 
           hideSpinner();
@@ -3425,13 +3503,12 @@ ${responseSchemaDescription}
         console.error(err);
         showMessageBox(err.message, "Notice");
       }
-    }
+    });
 
-    // Tabs Navigation
+    // Tab Navigation
     document.querySelectorAll('.tab-btn').forEach(btn => {
       btn.addEventListener('click', () => {
         speechEngine.stop();
-
         document.querySelectorAll('.tab-btn').forEach(b => b.classList.remove('active'));
         document.querySelectorAll('.tab-pane').forEach(p => p.classList.remove('active'));
         btn.classList.add('active');
@@ -3449,7 +3526,7 @@ ${responseSchemaDescription}
     // Startup Initialization
     window.addEventListener('DOMContentLoaded', async () => {
       await idb.init();
-      syncAllSlots();
+      await loadAndRenderBooks();
       refreshPackageArchiveUI();
       checkAndLoadChapterRoadmap();
       updateVoiceUIElements();
