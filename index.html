@@ -2289,7 +2289,7 @@ async function viewBookPdf(bookId) {
                 <span class="co-day-tag">Day ${co.day}</span>
               </div>
               <div class="co-item-actions">
-                <button type="button" class="co-act-btn co-view-btn" data-index="${idx}" title="View Objective">👁️ View</button>
+                <button type="button" class="co-act-btn co-view-btn" data-index="${idx}" title="View Objective">👁️</button>
                 <button type="button" class="co-act-btn co-modify-btn" data-index="${idx}" title="Modify Objective">✏️ Modify</button>
                 <button type="button" class="co-act-btn co-delete-btn del" data-index="${idx}" title="Delete Objective">🗑️ Delete</button>
               </div>
@@ -2679,151 +2679,186 @@ OUTPUT STRICT JSON:
       renderBooksList();
     }
 
-    function renderBooksList() {
-      const searchTerm = tbSearchBox.value.trim().toLowerCase();
-      const filterClass = tbFilterClass.value;
+    // =========================================================================
+// RENDER TEXTBOOKS (CLASSWISE -> ALPHABETICAL BY SUBJECT -> PART ORDER)
+// =========================================================================
+function renderBooksList() {
+  const searchTerm = tbSearchBox.value.trim().toLowerCase();
+  const filterClass = tbFilterClass.value;
 
-      let filtered = state.books.filter(b => {
-        const matchesSearch = !searchTerm || 
-          (b.subject && b.subject.toLowerCase().includes(searchTerm)) || 
-          (b.fileName && b.fileName.toLowerCase().includes(searchTerm)) ||
-          (`std ${b.classId}`.includes(searchTerm));
-        const matchesClass = (filterClass === 'all') || (b.classId === filterClass);
-        return matchesSearch && matchesClass;
-      });
+  let filtered = state.books.filter(b => {
+    const matchesSearch = !searchTerm || 
+      (b.subject && b.subject.toLowerCase().includes(searchTerm)) || 
+      (b.fileName && b.fileName.toLowerCase().includes(searchTerm)) ||
+      (`std ${b.classId}`.includes(searchTerm));
+    const matchesClass = (filterClass === 'all') || (b.classId === filterClass);
+    return matchesSearch && matchesClass;
+  });
 
-      const lockedCount = state.books.filter(b => b.isLocked).length;
-      lockedCountLabel.textContent = `${lockedCount} Locked`;
-      mobLockedPill.textContent = lockedCount;
+  const lockedCount = state.books.filter(b => b.isLocked).length;
+  lockedCountLabel.textContent = `${lockedCount} Locked`;
+  mobLockedPill.textContent = lockedCount;
 
-      if (filtered.length === 0) {
-        tbLibraryList.innerHTML = `
-          <div style="font-size: 0.7rem; color: var(--text-muted); text-align: center; padding: 10px;">
-            ${state.books.length === 0 ? 'No books uploaded yet. Click "+ Add Book".' : 'No textbooks match search.'}
-          </div>
-        `;
-        return;
-      }
+  if (filtered.length === 0) {
+    tbLibraryList.innerHTML = `
+      <div style="font-size: 0.7rem; color: var(--text-muted); text-align: center; padding: 12px;">
+        ${state.books.length === 0 ? 'No books uploaded yet. Click "+ Add Book".' : 'No textbooks match search criteria.'}
+      </div>
+    `;
+    return;
+  }
 
-      filtered.sort((a, b) => parseInt(a.classId || 0) - parseInt(b.classId || 0));
+  // Part order helper
+  const partRank = { 'part1': 1, 'part2': 2, 'part3': 3, 'full': 99 };
 
-      let html = '';
-      filtered.forEach(book => {
-        const isTarget = (state.activeBookId === book.id) || 
-          (state.currentClass === book.classId && state.currentPart === book.partId && (state.currentSubject || '').toLowerCase() === (book.subject || '').toLowerCase());
-        const isLocked = book.isLocked !== false;
+  // SORT: 1. Class (1, 2, 3...) -> 2. Subject (A to Z) -> 3. Part (Pt 1 -> Pt 2)
+  filtered.sort((a, b) => {
+    // 1. Classwise numerical order
+    const classA = parseInt(a.classId || 0, 10);
+    const classB = parseInt(b.classId || 0, 10);
+    if (classA !== classB) return classA - classB;
 
-        html += `
-          <div class="tb-compact-row ${isTarget ? 'is-active-target' : ''}" data-id="${book.id}">
-            <div class="tb-row-meta">
-              <div class="tb-row-title">
-                <span>📖 ${escapeHtml(book.subject || 'Subject')}</span>
-                <span class="pill-qnum" style="font-size:0.58rem; padding:1px 4px;">Std ${book.classId} (${book.partId === 'part2' ? 'P2' : book.partId === 'full' ? 'Full' : 'P1'})</span>
-              </div>
-              <div class="tb-row-sub" title="${escapeHtml(book.fileName || '')}">
-                ${escapeHtml(book.fileName || 'PDF')} • ${book.fileSize || ''}
-              </div>
-            </div>
-            <div class="tb-micro-actions">
-              <button class="tb-micro-btn ${isTarget ? 'active-target' : ''} tb-use-btn" data-id="${book.id}" title="Set as Active Target">
-                🎯 ${isTarget ? '' : ''}
-              </button>
-              <!-- View PDF Button placed just left of Unlock -->
-              <button class="tb-micro-btn view-pdf tb-view-btn" data-id="${book.id}" title="View Full PDF Document">
-                👁️               </button>
-              <button class="tb-micro-btn tb-lock-toggle-btn" data-id="${book.id}" title="${isLocked ? 'Unlock Textbook' : 'Lock Textbook'}">
-                ${isLocked ? '🔒' : '🔓'}
-              </button>
-              <button class="tb-micro-btn tb-edit-btn" data-id="${book.id}" title="Modify Details">
-                ✏️
-              </button>
-              <button class="tb-micro-btn del tb-delete-btn" data-id="${book.id}" title="Delete from Database">
-                🗑️
-              </button>
-            </div>
-          </div>
-        `;
-      });
-      tbLibraryList.innerHTML = html;
+    // 2. Alphabetical order by Subject
+    const subA = (a.subject || '').trim().toLowerCase();
+    const subB = (b.subject || '').trim().toLowerCase();
+    if (subA !== subB) return subA.localeCompare(subB);
 
-      // Attach handlers
-      tbLibraryList.querySelectorAll('.tb-view-btn').forEach(btn => {
-        btn.addEventListener('click', (e) => {
-          const bId = e.currentTarget.dataset.id;
-          viewBookPdf(bId);
-        });
-      });
+    // 3. Part order (Part 1, Part 2, Full)
+    const pA = partRank[String(a.partId || '').toLowerCase()] || 1;
+    const pB = partRank[String(b.partId || '').toLowerCase()] || 1;
+    return pA - pB;
+  });
 
-      tbLibraryList.querySelectorAll('.tb-use-btn').forEach(btn => {
-        btn.addEventListener('click', (e) => {
-          const bId = e.currentTarget.dataset.id;
-          const book = state.books.find(b => b.id === bId);
-          if (book) {
-            state.activeBookId = book.id;
-            state.currentClass = book.classId;
-            state.currentPart = book.partId;
-            state.currentSubject = book.subject;
+  let html = '';
+  let currentClassGroup = null;
 
-            classSelect.value = book.classId;
-            partSelect.value = book.partId;
-            syncSubjectDropdown();
-            targetSubjectInput.value = book.subject;
-            
-            checkAndLoadChapterRoadmap();
-            resetCOEngineToEmpty();
-            renderBooksList();
-            showToast(`Active Target: ${book.subject} Std ${book.classId}`);
-          }
-        });
-      });
-
-      tbLibraryList.querySelectorAll('.tb-lock-toggle-btn').forEach(btn => {
-        btn.addEventListener('click', async (e) => {
-          const bId = e.currentTarget.dataset.id;
-          const book = state.books.find(b => b.id === bId);
-          if (!book) return;
-
-          book.isLocked = !book.isLocked;
-          const cached = await idb.getBook(bId);
-          await idb.setBook(bId, { ...cached, ...book, isLocked: book.isLocked });
-
-          if (db) {
-            try {
-              await setDoc(doc(db, 'curriculum_books', bId), { isLocked: book.isLocked }, { merge: true });
-            } catch (err) {}
-          }
-          showToast(`Textbook ${book.isLocked ? 'Locked' : 'Unlocked'}`);
-          renderBooksList();
-        });
-      });
-
-      tbLibraryList.querySelectorAll('.tb-edit-btn').forEach(btn => {
-        btn.addEventListener('click', (e) => {
-          const bId = e.currentTarget.dataset.id;
-          const book = state.books.find(b => b.id === bId);
-          if (book) openBookModal(book);
-        });
-      });
-
-      tbLibraryList.querySelectorAll('.tb-delete-btn').forEach(btn => {
-        btn.addEventListener('click', async (e) => {
-          const bId = e.currentTarget.dataset.id;
-          const book = state.books.find(b => b.id === bId);
-          if (!book) return;
-          if (!confirm(`Delete "${book.subject} Std ${book.classId}" from repository?`)) return;
-
-          await idb.deleteBook(bId);
-          if (db) {
-            try { await deleteDoc(doc(db, 'curriculum_books', bId)); } catch (err) {}
-          }
-          if (state.activeBookId === bId) state.activeBookId = null;
-          state.books = state.books.filter(b => b.id !== bId);
-          syncSubjectDropdown();
-          renderBooksList();
-          showToast("Textbook deleted.");
-        });
-      });
+  filtered.forEach(book => {
+    // Show Class Section Header when viewing all classes
+    if (filterClass === 'all' && book.classId !== currentClassGroup) {
+      currentClassGroup = book.classId;
+      html += `
+        <div style="font-size: 0.66rem; font-weight: 800; color: var(--primary-dark); background: rgba(224, 242, 254, 0.85); border: 1px solid rgba(186, 230, 253, 0.8); padding: 2px 7px; border-radius: 4px; margin: 5px 0 2px 0; display: flex; align-items: center; gap: 4px;">
+          <span>🏫 Class ${currentClassGroup} (Std ${currentClassGroup})</span>
+        </div>
+      `;
     }
+
+    const isTarget = (state.activeBookId === book.id) || 
+      (state.currentClass === book.classId && state.currentPart === book.partId && (state.currentSubject || '').toLowerCase() === (book.subject || '').toLowerCase());
+    const isLocked = book.isLocked !== false;
+    const partLabel = (book.partId === 'part2') ? 'P2' : (book.partId === 'full') ? 'Full' : 'P1';
+
+    html += `
+      <div class="tb-compact-row ${isTarget ? 'is-active-target' : ''}" data-id="${book.id}">
+        <div class="tb-row-meta">
+          <div class="tb-row-title">
+            <span>📖 ${escapeHtml(book.subject || 'Subject')}</span>
+            <span class="pill-qnum" style="font-size:0.58rem; padding:1px 5px;">Std ${book.classId} (${partLabel})</span>
+          </div>
+          <div class="tb-row-sub" title="${escapeHtml(book.fileName || '')}">
+            ${escapeHtml(book.fileName || 'PDF')} • ${book.fileSize || ''}
+          </div>
+        </div>
+        <div class="tb-micro-actions">
+          <button class="tb-micro-btn ${isTarget ? 'active-target' : ''} tb-use-btn" data-id="${book.id}" title="Set as Active Target">
+            🎯 ${isTarget ? '' : ''}
+          </button>
+          <button class="tb-micro-btn view-pdf tb-view-btn" data-id="${book.id}" title="View Full PDF Document">📖
+            
+          </button>
+          <button class="tb-micro-btn tb-lock-toggle-btn" data-id="${book.id}" title="${isLocked ? 'Unlock Textbook' : 'Lock Textbook'}">
+            ${isLocked ? '🔒' : '🔓'}
+          </button>
+          <button class="tb-micro-btn tb-edit-btn" data-id="${book.id}" title="Modify Details">
+            ✏️
+          </button>
+          <button class="tb-micro-btn del tb-delete-btn" data-id="${book.id}" title="Delete from Database">
+            🗑️
+          </button>
+        </div>
+      </div>
+    `;
+  });
+  tbLibraryList.innerHTML = html;
+
+  // Re-attach handlers
+  tbLibraryList.querySelectorAll('.tb-view-btn').forEach(btn => {
+    btn.addEventListener('click', (e) => {
+      const bId = e.currentTarget.dataset.id;
+      viewBookPdf(bId);
+    });
+  });
+
+  tbLibraryList.querySelectorAll('.tb-use-btn').forEach(btn => {
+    btn.addEventListener('click', (e) => {
+      const bId = e.currentTarget.dataset.id;
+      const book = state.books.find(b => b.id === bId);
+      if (book) {
+        state.activeBookId = book.id;
+        state.currentClass = book.classId;
+        state.currentPart = book.partId;
+        state.currentSubject = book.subject;
+
+        classSelect.value = book.classId;
+        partSelect.value = book.partId;
+        syncSubjectDropdown();
+        targetSubjectInput.value = book.subject;
+        
+        checkAndLoadChapterRoadmap();
+        resetCOEngineToEmpty();
+        renderBooksList();
+        showToast(`Active Target: ${book.subject} Std ${book.classId}`);
+      }
+    });
+  });
+
+  tbLibraryList.querySelectorAll('.tb-lock-toggle-btn').forEach(btn => {
+    btn.addEventListener('click', async (e) => {
+      const bId = e.currentTarget.dataset.id;
+      const book = state.books.find(b => b.id === bId);
+      if (!book) return;
+
+      book.isLocked = !book.isLocked;
+      const cached = await idb.getBook(bId);
+      await idb.setBook(bId, { ...cached, ...book, isLocked: book.isLocked });
+
+      if (db) {
+        try {
+          await setDoc(doc(db, 'curriculum_books', bId), { isLocked: book.isLocked }, { merge: true });
+        } catch (err) {}
+      }
+      showToast(`Textbook ${book.isLocked ? 'Locked' : 'Unlocked'}`);
+      renderBooksList();
+    });
+  });
+
+  tbLibraryList.querySelectorAll('.tb-edit-btn').forEach(btn => {
+    btn.addEventListener('click', (e) => {
+      const bId = e.currentTarget.dataset.id;
+      const book = state.books.find(b => b.id === bId);
+      if (book) openBookModal(book);
+    });
+  });
+
+  tbLibraryList.querySelectorAll('.tb-delete-btn').forEach(btn => {
+    btn.addEventListener('click', async (e) => {
+      const bId = e.currentTarget.dataset.id;
+      const book = state.books.find(b => b.id === bId);
+      if (!book) return;
+      if (!confirm(`Delete "${book.subject} Std ${book.classId}" from repository?`)) return;
+
+      await idb.deleteBook(bId);
+      if (db) {
+        try { await deleteDoc(doc(db, 'curriculum_books', bId)); } catch (err) {}
+      }
+      if (state.activeBookId === bId) state.activeBookId = null;
+      state.books = state.books.filter(b => b.id !== bId);
+      syncSubjectDropdown();
+      renderBooksList();
+      showToast("Textbook deleted.");
+    });
+  });
+}
 
     tbSearchBox.addEventListener('input', renderBooksList);
     tbFilterClass.addEventListener('change', renderBooksList);
@@ -3942,87 +3977,146 @@ ${contentHtml}
       showToast(`Loaded: ${pkg.unitTitle} (Day ${pkg.dayNumber})`);
     }
 
-    async function refreshPackageArchiveUI() {
-      let cloudPackages = [];
+    // =========================================================================
+// REFRESH PACKAGE ARCHIVE (SORT & DISPLAY: CLASS -> SUBJECT -> PART -> UNIT)
+// =========================================================================
+async function refreshPackageArchiveUI() {
+  let cloudPackages = [];
 
-      if (db) {
-        try {
-          if (auth && !auth.currentUser) await signInAnonymously(auth).catch(() => {});
-          const snap = await withTimeout(getDocs(collection(db, 'saved_packages')), 2500);
-          snap.forEach(docSnap => {
-            if (docSnap.exists()) cloudPackages.push(docSnap.data());
-          });
-        } catch (e) {
-          console.warn("Firestore fetch packages:", e.message);
-        }
-      }
-
-      const localPackages = await idb.getAllPackages();
-      const packageMap = new Map();
-      localPackages.forEach(p => packageMap.set(p.id, p));
-      cloudPackages.forEach(p => {
-        packageMap.set(p.id, p);
-        idb.savePackage(p);
+  if (db) {
+    try {
+      if (auth && !auth.currentUser) await signInAnonymously(auth).catch(() => {});
+      const snap = await withTimeout(getDocs(collection(db, 'saved_packages')), 2500);
+      snap.forEach(docSnap => {
+        if (docSnap.exists()) cloudPackages.push(docSnap.data());
       });
+    } catch (e) {
+      console.warn("Firestore fetch packages:", e.message);
+    }
+  }
 
-      state.savedPackages = Array.from(packageMap.values());
-      packageCountBadge.textContent = state.savedPackages.length;
-      if (mobPkgPill) mobPkgPill.textContent = state.savedPackages.length;
+  const localPackages = await idb.getAllPackages();
+  const packageMap = new Map();
+  localPackages.forEach(p => packageMap.set(p.id, p));
+  cloudPackages.forEach(p => {
+    packageMap.set(p.id, p);
+    idb.savePackage(p);
+  });
 
-      if (state.savedPackages.length === 0) {
-        pkgArchiveList.innerHTML = `<div style="font-size: 0.68rem; color: var(--text-muted); text-align: center; padding: 6px;">No saved packages yet.</div>`;
-        return;
-      }
+  state.savedPackages = Array.from(packageMap.values());
+  packageCountBadge.textContent = state.savedPackages.length;
+  if (mobPkgPill) mobPkgPill.textContent = state.savedPackages.length;
 
-      state.savedPackages.sort((a, b) => b.createdAt - a.createdAt);
+  if (state.savedPackages.length === 0) {
+    pkgArchiveList.innerHTML = `<div style="font-size: 0.68rem; color: var(--text-muted); text-align: center; padding: 10px;">No saved packages yet.</div>`;
+    return;
+  }
 
-      let html = '';
-      state.savedPackages.forEach(pkg => {
-        const isLoaded = (pkg.id === state.activePackageId);
-        const coSnippet = pkg.data?.targetedCurricularObjective || 'SCERT Lesson';
+  // Helper to extract clean numerical part (e.g. "part1" -> 1, "part2" -> 2, "full" -> 99)
+  const extractPartNum = (part) => {
+    if (!part) return 1;
+    const match = String(part).match(/\d+/);
+    if (match) return parseInt(match[0], 10);
+    if (String(part).toLowerCase().includes('full')) return 99;
+    return 1;
+  };
 
-        html += `
-          <div class="pkg-card ${isLoaded ? 'active-loaded' : ''}" data-id="${pkg.id}">
-            <div class="pkg-card-top">
-              <div>
-                <div class="pkg-title-text">📚 Std ${pkg.classId} - ${pkg.unitTitle} (Day ${pkg.dayNumber}/${pkg.totalDays})</div>
-                <div class="pkg-meta-text">${pkg.dateFormatted} • ${escapeHtml(pkg.subject || 'SCERT')}</div>
-              </div>
-              <span class="badge-tag" style="background:#0284c7; color:#fff; font-size:0.6rem;">
-                ${isLoaded ? 'ACTIVE' : 'SAVED'}
-              </span>
+  // 1, 2, 3 Ascending Sort: Class -> Subject -> Part -> Unit -> Day
+  state.savedPackages.sort((a, b) => {
+    // 1. Class / Standard (1, 2, 3... ascending)
+    const classA = parseInt(a.classId, 10) || 0;
+    const classB = parseInt(b.classId, 10) || 0;
+    if (classA !== classB) return classA - classB;
+
+    // 2. Subject (A -> Z alphabetical)
+    const subA = (a.subject || '').trim().toLowerCase();
+    const subB = (b.subject || '').trim().toLowerCase();
+    if (subA !== subB) return subA.localeCompare(subB);
+
+    // 3. Part (Part 1 -> Part 2 -> Part 3 order)
+    const partA = extractPartNum(a.partId);
+    const partB = extractPartNum(b.partId);
+    if (partA !== partB) return partA - partB;
+
+    // 4. Unit / Chapter Title (A -> Z)
+    const unitA = (a.unitTitle || '').trim().toLowerCase();
+    const unitB = (b.unitTitle || '').trim().toLowerCase();
+    if (unitA !== unitB) return unitA.localeCompare(unitB);
+
+    // 5. Day progression (Day 1, 2, 3... ascending)
+    const dayA = parseInt(a.dayNumber, 10) || 1;
+    const dayB = parseInt(b.dayNumber, 10) || 1;
+    return dayA - dayB;
+  });
+
+  // Display Cards with Class, Subject, Part, and Unit badges
+  let html = '';
+  state.savedPackages.forEach(pkg => {
+    const isLoaded = (pkg.id === state.activePackageId);
+    const coSnippet = pkg.data?.targetedCurricularObjective || 'Standard SCERT Lesson';
+    const partNum = extractPartNum(pkg.partId);
+    const partLabel = (partNum === 99) ? 'Full Book' : `Part ${partNum}`;
+
+    html += `
+      <div class="pkg-card ${isLoaded ? 'active-loaded' : ''}" data-id="${pkg.id}">
+        <div class="pkg-card-top">
+          <div style="min-width:0; flex:1;">
+            <!-- Class, Subject & Part Order Display -->
+            <div style="display:flex; align-items:center; gap:5px; flex-wrap:wrap; margin-bottom:2px;">
+              <span class="pill-qnum" style="font-size:0.62rem; padding:1px 6px;">Std ${pkg.classId}</span>
+              <span style="font-size:0.72rem; font-weight:700; color:var(--primary-dark);">🧪 ${escapeHtml(pkg.subject || 'Curriculum')}</span>
+              <span class="pill-time" style="font-size:0.62rem; padding:1px 6px;">${partLabel}</span>
             </div>
-            <div class="pkg-co-preview" title="${coSnippet}">🎯 ${coSnippet}</div>
-            <div class="pkg-actions-row">
-              <button class="btn btn-primary btn-sm btn-load-pkg" data-id="${pkg.id}">📥 Load</button>
-              <button class="btn btn-outline btn-sm btn-reset-pkg" data-id="${pkg.id}">🔄 Reset</button>
-              <button class="btn btn-outline btn-sm btn-del-pkg" data-id="${pkg.id}" style="color:#ef4444; border-color:#fca5a5;">🗑️ Delete</button>
+            
+            <!-- Unit / Chapter Title -->
+            <div style="font-size:0.76rem; font-weight:700; color:#1e293b; margin-top:2px; word-break:break-word;">
+              📖 Unit: ${escapeHtml(pkg.unitTitle)}
+            </div>
+
+            <!-- Day & Date Metadata -->
+            <div class="pkg-meta-text" style="margin-top:2px;">
+              ⏱️ Day ${pkg.dayNumber}/${pkg.totalDays} • ${pkg.dateFormatted}
             </div>
           </div>
-        `;
-      });
-      pkgArchiveList.innerHTML = html;
 
-      pkgArchiveList.querySelectorAll('.btn-load-pkg').forEach(btn => {
-        btn.addEventListener('click', (e) => loadSavedPackage(e.currentTarget.dataset.id));
-      });
+          <span class="badge-tag" style="background:${isLoaded ? '#0284c7' : '#e2e8f0'}; color:${isLoaded ? '#fff' : '#334155'}; font-size:0.6rem;">
+            ${isLoaded ? 'ACTIVE' : 'SAVED'}
+          </span>
+        </div>
 
-      pkgArchiveList.querySelectorAll('.btn-reset-pkg').forEach(btn => btn.addEventListener('click', resetWorkspace));
+        <div class="pkg-co-preview" title="${coSnippet}">🎯 ${coSnippet}</div>
 
-      pkgArchiveList.querySelectorAll('.btn-del-pkg').forEach(btn => {
-        btn.addEventListener('click', async (e) => {
-          const id = e.currentTarget.dataset.id;
-          if (!confirm("Delete this daily lesson package from database?")) return;
-          await idb.deletePackage(id);
-          if (db) {
-            try { await deleteDoc(doc(db, 'saved_packages', id)); } catch (err) {}
-          }
-          if (state.activePackageId === id) resetWorkspace();
-          refreshPackageArchiveUI();
-          showToast("Package deleted.");
-        });
-      });
-    }
+        <div class="pkg-actions-row">
+          <button class="btn btn-primary btn-sm btn-load-pkg" data-id="${pkg.id}">📥 Load</button>
+          <button class="btn btn-outline btn-sm btn-reset-pkg" data-id="${pkg.id}">🔄 Reset</button>
+          <button class="btn btn-outline btn-sm btn-del-pkg" data-id="${pkg.id}" style="color:#ef4444; border-color:#fca5a5;">🗑️ Delete</button>
+        </div>
+      </div>
+    `;
+  });
+  pkgArchiveList.innerHTML = html;
+
+  // Re-attach action handlers
+  pkgArchiveList.querySelectorAll('.btn-load-pkg').forEach(btn => {
+    btn.addEventListener('click', (e) => loadSavedPackage(e.currentTarget.dataset.id));
+  });
+
+  pkgArchiveList.querySelectorAll('.btn-reset-pkg').forEach(btn => btn.addEventListener('click', resetWorkspace));
+
+  pkgArchiveList.querySelectorAll('.btn-del-pkg').forEach(btn => {
+    btn.addEventListener('click', async (e) => {
+      const id = e.currentTarget.dataset.id;
+      if (!confirm("Delete this package from local memory and cloud database?")) return;
+      await idb.deletePackage(id);
+      if (db) {
+        try { await deleteDoc(doc(db, 'saved_packages', id)); } catch (err) {}
+      }
+      if (state.activePackageId === id) resetWorkspace();
+      refreshPackageArchiveUI();
+      showToast("Package deleted.");
+    });
+  });
+}
 
     // =========================================================================
     // STEP 2: PACKAGE GENERATION (PARALLEL PROMISE.ALL PREVENTS 400MS LOOP TIMEOUT)
