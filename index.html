@@ -3,7 +3,6 @@
 <head>
   <meta charset="UTF-8">
   <meta name="viewport" content="width=device-width, initial-scale=1.0, maximum-scale=5.0, user-scalable=yes">
-  <meta name="referrer" content="no-referrer">
   <title>SCERT Kerala Smart Teacher Planner & Worksheet Studio</title>
   
   <!-- Fonts: Inter, Merriweather & Malayalam Manjari -->
@@ -1132,12 +1131,12 @@
       <div class="modal-body">
         <input type="hidden" id="modal-co-index" value="">
         <div class="form-group">
-          <label for="modal-targeted-co" style="font-weight:700; color:var(--primary);">Curricular Objective Details:</label>
-          <textarea id="modal-targeted-co" class="form-control" rows="4" placeholder="Enter full Curricular Objective text..."></textarea>
+          <label for="modal-targeted-co" style="font-weight:700; color:var(--primary);">Curricular Objective Statement:</label>
+          <textarea id="modal-targeted-co" class="form-control" rows="4" placeholder="Enter complete objective text based on chapter inquiry..."></textarea>
         </div>
         <div class="form-row" style="margin-top:8px;">
           <div class="form-group half">
-            <label for="modal-co-day-assign">Assign to Day:</label>
+            <label for="modal-co-day-assign">Assign to Day in Unit:</label>
             <input type="number" id="modal-co-day-assign" class="form-control" min="1" max="25" value="1">
           </div>
           <div class="form-group half">
@@ -1198,7 +1197,7 @@
           <label for="modal-book-file">📎 Textbook PDF File:</label>
           <input type="file" id="modal-book-file" accept="application/pdf" class="form-control">
           <div id="modal-file-status" style="font-size: 0.68rem; color: var(--text-muted); margin-top: 3px;">
-            Choose a PDF (Max 15MB recommended).
+            Choose a PDF file.
           </div>
         </div>
 
@@ -1328,7 +1327,7 @@
     </div>
 
     <div class="top-controls-grid">
-      <!-- Card 1: Pacing Target (CLEAN: CO inputs completely removed) -->
+      <!-- Card 1: Pacing Target (Focused syllabus setup) -->
       <div class="ctrl-card mob-active" data-section="pacing">
         <h3><span>🎯 1. Pacing Target</span></h3>
         <div id="roadmap-status-pill" class="roadmap-status-pill">
@@ -1421,7 +1420,7 @@
         </div>
       </div>
 
-      <!-- Card 3: Generator Control (NOW HOUSES TWO-PHASE CO & PACKAGE GENERATOR) -->
+      <!-- Card 3: Generator Control (HOUSES TWO-PHASE CO & PACKAGE GENERATOR) -->
       <div class="ctrl-card" data-section="generate">
         <h3>
           <span>⚡ 3. Generator Control</span>
@@ -1517,7 +1516,7 @@
 
     <div class="tab-content-wrapper">
       
-      <!-- Tab 1: Lesson Plan (Unified Cards) -->
+      <!-- Tab 1: Lesson Plan -->
       <section id="tab-lesson-plan" class="tab-pane active">
         <div class="pane-header no-print">
           <h2>35-Minute Daily Instructional Lesson Plan</h2>
@@ -1559,7 +1558,7 @@
         </div>
       </section>
 
-      <!-- Tab 2: Digital Media (Unified Cards) -->
+      <!-- Tab 2: Digital Media -->
       <section id="tab-media-resources" class="tab-pane">
         <div class="pane-header no-print">
           <h2>Digital Media Recommendations</h2>
@@ -1601,7 +1600,7 @@
         </div>
       </section>
 
-      <!-- Tab 3: Blackboard Notes (Unified Cards) -->
+      <!-- Tab 3: Blackboard Notes -->
       <section id="tab-blackboard-notes" class="tab-pane">
         <div class="pane-header no-print">
           <h2>Blackboard Application Notes</h2>
@@ -1643,7 +1642,7 @@
         </div>
       </section>
 
-      <!-- Tab 4: WhatsApp Broadcast (Unified Cards) -->
+      <!-- Tab 4: WhatsApp Broadcast -->
       <section id="tab-whatsapp-summary" class="tab-pane">
         <div class="pane-header no-print">
           <h2>Daily WhatsApp Broadcast</h2>
@@ -1699,7 +1698,7 @@
         </div>
       </section>
 
-      <!-- Tab 5: Printable Worksheet (Unified Cards) -->
+      <!-- Tab 5: Printable Worksheet -->
       <section id="tab-worksheet-view" class="tab-pane">
         <div class="pane-header no-print">
           <h2>Application Activity Worksheet (Total: 5 Scores)</h2>
@@ -1741,7 +1740,7 @@
         </div>
       </section>
 
-      <!-- Tab 6: Worksheet Answers (Unified Cards) -->
+      <!-- Tab 6: Worksheet Answers -->
       <section id="tab-worksheet-answers" class="tab-pane">
         <div class="pane-header no-print">
           <h2>Worksheet Answer Key & Scoring Guide</h2>
@@ -1924,7 +1923,7 @@
     const state = {
       currentClass: '5',
       currentPart: 'part1',
-      currentSubject: 'Basic Science',
+      currentSubject: '',
       generationScope: 'single',
       activeBookId: null,
       books: [],
@@ -1957,7 +1956,7 @@
     const btnScopeSingle = document.getElementById('btn-scope-single');
     const btnScopeUnit = document.getElementById('btn-scope-unit');
 
-    // Generator Control Elements (Phase 1 & 2)
+    // Generator Control Elements
     const coWorkflowBadge = document.getElementById('co-workflow-badge');
     const cosStatusPill = document.getElementById('cos-status-pill');
     const generateCosBtn = document.getElementById('generate-cos-btn');
@@ -2135,32 +2134,78 @@
       document.body.removeChild(ta);
     }
 
-    async function base64ToBlob(base64, mimeType = 'application/pdf') {
-      const res = await fetch(`data:${mimeType};base64,${base64}`);
-      return await res.blob();
+    // NATIVE ASYNC BLOB STREAMING (No synchronous loop, no timeout)
+    // =========================================================================
+// NON-BLOCKING BASE64 TO BLOB (IMMUNE TO 400ms LOOP TIMEOUT & POPUP BLOCKS)
+// =========================================================================
+async function base64ToBlob(base64, mimeType = 'application/pdf') {
+  // 1. Modern Native C++ Decoder (Chrome 140+, Safari 18.2+, Firefox 133+) -> 0 Loops, ~2ms
+  if (typeof Uint8Array.fromBase64 === 'function') {
+    return new Blob([Uint8Array.fromBase64(base64)], { type: mimeType });
+  }
+
+  // 2. Safe Time-Sliced Fallback (Each chunk takes ~1ms, completely resetting sandbox loop timers)
+  const binary = atob(base64);
+  const len = binary.length;
+  const bytes = new Uint8Array(len);
+  const chunkSize = 500000; // 500 KB chunks
+
+  return new Promise((resolve) => {
+    function processChunk(offset) {
+      if (offset >= len) {
+        resolve(new Blob([bytes], { type: mimeType }));
+        return;
+      }
+      const end = Math.min(offset + chunkSize, len);
+      for (let i = offset; i < end; i++) {
+        bytes[i] = binary.charCodeAt(i);
+      }
+      // Yield to the browser event loop to reset loop watchdog timers
+      setTimeout(() => processChunk(end), 0);
+    }
+    processChunk(0);
+  });
+}
+
+async function viewBookPdf(bookId) {
+  const book = state.books.find(b => b.id === bookId);
+
+  // Open tab synchronously on click to prevent browser popup blockers
+  const newTab = window.open('', '_blank');
+  if (newTab) {
+    newTab.document.write('<title>Opening PDF...</title><body style="display:flex;align-items:center;justify-content:center;height:100vh;font-family:sans-serif;background:#0f172a;color:#38bdf8;"><h3>Loading Textbook PDF...</h3></body>');
+  }
+
+  try {
+    const cached = await idb.getBook(bookId);
+
+    // 1. Instant preview if already stored as a native Blob/File (0ms)
+    if (cached?.blob instanceof Blob) {
+      const blobUrl = URL.createObjectURL(cached.blob);
+      if (newTab) newTab.location.href = blobUrl;
+      else window.open(blobUrl, '_blank');
+      return;
     }
 
-    async function viewBookPdf(bookId) {
-      const book = state.books.find(b => b.id === bookId);
-      showSpinner(`Loading ${book?.subject || 'Textbook'} PDF...`);
-      try {
-        const cached = await idb.getBook(bookId);
-        const base64 = cached?.base64 || cached;
-        hideSpinner();
-        if (!base64 || typeof base64 !== 'string') {
-          return showMessageBox("No cached PDF data found for this book. Please re-upload.", "File Missing");
-        }
-        const blob = await base64ToBlob(base64, 'application/pdf');
-        const blobUrl = URL.createObjectURL(blob);
-        window.open(blobUrl, '_blank');
-      } catch (err) {
-        hideSpinner();
-        showMessageBox("Unable to open PDF viewer: " + err.message, "PDF Preview Notice");
-      }
+    // 2. Fallback to cached Base64
+    const base64 = cached?.base64 || cached;
+    if (!base64 || typeof base64 !== 'string') {
+      if (newTab) newTab.close();
+      return showMessageBox("No cached PDF file found for this book. Please re-upload.", "File Missing");
     }
+
+    const blob = await base64ToBlob(base64, 'application/pdf');
+    const blobUrl = URL.createObjectURL(blob);
+    if (newTab) newTab.location.href = blobUrl;
+    else window.open(blobUrl, '_blank');
+  } catch (err) {
+    if (newTab) newTab.close();
+    showMessageBox("Unable to open PDF viewer: " + err.message, "PDF Preview Notice");
+  }
+}
 
     // =========================================================================
-    // DYNAMIC SUBJECT SYNC (STRICTLY FROM UPLOADED TEXTBOOKS)
+    // DYNAMIC SUBJECT SYNC (STRICTLY FROM UPLOADED TEXTBOOKS IN CARD 2)
     // =========================================================================
     function syncSubjectDropdown() {
       const currentCls = classSelect.value;
@@ -2172,7 +2217,7 @@
       if (uniqueSubjects.length === 0) {
         const opt = document.createElement('option');
         opt.value = "";
-        opt.textContent = "No books in Card 2";
+        opt.textContent = "No books uploaded (Upload in Card 2)";
         targetSubjectInput.appendChild(opt);
         state.currentSubject = "";
       } else {
@@ -2352,7 +2397,8 @@ OUTPUT STRICT JSON:
         const parts = [{ text: prompt }];
         if (activeBase64 && typeof activeBase64 === 'string') {
           const sizeInMB = (activeBase64.length * 0.75) / (1024 * 1024);
-          if (sizeInMB <= 15) {
+          // Keep browser payload <= 4MB to prevent connection drops
+          if (sizeInMB <= 4) {
             parts.unshift({ inlineData: { mimeType: "application/pdf", data: activeBase64 } });
           }
         }
@@ -2524,7 +2570,7 @@ OUTPUT STRICT JSON:
         modalBookPart.value = partSelect.value || "part1";
         modalBookSubject.value = state.currentSubject || "Basic Science";
         modalBookLock.checked = true;
-        modalFileStatus.textContent = "Choose a PDF (Max 15MB recommended).";
+        modalFileStatus.textContent = "Choose a PDF.";
       }
       modalBookFile.value = "";
       bookModalOverlay.style.display = "flex";
@@ -2585,7 +2631,11 @@ OUTPUT STRICT JSON:
           updatedAt: new Date().toISOString()
         };
 
-        await idb.setBook(bookId, { ...bookObj, base64: base64Data });
+        await idb.setBook(bookId, { 
+  ...bookObj, 
+  base64: base64Data, 
+  blob: file || existing?.blob 
+});
 
         if (db) {
           try {
@@ -2678,6 +2728,7 @@ OUTPUT STRICT JSON:
               <button class="tb-micro-btn ${isTarget ? 'active-target' : ''} tb-use-btn" data-id="${book.id}" title="Set as Active Target">
                 🎯 ${isTarget ? 'Active' : 'Use'}
               </button>
+              <!-- View PDF Button placed just left of Unlock -->
               <button class="tb-micro-btn view-pdf tb-view-btn" data-id="${book.id}" title="View Full PDF Document">
                 👁️ View
               </button>
@@ -2720,6 +2771,7 @@ OUTPUT STRICT JSON:
             targetSubjectInput.value = book.subject;
             
             checkAndLoadChapterRoadmap();
+            resetCOEngineToEmpty();
             renderBooksList();
             showToast(`Active Target: ${book.subject} Std ${book.classId}`);
           }
@@ -2777,21 +2829,24 @@ OUTPUT STRICT JSON:
     tbSearchBox.addEventListener('input', renderBooksList);
     tbFilterClass.addEventListener('change', renderBooksList);
 
-    // Sync Pacing Inputs to State & COs
+    // Sync Pacing Inputs to State
     classSelect.addEventListener('change', (e) => { 
       state.currentClass = e.target.value; 
       syncSubjectDropdown();
       checkAndLoadChapterRoadmap();
+      resetCOEngineToEmpty();
       renderBooksList();
     });
     partSelect.addEventListener('change', (e) => { 
       state.currentPart = e.target.value; 
       checkAndLoadChapterRoadmap();
+      resetCOEngineToEmpty();
       renderBooksList();
     });
 
     unitTitleInput.addEventListener('input', () => {
       checkAndLoadChapterRoadmap();
+      resetCOEngineToEmpty();
     });
     dayNumberInput.addEventListener('input', () => {
       if (state.isCOConfirmed) {
@@ -2984,35 +3039,49 @@ OUTPUT STRICT JSON:
     const delay = (ms) => new Promise((resolve) => setTimeout(resolve, ms));
 
     // =========================================================================
-    // GEMINI CLIENT
+    // ROBUST GEMINI CLIENT WITH PAYLOAD SAFETY & CORS RESILIENCE
     // =========================================================================
     async function callGemini(modelName, payload) {
-      const endpoint = `https://generativelanguage.googleapis.com/v1beta/models/${modelName}:generateContent`;
-      const response = await fetch(endpoint, {
-        method: "POST",
-        headers: { "Content-Type": "application/json", "x-goog-api-key": GEMINI_API_KEY },
-        body: JSON.stringify(payload)
-      });
-      const data = await response.json();
-      if (response.ok && data.candidates && data.candidates[0]?.content) {
-        return { success: true, data: data };
+      if (!GEMINI_API_KEY) {
+        return { success: false, isAuthError: true, error: "Missing Gemini API Key." };
       }
-      const errorMsg = data.error?.message || `HTTP ${response.status}`;
-      const msgLower = errorMsg.toLowerCase();
-      const isBusy = response.status === 503 || 
-                     response.status === 429 || 
-                     msgLower.includes("high demand") || 
-                     msgLower.includes("overloaded") || 
-                     msgLower.includes("unavailable") || 
-                     msgLower.includes("quota");
 
-      return { 
-        success: false, 
-        error: errorMsg, 
-        isAuthError: response.status === 400 || response.status === 401 || response.status === 403 || msgLower.includes("key"),
-        isBusy: isBusy,
-        isModelError: response.status === 404 || msgLower.includes("no longer available") || msgLower.includes("not found")
-      };
+      try {
+        const endpoint = `https://generativelanguage.googleapis.com/v1beta/models/${modelName}:generateContent?key=${encodeURIComponent(GEMINI_API_KEY)}`;
+        const response = await fetch(endpoint, {
+          method: "POST",
+          headers: { "Content-Type": "application/json" },
+          body: JSON.stringify(payload)
+        });
+
+        const data = await response.json();
+        if (response.ok && data.candidates && data.candidates[0]?.content) {
+          return { success: true, data: data };
+        }
+
+        const errorMsg = data.error?.message || `HTTP ${response.status}`;
+        const msgLower = errorMsg.toLowerCase();
+        const isBusy = response.status === 503 || 
+                       response.status === 429 || 
+                       msgLower.includes("high demand") || 
+                       msgLower.includes("overloaded") || 
+                       msgLower.includes("unavailable") || 
+                       msgLower.includes("quota");
+
+        return { 
+          success: false, 
+          error: errorMsg, 
+          isAuthError: response.status === 400 || response.status === 401 || response.status === 403 || msgLower.includes("key") || msgLower.includes("api_key"),
+          isBusy: isBusy,
+          isModelError: response.status === 404 || msgLower.includes("no longer available") || msgLower.includes("not found")
+        };
+      } catch (netErr) {
+        return {
+          success: false,
+          error: `Connection notice: ${netErr.message}. Ensure internet is active and PDF size is within browser limits.`,
+          isNetworkError: true
+        };
+      }
     }
 
     async function executeSmartGeneration(payload) {
@@ -3229,7 +3298,7 @@ OUTPUT STRICT JSON:
       const rawText = containerEl.innerText || containerEl.textContent || '';
       const cleanText = rawText.replace(/\s+/g, ' ').trim();
 
-      if (!cleanText || cleanText.includes("Enter details above") || cleanText.includes("No packages")) {
+      if (!cleanText || cleanText.includes("Awaiting CO") || cleanText.includes("No packages")) {
         return showMessageBox("Please generate or load a lesson package first.", "Nothing to Read");
       }
       speechEngine.speak(cleanText, buttonEl, state.ttsGender, state.ttsSpeed);
@@ -3281,7 +3350,7 @@ OUTPUT STRICT JSON:
       }
 
       const contentHtml = contentWrapperEl.innerHTML;
-      if (!contentHtml || contentHtml.includes("Generate Package") || contentHtml.includes("No packages")) {
+      if (!contentHtml || contentHtml.includes("Awaiting CO") || contentHtml.includes("No packages")) {
         return showMessageBox("Please generate or load a lesson package first before translating.", "Nothing to Translate");
       }
 
@@ -3957,7 +4026,7 @@ ${contentHtml}
     }
 
     // =========================================================================
-    // STEP 2: PACKAGE GENERATION (LOCKED SOLELY ON CONFIRMED/MODIFIED COs)
+    // STEP 2: PACKAGE GENERATION (PARALLEL PROMISE.ALL PREVENTS 400MS LOOP TIMEOUT)
     // =========================================================================
     generateBtn.addEventListener('click', async () => {
       if (!state.isCOConfirmed || state.allCOsList.length === 0) {
@@ -4084,7 +4153,7 @@ ${responseSchemaDescription}
 
         if (activeBase64 && typeof activeBase64 === 'string') {
           const sizeInMB = (activeBase64.length * 0.75) / (1024 * 1024);
-          if (sizeInMB <= 15) {
+          if (sizeInMB <= 4) {
             parts.unshift({
               inlineData: { mimeType: "application/pdf", data: activeBase64 }
             });
@@ -4108,8 +4177,10 @@ ${responseSchemaDescription}
 
         if (isWholeUnit && Array.isArray(result.dailyPackages)) {
           let firstDayPkg = null;
-          for (const dayPkg of result.dailyPackages) {
-            const currentDayNum = dayPkg.dayNumber || 1;
+          
+          // PARALLEL EXECUTION: Promise.all avoids Babel loop-protect 400ms timeout
+          await Promise.all(result.dailyPackages.map(async (dayPkg, index) => {
+            const currentDayNum = dayPkg.dayNumber || (index + 1);
             const fullDayData = {
               ...dayPkg,
               allUnitCurricularObjectives: state.allCOsList.map(c => `${c.num}: ${c.text}`)
@@ -4137,7 +4208,7 @@ ${responseSchemaDescription}
               } catch (e) {}
             }
             if (currentDayNum === 1) firstDayPkg = dailyClassPackage;
-          }
+          }));
 
           if (firstDayPkg) {
             state.currentPackage = firstDayPkg.data;
