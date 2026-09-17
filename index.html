@@ -3,9 +3,8 @@
 <head>
   <meta charset="UTF-8">
   <meta name="viewport" content="width=device-width, initial-scale=1.0, maximum-scale=5.0, user-scalable=yes">
-  <!-- Required for authentic Malayalam streaming audio without referrer blocks -->
   <meta name="referrer" content="no-referrer">
-  <title>TDTTI THURAVOOR Smart Teacher Planner & Worksheet Studio</title>
+  <title>SCERT Kerala Smart Teacher Planner & Worksheet Studio</title>
   
   <!-- Fonts: Inter, Merriweather & Malayalam Manjari -->
   <link rel="preconnect" href="https://fonts.googleapis.com">
@@ -14,33 +13,49 @@
 
   <style>
     /* ==========================================================================
-       1. FLUID MINIMALIST DESIGN SYSTEM
+       1. GLASSMORPHISM WITH ACCENT BLUE & WHITE COMBINATIONS
        ========================================================================== */
     :root {
-      --primary: #1b5e20;
-      --primary-hover: #144718;
-      --primary-light: #e8f5e9;
+      --primary: #0284c7;
+      --primary-hover: #0369a1;
+      --primary-dark: #075985;
+      --primary-light: rgba(2, 132, 199, 0.12);
+      --accent: #38bdf8;
+      --accent-soft: #e0f2fe;
       --secondary: #334155;
-      --border: #e2e8f0;
-      --bg: #f8fafc;
-      --surface: #ffffff;
+      
+      /* Frosted Glass Tokens */
+      --glass-bg: rgba(255, 255, 255, 0.75);
+      --glass-bg-subtle: rgba(255, 255, 255, 0.55);
+      --glass-bg-card: rgba(255, 255, 255, 0.88);
+      --glass-border: rgba(255, 255, 255, 0.85);
+      --glass-border-blue: rgba(56, 189, 248, 0.45);
+      --glass-blur: blur(16px);
+      --glass-shadow: 0 8px 32px 0 rgba(2, 132, 199, 0.08);
+      --glass-glow: inset 0 1px 1px 0 rgba(255, 255, 255, 0.95);
+
+      --border: rgba(203, 213, 225, 0.65);
       --text: #0f172a;
       --text-muted: #64748b;
-      --accent: #f59e0b;
-      --success: #16a34a;
+      --success: #10b981;
       --error: #ef4444;
       --media-blue: #0284c7;
       --whatsapp-green: #25d366;
-      --whatsapp-bg: #efeae2;
-      --whatsapp-bubble: #d9fdd3;
-      --header-height: 52px;
+      --header-height: 54px;
     }
 
     * { box-sizing: border-box; margin: 0; padding: 0; }
     html { -webkit-text-size-adjust: 100%; scroll-behavior: smooth; }
+    
     body {
       font-family: 'Inter', -apple-system, BlinkMacSystemFont, "Segoe UI", Roboto, sans-serif;
-      background: var(--bg);
+      background: 
+        radial-gradient(at 0% 0%, #e0f2fe 0px, transparent 50%),
+        radial-gradient(at 100% 0%, #eff6ff 0px, transparent 50%),
+        radial-gradient(at 50% 100%, #dbeafe 0px, transparent 50%),
+        radial-gradient(at 100% 100%, #f0fdf4 0px, transparent 40%),
+        #f8fafc;
+      background-attachment: fixed;
       color: var(--text);
       min-height: 100vh;
       display: flex;
@@ -53,96 +68,112 @@
     .malayalam-font { font-family: 'Manjari', 'Inter', sans-serif !important; }
 
     /* ==========================================================================
-       2. RESPONSIVE HEADER
+       2. GLASSMORPHIC HEADER
        ========================================================================== */
     header.app-header {
-      background: var(--primary);
+      background: linear-gradient(135deg, rgba(2, 132, 199, 0.88), rgba(3, 105, 161, 0.92));
+      backdrop-filter: var(--glass-blur);
+      -webkit-backdrop-filter: var(--glass-blur);
       color: #fff;
       padding: 8px 14px;
       display: flex;
       justify-content: space-between;
       align-items: center;
-      box-shadow: 0 1px 3px rgba(0,0,0,0.12);
+      border-bottom: 1px solid rgba(255, 255, 255, 0.3);
+      box-shadow: 0 4px 20px rgba(2, 132, 199, 0.15);
       position: sticky;
       top: 0;
       z-index: 1000;
       min-height: var(--header-height);
     }
-    .header-brand { display: flex; align-items: center; gap: 8px; min-width: 0; }
+    .header-brand { display: flex; align-items: center; gap: 9px; min-width: 0; }
     .brand-icon {
-      width: 32px; height: 32px;
-      background: rgba(255,255,255,0.2);
-      border-radius: 6px;
+      width: 34px; height: 34px;
+      background: rgba(255, 255, 255, 0.22);
+      border: 1px solid rgba(255, 255, 255, 0.4);
+      border-radius: 8px;
       display: flex; align-items: center; justify-content: center;
-      font-size: 1.15rem;
+      font-size: 1.2rem;
       flex-shrink: 0;
+      box-shadow: var(--glass-glow);
     }
     .header-titles { display: flex; align-items: baseline; gap: 6px; min-width: 0; }
     .header-brand h1 {
-      font-size: 0.94rem; font-weight: 700;
+      font-size: 0.96rem; font-weight: 700;
       letter-spacing: -0.01em;
       white-space: nowrap; overflow: hidden; text-overflow: ellipsis;
+      text-shadow: 0 1px 2px rgba(0,0,0,0.1);
     }
     .badge-tag {
-      background: var(--accent);
-      color: #000;
+      background: #ffffff;
+      color: var(--primary-dark);
       font-size: 0.62rem;
-      font-weight: 700;
-      padding: 2px 5px;
-      border-radius: 4px;
+      font-weight: 800;
+      padding: 2px 6px;
+      border-radius: 5px;
       text-transform: uppercase;
       flex-shrink: 0;
+      box-shadow: 0 2px 6px rgba(0,0,0,0.08);
     }
     .header-controls { display: flex; align-items: center; gap: 6px; flex-shrink: 0; }
 
     .btn-header {
-      background: rgba(255, 255, 255, 0.16);
+      background: rgba(255, 255, 255, 0.2);
       color: #fff;
-      border: 1px solid rgba(255, 255, 255, 0.35);
-      padding: 6px 10px;
-      border-radius: 5px;
+      border: 1px solid rgba(255, 255, 255, 0.45);
+      backdrop-filter: blur(8px);
+      padding: 6px 11px;
+      border-radius: 6px;
       font-size: 0.76rem;
       font-weight: 600;
       cursor: pointer;
       display: inline-flex;
       align-items: center;
-      gap: 4px;
+      gap: 5px;
       white-space: nowrap;
-      transition: background 0.15s;
+      transition: all 0.2s ease;
+      box-shadow: var(--glass-glow);
     }
-    .btn-header:hover { background: rgba(255, 255, 255, 0.28); }
+    .btn-header:hover {
+      background: rgba(255, 255, 255, 0.32);
+      border-color: #fff;
+      transform: translateY(-1px);
+    }
 
     /* ==========================================================================
-       3. TOP DRAWER (MOBILE SEGMENTED VIEW & DESKTOP GRID)
+       3. TOP DRAWER & CONTROLS
        ========================================================================== */
     .top-controls-panel {
-      background: var(--surface);
-      border-bottom: 1px solid var(--border);
+      background: var(--glass-bg);
+      backdrop-filter: var(--glass-blur);
+      -webkit-backdrop-filter: var(--glass-blur);
+      border-bottom: 1px solid var(--glass-border);
       padding: 12px 14px;
-      transition: all 0.22s ease-in-out;
-      box-shadow: 0 4px 10px rgba(0,0,0,0.03);
+      box-shadow: var(--glass-shadow);
       width: 100%;
+      transition: all 0.25s ease-in-out;
     }
     .top-controls-panel.collapsed { display: none !important; }
 
     .mobile-drawer-nav {
       display: none;
-      gap: 4px;
+      gap: 5px;
       overflow-x: auto;
       padding-bottom: 8px;
       margin-bottom: 8px;
-      border-bottom: 1px solid var(--border);
+      border-bottom: 1px solid rgba(226, 232, 240, 0.7);
       -webkit-overflow-scrolling: touch;
       scrollbar-width: none;
     }
     .mobile-drawer-nav::-webkit-scrollbar { display: none; }
     .mob-tab-btn {
       flex: 1;
-      padding: 6px 8px;
-      border: 1px solid var(--border);
-      background: #f8fafc;
-      border-radius: 5px;
-      font-size: 0.72rem;
+      padding: 7px 10px;
+      border: 1px solid var(--glass-border);
+      background: rgba(255, 255, 255, 0.7);
+      backdrop-filter: blur(8px);
+      border-radius: 6px;
+      font-size: 0.74rem;
       font-weight: 600;
       color: var(--secondary);
       white-space: nowrap;
@@ -150,30 +181,34 @@
       display: inline-flex;
       align-items: center;
       justify-content: center;
-      gap: 4px;
+      gap: 5px;
+      box-shadow: 0 2px 6px rgba(0,0,0,0.02);
     }
     .mob-tab-btn.active {
-      background: var(--primary-light);
+      background: #ffffff;
       border-color: var(--primary);
       color: var(--primary);
+      box-shadow: 0 3px 10px rgba(2, 132, 199, 0.15);
     }
     .pill-mini {
-      background: rgba(0,0,0,0.08);
-      padding: 1px 4px;
+      background: var(--accent-soft);
+      color: var(--primary);
+      padding: 1px 5px;
       border-radius: 8px;
       font-size: 0.65rem;
+      font-weight: 700;
     }
 
     .top-controls-grid {
       display: grid;
-      grid-template-columns: 1.2fr 1.35fr 0.95fr 1.1fr;
+      grid-template-columns: 1.05fr 1.15fr 1.45fr 1.05fr;
       gap: 12px;
       align-items: stretch;
-      max-width: 1520px;
+      max-width: 1600px;
       margin: 0 auto;
       width: 100%;
     }
-    @media (max-width: 1100px) {
+    @media (max-width: 1200px) {
       .top-controls-grid { grid-template-columns: 1fr 1fr; }
     }
     @media (max-width: 640px) {
@@ -188,20 +223,23 @@
     }
 
     .ctrl-card {
-      background: #f8fafc;
-      border: 1px solid var(--border);
-      border-radius: 6px;
-      padding: 10px 12px;
+      background: var(--glass-bg-card);
+      backdrop-filter: var(--glass-blur);
+      -webkit-backdrop-filter: var(--glass-blur);
+      border: 1px solid var(--glass-border);
+      border-radius: 10px;
+      padding: 11px 13px;
       flex-direction: column;
       justify-content: space-between;
       min-width: 0;
+      box-shadow: var(--glass-shadow), var(--glass-glow);
     }
     .ctrl-card h3 {
-      font-size: 0.78rem;
+      font-size: 0.8rem;
       font-weight: 700;
-      color: var(--secondary);
-      border-bottom: 1px solid #e2e8f0;
-      padding-bottom: 5px;
+      color: var(--primary-dark);
+      border-bottom: 1px solid rgba(226, 232, 240, 0.8);
+      padding-bottom: 6px;
       margin-bottom: 8px;
       display: flex;
       justify-content: space-between;
@@ -218,158 +256,269 @@
     }
     .form-control {
       width: 100%;
-      padding: 6px 8px;
-      border: 1px solid var(--border);
-      border-radius: 4px;
+      padding: 6px 9px;
+      border: 1px solid rgba(203, 213, 225, 0.8);
+      border-radius: 6px;
       font-size: 0.8rem;
-      background: #fff;
+      background: rgba(255, 255, 255, 0.9);
+      backdrop-filter: blur(6px);
       color: var(--text);
+      transition: all 0.15s ease;
     }
-    .form-control:focus { outline: none; border-color: var(--primary); }
+    .form-control:focus {
+      outline: none;
+      border-color: var(--primary);
+      background: #ffffff;
+      box-shadow: 0 0 0 3px rgba(2, 132, 199, 0.15);
+    }
     .form-row { display: flex; gap: 6px; }
     .form-row .half { flex: 1; min-width: 0; }
-    .radio-toggle { display: flex; gap: 10px; font-size: 0.76rem; font-weight: 500; }
 
-    .pacing-mode-box {
-      background: #f1f5f9;
-      border: 1px solid #cbd5e1;
-      padding: 5px 8px;
-      border-radius: 4px;
-      margin-bottom: 6px;
-      font-size: 0.74rem;
-    }
-    .pacing-mode-box label {
-      cursor: pointer;
+    /* Segmented Switcher */
+    .segmented-pacing-switch {
       display: flex;
+      background: rgba(224, 242, 254, 0.85);
+      border: 1px solid rgba(186, 230, 253, 0.9);
+      padding: 3px;
+      border-radius: 8px;
+      margin-bottom: 8px;
+      gap: 4px;
+    }
+    .seg-btn {
+      flex: 1;
+      display: inline-flex;
       align-items: center;
+      justify-content: center;
       gap: 5px;
-      margin-bottom: 3px;
+      padding: 6px 8px;
+      border: none;
+      background: transparent;
+      color: var(--secondary);
+      font-size: 0.72rem;
       font-weight: 600;
+      border-radius: 6px;
+      cursor: pointer;
+      transition: all 0.2s ease;
+      white-space: nowrap;
+    }
+    .seg-btn.active {
+      background: #ffffff;
+      color: var(--primary-dark);
+      box-shadow: 0 2px 8px rgba(2, 132, 199, 0.18);
     }
 
     .roadmap-status-pill {
-      background: #e0f2fe;
-      border: 1px solid #bae6fd;
-      color: #0369a1;
+      background: rgba(224, 242, 254, 0.9);
+      border: 1px solid rgba(186, 230, 253, 0.9);
+      color: var(--primary-dark);
       font-size: 0.68rem;
-      font-weight: 600;
-      padding: 4px 6px;
-      border-radius: 4px;
+      font-weight: 700;
+      padding: 4px 7px;
+      border-radius: 6px;
       margin-bottom: 6px;
       display: none;
       align-items: center;
       justify-content: space-between;
     }
 
-    /* Textbook Library Toolbar */
+    /* Generator Control: Interactive CO Engine Layout */
+    .generator-step-box {
+      background: rgba(240, 249, 255, 0.7);
+      border: 1px solid rgba(186, 230, 253, 0.85);
+      border-radius: 8px;
+      padding: 8px;
+      margin-bottom: 8px;
+      display: flex;
+      flex-direction: column;
+      gap: 6px;
+    }
+    .generator-step-title {
+      display: flex;
+      justify-content: space-between;
+      align-items: center;
+      font-size: 0.74rem;
+      font-weight: 700;
+      color: var(--primary-dark);
+    }
+    .co-separate-scroll {
+      display: flex;
+      flex-direction: column;
+      gap: 5px;
+      max-height: 140px;
+      overflow-y: auto;
+      padding-right: 2px;
+    }
+    .co-item-card {
+      background: rgba(255, 255, 255, 0.95);
+      border: 1px solid rgba(226, 232, 240, 0.95);
+      border-radius: 6px;
+      padding: 5px 8px;
+      display: flex;
+      flex-direction: column;
+      gap: 2px;
+      transition: all 0.15s;
+    }
+    .co-item-card.active-period-co {
+      border: 1.5px solid var(--primary);
+      background: rgba(240, 249, 255, 0.95);
+    }
+    .co-item-top {
+      display: flex;
+      justify-content: space-between;
+      align-items: center;
+      gap: 4px;
+    }
+    .co-item-badge-group { display: flex; align-items: center; gap: 4px; }
+    .co-badge-num {
+      background: var(--primary-dark);
+      color: #fff;
+      font-weight: 700;
+      font-size: 0.62rem;
+      padding: 1px 5px;
+      border-radius: 4px;
+    }
+    .co-day-tag {
+      background: #e0f2fe;
+      color: #0369a1;
+      font-size: 0.62rem;
+      font-weight: 600;
+      padding: 1px 5px;
+      border-radius: 4px;
+    }
+    .co-item-actions { display: flex; gap: 3px; align-items: center; }
+    .co-act-btn {
+      background: #f1f5f9;
+      border: 1px solid #cbd5e1;
+      border-radius: 3px;
+      padding: 2px 5px;
+      font-size: 0.64rem;
+      cursor: pointer;
+      font-weight: 600;
+    }
+    .co-act-btn:hover { background: #e2e8f0; }
+    .co-act-btn.del { color: #dc2626; border-color: #fca5a5; }
+    .co-item-text {
+      font-size: 0.71rem;
+      color: #1e293b;
+      line-height: 1.35;
+      word-break: break-word;
+    }
+
+    /* Textbook Compact List */
     .tb-library-toolbar {
       display: flex;
       gap: 5px;
       margin-bottom: 6px;
       align-items: center;
-      flex-wrap: wrap;
     }
     .tb-search-input {
       flex: 1;
-      min-width: 100px;
-      padding: 4px 7px;
+      min-width: 0;
+      padding: 5px 8px;
       font-size: 0.72rem;
-      border: 1px solid var(--border);
-      border-radius: 4px;
+      border: 1px solid rgba(203, 213, 225, 0.8);
+      border-radius: 6px;
+      background: rgba(255, 255, 255, 0.95);
     }
     .tb-filter-select {
-      padding: 4px 5px;
+      padding: 5px 6px;
       font-size: 0.72rem;
-      border: 1px solid var(--border);
-      border-radius: 4px;
+      border: 1px solid rgba(203, 213, 225, 0.8);
+      border-radius: 6px;
       background: #fff;
-      max-width: 90px;
+      max-width: 85px;
     }
-    .tb-library-scroll {
+    .tb-compact-scroll {
       display: flex;
       flex-direction: column;
-      gap: 5px;
-      max-height: 180px;
+      gap: 4px;
+      max-height: 185px;
       overflow-y: auto;
       padding-right: 2px;
     }
-    .tb-card-item {
+    .tb-compact-row {
+      background: rgba(255, 255, 255, 0.9);
+      border: 1px solid rgba(226, 232, 240, 0.95);
+      border-radius: 6px;
+      padding: 5px 7px;
+      display: flex;
+      align-items: center;
+      justify-content: space-between;
+      gap: 6px;
+      transition: all 0.15s ease;
+    }
+    .tb-compact-row:hover {
       background: #ffffff;
-      border: 1px solid #cbd5e1;
-      border-radius: 5px;
-      padding: 6px 8px;
+      border-color: var(--primary);
+    }
+    .tb-compact-row.is-active-target {
+      border: 1.5px solid var(--primary);
+      background: rgba(240, 253, 244, 0.95);
+    }
+    .tb-row-meta {
       display: flex;
       flex-direction: column;
-      gap: 4px;
-      transition: all 0.15s;
+      min-width: 0;
+      flex: 1;
     }
-    .tb-card-item.is-active-target {
-      border: 1.5px solid var(--primary);
-      background: #f0fdf4;
-    }
-    .tb-card-top {
-      display: flex;
-      justify-content: space-between;
-      align-items: center;
-      gap: 4px;
-    }
-    .tb-subject-badge {
-      font-size: 0.66rem;
+    .tb-row-title {
+      font-size: 0.72rem;
       font-weight: 700;
       color: #0f172a;
+      white-space: nowrap;
+      overflow: hidden;
+      text-overflow: ellipsis;
       display: flex;
       align-items: center;
       gap: 4px;
     }
-    .tb-lock-pill {
-      font-size: 0.58rem;
-      font-weight: 700;
-      padding: 1px 5px;
-      border-radius: 3px;
-      text-transform: uppercase;
-    }
-    .tb-lock-pill.locked { background: var(--success); color: #fff; }
-    .tb-lock-pill.unlocked { background: #e2e8f0; color: #475569; }
-
-    .tb-card-mid {
-      font-size: 0.65rem;
+    .tb-row-sub {
+      font-size: 0.62rem;
       color: var(--text-muted);
-      display: flex;
-      justify-content: space-between;
-      align-items: center;
+      white-space: nowrap;
       overflow: hidden;
       text-overflow: ellipsis;
-      white-space: nowrap;
     }
-    .tb-card-actions {
+    .tb-micro-actions {
       display: flex;
-      justify-content: space-between;
       align-items: center;
-      padding-top: 3px;
-      border-top: 1px dashed #e2e8f0;
-      margin-top: 2px;
+      gap: 3px;
+      flex-shrink: 0;
     }
-    .tb-icon-btn-group { display: flex; gap: 3px; align-items: center; }
-    .tb-btn-icon {
-      background: #f1f5f9;
-      border: 1px solid #cbd5e1;
-      border-radius: 3px;
-      padding: 2px 6px;
-      font-size: 0.68rem;
+    .tb-micro-btn {
+      background: rgba(241, 245, 249, 0.9);
+      border: 1px solid rgba(203, 213, 225, 0.85);
+      border-radius: 4px;
+      padding: 3px 6px;
+      font-size: 0.66rem;
+      font-weight: 600;
       cursor: pointer;
       display: inline-flex;
       align-items: center;
       gap: 2px;
-      font-weight: 600;
-      transition: background 0.15s;
+      transition: all 0.15s ease;
+      line-height: 1;
     }
-    .tb-btn-icon:hover { background: #e2e8f0; }
-    .tb-btn-icon.active-use {
-      background: var(--primary-light);
+    .tb-micro-btn:hover {
+      background: #ffffff;
       border-color: var(--primary);
-      color: var(--primary);
     }
-    .tb-btn-icon.del-btn { color: #dc2626; border-color: #fca5a5; }
+    .tb-micro-btn.active-target {
+      background: var(--primary);
+      border-color: var(--primary);
+      color: #ffffff;
+    }
+    .tb-micro-btn.view-pdf {
+      background: #e0f2fe;
+      border-color: #7dd3fc;
+      color: #0369a1;
+    }
+    .tb-micro-btn.view-pdf:hover { background: #bae6fd; }
+    .tb-micro-btn.del {
+      color: #dc2626;
+      border-color: rgba(252, 165, 165, 0.9);
+    }
+    .tb-micro-btn.del:hover { background: #fee2e2; }
 
     /* Saved Packages Archive */
     .pkg-archive-container {
@@ -380,17 +529,22 @@
       overflow-y: auto;
     }
     .pkg-card {
-      border: 1px solid #cbd5e1;
-      background: #ffffff;
-      border-radius: 6px;
+      border: 1px solid var(--glass-border);
+      background: rgba(255, 255, 255, 0.85);
+      border-radius: 8px;
       padding: 8px 10px;
       font-size: 0.76rem;
       display: flex;
       flex-direction: column;
       gap: 5px;
+      box-shadow: 0 2px 6px rgba(0,0,0,0.02);
       transition: all 0.15s;
     }
-    .pkg-card.active-loaded { border: 1.5px solid var(--primary); background: #f0fdf4; }
+    .pkg-card.active-loaded {
+      border: 1.5px solid var(--primary);
+      background: rgba(240, 253, 244, 0.95);
+      box-shadow: 0 4px 14px rgba(2, 132, 199, 0.12);
+    }
     .pkg-card-top {
       display: flex;
       justify-content: space-between;
@@ -402,10 +556,10 @@
     .pkg-co-preview {
       font-size: 0.68rem;
       color: #334155;
-      background: #f8fafc;
-      padding: 3px 6px;
-      border-radius: 3px;
-      border-left: 2.5px solid var(--primary);
+      background: rgba(248, 250, 252, 0.9);
+      padding: 3px 7px;
+      border-radius: 4px;
+      border-left: 3px solid var(--primary);
       overflow: hidden;
       text-overflow: ellipsis;
       white-space: nowrap;
@@ -413,48 +567,66 @@
     .pkg-actions-row { display: flex; gap: 4px; margin-top: 2px; align-items: center; }
 
     .active-status-bar {
-      background: #fef9c3;
-      border: 1px solid #fde047;
+      background: rgba(254, 249, 195, 0.88);
+      border: 1px solid rgba(253, 224, 71, 0.9);
       color: #854d0e;
-      padding: 5px 7px;
-      border-radius: 4px;
+      padding: 5px 8px;
+      border-radius: 6px;
       font-size: 0.72rem;
       margin-bottom: 6px;
       display: none;
       align-items: center;
       justify-content: space-between;
+      box-shadow: 0 2px 6px rgba(0,0,0,0.02);
     }
 
     /* Buttons */
     .btn {
       cursor: pointer;
       border: none;
-      border-radius: 4px;
-      padding: 6px 10px;
-      font-size: 0.78rem;
+      border-radius: 6px;
+      padding: 6px 11px;
+      font-size: 0.76rem;
       font-weight: 600;
       display: inline-flex;
       align-items: center;
       justify-content: center;
-      gap: 4px;
-      transition: background 0.15s;
+      gap: 5px;
+      transition: all 0.15s ease;
       touch-action: manipulation;
       min-height: 30px;
+      box-shadow: 0 2px 4px rgba(0,0,0,0.04);
     }
-    .btn-primary { background: var(--primary); color: #fff; }
-    .btn-primary:hover { background: var(--primary-hover); }
+    .btn:disabled {
+      opacity: 0.55;
+      cursor: not-allowed;
+      pointer-events: none;
+    }
+    .btn-primary {
+      background: linear-gradient(135deg, #0284c7, #0369a1);
+      color: #fff;
+      box-shadow: 0 3px 8px rgba(2, 132, 199, 0.25);
+    }
+    .btn-primary:hover {
+      background: linear-gradient(135deg, #0369a1, #075985);
+      transform: translateY(-1px);
+    }
     .btn-secondary { background: var(--secondary); color: #fff; }
-    .btn-outline { background: #fff; border: 1px solid var(--border); color: var(--secondary); }
-    .btn-outline:hover { background: #f1f5f9; }
-    .btn-success { background: var(--success); color: #fff; }
+    .btn-outline {
+      background: rgba(255, 255, 255, 0.85);
+      border: 1px solid rgba(203, 213, 225, 0.9);
+      color: var(--secondary);
+    }
+    .btn-outline:hover { background: #ffffff; border-color: var(--primary); }
+    .btn-success { background: #10b981; color: #fff; }
     .btn-info { background: var(--media-blue); color: #fff; }
-    .btn-danger { background: #dc2626; color: #fff; }
+    .btn-danger { background: #ef4444; color: #fff; }
     .btn-whatsapp { background: var(--whatsapp-green); color: #fff; }
     .btn-whatsapp:hover { background: #1eb956; }
     .btn-translate { background: #fdf2f8; border: 1px solid #f472b6; color: #be185d; }
     .btn-translate.active-ml { background: #be185d; color: #fff; }
     
-    .btn-tts { background: #f0fdfa; border: 1px solid #99f6e4; color: #0d9488; }
+    .btn-tts { background: rgba(240, 253, 250, 0.9); border: 1px solid #99f6e4; color: #0d9488; }
     .btn-tts:hover { background: #ccfbf1; }
     .btn-tts.speaking {
       background: #fee2e2 !important;
@@ -468,7 +640,7 @@
       100% { opacity: 1; }
     }
     .btn-block { width: 100%; }
-    .btn-sm { padding: 4px 7px; font-size: 0.7rem; min-height: 26px; }
+    .btn-sm { padding: 4px 8px; font-size: 0.7rem; min-height: 26px; }
 
     /* Voice & Speed Modal */
     .voice-option-grid {
@@ -478,8 +650,9 @@
       margin-bottom: 14px;
     }
     .voice-gender-card {
-      border: 1.5px solid var(--border);
-      border-radius: 6px;
+      border: 1.5px solid var(--glass-border);
+      background: rgba(255, 255, 255, 0.8);
+      border-radius: 8px;
       padding: 10px;
       text-align: center;
       cursor: pointer;
@@ -487,7 +660,8 @@
     }
     .voice-gender-card.selected {
       border-color: var(--primary);
-      background: var(--primary-light);
+      background: rgba(240, 249, 255, 0.95);
+      box-shadow: 0 4px 12px rgba(2, 132, 199, 0.15);
     }
     .voice-gender-icon { font-size: 1.6rem; display: block; margin-bottom: 4px; }
     .speed-slider-wrapper { margin: 12px 0 8px 0; }
@@ -500,18 +674,18 @@
     }
     .speed-presets-row { display: flex; gap: 5px; margin-top: 10px; flex-wrap: wrap; }
     .preset-pill {
-      padding: 3px 7px;
-      background: #f1f5f9;
-      border: 1px solid var(--border);
-      border-radius: 4px;
+      padding: 3px 8px;
+      background: rgba(241, 245, 249, 0.85);
+      border: 1px solid rgba(203, 213, 225, 0.8);
+      border-radius: 5px;
       font-size: 0.72rem;
       cursor: pointer;
       font-weight: 600;
     }
     .preset-pill.active {
-      background: var(--secondary);
+      background: var(--primary);
       color: #fff;
-      border-color: var(--secondary);
+      border-color: var(--primary);
     }
 
     /* ==========================================================================
@@ -521,15 +695,17 @@
       flex: 1;
       display: flex;
       flex-direction: column;
-      background: var(--bg);
+      background: transparent;
       width: 100%;
     }
     
     .canvas-tabs {
-      background: var(--surface);
-      border-bottom: 1px solid var(--border);
+      background: var(--glass-bg);
+      backdrop-filter: var(--glass-blur);
+      -webkit-backdrop-filter: var(--glass-blur);
+      border-bottom: 1px solid var(--glass-border);
       display: flex;
-      padding: 0 8px;
+      padding: 0 10px;
       overflow-x: auto;
       white-space: nowrap;
       position: sticky;
@@ -537,27 +713,31 @@
       z-index: 90;
       -webkit-overflow-scrolling: touch;
       scrollbar-width: none;
+      box-shadow: 0 2px 10px rgba(0,0,0,0.02);
     }
     .canvas-tabs::-webkit-scrollbar { display: none; }
     
     .tab-btn {
       background: none;
       border: none;
-      padding: 9px 11px;
+      padding: 10px 13px;
       font-weight: 600;
       font-size: 0.78rem;
       color: var(--text-muted);
       cursor: pointer;
-      border-bottom: 2px solid transparent;
+      border-bottom: 2.5px solid transparent;
       display: inline-flex;
       align-items: center;
-      gap: 5px;
+      gap: 6px;
       flex-shrink: 0;
+      transition: all 0.15s ease;
     }
     .tab-btn .tab-icon { font-size: 1rem; line-height: 1; }
+    .tab-btn:hover { color: var(--primary); }
     .tab-btn.active {
       color: var(--primary);
-      border-bottom: 2px solid var(--primary);
+      border-bottom: 2.5px solid var(--primary);
+      background: rgba(255, 255, 255, 0.5);
     }
 
     .tab-content-wrapper {
@@ -581,18 +761,20 @@
       flex-wrap: wrap;
       gap: 6px;
     }
-    .pane-header h2 { font-size: 0.92rem; font-weight: 700; color: var(--text); }
-    .pane-header-actions { display: flex; gap: 4px; align-items: center; flex-wrap: wrap; }
+    .pane-header h2 { font-size: 0.94rem; font-weight: 700; color: var(--text); }
+    .pane-header-actions { display: flex; gap: 5px; align-items: center; flex-wrap: wrap; }
 
     /* Universal Chapter & CO Header */
     .universal-header-card {
-      background: #ffffff;
-      border: 1px solid var(--border);
+      background: var(--glass-bg-card);
+      backdrop-filter: var(--glass-blur);
+      -webkit-backdrop-filter: var(--glass-blur);
+      border: 1px solid var(--glass-border);
       border-left: 4px solid var(--primary);
-      border-radius: 6px;
-      padding: 9px 11px;
+      border-radius: 8px;
+      padding: 10px 12px;
       margin-bottom: 12px;
-      box-shadow: 0 1px 2px rgba(0,0,0,0.02);
+      box-shadow: var(--glass-shadow), var(--glass-glow);
       width: 100%;
     }
     .u-header-top {
@@ -605,38 +787,38 @@
       gap: 4px;
     }
     .u-badge {
-      background: var(--primary-light);
-      color: var(--primary);
+      background: var(--accent-soft);
+      color: var(--primary-dark);
       font-weight: 700;
-      padding: 2px 5px;
-      border-radius: 3px;
+      padding: 2px 6px;
+      border-radius: 4px;
       text-transform: uppercase;
       font-size: 0.64rem;
+      border: 1px solid rgba(186, 230, 253, 0.7);
     }
     .u-meta-pacing { font-weight: 600; color: var(--secondary); }
     .u-header-unit {
-      font-size: 0.9rem;
+      font-size: 0.92rem;
       font-weight: 700;
       color: var(--text);
       margin-bottom: 4px;
       word-break: break-word;
     }
     .u-header-co {
-      background: #f8fafc;
-      border: 1px dashed #cbd5e1;
-      padding: 6px 9px;
-      border-radius: 4px;
+      background: rgba(240, 249, 255, 0.75);
+      border: 1px dashed rgba(186, 230, 253, 0.9);
+      padding: 7px 10px;
+      border-radius: 6px;
       font-size: 0.76rem;
       line-height: 1.45;
       color: #1e293b;
       word-break: break-word;
-      position: relative;
     }
     .u-header-co-title-row {
       display: flex;
       justify-content: space-between;
       align-items: center;
-      margin-bottom: 2px;
+      margin-bottom: 3px;
     }
     .u-co-badge-custom {
       font-size: 0.62rem;
@@ -648,150 +830,45 @@
       font-weight: 700;
     }
 
-    .rendered-markdown {
-      background: var(--surface);
-      padding: 14px;
-      border-radius: 6px;
-      border: 1px solid var(--border);
-      line-height: 1.6;
-      font-size: 0.86rem;
-      width: 100%;
-      word-break: break-word;
-      overflow-wrap: anywhere;
-    }
-    .co-box-master {
-      background: #f1f5f9;
-      border-left: 4px solid var(--secondary);
-      padding: 9px 11px;
-      border-radius: 4px;
-      margin-bottom: 10px;
-    }
-    .co-box-master strong { color: var(--secondary); font-size: 0.82rem; }
-    .co-box-master ul { margin-top: 4px; padding-left: 18px; }
-    .co-box-master li { margin-bottom: 3px; line-height: 1.4; font-size: 0.8rem; }
-
-    /* Spacious 35-Minute Period Breakdown Timeline */
-    .period-timeline {
-      display: flex;
-      flex-direction: column;
-      gap: 10px;
-      margin-top: 8px;
-      width: 100%;
-    }
-    .period-card {
-      background: #ffffff;
-      border: 1px solid #e2e8f0;
-      border-left: 4px solid var(--primary);
-      border-radius: 6px;
-      padding: 10px 12px;
-      box-shadow: 0 1px 3px rgba(0,0,0,0.02);
-      transition: transform 0.1s ease;
-    }
-    .period-card-header {
-      display: flex;
-      justify-content: space-between;
-      align-items: center;
-      margin-bottom: 6px;
-      flex-wrap: wrap;
-      gap: 4px;
-    }
-    .period-badge-time {
-      background: #e8f5e9;
-      color: #1b5e20;
-      font-weight: 700;
-      font-size: 0.68rem;
-      padding: 2px 6px;
-      border-radius: 4px;
-      display: inline-flex;
-      align-items: center;
-      gap: 3px;
-    }
-    .period-phase-title {
-      font-size: 0.82rem;
-      font-weight: 700;
-      color: #1e293b;
-    }
-    .period-card-body {
-      display: grid;
-      grid-template-columns: 1fr 1fr;
-      gap: 8px;
-      background: #f8fafc;
-      padding: 8px 10px;
-      border-radius: 5px;
-      border: 1px solid #edf2f7;
-    }
-    @media (max-width: 640px) {
-      .period-card-body { grid-template-columns: 1fr; }
-    }
-    .period-col h4 {
-      font-size: 0.68rem;
-      text-transform: uppercase;
-      letter-spacing: 0.03em;
-      color: #64748b;
-      margin-bottom: 3px;
-    }
-    .period-col p, .period-col div {
-      font-size: 0.78rem;
-      color: #1e293b;
-      line-height: 1.45;
-    }
-
-    .table-scroll-wrapper {
-      width: 100%;
-      overflow-x: auto;
-      margin: 10px 0;
-      -webkit-overflow-scrolling: touch;
-      border: 1px solid var(--border);
-      border-radius: 6px;
-      background: #fff;
-    }
-    .copiable-table {
-      width: 100%;
-      min-width: 640px;
-      border-collapse: collapse;
-      font-size: 0.82rem;
-      background: #fff;
-    }
-    .copiable-table th, .copiable-table td {
-      border: 1px solid #e2e8f0;
-      padding: 10px 12px;
-      text-align: left;
-      vertical-align: top;
-      line-height: 1.5;
-    }
-    .copiable-table th { background-color: #f8fafc; font-weight: 700; color: #1e293b; }
-    .copiable-table tr:nth-child(even) td { background-color: #fafbfc; }
-
-    /* Unified Modern Card Type System */
+    /* ==========================================================================
+       5. UNIFIED CARD-STYLED UI SYSTEM (ALL 6 TABS)
+       ========================================================================== */
     .cards-stack-container { display: flex; flex-direction: column; gap: 10px; width: 100%; }
     
     .unified-card {
-      background: #ffffff;
-      border: 1px solid #cbd5e1;
-      border-radius: 6px;
-      box-shadow: 0 1px 2px rgba(0,0,0,0.02);
+      background: var(--glass-bg-card);
+      backdrop-filter: var(--glass-blur);
+      -webkit-backdrop-filter: var(--glass-blur);
+      border: 1px solid var(--glass-border);
+      border-radius: 8px;
+      box-shadow: var(--glass-shadow), var(--glass-glow);
       overflow: hidden;
       width: 100%;
+      transition: all 0.2s ease;
+    }
+    .unified-card:hover {
+      box-shadow: 0 10px 30px rgba(2, 132, 199, 0.12);
     }
     .unified-card-header {
-      background: #f8fafc;
-      border-bottom: 1px solid #e2e8f0;
-      padding: 7px 10px;
+      background: rgba(240, 249, 255, 0.65);
+      border-bottom: 1px solid rgba(226, 232, 240, 0.85);
+      padding: 8px 11px;
       display: flex;
       justify-content: space-between;
       align-items: center;
       flex-wrap: wrap;
-      gap: 4px;
+      gap: 5px;
     }
-    .card-tag-group { display: flex; align-items: center; gap: 5px; }
+    .card-tag-group { display: flex; align-items: center; gap: 5px; flex-wrap: wrap; }
     
     .pill-qnum {
-      background: var(--secondary);
+      background: var(--primary-dark);
       color: #fff;
       font-weight: 700;
       font-size: 0.65rem;
-      padding: 1px 6px;
-      border-radius: 8px;
+      padding: 2px 7px;
+      border-radius: 5px;
+      box-shadow: 0 1px 3px rgba(0,0,0,0.1);
     }
     .pill-score {
       background: #fef3c7;
@@ -799,52 +876,61 @@
       border: 1px solid #fde68a;
       font-weight: 700;
       font-size: 0.65rem;
-      padding: 1px 6px;
-      border-radius: 8px;
+      padding: 2px 7px;
+      border-radius: 5px;
     }
     .pill-cognitive {
       background: #ede9fe;
       color: #5b21b6;
       font-weight: 600;
       font-size: 0.65rem;
-      padding: 1px 6px;
-      border-radius: 8px;
+      padding: 2px 7px;
+      border-radius: 5px;
+    }
+    .pill-time {
+      background: rgba(224, 242, 254, 0.95);
+      color: var(--primary-dark);
+      border: 1px solid rgba(186, 230, 253, 0.95);
+      font-weight: 700;
+      font-size: 0.65rem;
+      padding: 2px 7px;
+      border-radius: 5px;
     }
 
-    .unified-card-body { padding: 10px 12px; display: flex; flex-direction: column; gap: 8px; }
+    .unified-card-body { padding: 11px 13px; display: flex; flex-direction: column; gap: 8px; }
 
     .section-q {
-      background: #fefce8;
-      border-left: 3px solid #eab308;
-      border-radius: 3px;
-      padding: 8px 10px;
+      background: rgba(254, 252, 232, 0.88);
+      border-left: 3.5px solid #eab308;
+      border-radius: 4px;
+      padding: 8px 11px;
     }
     .label-q { font-size: 0.64rem; font-weight: 700; color: #854d0e; text-transform: uppercase; margin-bottom: 3px; }
     .text-q { font-size: 0.86rem; font-weight: 600; color: #1e293b; line-height: 1.45; }
 
     .section-a {
-      background: #f0fdf4;
-      border-left: 3px solid var(--primary);
-      border-radius: 3px;
-      padding: 8px 10px;
+      background: rgba(240, 253, 244, 0.88);
+      border-left: 3.5px solid #10b981;
+      border-radius: 4px;
+      padding: 8px 11px;
     }
-    .label-a { font-size: 0.64rem; font-weight: 700; color: var(--primary); text-transform: uppercase; margin-bottom: 3px; }
+    .label-a { font-size: 0.64rem; font-weight: 700; color: #047857; text-transform: uppercase; margin-bottom: 3px; }
     .text-a { font-size: 0.84rem; color: #0f172a; line-height: 1.5; }
 
     .section-rubric {
-      background: #f5f3ff;
-      border-left: 3px solid #8b5cf6;
-      border-radius: 3px;
-      padding: 8px 10px;
+      background: rgba(245, 243, 255, 0.88);
+      border-left: 3.5px solid #8b5cf6;
+      border-radius: 4px;
+      padding: 8px 11px;
     }
     .label-rubric { font-size: 0.64rem; font-weight: 700; color: #6d28d9; text-transform: uppercase; margin-bottom: 3px; }
     .text-rubric { font-size: 0.82rem; color: #334155; line-height: 1.45; }
 
     .section-write-space {
-      background: #fafafa;
-      border: 1px dashed #cbd5e1;
-      border-radius: 4px;
-      padding: 8px 10px;
+      background: rgba(255, 255, 255, 0.6);
+      border: 1px dashed rgba(203, 213, 225, 0.95);
+      border-radius: 6px;
+      padding: 8px 11px;
     }
     .label-write { font-size: 0.64rem; font-weight: 700; color: #64748b; text-transform: uppercase; margin-bottom: 4px; }
     .answer-line { border-bottom: 1px dashed #94a3b8; height: 18px; width: 100%; margin-top: 4px; display: block; }
@@ -853,35 +939,41 @@
       display: flex;
       justify-content: space-between;
       align-items: center;
-      background: #f8fafc;
-      border: 1px solid #cbd5e1;
+      background: rgba(240, 249, 255, 0.85);
+      border: 1px solid rgba(186, 230, 253, 0.9);
       padding: 8px 12px;
-      border-radius: 6px;
+      border-radius: 7px;
       margin-bottom: 10px;
       font-size: 0.78rem;
       font-weight: 600;
-      color: #334155;
+      color: var(--primary-dark);
+      flex-wrap: wrap;
+      gap: 4px;
+      box-shadow: 0 2px 6px rgba(0,0,0,0.02);
     }
 
-    /* Modals */
+    /* Modals & Glass Overlays */
     .spinner-overlay {
       position: fixed;
       top: 0; left: 0; width: 100vw; height: 100vh;
-      background: rgba(0, 0, 0, 0.4);
-      backdrop-filter: blur(2px);
+      background: rgba(15, 23, 42, 0.35);
+      backdrop-filter: blur(6px);
+      -webkit-backdrop-filter: blur(6px);
       display: flex; align-items: center; justify-content: center;
       z-index: 99999;
     }
     .spinner-card {
-      background: #ffffff;
+      background: rgba(255, 255, 255, 0.92);
+      backdrop-filter: var(--glass-blur);
+      border: 1px solid var(--glass-border);
       padding: 18px 24px;
-      border-radius: 8px;
+      border-radius: 12px;
       display: flex; flex-direction: column; align-items: center; gap: 10px;
-      box-shadow: 0 10px 25px rgba(0,0,0,0.2);
+      box-shadow: 0 15px 35px rgba(2, 132, 199, 0.2);
     }
     .yt-spinner-8px {
       width: 38px; height: 38px;
-      border: 4px solid #e2e8f0;
+      border: 4px solid rgba(226, 232, 240, 0.8);
       border-top: 4px solid var(--primary);
       border-radius: 50%;
       animation: yt-spin 0.8s linear infinite;
@@ -892,32 +984,41 @@
     .modal-overlay {
       position: fixed;
       top: 0; left: 0; width: 100vw; height: 100vh;
-      background: rgba(0, 0, 0, 0.45);
+      background: rgba(15, 23, 42, 0.45);
+      backdrop-filter: blur(6px);
+      -webkit-backdrop-filter: blur(6px);
       display: flex; align-items: center; justify-content: center;
       z-index: 100000;
     }
     .modal-box {
-      background: #fff; width: 92%; max-width: 460px;
-      border-radius: 8px; box-shadow: 0 10px 25px rgba(0,0,0,0.25);
+      background: rgba(255, 255, 255, 0.94);
+      backdrop-filter: var(--glass-blur);
+      border: 1px solid var(--glass-border);
+      width: 92%; max-width: 480px;
+      border-radius: 12px; box-shadow: 0 20px 40px rgba(15, 23, 42, 0.25);
       overflow: hidden;
     }
     .modal-header {
-      background: var(--primary); color: #fff;
-      padding: 9px 12px; display: flex; justify-content: space-between; align-items: center;
+      background: linear-gradient(135deg, var(--primary), var(--primary-dark));
+      color: #fff;
+      padding: 10px 14px; display: flex; justify-content: space-between; align-items: center;
     }
-    .modal-header h4 { font-size: 0.86rem; font-weight: 600; }
-    .modal-close { background: none; border: none; color: #fff; font-size: 1.2rem; cursor: pointer; }
+    .modal-header h4 { font-size: 0.88rem; font-weight: 600; }
+    .modal-close { background: none; border: none; color: #fff; font-size: 1.25rem; cursor: pointer; }
     .modal-body { padding: 14px; font-size: 0.84rem; line-height: 1.5; }
     .modal-footer {
-      padding: 9px 12px; background: #f8fafc;
-      display: flex; justify-content: flex-end; gap: 6px; border-top: 1px solid var(--border);
+      padding: 9px 14px; background: rgba(248, 250, 252, 0.9);
+      display: flex; justify-content: flex-end; gap: 7px; border-top: 1px solid rgba(226, 232, 240, 0.8);
     }
 
     .toast-popup {
-      position: fixed; bottom: 14px; right: 14px;
-      background: #1e293b; color: #fff; padding: 8px 12px;
-      border-radius: 5px; font-size: 0.76rem; font-weight: 500;
-      box-shadow: 0 4px 12px rgba(0,0,0,0.2);
+      position: fixed; bottom: 16px; right: 16px;
+      background: rgba(15, 23, 42, 0.92);
+      backdrop-filter: blur(8px);
+      color: #fff; padding: 9px 14px;
+      border-radius: 7px; font-size: 0.78rem; font-weight: 500;
+      box-shadow: 0 8px 24px rgba(0,0,0,0.25);
+      border: 1px solid rgba(255, 255, 255, 0.15);
       z-index: 100001; opacity: 0; transform: translateY(10px);
       transition: all 0.2s ease-out;
       max-width: 90vw;
@@ -975,7 +1076,7 @@
       .u-badge { border: 1px solid #000 !important; background: #f1f5f9 !important; color: #000 !important; }
       .u-header-co { background: #fff !important; border: 1px solid #666 !important; color: #000 !important; }
 
-      .rendered-markdown, .cards-stack-container, .wa-chat-canvas, #media-resources-body {
+      .cards-stack-container, .rendered-markdown {
         width: 100% !important;
         max-width: 100% !important;
         min-height: auto !important;
@@ -987,17 +1088,11 @@
         color: #000 !important;
       }
 
-      .unified-card, .period-card, .wa-bubble, .media-card, .copiable-table tr {
+      .unified-card {
         page-break-inside: avoid !important;
         break-inside: avoid !important;
         border: 1px solid #475569 !important;
         margin-bottom: 8px !important;
-      }
-      .copiable-table { width: 100% !important; min-width: auto !important; }
-      .copiable-table th, .copiable-table td {
-        padding: 6px 8px !important;
-        font-size: 8.5pt !important;
-        border: 1px solid #333 !important;
       }
       .answer-line { border-bottom: 1px dashed #333333 !important; }
     }
@@ -1017,46 +1112,43 @@
   <div id="custom-modal-overlay" class="modal-overlay no-print" style="display:none;">
     <div class="modal-box">
       <div class="modal-header">
-        <h4 id="modal-title">Teacher Studio</h4>
+        <h4 id="modal-title">🎓 Teacher Studio</h4>
         <button id="modal-close-btn" class="modal-close">&times;</button>
       </div>
       <div class="modal-body" id="modal-message"></div>
       <div class="modal-footer">
-        <button id="modal-ok-btn" class="btn btn-primary btn-sm">OK</button>
+        <button id="modal-ok-btn" class="btn btn-primary btn-sm">✔️ OK</button>
       </div>
     </div>
   </div>
 
-  <!-- ==========================================================================
-       EDIT CURRICULAR OBJECTIVES (CO) MODAL
-       ========================================================================== -->
+  <!-- CO View / Modify Modal -->
   <div id="co-modal-overlay" class="modal-overlay no-print" style="display:none;">
     <div class="modal-box" style="max-width: 520px;">
-      <div class="modal-header" style="background: #065f46;">
-        <h4>🎯 Edit Curricular Objectives (CO)</h4>
+      <div class="modal-header">
+        <h4>🎯 Curricular Objective (CO) Editor</h4>
         <button id="co-modal-close-btn" class="modal-close">&times;</button>
       </div>
       <div class="modal-body">
-        <div style="font-size: 0.76rem; color: #334155; margin-bottom: 8px;">
-          Customize the exact Curricular Objective(s) for this session. <strong>All lesson plan phases, Blackboard questions, evaluation activities, and WhatsApp summaries will strictly adhere to your edited objectives.</strong>
-        </div>
-
+        <input type="hidden" id="modal-co-index" value="">
         <div class="form-group">
-          <label for="modal-targeted-co" style="font-weight:700; color:var(--primary);">Targeted CO for Current Period (Day <span id="modal-co-day-lbl">1</span>):</label>
-          <textarea id="modal-targeted-co" class="form-control" rows="3" placeholder="e.g. CO 1: Identify and formulate the laws of reflection of light..."></textarea>
+          <label for="modal-targeted-co" style="font-weight:700; color:var(--primary);">Curricular Objective Details:</label>
+          <textarea id="modal-targeted-co" class="form-control" rows="4" placeholder="Enter full Curricular Objective text..."></textarea>
         </div>
-
-        <div class="form-group" style="margin-top: 10px;">
-          <label for="modal-master-cos" style="font-weight:700; color:var(--secondary);">Chapter Master Curricular Objectives (One per line):</label>
-          <textarea id="modal-master-cos" class="form-control" rows="5" placeholder="CO 1: ...&#10;CO 2: ...&#10;CO 3: ..."></textarea>
-          <div style="font-size: 0.65rem; color: var(--text-muted); margin-top: 2px;">
-            Editing master objectives will also recalibrate the pacing roadmap for this chapter.
+        <div class="form-row" style="margin-top:8px;">
+          <div class="form-group half">
+            <label for="modal-co-day-assign">Assign to Day:</label>
+            <input type="number" id="modal-co-day-assign" class="form-control" min="1" max="25" value="1">
+          </div>
+          <div class="form-group half">
+            <label for="modal-co-num-assign">CO Number / Label:</label>
+            <input type="text" id="modal-co-num-assign" class="form-control" value="CO 1">
           </div>
         </div>
       </div>
       <div class="modal-footer">
-        <button id="co-modal-cancel-btn" class="btn btn-outline btn-sm">Cancel</button>
-        <button id="co-modal-save-btn" class="btn btn-primary btn-sm">💾 Apply & Lock Edited COs</button>
+        <button id="co-modal-cancel-btn" class="btn btn-outline btn-sm">✖️ Cancel</button>
+        <button id="co-modal-save-btn" class="btn btn-primary btn-sm">💾 Save & Ground AI</button>
       </div>
     </div>
   </div>
@@ -1064,7 +1156,7 @@
   <!-- Textbook Upload & Modify Modal -->
   <div id="book-modal-overlay" class="modal-overlay no-print" style="display:none;">
     <div class="modal-box">
-      <div class="modal-header" style="background: var(--primary);">
+      <div class="modal-header">
         <h4 id="book-modal-title">📚 Add New Textbook</h4>
         <button id="book-modal-close-btn" class="modal-close">&times;</button>
       </div>
@@ -1073,7 +1165,7 @@
         
         <div class="form-row">
           <div class="form-group half">
-            <label for="modal-book-class">Class (Standard):</label>
+            <label for="modal-book-class">🏫 Class (Standard):</label>
             <select id="modal-book-class" class="form-control">
               <option value="1">Class 1</option>
               <option value="2">Class 2</option>
@@ -1088,7 +1180,7 @@
             </select>
           </div>
           <div class="form-group half">
-            <label for="modal-book-part">Part / Volume:</label>
+            <label for="modal-book-part">📖 Part / Volume:</label>
             <select id="modal-book-part" class="form-control">
               <option value="part1" selected>Part 1</option>
               <option value="part2">Part 2</option>
@@ -1098,24 +1190,12 @@
         </div>
 
         <div class="form-group">
-          <label for="modal-book-subject">Subject:</label>
-          <input type="text" id="modal-book-subject" class="form-control" placeholder="e.g. Basic Science, Social Science, Mathematics" list="scert-subjects-list">
-          <datalist id="scert-subjects-list">
-            <option value="Basic Science">
-            <option value="Social Science">
-            <option value="Mathematics">
-            <option value="Malayalam">
-            <option value="English">
-            <option value="Hindi">
-            <option value="ICT">
-            <option value="Environmental Studies">
-            <option value="Arabic">
-            <option value="Sanskrit">
-          </datalist>
+          <label for="modal-book-subject">🧪 Subject Name:</label>
+          <input type="text" id="modal-book-subject" class="form-control" placeholder="e.g. Basic Science, Social Science, Mathematics">
         </div>
 
         <div class="form-group">
-          <label for="modal-book-file">Textbook PDF File:</label>
+          <label for="modal-book-file">📎 Textbook PDF File:</label>
           <input type="file" id="modal-book-file" accept="application/pdf" class="form-control">
           <div id="modal-file-status" style="font-size: 0.68rem; color: var(--text-muted); margin-top: 3px;">
             Choose a PDF (Max 15MB recommended).
@@ -1125,12 +1205,12 @@
         <div class="form-group" style="margin-top: 10px;">
           <label style="display:flex; align-items:center; gap:6px; cursor:pointer; font-weight:600;">
             <input type="checkbox" id="modal-book-lock" checked>
-            <span>Lock into Active AI Synthesis Context</span>
+            <span>🔒 Lock into Active AI Synthesis Context</span>
           </label>
         </div>
       </div>
       <div class="modal-footer">
-        <button id="book-modal-cancel-btn" class="btn btn-outline btn-sm">Cancel</button>
+        <button id="book-modal-cancel-btn" class="btn btn-outline btn-sm">✖️ Cancel</button>
         <button id="save-book-modal-btn" class="btn btn-primary btn-sm">💾 Save Textbook</button>
       </div>
     </div>
@@ -1139,7 +1219,7 @@
   <!-- Voice & Speed Settings Modal -->
   <div id="voice-modal-overlay" class="modal-overlay no-print" style="display:none;">
     <div class="modal-box">
-      <div class="modal-header" style="background: var(--primary);">
+      <div class="modal-header">
         <h4>🎙️ Voice Gender & Speed Controls</h4>
         <button id="voice-modal-close-btn" class="modal-close">&times;</button>
       </div>
@@ -1175,12 +1255,12 @@
         </div>
 
         <div class="speed-presets-row">
-          <span class="preset-pill" data-speed="0.5">0.5x</span>
-          <span class="preset-pill" data-speed="0.75">0.75x</span>
-          <span class="preset-pill active" data-speed="1.0">1.0x</span>
-          <span class="preset-pill" data-speed="1.25">1.25x</span>
-          <span class="preset-pill" data-speed="1.5">1.5x</span>
-          <span class="preset-pill" data-speed="2.0">2.0x</span>
+          <span class="preset-pill" data-speed="0.5">⏱️ 0.5x</span>
+          <span class="preset-pill" data-speed="0.75">⏱️ 0.75x</span>
+          <span class="preset-pill active" data-speed="1.0">⏱️ 1.0x</span>
+          <span class="preset-pill" data-speed="1.25">⏱️ 1.25x</span>
+          <span class="preset-pill" data-speed="1.5">⏱️ 1.5x</span>
+          <span class="preset-pill" data-speed="2.0">⏱️ 2.0x</span>
         </div>
 
         <div style="margin-top:16px; padding-top:10px; border-top:1px dashed #cbd5e1; display:flex; gap:6px;">
@@ -1189,7 +1269,7 @@
         </div>
       </div>
       <div class="modal-footer">
-        <button id="save-voice-modal-btn" class="btn btn-primary btn-sm">Save & Apply</button>
+        <button id="save-voice-modal-btn" class="btn btn-primary btn-sm">💾 Save & Apply</button>
       </div>
     </div>
   </div>
@@ -1208,15 +1288,15 @@
         <input type="password" id="key-modal-input" class="form-control" placeholder="Paste AIza... key">
       </div>
       <div class="modal-footer">
-        <button id="save-key-modal-btn" class="btn btn-primary btn-sm">Save Key</button>
+        <button id="save-key-modal-btn" class="btn btn-primary btn-sm">💾 Save Key</button>
       </div>
     </div>
   </div>
 
   <!-- Floating Toast Notification -->
-  <div id="toast-popup" class="toast-popup no-print">Notification</div>
+  <div id="toast-popup" class="toast-popup no-print">🔔 Notification</div>
 
-  <!-- Header -->
+  <!-- Glassmorphic Header -->
   <header class="app-header no-print">
     <div class="header-brand">
       <button id="controls-toggle-btn" class="btn-header" title="Toggle Controls">
@@ -1232,46 +1312,49 @@
       <button id="header-voice-btn" class="btn-header" title="Speech Voice Gender & Speed">
         🎙️ <span id="hdr-voice-text">👩 1.0x</span>
       </button>
-      <button id="header-key-btn" class="btn-header" title="Change Gemini API Key">🔑 Key</button>
+      <button id="header-key-btn" class="btn-header" title="Change Gemini API Key">
+        🔑 <span>Key</span>
+      </button>
     </div>
   </header>
 
-  <!-- Top Controls Panel -->
+  <!-- Top Controls Panel (Frosted Glass) -->
   <section class="top-controls-panel no-print" id="top-controls-panel">
     <div class="mobile-drawer-nav">
-      <button class="mob-tab-btn active" data-drawer-tab="pacing">🎯 Pacing</button>
-      <button class="mob-tab-btn" data-drawer-tab="books">📚 Books <span id="mob-locked-pill" class="pill-mini">0</span></button>
-      <button class="mob-tab-btn" data-drawer-tab="generate">⚡ Action</button>
-      <button class="mob-tab-btn" data-drawer-tab="archive">💾 Saved <span id="mob-pkg-pill" class="pill-mini">0</span></button>
+      <button class="mob-tab-btn active" data-drawer-tab="pacing">🎯 <span>Pacing</span></button>
+      <button class="mob-tab-btn" data-drawer-tab="books">📚 <span>Books</span> <span id="mob-locked-pill" class="pill-mini">0</span></button>
+      <button class="mob-tab-btn" data-drawer-tab="generate">⚡ <span>Action</span></button>
+      <button class="mob-tab-btn" data-drawer-tab="archive">💾 <span>Saved</span> <span id="mob-pkg-pill" class="pill-mini">0</span></button>
     </div>
 
     <div class="top-controls-grid">
-      <!-- Card 1: Pacing Target with Direct CO Edit Field -->
+      <!-- Card 1: Pacing Target (CLEAN: CO inputs completely removed) -->
       <div class="ctrl-card mob-active" data-section="pacing">
-        <h3><span>1. Pacing Target</span></h3>
+        <h3><span>🎯 1. Pacing Target</span></h3>
         <div id="roadmap-status-pill" class="roadmap-status-pill">
-          <span id="roadmap-status-text">🔒 </span>
-          <button id="unlock-roadmap-btn" class="btn btn-danger btn-sm" style="padding: 1px 5px; font-size:0.64rem;">🔓 </button>
+          <span id="roadmap-status-text">🔒 Chapter Plan: Locked</span>
+          <button id="unlock-roadmap-btn" class="btn btn-danger btn-sm" style="padding: 1px 6px; font-size:0.64rem;">🔓 Unlock</button>
         </div>
 
-        <div class="pacing-mode-box">
-          <label>
-            <input type="radio" name="pacing-generation-scope" value="single" checked id="scope-single-day">
-            <span>Single Day Period</span>
-          </label>
-          <label>
-            <input type="radio" name="pacing-generation-scope" value="unit" id="scope-whole-unit">
-            <span>📦 Entire Unit Plan (All Days)</span>
-          </label>
+        <!-- Sleek Segmented Switcher (No Checkboxes or Radio Ticks) -->
+        <div class="segmented-pacing-switch" id="pacing-scope-switch">
+          <button type="button" class="seg-btn active" data-scope="single" id="btn-scope-single">
+            <span>📅 Single Day</span>
+          </button>
+          <button type="button" class="seg-btn" data-scope="unit" id="btn-scope-unit">
+            <span>📦 Entire Unit Plan</span>
+          </button>
         </div>
 
         <div class="form-row">
           <div class="form-group half">
-            <label>Subject:</label>
-            <input type="text" id="target-subject" class="form-control" value="Basic Science" placeholder="e.g. Basic Science">
+            <label for="target-subject">🧪 Subject (From Books):</label>
+            <select id="target-subject" class="form-control">
+              <option value="">Loading books...</option>
+            </select>
           </div>
           <div class="form-group half">
-            <label>Class & Part:</label>
+            <label>🏫 Class & Part:</label>
             <div class="form-row">
               <select id="class-select" class="form-control" style="flex:1;">
                 <option value="1">Std 1</option>
@@ -1295,43 +1378,31 @@
         </div>
 
         <div class="form-group">
-          <label>Chapter Title:</label>
+          <label>📖 Chapter Title:</label>
           <input type="text" id="unit-title" class="form-control" placeholder="e.g. Reflection of Light">
         </div>
 
         <div class="form-row">
           <div class="form-group half" id="day-number-container">
-            <label>Day in Unit:</label>
+            <label>⏱️ Day in Unit:</label>
             <input type="number" id="day-number" class="form-control" value="1" min="1" max="25">
           </div>
           <div class="form-group half" id="total-days-container">
-            <label>Total Days:</label>
+            <label>📊 Total Days:</label>
             <input type="number" id="total-days" class="form-control" value="5" min="1" max="25">
-          </div>
-        </div>
-
-        <!-- Direct Editable Curricular Objective (CO) -->
-        <div class="form-group" style="margin-top: 4px;">
-          <div style="display:flex; justify-content:space-between; align-items:center; margin-bottom:2px;">
-            <label for="custom-co-input" style="font-weight:700; color:#065f46; margin-bottom:0;">🎯 Targeted CO for Period:</label>
-            <button type="button" id="btn-quick-edit-co" class="btn btn-outline btn-sm" style="padding:1px 5px; font-size:0.64rem; height:20px;">✏️ Advanced COs</button>
-          </div>
-          <textarea id="custom-co-input" class="form-control" rows="2" style="font-size:0.75rem; line-height:1.35;" placeholder="Type custom Curricular Objective(s) here or let AI generate..."></textarea>
-          <div id="co-edited-badge" style="display:none; font-size:0.65rem; color:#b45309; font-weight:700; margin-top:2px;">
-            ⚡ Custom Edited CO Active (AI will strictly ground generation on this)
           </div>
         </div>
       </div>
 
-      <!-- Card 2: 100+ Books Management -->
+      <!-- Card 2: Restructured 100+ Books Management (Space-Efficient Compact List + View PDF Just Left of Unlock) -->
       <div class="ctrl-card" data-section="books">
         <h3>
-          <span>2. Locked Textbooks (<span id="locked-count">0</span>)</span>
-          <button id="add-textbook-btn" class="btn btn-primary btn-sm" style="padding: 2px 7px; font-size: 0.68rem;">+ Add Book</button>
+          <span>📚 2. Locked Textbooks (<span id="locked-count">0</span>)</span>
+          <button id="add-textbook-btn" class="btn btn-primary btn-sm" style="padding: 2px 7px; font-size: 0.68rem;">➕ Add Book</button>
         </h3>
         
         <div class="tb-library-toolbar">
-          <input type="text" id="tb-search-box" class="tb-search-input" placeholder="🔍 Search 100+ Books...">
+          <input type="text" id="tb-search-box" class="tb-search-input" placeholder="🔍 Search Books...">
           <select id="tb-filter-class" class="tb-filter-select">
             <option value="all">All Stds</option>
             <option value="5">Std 5</option>
@@ -1343,33 +1414,70 @@
           </select>
         </div>
 
-        <div id="tb-library-list" class="tb-library-scroll">
+        <div id="tb-library-list" class="tb-compact-scroll">
           <div style="font-size: 0.7rem; color: var(--text-muted); text-align: center; padding: 12px;">
             Loading textbook library...
           </div>
         </div>
       </div>
 
-      <!-- Card 3: Generator Control -->
+      <!-- Card 3: Generator Control (NOW HOUSES TWO-PHASE CO & PACKAGE GENERATOR) -->
       <div class="ctrl-card" data-section="generate">
-        <h3><span>3. Generator Control</span></h3>
+        <h3>
+          <span>⚡ 3. Generator Control</span>
+          <span id="co-workflow-badge" class="badge-tag" style="background:#e0f2fe; color:#0369a1;">Step 1: COs</span>
+        </h3>
+        
         <div id="active-status-bar" class="active-status-bar">
           <span id="active-status-text">🔒 Active Reference</span>
           <button id="quick-reset-btn" class="btn btn-danger btn-sm">Reset</button>
         </div>
-        <button id="generate-btn" class="btn btn-primary btn-block" style="padding: 9px 10px; margin-bottom: 5px;">
-          ⚡ Generate Package
-        </button>
-        <button id="reset-workspace-btn" class="btn btn-outline btn-block btn-sm">
-          🔄 Reset Workspace
-        </button>
+
+        <!-- PHASE 1: GENERATE & CONFIRM CHAPTER COs (NO DEFAULTS, REAL CHAPTER CONTENT ONLY) -->
+        <div class="generator-step-box">
+          <div class="generator-step-title">
+            <span>🎯 1. Chapter Curricular Objectives (COs)</span>
+            <span id="cos-status-pill" class="pill-qnum" style="background:#f1f5f9; color:#475569; font-size:0.6rem;">Awaiting Extraction</span>
+          </div>
+
+          <div style="display:flex; gap:4px;">
+            <button id="generate-cos-btn" class="btn btn-outline btn-sm" style="flex:2; border-color:var(--primary); color:var(--primary);">
+              🎯 Extract & Generate COs
+            </button>
+            <button id="btn-add-new-co" class="btn btn-outline btn-sm" style="flex:1;">
+              ➕ Add CO
+            </button>
+          </div>
+
+          <!-- Separated CO List Explorer (View 👁️, Modify ✏️, Delete 🗑️) -->
+          <div class="co-separate-scroll" id="co-separate-list">
+            <div style="font-size: 0.68rem; color: var(--text-muted); text-align: center; padding: 10px; font-style: italic;">
+              No default COs. Select chapter & textbook, then tap "Extract & Generate COs" above.
+            </div>
+          </div>
+
+          <!-- Confirm & Lock Action -->
+          <button id="lock-cos-btn" class="btn btn-outline btn-sm" style="border-color:#10b981; color:#047857;" disabled>
+            🔒 Confirm & Lock COs for Generation
+          </button>
+        </div>
+
+        <!-- PHASE 2: PACKAGE GENERATOR (LOCKED TO CONFIRMED/MODIFIED COs) -->
+        <div style="display:flex; flex-direction:column; gap:4px;">
+          <button id="generate-btn" class="btn btn-primary btn-block" style="padding: 8px 10px;" disabled>
+            ✨ 2. Generate Package (Locked to COs)
+          </button>
+          <button id="reset-workspace-btn" class="btn btn-outline btn-block btn-sm">
+            🔄 Reset Workspace
+          </button>
+        </div>
       </div>
 
       <!-- Card 4: Saved Packages -->
       <div class="ctrl-card" data-section="archive">
         <h3>
-          <span>4. Saved Packages</span>
-          <span class="badge-tag" id="package-count-badge" style="background:#cbd5e1; color:#0f172a;">0</span>
+          <span>💾 4. Saved Packages</span>
+          <span class="badge-tag" id="package-count-badge" style="background:#0284c7; color:#fff;">0</span>
         </h3>
         <div id="pkg-archive-list" class="pkg-archive-container">
           <div style="font-size: 0.7rem; color: var(--text-muted); text-align: center; padding: 6px;">
@@ -1382,7 +1490,7 @@
   </section>
 
   <!-- ==========================================================================
-       MAIN WORKSPACE CANVAS
+       MAIN WORKSPACE CANVAS (UNIFIED CARD UI ACROSS ALL 6 TABS)
        ========================================================================== -->
   <main class="canvas">
     
@@ -1409,16 +1517,16 @@
 
     <div class="tab-content-wrapper">
       
-      <!-- Tab 1: Lesson Plan -->
+      <!-- Tab 1: Lesson Plan (Unified Cards) -->
       <section id="tab-lesson-plan" class="tab-pane active">
         <div class="pane-header no-print">
           <h2>35-Minute Daily Instructional Lesson Plan</h2>
           <div class="pane-header-actions">
-            <button class="btn btn-translate btn-sm translate-tab-btn" data-tab="tab-lesson-plan">🌐 മലയാളം</button>
-            <button class="btn btn-tts btn-sm tts-tab-btn" data-tab="tab-lesson-plan">🔊 </button>
+            <button class="btn btn-translate btn-sm translate-tab-btn" data-tab="tab-lesson-plan">🌐 <span>മലയാളം</span></button>
+            <button class="btn btn-tts btn-sm tts-tab-btn" data-tab="tab-lesson-plan">🔊 <span>Read Aloud</span></button>
             <button class="btn btn-outline btn-sm tts-cfg-btn" title="Voice Gender & Speed">⚙️ <span class="cfg-spd-lbl">1.0x</span></button>
-            <button class="btn btn-secondary btn-sm copy-btn" data-target="lesson-plan-body">📋 Copy</button>
-            <button class="btn btn-success btn-sm print-tab-btn">🖨️ Print</button>
+            <button class="btn btn-secondary btn-sm" id="copy-all-lp-btn">📋 <span>Copy All</span></button>
+            <button class="btn btn-primary btn-sm print-tab-btn">🖨️ <span>Print Sheet</span></button>
           </div>
         </div>
 
@@ -1429,33 +1537,38 @@
               <span class="u-meta-pacing"><span class="u-meta-subject">Basic Science</span> • Std <span class="u-meta-class">5</span> (Pt <span class="u-meta-part">1</span>) • Day <span class="u-meta-day">1</span>/<span class="u-meta-total">5</span></span>
             </div>
             <div class="u-header-unit">
-              <strong>Chapter:</strong> <span class="u-meta-unit">Select Unit</span>
+              <strong>📖 Chapter:</strong> <span class="u-meta-unit">Select Unit</span>
             </div>
             <div class="u-header-co">
               <div class="u-header-co-title-row">
                 <strong>🎯 Targeted Curricular Objective(s):</strong>
-                <button class="btn btn-outline btn-sm btn-edit-co-header no-print" style="padding:1px 6px; font-size:0.62rem; height:20px;">✏️ Edit CO</button>
+                <button class="btn btn-outline btn-sm btn-edit-co-header no-print" style="padding:1px 6px; font-size:0.64rem; height:20px;">✏️ Edit CO</button>
               </div>
-              <div class="u-meta-co">Generated upon request</div>
+              <div class="u-meta-co">Awaiting CO extraction & confirmation in Generator Control</div>
             </div>
           </div>
 
-          <div id="lesson-plan-body" class="rendered-markdown">
-            <p style="color: var(--text-muted); font-style: italic;">Enter details above and tap "Generate Package".</p>
+          <div id="lesson-plan-body">
+            <div class="cards-stack-container">
+              <div class="unified-card">
+                <div class="unified-card-header"><span class="pill-qnum">Status</span></div>
+                <div class="unified-card-body"><p style="color: var(--text-muted); font-style: italic;">Extract chapter COs in Card 3, then generate package.</p></div>
+              </div>
+            </div>
           </div>
         </div>
       </section>
 
-      <!-- Tab 2: Digital Media -->
+      <!-- Tab 2: Digital Media (Unified Cards) -->
       <section id="tab-media-resources" class="tab-pane">
         <div class="pane-header no-print">
           <h2>Digital Media Recommendations</h2>
           <div class="pane-header-actions">
-            <button class="btn btn-translate btn-sm translate-tab-btn" data-tab="tab-media-resources">🌐 മലയാളം</button>
-            <button class="btn btn-tts btn-sm tts-tab-btn" data-tab="tab-media-resources">🔊</button>
+            <button class="btn btn-translate btn-sm translate-tab-btn" data-tab="tab-media-resources">🌐 <span>മലയാളം</span></button>
+            <button class="btn btn-tts btn-sm tts-tab-btn" data-tab="tab-media-resources">🔊 <span>Read Aloud</span></button>
             <button class="btn btn-outline btn-sm tts-cfg-btn" title="Voice Gender & Speed">⚙️ <span class="cfg-spd-lbl">1.0x</span></button>
-            <button class="btn btn-secondary btn-sm copy-btn" data-target="media-resources-body">📋 Copy</button>
-            <button class="btn btn-success btn-sm print-tab-btn">🖨️ Print</button>
+            <button class="btn btn-secondary btn-sm" id="copy-all-media-btn">📋 <span>Copy All</span></button>
+            <button class="btn btn-primary btn-sm print-tab-btn">🖨️ <span>Print Sheet</span></button>
           </div>
         </div>
 
@@ -1466,33 +1579,38 @@
               <span class="u-meta-pacing"><span class="u-meta-subject">Basic Science</span> • Std <span class="u-meta-class">5</span> (Pt <span class="u-meta-part">1</span>) • Day <span class="u-meta-day">1</span>/<span class="u-meta-total">5</span></span>
             </div>
             <div class="u-header-unit">
-              <strong>Chapter:</strong> <span class="u-meta-unit">Select Unit</span>
+              <strong>📖 Chapter:</strong> <span class="u-meta-unit">Select Unit</span>
             </div>
             <div class="u-header-co">
               <div class="u-header-co-title-row">
                 <strong>🎯 Targeted Curricular Objective(s):</strong>
-                <button class="btn btn-outline btn-sm btn-edit-co-header no-print" style="padding:1px 6px; font-size:0.62rem; height:20px;">✏️ Edit CO</button>
+                <button class="btn btn-outline btn-sm btn-edit-co-header no-print" style="padding:1px 6px; font-size:0.64rem; height:20px;">✏️ Edit CO</button>
               </div>
-              <div class="u-meta-co">Generated upon request</div>
+              <div class="u-meta-co">Awaiting CO extraction & confirmation in Generator Control</div>
             </div>
           </div>
 
           <div id="media-resources-body">
-            <p style="color: var(--text-muted); font-style: italic;">Curated media will render here.</p>
+            <div class="cards-stack-container">
+              <div class="unified-card">
+                <div class="unified-card-header"><span class="pill-qnum">Status</span></div>
+                <div class="unified-card-body"><p style="color: var(--text-muted); font-style: italic;">Media suggestions will render after generation.</p></div>
+              </div>
+            </div>
           </div>
         </div>
       </section>
 
-      <!-- Tab 3: Blackboard Notes -->
+      <!-- Tab 3: Blackboard Notes (Unified Cards) -->
       <section id="tab-blackboard-notes" class="tab-pane">
         <div class="pane-header no-print">
           <h2>Blackboard Application Notes</h2>
           <div class="pane-header-actions">
-            <button class="btn btn-translate btn-sm translate-tab-btn" data-tab="tab-blackboard-notes">🌐 മലയാളം</button>
-            <button class="btn btn-tts btn-sm tts-tab-btn" data-tab="tab-blackboard-notes">🔊</button>
+            <button class="btn btn-translate btn-sm translate-tab-btn" data-tab="tab-blackboard-notes">🌐 <span>മലയാളം</span></button>
+            <button class="btn btn-tts btn-sm tts-tab-btn" data-tab="tab-blackboard-notes">🔊 <span>Read Aloud</span></button>
             <button class="btn btn-outline btn-sm tts-cfg-btn" title="Voice Gender & Speed">⚙️ <span class="cfg-spd-lbl">1.0x</span></button>
-            <button class="btn btn-secondary btn-sm" id="copy-all-bb-btn">📋 Copy All</button>
-            <button class="btn btn-success btn-sm print-tab-btn">🖨️ Print</button>
+            <button class="btn btn-secondary btn-sm" id="copy-all-bb-btn">📋 <span>Copy All</span></button>
+            <button class="btn btn-primary btn-sm print-tab-btn">🖨️ <span>Print Sheet</span></button>
           </div>
         </div>
 
@@ -1503,36 +1621,39 @@
               <span class="u-meta-pacing"><span class="u-meta-subject">Basic Science</span> • Std <span class="u-meta-class">5</span> (Pt <span class="u-meta-part">1</span>) • Day <span class="u-meta-day">1</span>/<span class="u-meta-total">5</span></span>
             </div>
             <div class="u-header-unit">
-              <strong>Chapter:</strong> <span class="u-meta-unit">Select Unit</span>
+              <strong>📖 Chapter:</strong> <span class="u-meta-unit">Select Unit</span>
             </div>
             <div class="u-header-co">
               <div class="u-header-co-title-row">
                 <strong>🎯 Targeted Curricular Objective(s):</strong>
-                <button class="btn btn-outline btn-sm btn-edit-co-header no-print" style="padding:1px 6px; font-size:0.62rem; height:20px;">✏️ Edit CO</button>
+                <button class="btn btn-outline btn-sm btn-edit-co-header no-print" style="padding:1px 6px; font-size:0.64rem; height:20px;">✏️ Edit CO</button>
               </div>
-              <div class="u-meta-co">Generated upon request</div>
+              <div class="u-meta-co">Awaiting CO extraction & confirmation in Generator Control</div>
             </div>
           </div>
 
           <div id="blackboard-notes-body">
-            <div class="rendered-markdown">
-              <p style="color: var(--text-muted); font-style: italic;">Application questions and solutions will render here.</p>
+            <div class="cards-stack-container">
+              <div class="unified-card">
+                <div class="unified-card-header"><span class="pill-qnum">Status</span></div>
+                <div class="unified-card-body"><p style="color: var(--text-muted); font-style: italic;">Chalkboard notes will render after generation.</p></div>
+              </div>
             </div>
           </div>
         </div>
       </section>
 
-      <!-- Tab 4: WhatsApp Broadcast -->
+      <!-- Tab 4: WhatsApp Broadcast (Unified Cards) -->
       <section id="tab-whatsapp-summary" class="tab-pane">
         <div class="pane-header no-print">
           <h2>Daily WhatsApp Broadcast</h2>
           <div class="pane-header-actions">
-            <button class="btn btn-translate btn-sm translate-tab-btn" data-tab="tab-whatsapp-summary">🌐 മലയാളം</button>
-            <button class="btn btn-tts btn-sm tts-tab-btn" data-tab="tab-whatsapp-summary">🔊</button>
+            <button class="btn btn-translate btn-sm translate-tab-btn" data-tab="tab-whatsapp-summary">🌐 <span>മലയാളം</span></button>
+            <button class="btn btn-tts btn-sm tts-tab-btn" data-tab="tab-whatsapp-summary">🔊 <span>Read Aloud</span></button>
             <button class="btn btn-outline btn-sm tts-cfg-btn" title="Voice Gender & Speed">⚙️ <span class="cfg-spd-lbl">1.0x</span></button>
-            <button id="share-whatsapp-btn" class="btn btn-whatsapp btn-sm">📲 WhatsApp</button>
-            <button class="btn btn-secondary btn-sm" id="copy-whatsapp-text-btn">📋 Copy</button>
-            <button class="btn btn-success btn-sm print-tab-btn">🖨️ Print</button>
+            <button id="share-whatsapp-btn" class="btn btn-whatsapp btn-sm">📲 <span>Send WhatsApp</span></button>
+            <button class="btn btn-secondary btn-sm" id="copy-whatsapp-text-btn">📋 <span>Copy All</span></button>
+            <button class="btn btn-primary btn-sm print-tab-btn">🖨️ <span>Print Sheet</span></button>
           </div>
         </div>
 
@@ -1543,46 +1664,51 @@
               <span class="u-meta-pacing"><span class="u-meta-subject">Basic Science</span> • Std <span class="u-meta-class">5</span> (Pt <span class="u-meta-part">1</span>) • Day <span class="u-meta-day">1</span>/<span class="u-meta-total">5</span></span>
             </div>
             <div class="u-header-unit">
-              <strong>Chapter:</strong> <span class="u-meta-unit">Select Unit</span>
+              <strong>📖 Chapter:</strong> <span class="u-meta-unit">Select Unit</span>
             </div>
             <div class="u-header-co">
               <div class="u-header-co-title-row">
                 <strong>🎯 Targeted Curricular Objective(s):</strong>
-                <button class="btn btn-outline btn-sm btn-edit-co-header no-print" style="padding:1px 6px; font-size:0.62rem; height:20px;">✏️ Edit CO</button>
+                <button class="btn btn-outline btn-sm btn-edit-co-header no-print" style="padding:1px 6px; font-size:0.64rem; height:20px;">✏️ Edit CO</button>
               </div>
-              <div class="u-meta-co">Generated upon request</div>
+              <div class="u-meta-co">Awaiting CO extraction & confirmation in Generator Control</div>
             </div>
           </div>
 
-          <div class="wa-view-switch no-print">
-            <button class="wa-switch-btn active" id="wa-btn-chat">📱 Card View</button>
-            <button class="wa-switch-btn" id="wa-btn-raw">📋 Plaintext</button>
+          <div class="wa-view-switch no-print" style="display:flex; gap:6px; margin-bottom:8px;">
+            <button class="wa-switch-btn active btn btn-outline btn-sm" id="wa-btn-chat">📱 <span>Card View</span></button>
+            <button class="wa-switch-btn btn btn-outline btn-sm" id="wa-btn-raw">📝 <span>Plaintext</span></button>
           </div>
 
           <div id="wa-styled-container">
-            <div class="wa-chat-canvas" id="whatsapp-preview-area">
-              <div class="wa-bubble" style="color: var(--text-muted); font-style: italic;">
-                Parent broadcast message will render here.
+            <div id="whatsapp-preview-area">
+              <div class="cards-stack-container">
+                <div class="unified-card">
+                  <div class="unified-card-header"><span class="pill-qnum">Status</span></div>
+                  <div class="unified-card-body"><p style="color: var(--text-muted); font-style: italic;">Parent broadcast message will render here.</p></div>
+                </div>
               </div>
             </div>
           </div>
 
           <div id="wa-raw-container" style="display:none;">
-            <div id="whatsapp-summary-body" class="wa-box-raw">Parent communication message will render here.</div>
+            <div id="whatsapp-summary-body" class="unified-card-body" style="background:rgba(255,255,255,0.85); border:1px solid rgba(226,232,240,0.9); border-radius:8px; font-family:monospace; white-space:pre-wrap; font-size:0.8rem;">
+              Parent communication message will render here.
+            </div>
           </div>
         </div>
       </section>
 
-      <!-- Tab 5: Printable Worksheet -->
+      <!-- Tab 5: Printable Worksheet (Unified Cards) -->
       <section id="tab-worksheet-view" class="tab-pane">
         <div class="pane-header no-print">
           <h2>Application Activity Worksheet (Total: 5 Scores)</h2>
           <div class="pane-header-actions">
-            <button class="btn btn-translate btn-sm translate-tab-btn" data-tab="tab-worksheet-view">🌐 മലയാളം</button>
-            <button class="btn btn-tts btn-sm tts-tab-btn" data-tab="tab-worksheet-view">🔊</button>
+            <button class="btn btn-translate btn-sm translate-tab-btn" data-tab="tab-worksheet-view">🌐 <span>മലയാളം</span></button>
+            <button class="btn btn-tts btn-sm tts-tab-btn" data-tab="tab-worksheet-view">🔊 <span>Read Aloud</span></button>
             <button class="btn btn-outline btn-sm tts-cfg-btn" title="Voice Gender & Speed">⚙️ <span class="cfg-spd-lbl">1.0x</span></button>
-            <button class="btn btn-secondary btn-sm" id="copy-all-ws-btn">📋 Copy All</button>
-            <button class="btn btn-success btn-sm print-tab-btn">🖨️ Print</button>
+            <button class="btn btn-secondary btn-sm" id="copy-all-ws-btn">📋 <span>Copy All</span></button>
+            <button class="btn btn-primary btn-sm print-tab-btn">🖨️ <span>Print Sheet</span></button>
           </div>
         </div>
 
@@ -1593,35 +1719,38 @@
               <span class="u-meta-pacing"><span class="u-meta-subject">Basic Science</span> • Std <span class="u-meta-class">5</span> (Pt <span class="u-meta-part">1</span>) • Day <span class="u-meta-day">1</span>/<span class="u-meta-total">5</span></span>
             </div>
             <div class="u-header-unit">
-              <strong>Chapter:</strong> <span class="u-meta-unit">Select Unit</span>
+              <strong>📖 Chapter:</strong> <span class="u-meta-unit">Select Unit</span>
             </div>
             <div class="u-header-co">
               <div class="u-header-co-title-row">
                 <strong>🎯 Targeted Curricular Objective(s):</strong>
-                <button class="btn btn-outline btn-sm btn-edit-co-header no-print" style="padding:1px 6px; font-size:0.62rem; height:20px;">✏️ Edit CO</button>
+                <button class="btn btn-outline btn-sm btn-edit-co-header no-print" style="padding:1px 6px; font-size:0.64rem; height:20px;">✏️ Edit CO</button>
               </div>
-              <div class="u-meta-co">Generated upon request</div>
+              <div class="u-meta-co">Awaiting CO extraction & confirmation in Generator Control</div>
             </div>
           </div>
           
           <div id="worksheet-render-area">
-            <div class="rendered-markdown">
-              <p style="color: var(--text-muted); font-style: italic;">Evaluation activities will render here.</p>
+            <div class="cards-stack-container">
+              <div class="unified-card">
+                <div class="unified-card-header"><span class="pill-qnum">Status</span></div>
+                <div class="unified-card-body"><p style="color: var(--text-muted); font-style: italic;">Evaluation activities will render here.</p></div>
+              </div>
             </div>
           </div>
         </div>
       </section>
 
-      <!-- Tab 6: Worksheet Answers -->
+      <!-- Tab 6: Worksheet Answers (Unified Cards) -->
       <section id="tab-worksheet-answers" class="tab-pane">
         <div class="pane-header no-print">
           <h2>Worksheet Answer Key & Scoring Guide</h2>
           <div class="pane-header-actions">
-            <button class="btn btn-translate btn-sm translate-tab-btn" data-tab="tab-worksheet-answers">🌐 മലയാളം</button>
-            <button class="btn btn-tts btn-sm tts-tab-btn" data-tab="tab-worksheet-answers">🔊 </button>
+            <button class="btn btn-translate btn-sm translate-tab-btn" data-tab="tab-worksheet-answers">🌐 <span>മലയാളം</span></button>
+            <button class="btn btn-tts btn-sm tts-tab-btn" data-tab="tab-worksheet-answers">🔊 <span>Read Aloud</span></button>
             <button class="btn btn-outline btn-sm tts-cfg-btn" title="Voice Gender & Speed">⚙️ <span class="cfg-spd-lbl">1.0x</span></button>
-            <button class="btn btn-secondary btn-sm" id="copy-all-ak-btn">📋 Copy All</button>
-            <button class="btn btn-success btn-sm print-tab-btn">🖨️ Print</button>
+            <button class="btn btn-secondary btn-sm" id="copy-all-ak-btn">📋 <span>Copy All</span></button>
+            <button class="btn btn-primary btn-sm print-tab-btn">🖨️ <span>Print Sheet</span></button>
           </div>
         </div>
 
@@ -1632,20 +1761,23 @@
               <span class="u-meta-pacing"><span class="u-meta-subject">Basic Science</span> • Std <span class="u-meta-class">5</span> (Pt <span class="u-meta-part">1</span>) • Day <span class="u-meta-day">1</span>/<span class="u-meta-total">5</span></span>
             </div>
             <div class="u-header-unit">
-              <strong>Chapter:</strong> <span class="u-meta-unit">Select Unit</span>
+              <strong>📖 Chapter:</strong> <span class="u-meta-unit">Select Unit</span>
             </div>
             <div class="u-header-co">
               <div class="u-header-co-title-row">
                 <strong>🎯 Targeted Curricular Objective(s):</strong>
-                <button class="btn btn-outline btn-sm btn-edit-co-header no-print" style="padding:1px 6px; font-size:0.62rem; height:20px;">✏️ Edit CO</button>
+                <button class="btn btn-outline btn-sm btn-edit-co-header no-print" style="padding:1px 6px; font-size:0.64rem; height:20px;">✏️ Edit CO</button>
               </div>
-              <div class="u-meta-co">Generated upon request</div>
+              <div class="u-meta-co">Awaiting CO extraction & confirmation in Generator Control</div>
             </div>
           </div>
 
           <div id="worksheet-answers-body">
-            <div class="rendered-markdown">
-              <p style="color: var(--text-muted); font-style: italic;">Model answers and scoring criteria will render here.</p>
+            <div class="cards-stack-container">
+              <div class="unified-card">
+                <div class="unified-card-header"><span class="pill-qnum">Status</span></div>
+                <div class="unified-card-body"><p style="color: var(--text-muted); font-style: italic;">Model answers and scoring criteria will render here.</p></div>
+              </div>
             </div>
           </div>
         </div>
@@ -1684,7 +1816,7 @@
     const PRIMARY_MODEL = "gemini-3.6-flash";
     const FALLBACK_MODEL = "gemini-3.5-flash-lite";
 
-    /* IndexedDB Database Helper */
+    /* IndexedDB Helper */
     const idb = {
       db: null,
       async init() {
@@ -1727,7 +1859,12 @@
             const cursor = e.target.result;
             if (cursor) {
               const val = cursor.value;
-              items.push({ id: cursor.key, ...(typeof val === 'object' ? val : { base64: val }) });
+              if (typeof val === 'object' && val !== null) {
+                const { base64, ...meta } = val;
+                items.push({ id: cursor.key, ...meta });
+              } else {
+                items.push({ id: cursor.key });
+              }
               cursor.continue();
             } else {
               resolve(items);
@@ -1788,12 +1925,14 @@
       currentClass: '5',
       currentPart: 'part1',
       currentSubject: 'Basic Science',
+      generationScope: 'single',
       activeBookId: null,
       books: [],
       currentPackage: null,
       activePackageId: null,
       lockedRoadmap: null,
-      customTargetedCO: null, // Stores user-edited CO
+      allCOsList: [],       // Separated real chapter COs
+      isCOConfirmed: false, // Must be confirmed/locked before generation
       savedPackages: [],
       ttsGender: localStorage.getItem('SCERT_TTS_GENDER') || 'female',
       ttsSpeed: parseFloat(localStorage.getItem('SCERT_TTS_SPEED') || '1.0'),
@@ -1813,12 +1952,23 @@
     const dayNumberInput = document.getElementById('day-number');
     const totalDaysInput = document.getElementById('total-days');
     const dayNumberContainer = document.getElementById('day-number-container');
-    const scopeRadios = document.querySelectorAll('input[name="pacing-generation-scope"]');
+    
+    // Segmented Scope Switch
+    const btnScopeSingle = document.getElementById('btn-scope-single');
+    const btnScopeUnit = document.getElementById('btn-scope-unit');
 
-    // Editable CO elements
-    const customCoInput = document.getElementById('custom-co-input');
-    const coEditedBadge = document.getElementById('co-edited-badge');
-    const btnQuickEditCo = document.getElementById('btn-quick-edit-co');
+    // Generator Control Elements (Phase 1 & 2)
+    const coWorkflowBadge = document.getElementById('co-workflow-badge');
+    const cosStatusPill = document.getElementById('cos-status-pill');
+    const generateCosBtn = document.getElementById('generate-cos-btn');
+    const btnAddNewCo = document.getElementById('btn-add-new-co');
+    const coSeparateList = document.getElementById('co-separate-list');
+    const lockCosBtn = document.getElementById('lock-cos-btn');
+    const generateBtn = document.getElementById('generate-btn');
+    const resetWorkspaceBtn = document.getElementById('reset-workspace-btn');
+    const quickResetBtn = document.getElementById('quick-reset-btn');
+    const activeStatusBar = document.getElementById('active-status-bar');
+    const activeStatusText = document.getElementById('active-status-text');
 
     // CO Modal Elements
     const coModalOverlay = document.getElementById('co-modal-overlay');
@@ -1826,18 +1976,14 @@
     const coModalCancelBtn = document.getElementById('co-modal-cancel-btn');
     const coModalSaveBtn = document.getElementById('co-modal-save-btn');
     const modalTargetedCo = document.getElementById('modal-targeted-co');
-    const modalMasterCos = document.getElementById('modal-master-cos');
-    const modalCoDayLbl = document.getElementById('modal-co-day-lbl');
+    const modalCoDayAssign = document.getElementById('modal-co-day-assign');
+    const modalCoNumAssign = document.getElementById('modal-co-num-assign');
+    const modalCoIndex = document.getElementById('modal-co-index');
 
     const roadmapStatusPill = document.getElementById('roadmap-status-pill');
     const roadmapStatusText = document.getElementById('roadmap-status-text');
     const unlockRoadmapBtn = document.getElementById('unlock-roadmap-btn');
 
-    const generateBtn = document.getElementById('generate-btn');
-    const resetWorkspaceBtn = document.getElementById('reset-workspace-btn');
-    const quickResetBtn = document.getElementById('quick-reset-btn');
-    const activeStatusBar = document.getElementById('active-status-bar');
-    const activeStatusText = document.getElementById('active-status-text');
     const pkgArchiveList = document.getElementById('pkg-archive-list');
     const packageCountBadge = document.getElementById('package-count-badge');
     const mobPkgPill = document.getElementById('mob-pkg-pill');
@@ -1912,6 +2058,16 @@
       toggleText.textContent = 'Controls';
     });
 
+    function setGenerationScope(scope) {
+      state.generationScope = scope;
+      btnScopeSingle.classList.toggle('active', scope === 'single');
+      btnScopeUnit.classList.toggle('active', scope === 'unit');
+      dayNumberContainer.style.display = (scope === 'unit') ? 'none' : 'block';
+    }
+
+    btnScopeSingle.addEventListener('click', () => setGenerationScope('single'));
+    btnScopeUnit.addEventListener('click', () => setGenerationScope('unit'));
+
     function showSpinner(text = "Processing...") {
       spinnerText.textContent = text;
       spinnerOverlay.style.display = "flex";
@@ -1979,113 +2135,378 @@
       document.body.removeChild(ta);
     }
 
-    // =========================================================================
-    // EDITABLE CURRICULAR OBJECTIVES (CO) SYSTEM
-    // =========================================================================
-    function setEditedCOState(coText, isCustom = true) {
-      state.customTargetedCO = coText ? coText.trim() : null;
-      if (customCoInput) customCoInput.value = state.customTargetedCO || "";
+    async function base64ToBlob(base64, mimeType = 'application/pdf') {
+      const res = await fetch(`data:${mimeType};base64,${base64}`);
+      return await res.blob();
+    }
 
-      if (state.customTargetedCO && isCustom) {
-        coEditedBadge.style.display = "block";
-        document.querySelectorAll('.u-meta-co').forEach(el => {
-          el.innerHTML = `
-            ${formatCODisplay(state.customTargetedCO)}
-            <div style="margin-top:4px;"><span class="u-co-badge-custom">⚡ Custom Teacher-Edited CO Active</span></div>
-          `;
-        });
-      } else {
-        coEditedBadge.style.display = "none";
+    async function viewBookPdf(bookId) {
+      const book = state.books.find(b => b.id === bookId);
+      showSpinner(`Loading ${book?.subject || 'Textbook'} PDF...`);
+      try {
+        const cached = await idb.getBook(bookId);
+        const base64 = cached?.base64 || cached;
+        hideSpinner();
+        if (!base64 || typeof base64 !== 'string') {
+          return showMessageBox("No cached PDF data found for this book. Please re-upload.", "File Missing");
+        }
+        const blob = await base64ToBlob(base64, 'application/pdf');
+        const blobUrl = URL.createObjectURL(blob);
+        window.open(blobUrl, '_blank');
+      } catch (err) {
+        hideSpinner();
+        showMessageBox("Unable to open PDF viewer: " + err.message, "PDF Preview Notice");
       }
     }
 
-    // Direct input listener on Card 1
-    customCoInput.addEventListener('input', (e) => {
-      const val = e.target.value.trim();
-      if (val) {
-        setEditedCOState(val, true);
+    // =========================================================================
+    // DYNAMIC SUBJECT SYNC (STRICTLY FROM UPLOADED TEXTBOOKS)
+    // =========================================================================
+    function syncSubjectDropdown() {
+      const currentCls = classSelect.value;
+      const booksForClass = state.books.filter(b => b.classId === currentCls);
+      const relevantBooks = booksForClass.length > 0 ? booksForClass : state.books;
+      const uniqueSubjects = Array.from(new Set(relevantBooks.map(b => b.subject).filter(Boolean)));
+
+      targetSubjectInput.innerHTML = '';
+      if (uniqueSubjects.length === 0) {
+        const opt = document.createElement('option');
+        opt.value = "";
+        opt.textContent = "No books in Card 2";
+        targetSubjectInput.appendChild(opt);
+        state.currentSubject = "";
       } else {
-        setEditedCOState(null, false);
-        // Fall back to roadmap if available
-        if (state.lockedRoadmap) {
-          const day = dayNumberInput.value;
-          const assigned = state.lockedRoadmap.dailyDistribution?.[day];
-          document.querySelectorAll('.u-meta-co').forEach(el => el.innerHTML = formatCODisplay(assigned));
+        uniqueSubjects.forEach(sub => {
+          const opt = document.createElement('option');
+          opt.value = sub;
+          opt.textContent = sub;
+          if (sub === state.currentSubject) opt.selected = true;
+          targetSubjectInput.appendChild(opt);
+        });
+
+        if (!uniqueSubjects.includes(state.currentSubject)) {
+          state.currentSubject = uniqueSubjects[0];
+          targetSubjectInput.value = uniqueSubjects[0];
         }
+      }
+    }
+
+    targetSubjectInput.addEventListener('change', (e) => {
+      state.currentSubject = e.target.value;
+      checkAndLoadChapterRoadmap();
+      resetCOEngineToEmpty();
+      renderBooksList();
+    });
+
+    // =========================================================================
+    // STEP 1: CO GENERATION & MANAGEMENT (NO DEFAULTS, REAL CHAPTER CONTENT ONLY)
+    // =========================================================================
+    function resetCOEngineToEmpty() {
+      state.allCOsList = [];
+      state.isCOConfirmed = false;
+      cosStatusPill.textContent = "Awaiting Extraction";
+      cosStatusPill.style.background = "#f1f5f9";
+      cosStatusPill.style.color = "#475569";
+      coWorkflowBadge.textContent = "Step 1: COs";
+      coWorkflowBadge.style.background = "#e0f2fe";
+      coWorkflowBadge.style.color = "#0369a1";
+
+      lockCosBtn.disabled = true;
+      generateBtn.disabled = true;
+      generateBtn.innerHTML = `✨ 2. Generate Package (Locked to COs)`;
+
+      coSeparateList.innerHTML = `
+        <div style="font-size: 0.68rem; color: var(--text-muted); text-align: center; padding: 10px; font-style: italic;">
+          No default COs. Select chapter & textbook, then tap "Extract & Generate COs" above.
+        </div>
+      `;
+      document.querySelectorAll('.u-meta-co').forEach(el => {
+        el.innerHTML = "Awaiting CO extraction & confirmation in Generator Control";
+      });
+    }
+
+    function renderSeparatedCOList() {
+      if (state.allCOsList.length === 0) {
+        resetCOEngineToEmpty();
+        return;
+      }
+
+      const currentDay = parseInt(dayNumberInput.value, 10) || 1;
+      let html = '';
+
+      state.allCOsList.forEach((co, idx) => {
+        const isCurrentDay = (co.day === currentDay);
+        html += `
+          <div class="co-item-card ${isCurrentDay ? 'active-period-co' : ''}">
+            <div class="co-item-top">
+              <div class="co-item-badge-group">
+                <span class="co-badge-num">${co.num}</span>
+                <span class="co-day-tag">Day ${co.day}</span>
+              </div>
+              <div class="co-item-actions">
+                <button type="button" class="co-act-btn co-view-btn" data-index="${idx}" title="View Objective">👁️ View</button>
+                <button type="button" class="co-act-btn co-modify-btn" data-index="${idx}" title="Modify Objective">✏️ Modify</button>
+                <button type="button" class="co-act-btn co-delete-btn del" data-index="${idx}" title="Delete Objective">🗑️ Delete</button>
+              </div>
+            </div>
+            <div class="co-item-text">${escapeHtml(co.text)}</div>
+          </div>
+        `;
+      });
+      coSeparateList.innerHTML = html;
+
+      // Enable lock action
+      lockCosBtn.disabled = false;
+      cosStatusPill.textContent = `${state.allCOsList.length} COs Extracted`;
+      cosStatusPill.style.background = "#e0f2fe";
+      cosStatusPill.style.color = "#0369a1";
+
+      // Event handlers
+      coSeparateList.querySelectorAll('.co-view-btn').forEach(btn => {
+        btn.addEventListener('click', (e) => {
+          const idx = parseInt(e.currentTarget.dataset.index, 10);
+          const co = state.allCOsList[idx];
+          showMessageBox(`[${co.num} - Assigned to Day ${co.day}]\n\n${co.text}`, "Curricular Objective Details");
+        });
+      });
+
+      coSeparateList.querySelectorAll('.co-modify-btn').forEach(btn => {
+        btn.addEventListener('click', (e) => {
+          const idx = parseInt(e.currentTarget.dataset.index, 10);
+          openCOModalForIndex(idx);
+        });
+      });
+
+      coSeparateList.querySelectorAll('.co-delete-btn').forEach(btn => {
+        btn.addEventListener('click', (e) => {
+          const idx = parseInt(e.currentTarget.dataset.index, 10);
+          const co = state.allCOsList[idx];
+          if (!confirm(`Delete "${co.num}"? The teaching package will ground strictly on remaining objectives.`)) return;
+          state.allCOsList.splice(idx, 1);
+          renderSeparatedCOList();
+          showToast(`Deleted ${co.num}`);
+        });
+      });
+    }
+
+    function getEffectiveTargetedCOText() {
+      const currentDay = parseInt(dayNumberInput.value, 10) || 1;
+      const matching = state.allCOsList.filter(c => c.day === currentDay);
+      if (matching.length > 0) {
+        return matching.map(c => `${c.num}: ${c.text}`).join('\n');
+      }
+      return state.allCOsList[0] ? `${state.allCOsList[0].num}: ${state.allCOsList[0].text}` : '';
+    }
+
+    // Step 1 Trigger: Extract & Generate Chapter COs from Textbook
+    generateCosBtn.addEventListener('click', async () => {
+      const unitTitle = unitTitleInput.value.trim();
+      if (!unitTitle) return showMessageBox("Please enter a Chapter or Unit Title before extracting COs.", "Missing Chapter");
+
+      const totalDays = parseInt(totalDaysInput.value, 10) || 5;
+
+      let activeBook = state.books.find(b => b.id === state.activeBookId);
+      if (!activeBook) {
+        activeBook = state.books.find(b => 
+          b.isLocked && 
+          b.classId === state.currentClass && 
+          (b.subject || '').toLowerCase() === (state.currentSubject || '').toLowerCase()
+        );
+      }
+
+      let activeBase64 = null;
+      if (activeBook) {
+        const cached = await idb.getBook(activeBook.id);
+        activeBase64 = cached?.base64 || cached;
+      }
+
+      showSpinner(`Analyzing textbook & extracting authentic SCERT COs for "${unitTitle}"...`);
+
+      try {
+        const prompt = `
+You are an expert Kerala SCERT curriculum specialist.
+Analyze the chapter "${unitTitle}" for:
+- Subject: ${state.currentSubject}
+- Standard: Class ${state.currentClass} (Part ${state.currentPart})
+- Total Planned Days: ${totalDays}
+
+TASK:
+Extract and formulate the exact, authentic Curricular Objectives (CO 1, CO 2, ... CO N) systematically and rigorously from the real content of this specific chapter.
+DO NOT use generic or placeholder templates. Reflect the exact scientific/social/mathematical concepts, activities, experiments, process skills, and competencies found in this chapter.
+
+Map them across ${totalDays} days in "dailyDistribution". (Multiple COs can be grouped per day if CO count exceeds days).
+
+OUTPUT STRICT JSON:
+{
+  "allUnitCurricularObjectives": [
+    "CO 1: [Specific objective based on chapter content]",
+    "CO 2: [Specific objective based on chapter content]"
+  ],
+  "dailyDistribution": {
+    "1": ["CO 1: ..."],
+    "2": ["CO 2: ..."]
+  }
+}
+`;
+
+        const parts = [{ text: prompt }];
+        if (activeBase64 && typeof activeBase64 === 'string') {
+          const sizeInMB = (activeBase64.length * 0.75) / (1024 * 1024);
+          if (sizeInMB <= 15) {
+            parts.unshift({ inlineData: { mimeType: "application/pdf", data: activeBase64 } });
+          }
+        }
+
+        const payload = {
+          contents: [{ role: "user", parts: parts }],
+          generationConfig: { responseMimeType: "application/json", temperature: 0.1 }
+        };
+
+        const data = await executeSmartGeneration(payload);
+        let rawJson = data.candidates[0].content.parts[0].text;
+        rawJson = rawJson.replace(/^```(?:json)?\s*/i, '').replace(/\s*```$/i, '').trim();
+        const result = JSON.parse(rawJson);
+
+        const extractedList = result.allUnitCurricularObjectives || [];
+        if (extractedList.length === 0) throw new Error("Could not extract chapter objectives.");
+
+        state.allCOsList = extractedList.map((coText, idx) => {
+          let dayAssigned = 1;
+          if (result.dailyDistribution) {
+            for (let d in result.dailyDistribution) {
+              if (result.dailyDistribution[d].some(str => str.includes(`CO ${idx+1}`) || coText.includes(str))) {
+                dayAssigned = parseInt(d, 10);
+                break;
+              }
+            }
+          }
+          if (!dayAssigned) {
+            dayAssigned = Math.min(totalDays, Math.floor((idx / extractedList.length) * totalDays) + 1);
+          }
+
+          return {
+            num: `CO ${idx + 1}`,
+            text: coText.replace(/^CO\s*\d+\s*:\s*/i, ''),
+            day: dayAssigned
+          };
+        });
+
+        renderSeparatedCOList();
+        hideSpinner();
+        showToast(`Extracted ${state.allCOsList.length} authentic chapter COs!`);
+      } catch (err) {
+        hideSpinner();
+        showMessageBox("Failed to extract chapter COs: " + err.message, "CO Extraction Error");
       }
     });
 
-    function openCOModal() {
-      const day = dayNumberInput.value || "1";
-      modalCoDayLbl.textContent = day;
+    // Add New Custom CO
+    btnAddNewCo.addEventListener('click', () => {
+      openCOModalForIndex(-1);
+    });
 
-      const currentCO = state.customTargetedCO || 
-        (state.lockedRoadmap ? state.lockedRoadmap.dailyDistribution?.[day] : "") || 
-        (state.currentPackage ? (state.currentPackage.targetedCurricularObjectives || state.currentPackage.targetedCurricularObjective) : "");
+    function openCOModalForIndex(idx = -1) {
+      modalCoIndex.value = idx;
+      const currentDay = parseInt(dayNumberInput.value, 10) || 1;
 
-      modalTargetedCo.value = Array.isArray(currentCO) ? currentCO.join('\n') : (currentCO || "");
-
-      const masterCOs = (state.lockedRoadmap && state.lockedRoadmap.allUnitCurricularObjectives) ||
-        (state.currentPackage && state.currentPackage.allUnitCurricularObjectives) || [];
-      modalMasterCos.value = masterCOs.join('\n');
-
+      if (idx >= 0 && state.allCOsList[idx]) {
+        const co = state.allCOsList[idx];
+        modalTargetedCo.value = co.text;
+        modalCoDayAssign.value = co.day || currentDay;
+        modalCoNumAssign.value = co.num || `CO ${idx + 1}`;
+      } else {
+        modalTargetedCo.value = "";
+        modalCoDayAssign.value = currentDay;
+        modalCoNumAssign.value = `CO ${state.allCOsList.length + 1}`;
+      }
       coModalOverlay.style.display = "flex";
       modalTargetedCo.focus();
     }
 
     function hideCOModal() {
       coModalOverlay.style.display = "none";
+      modalCoIndex.value = "";
     }
 
-    btnQuickEditCo.addEventListener('click', openCOModal);
     coModalCloseBtn.addEventListener('click', hideCOModal);
     coModalCancelBtn.addEventListener('click', hideCOModal);
 
-    // Attach listener to all header edit buttons
+    coModalSaveBtn.addEventListener('click', () => {
+      const text = modalTargetedCo.value.trim();
+      if (!text) return alert("Please enter the Curricular Objective statement.");
+      const day = parseInt(modalCoDayAssign.value, 10) || 1;
+      const num = modalCoNumAssign.value.trim() || "CO";
+      const idx = parseInt(modalCoIndex.value, 10);
+
+      if (idx >= 0 && state.allCOsList[idx]) {
+        state.allCOsList[idx] = { num, text, day };
+      } else {
+        state.allCOsList.push({ num, text, day });
+      }
+
+      renderSeparatedCOList();
+      hideCOModal();
+      showToast("Curricular Objective saved!");
+    });
+
+    // Confirm & Lock COs Action -> Unlocks Package Generation
+    lockCosBtn.addEventListener('click', () => {
+      if (state.allCOsList.length === 0) return;
+
+      state.isCOConfirmed = true;
+      const totalDays = parseInt(totalDaysInput.value, 10) || 5;
+      const unitTitle = unitTitleInput.value.trim() || "Unit";
+      const roadmapKey = getRoadmapStorageKey(state.currentClass, state.currentSubject, unitTitle);
+
+      const dailyMap = {};
+      state.allCOsList.forEach(co => {
+        if (!dailyMap[co.day]) dailyMap[co.day] = [];
+        dailyMap[co.day].push(`${co.num}: ${co.text}`);
+      });
+
+      const roadmapObj = {
+        totalDays: totalDays,
+        allUnitCurricularObjectives: state.allCOsList.map(c => `${c.num}: ${c.text}`),
+        dailyDistribution: dailyMap
+      };
+
+      localStorage.setItem(roadmapKey, JSON.stringify(roadmapObj));
+      state.lockedRoadmap = roadmapObj;
+
+      // Update UI
+      roadmapStatusPill.style.display = 'flex';
+      roadmapStatusText.textContent = `🔒 Chapter COs Locked (${totalDays} Days Roadmap)`;
+      cosStatusPill.textContent = `🔒 ${state.allCOsList.length} COs Locked`;
+      cosStatusPill.style.background = "#dcfce7";
+      cosStatusPill.style.color = "#15803d";
+      
+      coWorkflowBadge.textContent = "Step 2: Package Ready";
+      coWorkflowBadge.style.background = "#dcfce7";
+      coWorkflowBadge.style.color = "#15803d";
+
+      // Enable Step 2 Package Generation
+      generateBtn.disabled = false;
+
+      // Update Universal Headers across all tabs
+      const currentTargetedCO = getEffectiveTargetedCOText();
+      document.querySelectorAll('.u-meta-co').forEach(el => {
+        el.innerHTML = `
+          ${formatCODisplay(currentTargetedCO)}
+          <div style="margin-top:4px;"><span class="u-co-badge-custom">🔒 Confirmed & Locked Chapter COs</span></div>
+        `;
+      });
+
+      showToast("Curricular Objectives locked! Package generator is now unlocked.");
+    });
+
     function attachHeaderCOEditListeners() {
       document.querySelectorAll('.btn-edit-co-header').forEach(btn => {
-        btn.onclick = openCOModal;
+        btn.onclick = () => openCOModalForIndex(0);
       });
     }
 
-    coModalSaveBtn.addEventListener('click', () => {
-      const editedTarget = modalTargetedCo.value.trim();
-      const rawMasters = modalMasterCos.value.trim();
-
-      if (editedTarget) {
-        setEditedCOState(editedTarget, true);
-      }
-
-      if (rawMasters) {
-        const masterList = rawMasters.split('\n').map(s => s.trim()).filter(s => s.length > 0);
-        const unitTitle = unitTitleInput.value.trim();
-        const totalDays = parseInt(totalDaysInput.value, 10);
-        const day = dayNumberInput.value;
-
-        if (unitTitle) {
-          const roadmapKey = getRoadmapStorageKey(state.currentClass, state.currentSubject, unitTitle);
-          let roadmap = state.lockedRoadmap || {
-            totalDays: totalDays,
-            allUnitCurricularObjectives: masterList,
-            dailyDistribution: {}
-          };
-          roadmap.allUnitCurricularObjectives = masterList;
-          if (editedTarget) {
-            roadmap.dailyDistribution[day] = [editedTarget];
-          }
-          localStorage.setItem(roadmapKey, JSON.stringify(roadmap));
-          state.lockedRoadmap = roadmap;
-          roadmapStatusPill.style.display = 'flex';
-          roadmapStatusText.textContent = `🔒 Chapter COs Locked (${totalDays} Days Roadmap)`;
-        }
-      }
-
-      hideCOModal();
-      showToast("Curricular Objectives applied & locked!");
-    });
-
     // =========================================================================
-    // DYNAMIC 100+ TEXTBOOK MANAGEMENT
+    // DYNAMIC TEXTBOOK REPOSITORY
     // =========================================================================
     function openBookModal(book = null) {
       if (book) {
@@ -2101,7 +2522,7 @@
         editBookIdInput.value = "";
         modalBookClass.value = classSelect.value || "5";
         modalBookPart.value = partSelect.value || "part1";
-        modalBookSubject.value = targetSubjectInput.value || "Basic Science";
+        modalBookSubject.value = state.currentSubject || "Basic Science";
         modalBookLock.checked = true;
         modalFileStatus.textContent = "Choose a PDF (Max 15MB recommended).";
       }
@@ -2136,13 +2557,9 @@
       const file = modalBookFile.files[0];
 
       let existing = state.books.find(b => b.id === bookId);
-
-      if (!existing && !file) {
-        return showMessageBox("Please select a PDF file for this new textbook.", "Missing PDF");
-      }
+      if (!existing && !file) return showMessageBox("Please select a PDF file for this new textbook.", "Missing PDF");
 
       showSpinner("Saving textbook to repository...");
-
       try {
         let base64Data = null;
         let fileName = existing ? existing.fileName : file.name;
@@ -2174,9 +2591,7 @@
           try {
             if (auth && !auth.currentUser) await signInAnonymously(auth).catch(() => {});
             await setDoc(doc(db, 'curriculum_books', bookId), bookObj);
-          } catch (e) {
-            console.warn("Firebase book sync skipped:", e.message);
-          }
+          } catch (e) {}
         }
 
         hideSpinner();
@@ -2210,6 +2625,7 @@
       });
 
       state.books = Array.from(bookMap.values());
+      syncSubjectDropdown();
       renderBooksList();
     }
 
@@ -2232,8 +2648,8 @@
 
       if (filtered.length === 0) {
         tbLibraryList.innerHTML = `
-          <div style="font-size: 0.7rem; color: var(--text-muted); text-align: center; padding: 14px;">
-            ${state.books.length === 0 ? 'No textbooks uploaded yet. Click "+ Add Book" to begin building your collection.' : 'No textbooks match your search/filter criteria.'}
+          <div style="font-size: 0.7rem; color: var(--text-muted); text-align: center; padding: 10px;">
+            ${state.books.length === 0 ? 'No books uploaded yet. Click "+ Add Book".' : 'No textbooks match search.'}
           </div>
         `;
         return;
@@ -2244,42 +2660,49 @@
       let html = '';
       filtered.forEach(book => {
         const isTarget = (state.activeBookId === book.id) || 
-          (state.currentClass === book.classId && state.currentPart === book.partId && state.currentSubject.toLowerCase() === (book.subject || '').toLowerCase());
+          (state.currentClass === book.classId && state.currentPart === book.partId && (state.currentSubject || '').toLowerCase() === (book.subject || '').toLowerCase());
         const isLocked = book.isLocked !== false;
 
         html += `
-          <div class="tb-card-item ${isTarget ? 'is-active-target' : ''}" data-id="${book.id}">
-            <div class="tb-card-top">
-              <span class="tb-subject-badge">
-                📖 ${escapeHtml(book.subject || 'Subject')} • Std ${book.classId} (${book.partId === 'part2' ? 'Pt 2' : book.partId === 'full' ? 'Full' : 'Pt 1'})
-              </span>
-              <span class="tb-lock-pill ${isLocked ? 'locked' : 'unlocked'}">
-                ${isLocked ? '🔒 ' : '🔓 '}
-              </span>
+          <div class="tb-compact-row ${isTarget ? 'is-active-target' : ''}" data-id="${book.id}">
+            <div class="tb-row-meta">
+              <div class="tb-row-title">
+                <span>📖 ${escapeHtml(book.subject || 'Subject')}</span>
+                <span class="pill-qnum" style="font-size:0.58rem; padding:1px 4px;">Std ${book.classId} (${book.partId === 'part2' ? 'P2' : book.partId === 'full' ? 'Full' : 'P1'})</span>
+              </div>
+              <div class="tb-row-sub" title="${escapeHtml(book.fileName || '')}">
+                ${escapeHtml(book.fileName || 'PDF')} • ${book.fileSize || ''}
+              </div>
             </div>
-            <div class="tb-card-mid">
-              <span title="${escapeHtml(book.fileName || '')}">📄 ${escapeHtml(book.fileName || 'PDF')}</span>
-              <span>${book.fileSize || ''}</span>
-            </div>
-            <div class="tb-card-actions">
-              <button class="tb-btn-icon tb-use-btn ${isTarget ? 'active-use' : ''}" data-id="${book.id}" title="Select this textbook for Day planning in Card 1">
+            <div class="tb-micro-actions">
+              <button class="tb-micro-btn ${isTarget ? 'active-target' : ''} tb-use-btn" data-id="${book.id}" title="Set as Active Target">
                 🎯 ${isTarget ? 'Active' : 'Use'}
               </button>
-              <div class="tb-icon-btn-group">
-                <button class="tb-btn-icon tb-lock-toggle-btn" data-id="${book.id}" title="${isLocked ? 'Unlock Textbook' : 'Lock Textbook'}">
-                  ${isLocked ? '🔓 ' : '🔒'}
-                </button>
-                <button class="tb-btn-icon tb-edit-btn" data-id="${book.id}" title="Modify Title, Subject, Class or File">
-                  ✏️</button>
-                <button class="tb-btn-icon del-btn tb-delete-btn" data-id="${book.id}" title="Delete from Database">
-                  🗑️
-                </button>
-              </div>
+              <button class="tb-micro-btn view-pdf tb-view-btn" data-id="${book.id}" title="View Full PDF Document">
+                👁️ View
+              </button>
+              <button class="tb-micro-btn tb-lock-toggle-btn" data-id="${book.id}" title="${isLocked ? 'Unlock Textbook' : 'Lock Textbook'}">
+                ${isLocked ? '🔒 Lock' : '🔓 Unlock'}
+              </button>
+              <button class="tb-micro-btn tb-edit-btn" data-id="${book.id}" title="Modify Details">
+                ✏️
+              </button>
+              <button class="tb-micro-btn del tb-delete-btn" data-id="${book.id}" title="Delete from Database">
+                🗑️
+              </button>
             </div>
           </div>
         `;
       });
       tbLibraryList.innerHTML = html;
+
+      // Attach handlers
+      tbLibraryList.querySelectorAll('.tb-view-btn').forEach(btn => {
+        btn.addEventListener('click', (e) => {
+          const bId = e.currentTarget.dataset.id;
+          viewBookPdf(bId);
+        });
+      });
 
       tbLibraryList.querySelectorAll('.tb-use-btn').forEach(btn => {
         btn.addEventListener('click', (e) => {
@@ -2293,6 +2716,7 @@
 
             classSelect.value = book.classId;
             partSelect.value = book.partId;
+            syncSubjectDropdown();
             targetSubjectInput.value = book.subject;
             
             checkAndLoadChapterRoadmap();
@@ -2335,7 +2759,7 @@
           const bId = e.currentTarget.dataset.id;
           const book = state.books.find(b => b.id === bId);
           if (!book) return;
-          if (!confirm(`Delete "${book.subject} Std ${book.classId} (${book.fileName})" from textbook library?`)) return;
+          if (!confirm(`Delete "${book.subject} Std ${book.classId}" from repository?`)) return;
 
           await idb.deleteBook(bId);
           if (db) {
@@ -2343,6 +2767,7 @@
           }
           if (state.activeBookId === bId) state.activeBookId = null;
           state.books = state.books.filter(b => b.id !== bId);
+          syncSubjectDropdown();
           renderBooksList();
           showToast("Textbook deleted.");
         });
@@ -2352,8 +2777,10 @@
     tbSearchBox.addEventListener('input', renderBooksList);
     tbFilterClass.addEventListener('change', renderBooksList);
 
+    // Sync Pacing Inputs to State & COs
     classSelect.addEventListener('change', (e) => { 
       state.currentClass = e.target.value; 
+      syncSubjectDropdown();
       checkAndLoadChapterRoadmap();
       renderBooksList();
     });
@@ -2362,10 +2789,20 @@
       checkAndLoadChapterRoadmap();
       renderBooksList();
     });
-    targetSubjectInput.addEventListener('input', (e) => { 
-      state.currentSubject = e.target.value; 
+
+    unitTitleInput.addEventListener('input', () => {
       checkAndLoadChapterRoadmap();
-      renderBooksList();
+    });
+    dayNumberInput.addEventListener('input', () => {
+      if (state.isCOConfirmed) {
+        const currentTargetedCO = getEffectiveTargetedCOText();
+        document.querySelectorAll('.u-meta-co').forEach(el => {
+          el.innerHTML = `
+            ${formatCODisplay(currentTargetedCO)}
+            <div style="margin-top:4px;"><span class="u-co-badge-custom">🔒 Confirmed & Locked Chapter COs</span></div>
+          `;
+        });
+      }
     });
 
     const withTimeout = (promise, ms = 2500) => 
@@ -2436,7 +2873,7 @@
     });
 
     // =========================================================================
-    // CHAPTER ROADMAP LOCKING (WITH EDITED CO COMPATIBILITY)
+    // CHAPTER ROADMAP CHECK
     // =========================================================================
     function getRoadmapStorageKey(cls, subject, unit) {
       const cleanSub = (subject || '').toLowerCase().trim().replace(/[^a-z0-9]/g, '_');
@@ -2445,7 +2882,7 @@
     }
 
     function formatCODisplay(coData) {
-      if (!coData) return 'SCERT Curricular Competency Targeted';
+      if (!coData) return 'Curricular Objectives Locked';
       if (Array.isArray(coData)) {
         return coData.map(c => `• ${c}`).join('<br>');
       }
@@ -2468,13 +2905,19 @@
           roadmapStatusPill.style.display = 'flex';
           roadmapStatusText.textContent = `🔒 Chapter COs Locked (${parsed.totalDays} Days Roadmap)`;
           totalDaysInput.value = parsed.totalDays;
-          
-          const day = dayNumberInput.value;
-          const assignedCO = parsed.dailyDistribution?.[day];
-          if (assignedCO && !state.customTargetedCO) {
-            const coString = Array.isArray(assignedCO) ? assignedCO.join('; ') : assignedCO;
-            customCoInput.value = coString;
-            document.querySelectorAll('.u-meta-co').forEach(el => el.innerHTML = formatCODisplay(assignedCO));
+
+          if (parsed.allUnitCurricularObjectives && parsed.allUnitCurricularObjectives.length > 0) {
+            state.allCOsList = parsed.allUnitCurricularObjectives.map((str, i) => {
+              const parts = str.split(':');
+              return {
+                num: parts[0].trim() || `CO ${i+1}`,
+                text: parts.slice(1).join(':').trim() || str,
+                day: 1
+              };
+            });
+            state.isCOConfirmed = true;
+            renderSeparatedCOList();
+            generateBtn.disabled = false;
           }
           return;
         } catch (e) {}
@@ -2483,29 +2926,44 @@
       state.lockedRoadmap = null;
     }
 
-    unitTitleInput.addEventListener('input', checkAndLoadChapterRoadmap);
-    dayNumberInput.addEventListener('input', () => {
-      const day = dayNumberInput.value;
-      if (state.lockedRoadmap && !state.customTargetedCO) {
-        const assignedCO = state.lockedRoadmap.dailyDistribution?.[day];
-        if (assignedCO) {
-          const coString = Array.isArray(assignedCO) ? assignedCO.join('; ') : assignedCO;
-          customCoInput.value = coString;
-          document.querySelectorAll('.u-meta-co').forEach(el => el.innerHTML = formatCODisplay(assignedCO));
-        }
-      }
-    });
-
     unlockRoadmapBtn.addEventListener('click', () => {
       const unit = unitTitleInput.value.trim();
       if (!unit) return;
-      if (!confirm(`Unlock and recalculate Curricular Objectives for "${unit}"?`)) return;
+      if (!confirm(`Unlock and clear Curricular Objectives for "${unit}"?`)) return;
       const key = getRoadmapStorageKey(state.currentClass, state.currentSubject, unit);
       localStorage.removeItem(key);
       state.lockedRoadmap = null;
-      setEditedCOState(null, false);
       roadmapStatusPill.style.display = 'none';
-      showToast("Chapter COs unlocked! Next generation will calculate a fresh pacing roadmap.");
+      resetCOEngineToEmpty();
+      showToast("Chapter COs unlocked!");
+    });
+
+    // Copy Handlers
+    document.getElementById('copy-all-lp-btn').addEventListener('click', () => {
+      copyText(document.getElementById('lesson-plan-body').innerText, "Copied Complete Lesson Plan!");
+    });
+    document.getElementById('copy-all-media-btn').addEventListener('click', () => {
+      copyText(document.getElementById('media-resources-body').innerText, "Copied All Media Recommendations!");
+    });
+    document.getElementById('copy-all-bb-btn').addEventListener('click', () => {
+      copyText(document.getElementById('blackboard-notes-body').innerText, "Copied Blackboard Notes!");
+    });
+    document.getElementById('copy-all-ws-btn').addEventListener('click', () => {
+      copyText(document.getElementById('worksheet-render-area').innerText, "Copied Complete Worksheet Activities!");
+    });
+    document.getElementById('copy-all-ak-btn').addEventListener('click', () => {
+      copyText(document.getElementById('worksheet-answers-body').innerText, "Copied Complete Answer Key & Rubrics!");
+    });
+    document.getElementById('copy-whatsapp-text-btn').addEventListener('click', () => {
+      copyText(document.getElementById('whatsapp-summary-body').textContent.trim(), "Copied WhatsApp Broadcast Text!");
+    });
+
+    shareWhatsAppBtn.addEventListener('click', () => {
+      const text = document.getElementById('whatsapp-summary-body').textContent.trim();
+      if (!text || text.includes("Parent communication message will render here")) {
+        return showMessageBox("Please generate or load a lesson package first.", "Nothing to Share");
+      }
+      window.open(`https://api.whatsapp.com/send?text=${encodeURIComponent(text)}`, '_blank');
     });
 
     // WhatsApp View Switcher
@@ -2523,66 +2981,10 @@
       waStyledContainer.style.display = 'none'; waRawContainer.style.display = 'block';
     });
 
-    // Copy All Buttons
-    document.getElementById('copy-all-bb-btn').addEventListener('click', () => {
-      if (!state.currentPackage?.blackboardQa?.length) {
-        return copyText(document.getElementById('blackboard-notes-body').innerText, "Copied Blackboard Notes!");
-      }
-      let combined = `*BLACKBOARD APPLICATION NOTES*\n\n`;
-      state.currentPackage.blackboardQa.forEach((item, idx) => {
-        combined += `Q${idx + 1}: ${item.question}\nAns: ${item.answer}\n\n`;
-      });
-      copyText(combined.trim(), "Copied All Blackboard Q&As!");
-    });
-
-    document.getElementById('copy-all-ws-btn').addEventListener('click', () => {
-      const wsList = state.currentPackage?.worksheetQuestions || state.currentPackage?.blackboardQa;
-      if (!wsList || wsList.length === 0) {
-        return copyText(document.getElementById('worksheet-render-area').innerText, "Copied Worksheet!");
-      }
-      let text = `*SCERT EVALUATION WORKSHEET (5 SCORES)*\n\n`;
-      wsList.forEach((q, i) => {
-        text += `Question ${i + 1} [Score: ${q.score || 1}]:\n${q.question}\n\n`;
-      });
-      copyText(text.trim(), "Copied All Worksheet Activities!");
-    });
-
-    document.getElementById('copy-all-ak-btn').addEventListener('click', () => {
-      const akList = state.currentPackage?.worksheetAnswers || state.currentPackage?.blackboardQa;
-      if (!akList || akList.length === 0) {
-        return copyText(document.getElementById('worksheet-answers-body').innerText, "Copied Answer Key!");
-      }
-      let text = `*SCERT WORKSHEET ANSWER KEY & SCORING RUBRIC*\n\n`;
-      akList.forEach((a, i) => {
-        text += `Q${i + 1} [Max Score: ${a.score || 1}]:\nCriteria: ${a.rubric || 'Accuracy and scientific reasoning'}\nKey: ${a.answer || a.modelAnswer}\n\n`;
-      });
-      copyText(text.trim(), "Copied Complete Answer Key!");
-    });
-
-    document.getElementById('copy-whatsapp-text-btn').addEventListener('click', () => {
-      copyText(document.getElementById('whatsapp-summary-body').textContent.trim(), "Copied WhatsApp Broadcast Text!");
-    });
-
-    shareWhatsAppBtn.addEventListener('click', () => {
-      const text = document.getElementById('whatsapp-summary-body').textContent.trim();
-      if (!text || text.includes("Parent communication message will render here")) {
-        return showMessageBox("Please generate or load a lesson package first.", "Nothing to Share");
-      }
-      window.open(`https://api.whatsapp.com/send?text=${encodeURIComponent(text)}`, '_blank');
-    });
-
-    scopeRadios.forEach(radio => {
-      radio.addEventListener('change', () => {
-        const isWholeUnit = document.getElementById('scope-whole-unit').checked;
-        dayNumberContainer.style.display = isWholeUnit ? 'none' : 'block';
-        generateBtn.innerHTML = isWholeUnit ? `⚡ Generate Full Unit Package` : `⚡ Generate Package`;
-      });
-    });
-
     const delay = (ms) => new Promise((resolve) => setTimeout(resolve, ms));
 
     // =========================================================================
-    // GEMINI 3.6 FLASH CLIENT
+    // GEMINI CLIENT
     // =========================================================================
     async function callGemini(modelName, payload) {
       const endpoint = `https://generativelanguage.googleapis.com/v1beta/models/${modelName}:generateContent`;
@@ -2670,7 +3072,7 @@
 
         if (this.activeBtn) {
           this.activeBtn.classList.remove('speaking');
-          this.activeBtn.innerHTML = `🔊`;
+          this.activeBtn.innerHTML = `🔊 <span>Read Aloud</span>`;
           this.activeBtn = null;
         }
       }
@@ -2722,7 +3124,7 @@
 
         const isMalayalam = /[\u0D00-\u0D7F]/.test(text);
         this.activeBtn.classList.add('speaking');
-        this.activeBtn.innerHTML = `⏹️ `;
+        this.activeBtn.innerHTML = `⏹️ <span>Stop</span>`;
         showToast(`Reading aloud (${isMalayalam ? 'മലയാളം' : 'English'} at ${speed.toFixed(1)}x)...`);
 
         const voices = ('speechSynthesis' in window) ? window.speechSynthesis.getVoices() : [];
@@ -2816,7 +3218,7 @@
     function toggleReadAloud(tabId, buttonEl) {
       if (speechEngine.isPlaying && speechEngine.activeBtn === buttonEl) {
         speechEngine.stop();
-        showToast("Stopped 🔊");
+        showToast("Stopped Read Aloud.");
         return;
       }
 
@@ -2855,8 +3257,9 @@
           contentWrapperEl.innerHTML = originalEnglish;
           contentWrapperEl.classList.remove('malayalam-font');
           buttonEl.classList.remove('active-ml');
-          buttonEl.innerHTML = `🌐 മലയാളം`;
+          buttonEl.innerHTML = `🌐 <span>മലയാളം</span>`;
           attachHeaderCOEditListeners();
+          attachSingleCopyListeners(contentWrapperEl);
           showToast("Switched to English (Header & Body)");
           return;
         }
@@ -2870,8 +3273,9 @@
         contentWrapperEl.innerHTML = cachedMalayalam;
         contentWrapperEl.classList.add('malayalam-font');
         buttonEl.classList.add('active-ml');
-        buttonEl.innerHTML = `🌐 English`;
+        buttonEl.innerHTML = `🌐 <span>English</span>`;
         attachHeaderCOEditListeners();
+        attachSingleCopyListeners(contentWrapperEl);
         showToast("Loaded Malayalam (Header & Body)");
         return;
       }
@@ -2887,7 +3291,7 @@
         const translatePrompt = `
 You are an expert Kerala SCERT Malayalam-medium pedagogical translator.
 Translate the following HTML content into natural, official educational Malayalam (മലയാളം).
-Maintain all HTML structure, classes (e.g. class="unified-card", class="section-q", class="period-card"), and tag layout intact.
+Maintain all HTML structure, classes (e.g. class="unified-card", class="section-q", class="section-a"), and tag layout intact.
 Use standard terms: 'പാഠ്യപദ്ധതി ലക്ഷ്യങ്ങൾ', 'പ്രവേശന പ്രവർത്തനം', 'ക്ലാസ്സ് റൂം വിലയിരുത്തൽ', 'ബ്ലാക്ക്ബോർഡ് കുറിപ്പുകൾ', 'പ്രവർത്തന പത്രിക'.
 OUTPUT PURE HTML ONLY. DO NOT WRAP IN BACKTICKS OR CODE FENCES.
 
@@ -2912,8 +3316,9 @@ ${contentHtml}
         contentWrapperEl.innerHTML = translatedHtml;
         contentWrapperEl.classList.add('malayalam-font');
         buttonEl.classList.add('active-ml');
-        buttonEl.innerHTML = `🌐 English`;
+        buttonEl.innerHTML = `🌐 <span>English</span>`;
         attachHeaderCOEditListeners();
+        attachSingleCopyListeners(contentWrapperEl);
 
         hideSpinner();
         showToast("Translated Header & Body to Malayalam!");
@@ -2927,7 +3332,7 @@ ${contentHtml}
       btn.addEventListener('click', () => translateActiveTab(btn.dataset.tab, btn));
     });
 
-    // Print
+    // Print Handler
     document.querySelectorAll('.print-tab-btn').forEach(btn => {
       btn.addEventListener('click', () => {
         const pane = btn.closest('.tab-pane');
@@ -2951,108 +3356,191 @@ ${contentHtml}
       document.querySelectorAll('.u-meta-day').forEach(el => el.textContent = dayNumber);
       document.querySelectorAll('.u-meta-total').forEach(el => el.textContent = totalDays);
       
-      const isCustom = Boolean(state.customTargetedCO);
+      const isCustom = Boolean(state.isCOConfirmed);
       document.querySelectorAll('.u-meta-co').forEach(el => {
         el.innerHTML = `
           ${formatCODisplay(targetedCO)}
-          ${isCustom ? '<div style="margin-top:4px;"><span class="u-co-badge-custom">⚡ Custom Teacher-Edited CO Active</span></div>' : ''}
+          ${isCustom ? '<div style="margin-top:4px;"><span class="u-co-badge-custom">🔒 Confirmed & Locked Chapter COs</span></div>' : ''}
         `;
       });
       attachHeaderCOEditListeners();
     }
 
     // =========================================================================
-    // WORKSPACE RENDERING
+    // UNIVERSAL RENDERERS (UNIFIED CARD-STYLED UI ACROSS ALL 6 TABS)
     // =========================================================================
     function renderPackageToWorkspace(pkgData, unitTitle, dayNumber, totalDays, classId, partId = state.currentPart) {
       document.querySelectorAll('.translate-tab-btn').forEach(b => {
         b.classList.remove('active-ml');
-        b.innerHTML = `🌐 മലയാളം`;
+        b.innerHTML = `🌐 <span>മലയാളം</span>`;
       });
       speechEngine.stop();
 
-      const targetedCO = state.customTargetedCO || pkgData.targetedCurricularObjectives || pkgData.targetedCurricularObjective;
+      const targetedCO = getEffectiveTargetedCOText() || pkgData.targetedCurricularObjectives || pkgData.targetedCurricularObjective;
       updateAllUniversalHeaders(state.currentSubject, unitTitle, dayNumber, totalDays, classId, partId, targetedCO);
 
-      // 1. Render Lesson Plan
-      let coMasterListHtml = `
-        <div class="co-box-master">
-          <strong>All Curricular Objectives (Unit Master — Exhaustive Coverage):</strong>
-          <ul style="margin-top:5px; padding-left:18px;">
-      `;
-      (pkgData.allUnitCurricularObjectives || []).forEach(co => {
-        coMasterListHtml += `<li>${co}</li>`;
-      });
-      coMasterListHtml += `</ul></div>`;
-
-      let breakdownHtml = '';
-      if (pkgData.periodBreakdown && Array.isArray(pkgData.periodBreakdown)) {
-        breakdownHtml = `<div class="period-timeline">`;
-        pkgData.periodBreakdown.forEach(phase => {
-          breakdownHtml += `
-            <div class="period-card">
-              <div class="period-card-header">
-                <span class="period-badge-time">⏱️ ${phase.time || 'Phase'}</span>
-                <span class="period-phase-title">${phase.phaseTitle || phase.phase || ''}</span>
-              </div>
-              <div class="period-card-body">
-                <div class="period-col">
-                  <h4>Teacher Activity / Inquiry Prompt</h4>
-                  <p>${phase.teacherActivity || phase.activity || ''}</p>
-                </div>
-                <div class="period-col">
-                  <h4>Learner Response & Cognitive Skill</h4>
-                  <p>${phase.studentActivity || phase.evaluation || ''}</p>
-                </div>
-              </div>
-            </div>
-          `;
-        });
-        breakdownHtml += `</div>`;
-      } else {
-        let tableHtml = pkgData.lessonPlanTableHtml || '';
-        if (!tableHtml.includes('table-scroll-wrapper')) {
-          tableHtml = `<div class="table-scroll-wrapper">${tableHtml}</div>`;
-        }
-        breakdownHtml = tableHtml;
-      }
-
-      document.getElementById('lesson-plan-body').innerHTML = `
-        ${coMasterListHtml}
-        ${pkgData.lessonPlanIntroHtml || ''}
-        <h3 style="margin:14px 0 6px 0; color:var(--primary); font-size:0.88rem; font-weight:700;">
-          ⏱️ 35-Minute Daily Instructional Timeline:
-        </h3>
-        ${breakdownHtml}
-      `;
-      
-      // 2. Render Media Resources
-      renderMediaResources(pkgData.mediaResources || []);
-
-      // 3. Render Blackboard Notes
-      renderBlackboardNotes(pkgData.blackboardQa || []);
-
-      // 4. Render WhatsApp Broadcast
+      renderLessonPlanCards(pkgData, unitTitle, dayNumber, totalDays, classId);
+      renderMediaCards(pkgData.mediaResources || [], unitTitle, classId);
+      renderBlackboardNotes(pkgData.blackboardQa || [], unitTitle, dayNumber, totalDays);
       renderWhatsAppBroadcast(pkgData.whatsappSummary, pkgData.blackboardQa || [], unitTitle, dayNumber, totalDays, classId);
-      
-      // 5. Render Evaluation Worksheet
       renderWorksheetCards(pkgData.worksheetQuestions || pkgData.blackboardQa || [], unitTitle, dayNumber, totalDays, classId);
-
-      // 6. Render Answer Key
       renderAnswerKeyCards(pkgData.worksheetAnswers || pkgData.blackboardQa || [], unitTitle, dayNumber, totalDays);
     }
 
-    function renderBlackboardNotes(qaList) {
-      const container = document.getElementById('blackboard-notes-body');
-      if (!qaList || qaList.length === 0) {
-        container.innerHTML = `<div class="rendered-markdown"><p style="color:var(--text-muted);">No notes generated.</p></div>`;
+    // Tab 1: Lesson Plan Cards
+    function renderLessonPlanCards(pkgData, unitTitle, dayNumber, totalDays, classId) {
+      const container = document.getElementById('lesson-plan-body');
+      let html = `
+        <div class="meta-overview-banner">
+          <div>📋 35-Minute Daily Instructional Period Breakdown</div>
+          <div>Std ${classId} • Day ${dayNumber}/${totalDays}</div>
+        </div>
+        <div class="cards-stack-container">
+      `;
+
+      const coList = pkgData.allUnitCurricularObjectives || state.allCOsList.map(c => `${c.num}: ${c.text}`) || [];
+      if (coList.length > 0) {
+        html += `
+          <div class="unified-card">
+            <div class="unified-card-header">
+              <div class="card-tag-group">
+                <span class="pill-qnum">CO Alignment</span>
+                <span class="pill-cognitive">Unit Master Curricular Objectives (${coList.length})</span>
+              </div>
+              <button class="btn btn-outline btn-sm copy-single-item" data-text="Curricular Objectives:\n${escapeHtml(coList.join('\n'))}">📋 Copy</button>
+            </div>
+            <div class="unified-card-body">
+              <div class="section-rubric">
+                <div class="label-rubric">Comprehensive Chapter Competencies</div>
+                <ul style="padding-left:18px; margin-top:4px;">
+                  ${coList.map(co => `<li style="margin-bottom:3px; line-height:1.45;">${co}</li>`).join('')}
+                </ul>
+              </div>
+            </div>
+          </div>
+        `;
+      }
+
+      const phases = pkgData.periodBreakdown || [
+        { time: "0-5 min", phaseTitle: "Entry Activity & Hook", teacherActivity: "Introduce inquiry prompt and review foundational concepts.", studentActivity: "Observe teacher stimulus and activate prior knowledge." },
+        { time: "5-20 min", phaseTitle: "Concept Exploration & Inquiry", teacherActivity: "Facilitate hands-on exploration and concept scaffolding.", studentActivity: "Formulate hypotheses and engage in experiential activity." },
+        { time: "20-25 min", phaseTitle: "Formative Assessment & Synthesis", teacherActivity: "Present quick assessment check to verify understanding.", studentActivity: "Respond to application check and consolidate key learnings." },
+        { time: "25-35 min", phaseTitle: "Blackboard Work & Reflection", teacherActivity: "Summarize core findings on chalk board.", studentActivity: "Record synthesis and application problem in notebook." }
+      ];
+
+      phases.forEach((phase, idx) => {
+        const timeLabel = phase.time || `Phase ${idx+1}`;
+        const title = phase.phaseTitle || phase.phase || `Instructional Stage ${idx+1}`;
+        const tAct = phase.teacherActivity || phase.activity || '';
+        const sAct = phase.studentActivity || phase.evaluation || '';
+
+        html += `
+          <div class="unified-card">
+            <div class="unified-card-header">
+              <div class="card-tag-group">
+                <span class="pill-qnum">Stage ${idx+1}</span>
+                <span class="pill-time">⏱️ ${timeLabel}</span>
+                <span class="pill-cognitive">${escapeHtml(title)}</span>
+              </div>
+              <button class="btn btn-outline btn-sm copy-single-item" data-text="Stage ${idx+1} [${timeLabel} - ${title}]:\nTeacher: ${escapeHtml(tAct)}\nStudent: ${escapeHtml(sAct)}">📋 Copy</button>
+            </div>
+            <div class="unified-card-body">
+              <div class="section-q">
+                <div class="label-q">Teacher Activity & Inquiry Prompt</div>
+                <div class="text-q">${tAct}</div>
+              </div>
+              <div class="section-a">
+                <div class="label-a">Learner Response & Cognitive Skill</div>
+                <div class="text-a">${sAct}</div>
+              </div>
+            </div>
+          </div>
+        `;
+      });
+
+      html += `</div>`;
+      container.innerHTML = html;
+      attachSingleCopyListeners(container);
+    }
+
+    // Tab 2: Digital Media Cards
+    function renderMediaCards(mediaList, unitTitle, classId) {
+      const container = document.getElementById('media-resources-body');
+      if (!mediaList || mediaList.length === 0) {
+        container.innerHTML = `<div class="cards-stack-container"><div class="unified-card"><div class="unified-card-body"><p style="color:var(--text-muted); font-style:italic;">No media suggestions found.</p></div></div></div>`;
         return;
       }
 
-      let html = `<div class="cards-stack-container">`;
+      let html = `
+        <div class="meta-overview-banner">
+          <div>🌐 Curated Digital Media Recommendations</div>
+          <div>SCERT Std ${classId} • ${unitTitle}</div>
+        </div>
+        <div class="cards-stack-container">
+      `;
+
+      mediaList.forEach((item, idx) => {
+        const queryEncoded = encodeURIComponent(item.searchQuery || item.title);
+        let searchUrl = `https://www.youtube.com/results?search_query=${queryEncoded}`;
+        let actionLabel = "Search YouTube ↗";
+
+        if (item.type === 'diksha' || item.platform?.toLowerCase().includes('diksha')) {
+          searchUrl = `https://diksha.gov.in/explore?query=${queryEncoded}`;
+          actionLabel = "Open DIKSHA ↗";
+        } else if (item.type === 'sim' || item.platform?.toLowerCase().includes('phet')) {
+          searchUrl = `https://www.google.com/search?q=${encodeURIComponent(item.searchQuery + ' phet simulation')}`;
+          actionLabel = "Open Simulation ↗";
+        }
+
+        html += `
+          <div class="unified-card">
+            <div class="unified-card-header">
+              <div class="card-tag-group">
+                <span class="pill-qnum">Media ${idx+1}</span>
+                <span class="pill-score">${escapeHtml(item.platform || 'Digital Media')}</span>
+                <span class="pill-cognitive">${escapeHtml(item.type || 'Resource')}</span>
+              </div>
+              <a href="${searchUrl}" target="_blank" rel="noopener noreferrer" class="btn btn-primary btn-sm" style="padding:2px 9px; font-size:0.68rem;">${actionLabel}</a>
+            </div>
+            <div class="unified-card-body">
+              <div class="section-q">
+                <div class="label-q">Resource Concept & Focus</div>
+                <div class="text-q">${item.title}</div>
+                <div style="font-size:0.8rem; color:#475569; margin-top:4px;">${item.description}</div>
+              </div>
+              <div class="section-a">
+                <div class="label-a">Recommended Keyword Query</div>
+                <div class="text-a">🔍 "${item.searchQuery || item.title}"</div>
+              </div>
+            </div>
+          </div>
+        `;
+      });
+
+      html += `</div>`;
+      container.innerHTML = html;
+      attachSingleCopyListeners(container);
+    }
+
+    // Tab 3: Blackboard Notes Cards
+    function renderBlackboardNotes(qaList, unitTitle, dayNumber, totalDays) {
+      const container = document.getElementById('blackboard-notes-body');
+      if (!qaList || qaList.length === 0) {
+        container.innerHTML = `<div class="cards-stack-container"><div class="unified-card"><div class="unified-card-body"><p style="color:var(--text-muted); font-style:italic;">No blackboard notes generated.</p></div></div></div>`;
+        return;
+      }
+
+      let html = `
+        <div class="meta-overview-banner">
+          <div>✍️ Blackboard Application & Notebook Work</div>
+          <div>Day ${dayNumber}/${totalDays} • ${qaList.length} Chalkboard Q&As</div>
+        </div>
+        <div class="cards-stack-container">
+      `;
+
       qaList.forEach((item, index) => {
         const qNum = item.qNum || (index + 1);
-        const domain = item.cognitiveDomain || "Application";
+        const domain = item.cognitiveDomain || "HOTS Application";
         const cleanAnswer = formatMarkdown(item.answer);
 
         html += `
@@ -3077,22 +3565,115 @@ ${contentHtml}
           </div>
         `;
       });
+
       html += `</div>`;
       container.innerHTML = html;
       attachSingleCopyListeners(container);
     }
 
+    // Tab 4: WhatsApp Broadcast Cards
+    function renderWhatsAppBroadcast(summaryObj, qaList, unitTitle, dayNumber, totalDays, classId = state.currentClass) {
+      const previewArea = document.getElementById('whatsapp-preview-area');
+      const rawBody = document.getElementById('whatsapp-summary-body');
+
+      const recap = summaryObj?.dailyRecap || "Today, students explored concepts through structured inquiry.";
+      const tip = summaryObj?.studyTip || "Discuss today's classroom experiment with your child.";
+      const links = summaryObj?.dikshaKeywords || `${state.currentSubject} ${unitTitle} SCERT Class ${classId}`;
+
+      let html = `
+        <div class="meta-overview-banner">
+          <div>💬 Daily Parent Broadcast Feed</div>
+          <div>Std ${classId} • Day ${dayNumber}/${totalDays}</div>
+        </div>
+        <div class="cards-stack-container">
+          <div class="unified-card">
+            <div class="unified-card-header">
+              <div class="card-tag-group">
+                <span class="pill-qnum">🏫 Classroom Recap</span>
+                <span class="pill-time">Day ${dayNumber}/${totalDays}</span>
+              </div>
+              <button class="btn btn-outline btn-sm copy-single-item" data-text="Classroom Recap:\n${escapeHtml(recap)}">📋 Copy</button>
+            </div>
+            <div class="unified-card-body">
+              <div class="section-a">
+                <div class="label-a">Daily Learning Overview</div>
+                <div class="text-a"><strong>*Unit:*</strong> ${unitTitle}<br>${recap}</div>
+              </div>
+            </div>
+          </div>
+      `;
+
+      qaList.forEach((item, idx) => {
+        html += `
+          <div class="unified-card">
+            <div class="unified-card-header">
+              <div class="card-tag-group">
+                <span class="pill-qnum">Notebook Q${idx+1}</span>
+                <span class="pill-cognitive">Parent Verification</span>
+              </div>
+              <button class="btn btn-outline btn-sm copy-single-item" data-text="Q${idx+1}: ${escapeHtml(item.question)}\nAns: ${escapeHtml(item.answer)}">📋 Copy</button>
+            </div>
+            <div class="unified-card-body">
+              <div class="section-q">
+                <div class="label-q">Question</div>
+                <div class="text-q">${item.question}</div>
+              </div>
+              <div class="section-a">
+                <div class="label-a">Expected Child's Answer</div>
+                <div class="text-a">${item.answer}</div>
+              </div>
+            </div>
+          </div>
+        `;
+      });
+
+      html += `
+          <div class="unified-card">
+            <div class="unified-card-header">
+              <div class="card-tag-group">
+                <span class="pill-qnum">💡 Home Study Tip</span>
+                <span class="pill-score">DIKSHA Recommendations</span>
+              </div>
+              <button class="btn btn-outline btn-sm copy-single-item" data-text="Home Discussion: ${escapeHtml(tip)}\nSearch: ${escapeHtml(links)}">📋 Copy</button>
+            </div>
+            <div class="unified-card-body">
+              <div class="section-rubric">
+                <div class="label-rubric">Evening Discussion Prompt</div>
+                <div class="text-rubric">${tip}</div>
+              </div>
+              <div class="section-q">
+                <div class="label-q">Search on DIKSHA / YouTube</div>
+                <div class="text-q">🔍 "${links}"</div>
+              </div>
+            </div>
+          </div>
+        </div>
+      `;
+      previewArea.innerHTML = html;
+      attachSingleCopyListeners(previewArea);
+
+      let rawText = `*🏫 SCERT ${state.currentSubject} Std ${classId} Daily Update*\n*Unit:* ${unitTitle} (Day ${dayNumber}/${totalDays})\n\n`;
+      rawText += `*🌟 Today's Learning:*\n${recap}\n\n`;
+      rawText += `*📚 Today's Blackboard Q&As:*\n\n`;
+      qaList.forEach((item, idx) => {
+        rawText += `*Q${idx + 1}:* ${item.question}\n*Ans:* ${item.answer}\n\n`;
+      });
+      rawText += `*💡 Home Tip:* ${tip}\n*🔍 DIKSHA Search:* "${links}"`;
+      rawBody.textContent = rawText;
+    }
+
+    // Tab 5: Evaluation Worksheet Cards
     function renderWorksheetCards(qList, unitTitle, dayNumber, totalDays, classId) {
       const container = document.getElementById('worksheet-render-area');
       if (!qList || qList.length === 0) {
-        container.innerHTML = `<div class="rendered-markdown"><p style="color:var(--text-muted);">No worksheet activities generated.</p></div>`;
+        container.innerHTML = `<div class="cards-stack-container"><div class="unified-card"><div class="unified-card-body"><p style="color:var(--text-muted); font-style:italic;">No worksheet activities generated.</p></div></div></div>`;
         return;
       }
 
       let html = `
         <div class="meta-overview-banner">
-          <div>📚 Class ${classId} • ${unitTitle} (Day ${dayNumber}/${totalDays})</div>
-          <div>🎯 Total: 5 Scores • Time: 20 Mins</div>
+          <div>📄 Kerala SCERT Evaluation Worksheet (5 Scores Total)</div>
+          <div>Class ${classId} • Day ${dayNumber}/${totalDays} • Time: 20 Mins</div>
         </div>
         <div class="cards-stack-container">
       `;
@@ -3100,7 +3681,7 @@ ${contentHtml}
       qList.forEach((item, index) => {
         const qNum = item.qNum || (index + 1);
         const score = item.score || (index === 0 ? 2 : 1);
-        const domain = item.cognitiveDomain || "HOTS Inquiry";
+        const domain = item.cognitiveDomain || "Application & Inference";
 
         html += `
           <div class="unified-card">
@@ -3114,11 +3695,11 @@ ${contentHtml}
             </div>
             <div class="unified-card-body">
               <div class="section-q">
-                <div class="label-q">Task / Application Activity</div>
+                <div class="label-q">Evaluation Activity / Scenario</div>
                 <div class="text-q">${item.question}</div>
               </div>
               <div class="section-write-space">
-                <div class="label-write">Student Response Area / Reasoning</div>
+                <div class="label-write">Student Response Area</div>
                 <div class="answer-line"></div>
                 <div class="answer-line"></div>
               </div>
@@ -3132,16 +3713,17 @@ ${contentHtml}
       attachSingleCopyListeners(container);
     }
 
+    // Tab 6: Answer Key Cards
     function renderAnswerKeyCards(aList, unitTitle, dayNumber, totalDays) {
       const container = document.getElementById('worksheet-answers-body');
       if (!aList || aList.length === 0) {
-        container.innerHTML = `<div class="rendered-markdown"><p style="color:var(--text-muted);">No answer key generated.</p></div>`;
+        container.innerHTML = `<div class="cards-stack-container"><div class="unified-card"><div class="unified-card-body"><p style="color:var(--text-muted); font-style:italic;">No answer key generated.</p></div></div></div>`;
         return;
       }
 
       let html = `
         <div class="meta-overview-banner">
-          <div>🔑 Kerala SCERT Evaluation Criteria & Scoring Matrix</div>
+          <div>🔑 SCERT Scoring Matrix & Value Points (Total: 5 Marks)</div>
           <div>Unit: ${unitTitle} • Day ${dayNumber}/${totalDays}</div>
         </div>
         <div class="cards-stack-container">
@@ -3157,14 +3739,14 @@ ${contentHtml}
           <div class="unified-card">
             <div class="unified-card-header">
               <div class="card-tag-group">
-                <span class="pill-qnum">Activity ${qNum} Solution</span>
+                <span class="pill-qnum">Activity ${qNum} Key</span>
                 <span class="pill-score">Max Score: ${score}</span>
               </div>
               <button class="btn btn-outline btn-sm copy-single-item" data-text="Activity ${qNum} Solution [Score: ${score}]:\nRubric: ${escapeHtml(rubric)}\nKey: ${escapeHtml(item.answer || item.modelAnswer)}">📋 Copy</button>
             </div>
             <div class="unified-card-body">
               <div class="section-rubric">
-                <div class="label-rubric">Scoring Criteria & Value Points</div>
+                <div class="label-rubric">Evaluation Criteria & Rubric Breakdown</div>
                 <div class="text-rubric">${rubric}</div>
               </div>
               <div class="section-a">
@@ -3188,107 +3770,11 @@ ${contentHtml}
 
     function attachSingleCopyListeners(parentEl) {
       parentEl.querySelectorAll('.copy-single-item').forEach(btn => {
-        btn.addEventListener('click', (e) => {
+        btn.onclick = (e) => {
           const txt = e.currentTarget.dataset.text;
           copyText(txt, "Copied card content!");
-        });
+        };
       });
-    }
-
-    function renderWhatsAppBroadcast(summaryObj, qaList, unitTitle, dayNumber, totalDays, classId = state.currentClass) {
-      const previewArea = document.getElementById('whatsapp-preview-area');
-      const rawBody = document.getElementById('whatsapp-summary-body');
-
-      const recap = summaryObj?.dailyRecap || "Today, students engaged in concept exploration.";
-      const tip = summaryObj?.studyTip || "Discuss today's topic with your child.";
-      const links = summaryObj?.dikshaKeywords || `${state.currentSubject} ${unitTitle} SCERT Class ${classId}`;
-
-      let chatHtml = `
-        <div class="wa-bubble wa-bubble-green">
-          <div class="wa-bubble-header" style="font-weight:700; color:var(--primary); margin-bottom:4px; font-size:0.75rem;">
-            🏫 Daily Classroom Recap (${state.currentSubject} • Std ${classId} • Day ${dayNumber}/${totalDays})
-          </div>
-          <p style="font-weight:600; margin-bottom:4px;">*Unit:* ${unitTitle}</p>
-          <p>${recap}</p>
-        </div>
-
-        <div class="wa-bubble">
-          <div class="wa-bubble-header" style="font-weight:700; color:#1e293b; margin-bottom:4px; font-size:0.75rem;">
-            📝 Today's Notebook & Blackboard Q&As (${qaList.length} Items)
-          </div>
-          <div class="wa-qa-list">
-      `;
-
-      qaList.forEach((item, idx) => {
-        chatHtml += `
-          <div class="wa-qa-card">
-            <div class="wa-qa-q">❓ Q${idx + 1}: ${item.question}</div>
-            <div class="wa-qa-a"><strong>Ans:</strong> ${item.answer}</div>
-          </div>
-        `;
-      });
-
-      chatHtml += `
-          </div>
-        </div>
-
-        <div class="wa-bubble wa-bubble-green">
-          <div class="wa-bubble-header" style="font-weight:700; color:var(--primary); margin-bottom:4px; font-size:0.75rem;">
-            💡 Evening Study & DIKSHA Recommendations
-          </div>
-          <p style="margin-bottom:6px;"><strong>Home Discussion:</strong> ${tip}</p>
-          <div style="font-size:0.76rem; background:#f1f5f9; padding:5px 7px; border-radius:4px;">
-            🔍 <strong>Search on DIKSHA / YouTube:</strong> "${links}"
-          </div>
-        </div>
-      `;
-      previewArea.innerHTML = chatHtml;
-
-      let rawText = `*🏫 SCERT ${state.currentSubject} Std ${classId} Daily Update*\n*Unit:* ${unitTitle} (Day ${dayNumber}/${totalDays})\n\n`;
-      rawText += `*🌟 Today's Learning:*\n${recap}\n\n`;
-      rawText += `*📚 Today's Blackboard Q&As:*\n\n`;
-      qaList.forEach((item, idx) => {
-        rawText += `*Q${idx + 1}:* ${item.question}\n*Ans:* ${item.answer}\n\n`;
-      });
-      rawText += `*💡 Home Tip:* ${tip}\n*🔍 DIKSHA Search:* "${links}"`;
-      rawBody.textContent = rawText;
-    }
-
-    function renderMediaResources(mediaList) {
-      const container = document.getElementById('media-resources-body');
-      if (!mediaList || mediaList.length === 0) {
-        container.innerHTML = `<p style="color: var(--text-muted);">No media suggestions found.</p>`;
-        return;
-      }
-
-      let html = `<div class="media-grid">`;
-      mediaList.forEach(item => {
-        const typeClass = `type-${item.type || 'video'}`;
-        const queryEncoded = encodeURIComponent(item.searchQuery || item.title);
-        let searchUrl = `https://www.youtube.com/results?search_query=${queryEncoded}`;
-        let actionLabel = "Search YouTube ↗";
-
-        if (item.type === 'diksha' || item.platform?.toLowerCase().includes('diksha')) {
-          searchUrl = `https://diksha.gov.in/explore?query=${queryEncoded}`;
-          actionLabel = "Open DIKSHA ↗";
-        } else if (item.type === 'sim' || item.platform?.toLowerCase().includes('phet')) {
-          searchUrl = `https://www.google.com/search?q=${encodeURIComponent(item.searchQuery + ' phet simulation')}`;
-          actionLabel = "Open Simulation ↗";
-        }
-
-        html += `
-          <div class="media-card">
-            <div>
-              <span class="media-card-type ${typeClass}">${item.platform || 'Online Media'}</span>
-              <h4>${item.title}</h4>
-              <p>${item.description}</p>
-            </div>
-            <a href="${searchUrl}" target="_blank" rel="noopener noreferrer" class="btn btn-info btn-sm">${actionLabel}</a>
-          </div>
-        `;
-      });
-      html += `</div>`;
-      container.innerHTML = html;
     }
 
     function formatMarkdown(md) {
@@ -3305,7 +3791,7 @@ ${contentHtml}
     function updateGeneratorUIStatus(pkgTitle = "") {
       if (state.currentPackage) {
         activeStatusBar.style.display = "flex";
-        activeStatusText.textContent = `Active: ${pkgTitle || state.currentPackage.targetedCurricularObjective || 'Current'}`;
+        activeStatusText.textContent = `Active: ${pkgTitle || 'Current Package'}`;
       } else {
         activeStatusBar.style.display = "none";
       }
@@ -3314,24 +3800,33 @@ ${contentHtml}
     function resetWorkspace() {
       state.currentPackage = null;
       state.activePackageId = null;
-      setEditedCOState(null, false);
+      resetCOEngineToEmpty();
       updateGeneratorUIStatus();
       speechEngine.stop();
 
       document.querySelectorAll('.translate-tab-btn').forEach(b => {
         b.classList.remove('active-ml');
-        b.innerHTML = `🌐 മലയാളം`;
+        b.innerHTML = `🌐 <span>മലയാളം</span>`;
       });
 
-      updateAllUniversalHeaders(state.currentSubject, "Select Unit", "1", "5", state.currentClass, state.currentPart, "Generated upon request");
+      updateAllUniversalHeaders(state.currentSubject, "Select Unit", "1", "5", state.currentClass, state.currentPart, "Awaiting CO extraction in Generator Control");
 
-      document.getElementById('lesson-plan-body').innerHTML = `<p style="color: var(--text-muted); font-style: italic;">Enter details above and tap "Generate Package".</p>`;
-      document.getElementById('media-resources-body').innerHTML = `<p style="color: var(--text-muted); font-style: italic;">Curated media will render here.</p>`;
-      document.getElementById('blackboard-notes-body').innerHTML = `<div class="rendered-markdown"><p style="color: var(--text-muted); font-style: italic;">Application questions and solutions will render here.</p></div>`;
-      document.getElementById('whatsapp-preview-area').innerHTML = `<div class="wa-bubble" style="color: var(--text-muted); font-style: italic;">Parent broadcast message will render here.</div>`;
+      const emptyCard = (text) => `
+        <div class="cards-stack-container">
+          <div class="unified-card">
+            <div class="unified-card-header"><span class="pill-qnum">Status</span></div>
+            <div class="unified-card-body"><p style="color:var(--text-muted); font-style:italic;">${text}</p></div>
+          </div>
+        </div>
+      `;
+
+      document.getElementById('lesson-plan-body').innerHTML = emptyCard("Extract COs in Card 3, then generate package.");
+      document.getElementById('media-resources-body').innerHTML = emptyCard("Curated media recommendations will render here.");
+      document.getElementById('blackboard-notes-body').innerHTML = emptyCard("Application questions and solutions will render here.");
+      document.getElementById('whatsapp-preview-area').innerHTML = emptyCard("Parent broadcast message will render here.");
       document.getElementById('whatsapp-summary-body').textContent = `Parent communication message will render here.`;
-      document.getElementById('worksheet-render-area').innerHTML = `<div class="rendered-markdown"><p style="color: var(--text-muted); font-style: italic;">Evaluation activities will render here.</p></div>`;
-      document.getElementById('worksheet-answers-body').innerHTML = `<div class="rendered-markdown"><p style="color: var(--text-muted); font-style: italic;">Model answers and scoring criteria will render here.</p></div>`;
+      document.getElementById('worksheet-render-area').innerHTML = emptyCard("Evaluation activities will render here.");
+      document.getElementById('worksheet-answers-body').innerHTML = emptyCard("Model answers and scoring criteria will render here.");
 
       document.querySelectorAll('.pkg-card').forEach(c => c.classList.remove('active-loaded'));
       showToast("Workspace Reset!");
@@ -3359,6 +3854,7 @@ ${contentHtml}
 
       classSelect.value = pkg.classId;
       partSelect.value = pkg.partId;
+      syncSubjectDropdown();
       targetSubjectInput.value = state.currentSubject;
       unitTitleInput.value = pkg.unitTitle;
       dayNumberInput.value = pkg.dayNumber;
@@ -3369,10 +3865,6 @@ ${contentHtml}
 
       state.currentPackage = pkg.data;
       state.activePackageId = pkg.id;
-
-      if (pkg.data.customTargetedCO || pkg.data.targetedCurricularObjective) {
-        setEditedCOState(pkg.data.customTargetedCO || pkg.data.targetedCurricularObjective, Boolean(pkg.data.customTargetedCO));
-      }
 
       renderPackageToWorkspace(pkg.data, pkg.unitTitle, pkg.dayNumber, pkg.totalDays, pkg.classId, pkg.partId);
       updateGeneratorUIStatus(`Std ${pkg.classId} - ${pkg.unitTitle} (D${pkg.dayNumber})`);
@@ -3419,7 +3911,7 @@ ${contentHtml}
       let html = '';
       state.savedPackages.forEach(pkg => {
         const isLoaded = (pkg.id === state.activePackageId);
-        const coSnippet = pkg.data?.targetedCurricularObjective || 'Standard SCERT Lesson';
+        const coSnippet = pkg.data?.targetedCurricularObjective || 'SCERT Lesson';
 
         html += `
           <div class="pkg-card ${isLoaded ? 'active-loaded' : ''}" data-id="${pkg.id}">
@@ -3428,7 +3920,7 @@ ${contentHtml}
                 <div class="pkg-title-text">📚 Std ${pkg.classId} - ${pkg.unitTitle} (Day ${pkg.dayNumber}/${pkg.totalDays})</div>
                 <div class="pkg-meta-text">${pkg.dateFormatted} • ${escapeHtml(pkg.subject || 'SCERT')}</div>
               </div>
-              <span class="badge-tag" style="background:${isLoaded ? 'var(--primary)' : '#e2e8f0'}; color:${isLoaded ? '#fff' : '#334155'}; font-size:0.6rem;">
+              <span class="badge-tag" style="background:#0284c7; color:#fff; font-size:0.6rem;">
                 ${isLoaded ? 'ACTIVE' : 'SAVED'}
               </span>
             </div>
@@ -3465,27 +3957,30 @@ ${contentHtml}
     }
 
     // =========================================================================
-    // GENERATOR: STRICTLY GROUNDED ON EDITED CO(S)
+    // STEP 2: PACKAGE GENERATION (LOCKED SOLELY ON CONFIRMED/MODIFIED COs)
     // =========================================================================
     generateBtn.addEventListener('click', async () => {
+      if (!state.isCOConfirmed || state.allCOsList.length === 0) {
+        return showMessageBox("Please generate and confirm the Curricular Objectives (COs) in Step 1 first.", "COs Required");
+      }
+
       const unitTitle = unitTitleInput.value.trim();
-      if (!unitTitle) return showMessageBox("Please enter a Chapter or Unit Title before generating.", "Missing Unit");
+      if (!unitTitle) return showMessageBox("Please enter a Chapter or Unit Title.", "Missing Unit");
 
       const totalDays = parseInt(totalDaysInput.value, 10);
-      const isWholeUnit = document.getElementById('scope-whole-unit').checked;
+      const isWholeUnit = (state.generationScope === 'unit');
       const dayNumber = isWholeUnit ? 1 : parseInt(dayNumberInput.value, 10);
 
       if (dayNumber > totalDays) {
         return showMessageBox("Day in Unit cannot exceed Total Planned Days.", "Invalid Pacing");
       }
 
-      // Check textbook PDF
       let activeBook = state.books.find(b => b.id === state.activeBookId);
       if (!activeBook) {
         activeBook = state.books.find(b => 
           b.isLocked && 
           b.classId === state.currentClass && 
-          (b.subject || '').toLowerCase() === state.currentSubject.toLowerCase()
+          (b.subject || '').toLowerCase() === (state.currentSubject || '').toLowerCase()
         );
       }
 
@@ -3495,55 +3990,39 @@ ${contentHtml}
         activeBase64 = cached?.base64 || cached;
       }
 
-      const roadmapKey = getRoadmapStorageKey(state.currentClass, state.currentSubject, unitTitle);
-      const existingRoadmap = state.lockedRoadmap;
-
-      // Check if user edited the CO
-      const activeEditedCO = state.customTargetedCO || customCoInput.value.trim();
+      const activeTargetedCO = getEffectiveTargetedCOText();
+      const allCOStatements = state.allCOsList.map(c => `${c.num}: ${c.text}`).join('\n');
 
       showSpinner(isWholeUnit 
-        ? `Synthesizing Entire ${state.currentSubject} Unit Plan on Edited Roadmap...` 
-        : `Synthesizing Day ${dayNumber} of ${totalDays} Grounded on Edited CO...`
+        ? `Synthesizing Entire ${state.currentSubject} Unit Plan on Locked COs...` 
+        : `Synthesizing Day ${dayNumber} of ${totalDays} Grounded on Locked CO...`
       );
 
-      let coInstruction = "";
-      if (activeEditedCO) {
-        coInstruction = `
-CRITICAL DIRECTIVE - TEACHER-EDITED CURRICULAR OBJECTIVE(S) ACTIVE:
-The teacher has explicitly customized the targeted Curricular Objective(s) for Day ${dayNumber}:
+      let coInstruction = `
+CRITICAL SUPREME DIRECTIVE - TEACHER-CONFIRMED & LOCKED COs MANDATORY:
+The teacher has finalized and locked the following Curricular Objective(s) for Day ${dayNumber}:
 """
-${activeEditedCO}
+${activeTargetedCO}
 """
-You MUST strictly and exclusively ground EVERY single output section on this exact edited Curricular Objective!
-- The 35-minute period breakdown (Entry, Inquiry, Evaluation, Chalkboard) must target this edited CO.
-- Blackboard questions and model answers must directly assess this edited CO at application/HOTS level.
-- Evaluation Worksheet questions (5 total scores) must evaluate this edited CO.
-- WhatsApp parent broadcast message must summarize the study of this edited CO.
-Do NOT replace, alter, or ignore this teacher-specified objective!
+Full Chapter Confirmed Objectives:
+"""
+${allCOStatements}
+"""
+EVERY SINGLE SCENARIO AND DELIVERABLE MUST BE DERIVED 100% EXCLUSIVELY FROM THESE LOCKED COs!
+- 35-MINUTE TIMELINE (Entry Hook, Concept Inquiry, Evaluation, Chalkboard): Each phase must target this locked CO.
+- BLACKBOARD APPLICATION NOTES: 2-3 HOTS questions & chalk answers derived from this locked CO.
+- EVALUATION WORKSHEET (5 SCORES): Activities & writing lines assessing this locked CO.
+- ANSWER KEY & RUBRIC: Model answers and scoring points directly tied to this locked CO.
+- WHATSAPP BROADCAST: 100-word daily recap explaining exploration of this locked CO.
+DO NOT substitute, drift, or invent alternative objectives!
 `;
-      } else if (existingRoadmap && existingRoadmap.dailyDistribution) {
-        coInstruction = `
-LOCKED CHAPTER PACING ROADMAP ACTIVE:
-Master Curricular Objectives for the whole unit:
-${JSON.stringify(existingRoadmap.allUnitCurricularObjectives, null, 2)}
-Pre-allocated Daily Distribution across days:
-${JSON.stringify(existingRoadmap.dailyDistribution, null, 2)}
-Strictly ground Day ${dayNumber}'s package on its roadmap CO.
-`;
-      } else {
-        coInstruction = `
-NEW CHAPTER PACING ROADMAP REQUIRED:
-1. "allUnitCurricularObjectives": Generate an exhaustive master list of Curricular Objectives (CO 1, CO 2, ... CO N) covering the complete chapter.
-2. "chapterPacingRoadmap": Distribute all COs across the ${totalDays} Total Planned Days so 100% of chapter competencies are covered.
-`;
-      }
 
       const singleDayPackageSchema = `
       "periodBreakdown": [
-        {"time": "0-5 min", "phaseTitle": "Entry Activity / Pre-requisite Hook", "teacherActivity": "...", "studentActivity": "..."},
+        {"time": "0-5 min", "phaseTitle": "Entry Activity & Hook", "teacherActivity": "...", "studentActivity": "..."},
         {"time": "5-20 min", "phaseTitle": "Concept Exploration & Inquiry", "teacherActivity": "...", "studentActivity": "..."},
-        {"time": "20-25 min", "phaseTitle": "Formative Evaluation & Synthesis", "teacherActivity": "...", "studentActivity": "..."},
-        {"time": "25-35 min", "phaseTitle": "Blackboard Work & Journal Writing", "teacherActivity": "...", "studentActivity": "..."}
+        {"time": "20-25 min", "phaseTitle": "Formative Assessment & Synthesis", "teacherActivity": "...", "studentActivity": "..."},
+        {"time": "25-35 min", "phaseTitle": "Blackboard Work & Reflection", "teacherActivity": "...", "studentActivity": "..."}
       ],
       "lessonPlanTableHtml": "<table class='copiable-table' border='1'>...</table>",
       "lessonPlanIntroHtml": "<p>...</p>",
@@ -3559,15 +4038,11 @@ NEW CHAPTER PACING ROADMAP REQUIRED:
         responseSchemaDescription = `
 {
   "allUnitCurricularObjectives": ["CO 1: ...", "CO 2: ..."],
-  "chapterPacingRoadmap": {
-    "totalDays": ${totalDays},
-    "dailyDistribution": {"1": ["CO 1: ..."], "2": ["CO 2: ..."]}
-  },
   "dailyPackages": [
     {
       "dayNumber": 1,
-      "targetedCurricularObjectives": ["${activeEditedCO || 'CO 1: ...'}"],
-      "targetedCurricularObjective": "${activeEditedCO || 'CO 1: ...'}",
+      "targetedCurricularObjectives": ["${activeTargetedCO || 'CO 1: ...'}"],
+      "targetedCurricularObjective": "${activeTargetedCO || 'CO 1: ...'}",
       ${singleDayPackageSchema}
     }
   ]
@@ -3576,12 +4051,8 @@ NEW CHAPTER PACING ROADMAP REQUIRED:
         responseSchemaDescription = `
 {
   "allUnitCurricularObjectives": ["CO 1: ...", "CO 2: ..."],
-  "chapterPacingRoadmap": {
-    "totalDays": ${totalDays},
-    "dailyDistribution": {"1": ["CO 1: ..."], "2": ["CO 2: ..."]}
-  },
-  "targetedCurricularObjectives": ["${activeEditedCO || 'CO ...'}"],
-  "targetedCurricularObjective": "${activeEditedCO || 'CO ...'}",
+  "targetedCurricularObjectives": ["${activeTargetedCO || 'CO ...'}"],
+  "targetedCurricularObjective": "${activeTargetedCO || 'CO ...'}",
   ${singleDayPackageSchema}
 }`;
       }
@@ -3589,7 +4060,7 @@ NEW CHAPTER PACING ROADMAP REQUIRED:
       try {
         const prompt = `
 You are an expert pedagogical assistant for Kerala SCERT curriculum.
-Formulate an authentic, practical daily instructional package for:
+Formulate an authentic daily instructional package for:
 - Subject: ${state.currentSubject}
 - Standard: Class ${state.currentClass}
 - Textbook: Part ${state.currentPart}
@@ -3599,10 +4070,10 @@ Formulate an authentic, practical daily instructional package for:
 ${coInstruction}
 ${isWholeUnit ? `WHOLE UNIT BATCH: Generate instructional packages for EVERY SINGLE DAY from Day 1 to Day ${totalDays}.` : `SINGLE DAY PERIOD MODE: Target Day ${dayNumber} of ${totalDays}.`}
 
-CRITICAL PEDAGOGICAL SPECIFICATIONS:
-1. 35-MINUTE TIMELINE: Formulate spacious breakdown stages (0-5, 5-20, 20-25, 25-35 min) focused directly on achieving the targeted CO.
-2. BLACKBOARD NOTES: 2-3 HOTS questions and chalkboard answers derived from the CO.
-3. WORKSHEET & ANSWER KEY: Distinct application-level activities totalling 5 scores with explicit scoring criteria rubric points testing this CO.
+CRITICAL SPECIFICATIONS:
+1. 35-MINUTE TIMELINE: Formulate spacious breakdown stages (0-5, 5-20, 20-25, 25-35 min) focused directly on the locked CO.
+2. BLACKBOARD NOTES: 2-3 HOTS questions and chalkboard answers derived from the locked CO.
+3. WORKSHEET & ANSWER KEY: Distinct application-level activities totalling 5 scores with explicit rubric points.
 4. WHATSAPP BROADCAST: 100-word daily recap with exact Blackboard Q&As.
 
 OUTPUT MUST BE A STRICT JSON OBJECT MATCHING THIS SCHEMA:
@@ -3630,27 +4101,8 @@ ${responseSchemaDescription}
         rawJson = rawJson.replace(/^```(?:json)?\s*/i, '').replace(/\s*```$/i, '').trim();
         const result = JSON.parse(rawJson);
 
-        // Retain user's custom CO in output if present
-        if (activeEditedCO) {
-          result.targetedCurricularObjective = activeEditedCO;
-          result.targetedCurricularObjectives = [activeEditedCO];
-          result.customTargetedCO = activeEditedCO;
-        }
-
-        if (!existingRoadmap && result.chapterPacingRoadmap) {
-          const roadmapToSave = {
-            totalDays: totalDays,
-            allUnitCurricularObjectives: result.allUnitCurricularObjectives || [],
-            dailyDistribution: result.chapterPacingRoadmap.dailyDistribution || {}
-          };
-          if (activeEditedCO) {
-            roadmapToSave.dailyDistribution[dayNumber] = [activeEditedCO];
-          }
-          localStorage.setItem(roadmapKey, JSON.stringify(roadmapToSave));
-          state.lockedRoadmap = roadmapToSave;
-          roadmapStatusPill.style.display = 'flex';
-          roadmapStatusText.textContent = `🔒 Chapter COs Locked (${totalDays} Days Roadmap)`;
-        }
+        result.targetedCurricularObjective = activeTargetedCO;
+        result.targetedCurricularObjectives = [activeTargetedCO];
 
         const now = new Date();
 
@@ -3660,7 +4112,7 @@ ${responseSchemaDescription}
             const currentDayNum = dayPkg.dayNumber || 1;
             const fullDayData = {
               ...dayPkg,
-              allUnitCurricularObjectives: result.allUnitCurricularObjectives || []
+              allUnitCurricularObjectives: state.allCOsList.map(c => `${c.num}: ${c.text}`)
             };
 
             const pkgId = `pkg_${now.getTime()}_d${currentDayNum}`;
@@ -3697,7 +4149,7 @@ ${responseSchemaDescription}
 
           await refreshPackageArchiveUI();
           hideSpinner();
-          showMessageBox(`All ${totalDays} daily lesson packages for "${unitTitle}" have been generated on the ground of your COs!`, "Unit Plan Complete");
+          showMessageBox(`All ${totalDays} daily packages for "${unitTitle}" generated strictly grounded on locked COs!`, "Unit Complete");
         } else {
           state.currentPackage = result;
           renderPackageToWorkspace(result, unitTitle, dayNumber, totalDays, state.currentClass, state.currentPart);
@@ -3729,7 +4181,7 @@ ${responseSchemaDescription}
           await refreshPackageArchiveUI();
 
           hideSpinner();
-          showToast("Daily lesson package generated on edited COs!");
+          showToast("Daily package generated strictly on locked COs!");
         }
       } catch (err) {
         hideSpinner();
@@ -3746,13 +4198,6 @@ ${responseSchemaDescription}
         document.querySelectorAll('.tab-pane').forEach(p => p.classList.remove('active'));
         btn.classList.add('active');
         document.getElementById(`tab-${btn.dataset.tab}`).classList.add('active');
-      });
-    });
-
-    document.querySelectorAll('.copy-btn').forEach(btn => {
-      btn.addEventListener('click', () => {
-        const target = document.getElementById(btn.dataset.target);
-        if (target) copyText(target.innerText || target.textContent, "Copied content!");
       });
     });
 
