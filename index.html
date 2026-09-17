@@ -166,10 +166,10 @@
 
     .top-controls-grid {
       display: grid;
-      grid-template-columns: 1.15fr 1.4fr 0.95fr 1.1fr;
+      grid-template-columns: 1.2fr 1.35fr 0.95fr 1.1fr;
       gap: 12px;
       align-items: stretch;
-      max-width: 1480px;
+      max-width: 1520px;
       margin: 0 auto;
       width: 100%;
     }
@@ -261,9 +261,7 @@
       justify-content: space-between;
     }
 
-    /* ==========================================================================
-       CARD 2: DYNAMIC TEXTBOOK LIBRARY (SUPPORTS 100+ UPLOADS ACROSS ALL SUBJECTS)
-       ========================================================================== */
+    /* Textbook Library Toolbar */
     .tb-library-toolbar {
       display: flex;
       gap: 5px;
@@ -626,12 +624,28 @@
     .u-header-co {
       background: #f8fafc;
       border: 1px dashed #cbd5e1;
-      padding: 5px 8px;
+      padding: 6px 9px;
       border-radius: 4px;
       font-size: 0.76rem;
-      line-height: 1.4;
+      line-height: 1.45;
       color: #1e293b;
       word-break: break-word;
+      position: relative;
+    }
+    .u-header-co-title-row {
+      display: flex;
+      justify-content: space-between;
+      align-items: center;
+      margin-bottom: 2px;
+    }
+    .u-co-badge-custom {
+      font-size: 0.62rem;
+      background: #fef3c7;
+      color: #92400e;
+      border: 1px solid #fde68a;
+      padding: 1px 5px;
+      border-radius: 4px;
+      font-weight: 700;
     }
 
     .rendered-markdown {
@@ -748,7 +762,7 @@
     .copiable-table th { background-color: #f8fafc; font-weight: 700; color: #1e293b; }
     .copiable-table tr:nth-child(even) td { background-color: #fafbfc; }
 
-    /* Unified Modern Card Type System: Board, Worksheet & Answer Key */
+    /* Unified Modern Card Type System */
     .cards-stack-container { display: flex; flex-direction: column; gap: 10px; width: 100%; }
     
     .unified-card {
@@ -883,7 +897,7 @@
       z-index: 100000;
     }
     .modal-box {
-      background: #fff; width: 92%; max-width: 440px;
+      background: #fff; width: 92%; max-width: 460px;
       border-radius: 8px; box-shadow: 0 10px 25px rgba(0,0,0,0.25);
       overflow: hidden;
     }
@@ -1014,8 +1028,40 @@
   </div>
 
   <!-- ==========================================================================
-       TEXTBOOK UPLOAD & MODIFY MODAL (SUPPORTS 100+ BOOKS ACROSS ALL SUBJECTS)
+       EDIT CURRICULAR OBJECTIVES (CO) MODAL
        ========================================================================== -->
+  <div id="co-modal-overlay" class="modal-overlay no-print" style="display:none;">
+    <div class="modal-box" style="max-width: 520px;">
+      <div class="modal-header" style="background: #065f46;">
+        <h4>🎯 Edit Curricular Objectives (CO)</h4>
+        <button id="co-modal-close-btn" class="modal-close">&times;</button>
+      </div>
+      <div class="modal-body">
+        <div style="font-size: 0.76rem; color: #334155; margin-bottom: 8px;">
+          Customize the exact Curricular Objective(s) for this session. <strong>All lesson plan phases, Blackboard questions, evaluation activities, and WhatsApp summaries will strictly adhere to your edited objectives.</strong>
+        </div>
+
+        <div class="form-group">
+          <label for="modal-targeted-co" style="font-weight:700; color:var(--primary);">Targeted CO for Current Period (Day <span id="modal-co-day-lbl">1</span>):</label>
+          <textarea id="modal-targeted-co" class="form-control" rows="3" placeholder="e.g. CO 1: Identify and formulate the laws of reflection of light..."></textarea>
+        </div>
+
+        <div class="form-group" style="margin-top: 10px;">
+          <label for="modal-master-cos" style="font-weight:700; color:var(--secondary);">Chapter Master Curricular Objectives (One per line):</label>
+          <textarea id="modal-master-cos" class="form-control" rows="5" placeholder="CO 1: ...&#10;CO 2: ...&#10;CO 3: ..."></textarea>
+          <div style="font-size: 0.65rem; color: var(--text-muted); margin-top: 2px;">
+            Editing master objectives will also recalibrate the pacing roadmap for this chapter.
+          </div>
+        </div>
+      </div>
+      <div class="modal-footer">
+        <button id="co-modal-cancel-btn" class="btn btn-outline btn-sm">Cancel</button>
+        <button id="co-modal-save-btn" class="btn btn-primary btn-sm">💾 Apply & Lock Edited COs</button>
+      </div>
+    </div>
+  </div>
+
+  <!-- Textbook Upload & Modify Modal -->
   <div id="book-modal-overlay" class="modal-overlay no-print" style="display:none;">
     <div class="modal-box">
       <div class="modal-header" style="background: var(--primary);">
@@ -1072,7 +1118,7 @@
           <label for="modal-book-file">Textbook PDF File:</label>
           <input type="file" id="modal-book-file" accept="application/pdf" class="form-control">
           <div id="modal-file-status" style="font-size: 0.68rem; color: var(--text-muted); margin-top: 3px;">
-            Choose a PDF (Max 15MB recommended for direct AI inline upload).
+            Choose a PDF (Max 15MB recommended).
           </div>
         </div>
 
@@ -1179,7 +1225,7 @@
       <div class="brand-icon">🎓</div>
       <div class="header-titles">
         <h1>Teacher Studio</h1>
-        <span class="badge-tag">TDTTI</span>
+        <span class="badge-tag">SCERT</span>
       </div>
     </div>
     <div class="header-controls">
@@ -1200,11 +1246,11 @@
     </div>
 
     <div class="top-controls-grid">
-      <!-- Card 1: Pacing Target -->
+      <!-- Card 1: Pacing Target with Direct CO Edit Field -->
       <div class="ctrl-card mob-active" data-section="pacing">
         <h3><span>1. Pacing Target</span></h3>
         <div id="roadmap-status-pill" class="roadmap-status-pill">
-          <span id="roadmap-status-text"> Chapter Plan: 🔒 </span>
+          <span id="roadmap-status-text">🔒 </span>
           <button id="unlock-roadmap-btn" class="btn btn-danger btn-sm" style="padding: 1px 5px; font-size:0.64rem;">🔓 </button>
         </div>
 
@@ -1263,16 +1309,27 @@
             <input type="number" id="total-days" class="form-control" value="5" min="1" max="25">
           </div>
         </div>
+
+        <!-- Direct Editable Curricular Objective (CO) -->
+        <div class="form-group" style="margin-top: 4px;">
+          <div style="display:flex; justify-content:space-between; align-items:center; margin-bottom:2px;">
+            <label for="custom-co-input" style="font-weight:700; color:#065f46; margin-bottom:0;">🎯 Targeted CO for Period:</label>
+            <button type="button" id="btn-quick-edit-co" class="btn btn-outline btn-sm" style="padding:1px 5px; font-size:0.64rem; height:20px;">✏️ Advanced COs</button>
+          </div>
+          <textarea id="custom-co-input" class="form-control" rows="2" style="font-size:0.75rem; line-height:1.35;" placeholder="Type custom Curricular Objective(s) here or let AI generate..."></textarea>
+          <div id="co-edited-badge" style="display:none; font-size:0.65rem; color:#b45309; font-weight:700; margin-top:2px;">
+            ⚡ Custom Edited CO Active (AI will strictly ground generation on this)
+          </div>
+        </div>
       </div>
 
-      <!-- Card 2: 100+ Books Management (Unlock, Modify, Delete) -->
+      <!-- Card 2: 100+ Books Management -->
       <div class="ctrl-card" data-section="books">
         <h3>
           <span>2. Locked Textbooks (<span id="locked-count">0</span>)</span>
           <button id="add-textbook-btn" class="btn btn-primary btn-sm" style="padding: 2px 7px; font-size: 0.68rem;">+ Add Book</button>
         </h3>
         
-        <!-- Filter Toolbar -->
         <div class="tb-library-toolbar">
           <input type="text" id="tb-search-box" class="tb-search-input" placeholder="🔍 Search 100+ Books...">
           <select id="tb-filter-class" class="tb-filter-select">
@@ -1286,7 +1343,6 @@
           </select>
         </div>
 
-        <!-- 100+ Books Scroll Container -->
         <div id="tb-library-list" class="tb-library-scroll">
           <div style="font-size: 0.7rem; color: var(--text-muted); text-align: center; padding: 12px;">
             Loading textbook library...
@@ -1369,14 +1425,17 @@
         <div class="tab-translatable-content" id="content-tab-lesson-plan">
           <div class="universal-header-card" id="header-tab-lesson-plan">
             <div class="u-header-top">
-              <span class="u-badge">TDTTI • LESSON PLAN</span>
+              <span class="u-badge">SCERT • LESSON PLAN</span>
               <span class="u-meta-pacing"><span class="u-meta-subject">Basic Science</span> • Std <span class="u-meta-class">5</span> (Pt <span class="u-meta-part">1</span>) • Day <span class="u-meta-day">1</span>/<span class="u-meta-total">5</span></span>
             </div>
             <div class="u-header-unit">
               <strong>Chapter:</strong> <span class="u-meta-unit">Select Unit</span>
             </div>
             <div class="u-header-co">
-              <strong>🎯 Targeted Curricular Objective(s):</strong><br>
+              <div class="u-header-co-title-row">
+                <strong>🎯 Targeted Curricular Objective(s):</strong>
+                <button class="btn btn-outline btn-sm btn-edit-co-header no-print" style="padding:1px 6px; font-size:0.62rem; height:20px;">✏️ Edit CO</button>
+              </div>
               <div class="u-meta-co">Generated upon request</div>
             </div>
           </div>
@@ -1393,7 +1452,7 @@
           <h2>Digital Media Recommendations</h2>
           <div class="pane-header-actions">
             <button class="btn btn-translate btn-sm translate-tab-btn" data-tab="tab-media-resources">🌐 മലയാളം</button>
-            <button class="btn btn-tts btn-sm tts-tab-btn" data-tab="tab-media-resources">🔊 </button>
+            <button class="btn btn-tts btn-sm tts-tab-btn" data-tab="tab-media-resources">🔊</button>
             <button class="btn btn-outline btn-sm tts-cfg-btn" title="Voice Gender & Speed">⚙️ <span class="cfg-spd-lbl">1.0x</span></button>
             <button class="btn btn-secondary btn-sm copy-btn" data-target="media-resources-body">📋 Copy</button>
             <button class="btn btn-success btn-sm print-tab-btn">🖨️ Print</button>
@@ -1403,14 +1462,17 @@
         <div class="tab-translatable-content" id="content-tab-media-resources">
           <div class="universal-header-card" id="header-tab-media-resources">
             <div class="u-header-top">
-              <span class="u-badge">TDTTI • DIGITAL MEDIA</span>
+              <span class="u-badge">SCERT • DIGITAL MEDIA</span>
               <span class="u-meta-pacing"><span class="u-meta-subject">Basic Science</span> • Std <span class="u-meta-class">5</span> (Pt <span class="u-meta-part">1</span>) • Day <span class="u-meta-day">1</span>/<span class="u-meta-total">5</span></span>
             </div>
             <div class="u-header-unit">
               <strong>Chapter:</strong> <span class="u-meta-unit">Select Unit</span>
             </div>
             <div class="u-header-co">
-              <strong>🎯 Targeted Curricular Objective(s):</strong><br>
+              <div class="u-header-co-title-row">
+                <strong>🎯 Targeted Curricular Objective(s):</strong>
+                <button class="btn btn-outline btn-sm btn-edit-co-header no-print" style="padding:1px 6px; font-size:0.62rem; height:20px;">✏️ Edit CO</button>
+              </div>
               <div class="u-meta-co">Generated upon request</div>
             </div>
           </div>
@@ -1427,7 +1489,7 @@
           <h2>Blackboard Application Notes</h2>
           <div class="pane-header-actions">
             <button class="btn btn-translate btn-sm translate-tab-btn" data-tab="tab-blackboard-notes">🌐 മലയാളം</button>
-            <button class="btn btn-tts btn-sm tts-tab-btn" data-tab="tab-blackboard-notes">🔊 </button>
+            <button class="btn btn-tts btn-sm tts-tab-btn" data-tab="tab-blackboard-notes">🔊</button>
             <button class="btn btn-outline btn-sm tts-cfg-btn" title="Voice Gender & Speed">⚙️ <span class="cfg-spd-lbl">1.0x</span></button>
             <button class="btn btn-secondary btn-sm" id="copy-all-bb-btn">📋 Copy All</button>
             <button class="btn btn-success btn-sm print-tab-btn">🖨️ Print</button>
@@ -1437,14 +1499,17 @@
         <div class="tab-translatable-content" id="content-tab-blackboard-notes">
           <div class="universal-header-card" id="header-tab-blackboard-notes">
             <div class="u-header-top">
-              <span class="u-badge">TDTTI • BLACKBOARD WORK</span>
+              <span class="u-badge">SCERT • BLACKBOARD WORK</span>
               <span class="u-meta-pacing"><span class="u-meta-subject">Basic Science</span> • Std <span class="u-meta-class">5</span> (Pt <span class="u-meta-part">1</span>) • Day <span class="u-meta-day">1</span>/<span class="u-meta-total">5</span></span>
             </div>
             <div class="u-header-unit">
               <strong>Chapter:</strong> <span class="u-meta-unit">Select Unit</span>
             </div>
             <div class="u-header-co">
-              <strong>🎯 Targeted Curricular Objective(s):</strong><br>
+              <div class="u-header-co-title-row">
+                <strong>🎯 Targeted Curricular Objective(s):</strong>
+                <button class="btn btn-outline btn-sm btn-edit-co-header no-print" style="padding:1px 6px; font-size:0.62rem; height:20px;">✏️ Edit CO</button>
+              </div>
               <div class="u-meta-co">Generated upon request</div>
             </div>
           </div>
@@ -1463,7 +1528,7 @@
           <h2>Daily WhatsApp Broadcast</h2>
           <div class="pane-header-actions">
             <button class="btn btn-translate btn-sm translate-tab-btn" data-tab="tab-whatsapp-summary">🌐 മലയാളം</button>
-            <button class="btn btn-tts btn-sm tts-tab-btn" data-tab="tab-whatsapp-summary">🔊 </button>
+            <button class="btn btn-tts btn-sm tts-tab-btn" data-tab="tab-whatsapp-summary">🔊</button>
             <button class="btn btn-outline btn-sm tts-cfg-btn" title="Voice Gender & Speed">⚙️ <span class="cfg-spd-lbl">1.0x</span></button>
             <button id="share-whatsapp-btn" class="btn btn-whatsapp btn-sm">📲 WhatsApp</button>
             <button class="btn btn-secondary btn-sm" id="copy-whatsapp-text-btn">📋 Copy</button>
@@ -1474,14 +1539,17 @@
         <div class="tab-translatable-content" id="content-tab-whatsapp-summary">
           <div class="universal-header-card" id="header-tab-whatsapp-summary">
             <div class="u-header-top">
-              <span class="u-badge">TDTTI • PARENT BROADCAST</span>
+              <span class="u-badge">SCERT • PARENT BROADCAST</span>
               <span class="u-meta-pacing"><span class="u-meta-subject">Basic Science</span> • Std <span class="u-meta-class">5</span> (Pt <span class="u-meta-part">1</span>) • Day <span class="u-meta-day">1</span>/<span class="u-meta-total">5</span></span>
             </div>
             <div class="u-header-unit">
               <strong>Chapter:</strong> <span class="u-meta-unit">Select Unit</span>
             </div>
             <div class="u-header-co">
-              <strong>🎯 Targeted Curricular Objective(s):</strong><br>
+              <div class="u-header-co-title-row">
+                <strong>🎯 Targeted Curricular Objective(s):</strong>
+                <button class="btn btn-outline btn-sm btn-edit-co-header no-print" style="padding:1px 6px; font-size:0.62rem; height:20px;">✏️ Edit CO</button>
+              </div>
               <div class="u-meta-co">Generated upon request</div>
             </div>
           </div>
@@ -1511,7 +1579,7 @@
           <h2>Application Activity Worksheet (Total: 5 Scores)</h2>
           <div class="pane-header-actions">
             <button class="btn btn-translate btn-sm translate-tab-btn" data-tab="tab-worksheet-view">🌐 മലയാളം</button>
-            <button class="btn btn-tts btn-sm tts-tab-btn" data-tab="tab-worksheet-view">🔊 </button>
+            <button class="btn btn-tts btn-sm tts-tab-btn" data-tab="tab-worksheet-view">🔊</button>
             <button class="btn btn-outline btn-sm tts-cfg-btn" title="Voice Gender & Speed">⚙️ <span class="cfg-spd-lbl">1.0x</span></button>
             <button class="btn btn-secondary btn-sm" id="copy-all-ws-btn">📋 Copy All</button>
             <button class="btn btn-success btn-sm print-tab-btn">🖨️ Print</button>
@@ -1521,14 +1589,17 @@
         <div class="tab-translatable-content" id="content-tab-worksheet-view">
           <div class="universal-header-card" id="header-tab-worksheet-view">
             <div class="u-header-top">
-              <span class="u-badge">TDTTI • EVALUATION WORKSHEET</span>
+              <span class="u-badge">SCERT • EVALUATION WORKSHEET</span>
               <span class="u-meta-pacing"><span class="u-meta-subject">Basic Science</span> • Std <span class="u-meta-class">5</span> (Pt <span class="u-meta-part">1</span>) • Day <span class="u-meta-day">1</span>/<span class="u-meta-total">5</span></span>
             </div>
             <div class="u-header-unit">
               <strong>Chapter:</strong> <span class="u-meta-unit">Select Unit</span>
             </div>
             <div class="u-header-co">
-              <strong>🎯 Targeted Curricular Objective(s):</strong><br>
+              <div class="u-header-co-title-row">
+                <strong>🎯 Targeted Curricular Objective(s):</strong>
+                <button class="btn btn-outline btn-sm btn-edit-co-header no-print" style="padding:1px 6px; font-size:0.62rem; height:20px;">✏️ Edit CO</button>
+              </div>
               <div class="u-meta-co">Generated upon request</div>
             </div>
           </div>
@@ -1557,14 +1628,17 @@
         <div class="tab-translatable-content" id="content-tab-worksheet-answers">
           <div class="universal-header-card" id="header-tab-worksheet-answers">
             <div class="u-header-top">
-              <span class="u-badge">TDTTI • ANSWER KEY</span>
+              <span class="u-badge">SCERT • ANSWER KEY</span>
               <span class="u-meta-pacing"><span class="u-meta-subject">Basic Science</span> • Std <span class="u-meta-class">5</span> (Pt <span class="u-meta-part">1</span>) • Day <span class="u-meta-day">1</span>/<span class="u-meta-total">5</span></span>
             </div>
             <div class="u-header-unit">
               <strong>Chapter:</strong> <span class="u-meta-unit">Select Unit</span>
             </div>
             <div class="u-header-co">
-              <strong>🎯 Targeted Curricular Objective(s):</strong><br>
+              <div class="u-header-co-title-row">
+                <strong>🎯 Targeted Curricular Objective(s):</strong>
+                <button class="btn btn-outline btn-sm btn-edit-co-header no-print" style="padding:1px 6px; font-size:0.62rem; height:20px;">✏️ Edit CO</button>
+              </div>
               <div class="u-meta-co">Generated upon request</div>
             </div>
           </div>
@@ -1607,7 +1681,6 @@
     };
 
     let GEMINI_API_KEY = localStorage.getItem('SCERT_GEMINI_KEY') || "";
-    // Flagship and Fallback Models
     const PRIMARY_MODEL = "gemini-3.6-flash";
     const FALLBACK_MODEL = "gemini-3.5-flash-lite";
 
@@ -1716,10 +1789,11 @@
       currentPart: 'part1',
       currentSubject: 'Basic Science',
       activeBookId: null,
-      books: [], // Stores 100+ textbooks
+      books: [],
       currentPackage: null,
       activePackageId: null,
       lockedRoadmap: null,
+      customTargetedCO: null, // Stores user-edited CO
       savedPackages: [],
       ttsGender: localStorage.getItem('SCERT_TTS_GENDER') || 'female',
       ttsSpeed: parseFloat(localStorage.getItem('SCERT_TTS_SPEED') || '1.0'),
@@ -1740,6 +1814,20 @@
     const totalDaysInput = document.getElementById('total-days');
     const dayNumberContainer = document.getElementById('day-number-container');
     const scopeRadios = document.querySelectorAll('input[name="pacing-generation-scope"]');
+
+    // Editable CO elements
+    const customCoInput = document.getElementById('custom-co-input');
+    const coEditedBadge = document.getElementById('co-edited-badge');
+    const btnQuickEditCo = document.getElementById('btn-quick-edit-co');
+
+    // CO Modal Elements
+    const coModalOverlay = document.getElementById('co-modal-overlay');
+    const coModalCloseBtn = document.getElementById('co-modal-close-btn');
+    const coModalCancelBtn = document.getElementById('co-modal-cancel-btn');
+    const coModalSaveBtn = document.getElementById('co-modal-save-btn');
+    const modalTargetedCo = document.getElementById('modal-targeted-co');
+    const modalMasterCos = document.getElementById('modal-master-cos');
+    const modalCoDayLbl = document.getElementById('modal-co-day-lbl');
 
     const roadmapStatusPill = document.getElementById('roadmap-status-pill');
     const roadmapStatusText = document.getElementById('roadmap-status-text');
@@ -1892,7 +1980,112 @@
     }
 
     // =========================================================================
-    // DYNAMIC 100+ TEXTBOOK MANAGEMENT (UNLOCK, MODIFY, DELETE)
+    // EDITABLE CURRICULAR OBJECTIVES (CO) SYSTEM
+    // =========================================================================
+    function setEditedCOState(coText, isCustom = true) {
+      state.customTargetedCO = coText ? coText.trim() : null;
+      if (customCoInput) customCoInput.value = state.customTargetedCO || "";
+
+      if (state.customTargetedCO && isCustom) {
+        coEditedBadge.style.display = "block";
+        document.querySelectorAll('.u-meta-co').forEach(el => {
+          el.innerHTML = `
+            ${formatCODisplay(state.customTargetedCO)}
+            <div style="margin-top:4px;"><span class="u-co-badge-custom">⚡ Custom Teacher-Edited CO Active</span></div>
+          `;
+        });
+      } else {
+        coEditedBadge.style.display = "none";
+      }
+    }
+
+    // Direct input listener on Card 1
+    customCoInput.addEventListener('input', (e) => {
+      const val = e.target.value.trim();
+      if (val) {
+        setEditedCOState(val, true);
+      } else {
+        setEditedCOState(null, false);
+        // Fall back to roadmap if available
+        if (state.lockedRoadmap) {
+          const day = dayNumberInput.value;
+          const assigned = state.lockedRoadmap.dailyDistribution?.[day];
+          document.querySelectorAll('.u-meta-co').forEach(el => el.innerHTML = formatCODisplay(assigned));
+        }
+      }
+    });
+
+    function openCOModal() {
+      const day = dayNumberInput.value || "1";
+      modalCoDayLbl.textContent = day;
+
+      const currentCO = state.customTargetedCO || 
+        (state.lockedRoadmap ? state.lockedRoadmap.dailyDistribution?.[day] : "") || 
+        (state.currentPackage ? (state.currentPackage.targetedCurricularObjectives || state.currentPackage.targetedCurricularObjective) : "");
+
+      modalTargetedCo.value = Array.isArray(currentCO) ? currentCO.join('\n') : (currentCO || "");
+
+      const masterCOs = (state.lockedRoadmap && state.lockedRoadmap.allUnitCurricularObjectives) ||
+        (state.currentPackage && state.currentPackage.allUnitCurricularObjectives) || [];
+      modalMasterCos.value = masterCOs.join('\n');
+
+      coModalOverlay.style.display = "flex";
+      modalTargetedCo.focus();
+    }
+
+    function hideCOModal() {
+      coModalOverlay.style.display = "none";
+    }
+
+    btnQuickEditCo.addEventListener('click', openCOModal);
+    coModalCloseBtn.addEventListener('click', hideCOModal);
+    coModalCancelBtn.addEventListener('click', hideCOModal);
+
+    // Attach listener to all header edit buttons
+    function attachHeaderCOEditListeners() {
+      document.querySelectorAll('.btn-edit-co-header').forEach(btn => {
+        btn.onclick = openCOModal;
+      });
+    }
+
+    coModalSaveBtn.addEventListener('click', () => {
+      const editedTarget = modalTargetedCo.value.trim();
+      const rawMasters = modalMasterCos.value.trim();
+
+      if (editedTarget) {
+        setEditedCOState(editedTarget, true);
+      }
+
+      if (rawMasters) {
+        const masterList = rawMasters.split('\n').map(s => s.trim()).filter(s => s.length > 0);
+        const unitTitle = unitTitleInput.value.trim();
+        const totalDays = parseInt(totalDaysInput.value, 10);
+        const day = dayNumberInput.value;
+
+        if (unitTitle) {
+          const roadmapKey = getRoadmapStorageKey(state.currentClass, state.currentSubject, unitTitle);
+          let roadmap = state.lockedRoadmap || {
+            totalDays: totalDays,
+            allUnitCurricularObjectives: masterList,
+            dailyDistribution: {}
+          };
+          roadmap.allUnitCurricularObjectives = masterList;
+          if (editedTarget) {
+            roadmap.dailyDistribution[day] = [editedTarget];
+          }
+          localStorage.setItem(roadmapKey, JSON.stringify(roadmap));
+          state.lockedRoadmap = roadmap;
+          roadmapStatusPill.style.display = 'flex';
+          roadmapStatusText.textContent = `🔒 Chapter COs Locked (${totalDays} Days Roadmap)`;
+        }
+      }
+
+      hideCOModal();
+      showToast("Curricular Objectives applied & locked!");
+    });
+
+    // =========================================================================
+    // DYNAMIC 100+ TEXTBOOK MANAGEMENT
     // =========================================================================
     function openBookModal(book = null) {
       if (book) {
@@ -1975,10 +2168,8 @@
           updatedAt: new Date().toISOString()
         };
 
-        // 1. Save Full Object with Binary in IndexedDB
         await idb.setBook(bookId, { ...bookObj, base64: base64Data });
 
-        // 2. Sync Metadata with Firebase (Omit large base64 to protect 1MB Firestore doc limits)
         if (db) {
           try {
             if (auth && !auth.currentUser) await signInAnonymously(auth).catch(() => {});
@@ -2042,13 +2233,12 @@
       if (filtered.length === 0) {
         tbLibraryList.innerHTML = `
           <div style="font-size: 0.7rem; color: var(--text-muted); text-align: center; padding: 14px;">
-            ${state.books.length === 0 ? 'No textbooks uploaded yet. Click "+ Add Book" to begin building your 100+ collection.' : 'No textbooks match your search/filter criteria.'}
+            ${state.books.length === 0 ? 'No textbooks uploaded yet. Click "+ Add Book" to begin building your collection.' : 'No textbooks match your search/filter criteria.'}
           </div>
         `;
         return;
       }
 
-      // Sort by class then subject
       filtered.sort((a, b) => parseInt(a.classId || 0) - parseInt(b.classId || 0));
 
       let html = '';
@@ -2076,15 +2266,11 @@
                 🎯 ${isTarget ? 'Active' : 'Use'}
               </button>
               <div class="tb-icon-btn-group">
-                <!-- Toggle Lock / Unlock -->
                 <button class="tb-btn-icon tb-lock-toggle-btn" data-id="${book.id}" title="${isLocked ? 'Unlock Textbook' : 'Lock Textbook'}">
-                  ${isLocked ? '🔓 ' : '🔒 '}
+                  ${isLocked ? '🔓 ' : '🔒'}
                 </button>
-                <!-- Modify Button -->
                 <button class="tb-btn-icon tb-edit-btn" data-id="${book.id}" title="Modify Title, Subject, Class or File">
-                  ✏️ 
-                </button>
-                <!-- Delete Button -->
+                  ✏️</button>
                 <button class="tb-btn-icon del-btn tb-delete-btn" data-id="${book.id}" title="Delete from Database">
                   🗑️
                 </button>
@@ -2095,7 +2281,6 @@
       });
       tbLibraryList.innerHTML = html;
 
-      // Attach Event Handlers to Library Cards
       tbLibraryList.querySelectorAll('.tb-use-btn').forEach(btn => {
         btn.addEventListener('click', (e) => {
           const bId = e.currentTarget.dataset.id;
@@ -2154,9 +2339,7 @@
 
           await idb.deleteBook(bId);
           if (db) {
-            try {
-              await deleteDoc(doc(db, 'curriculum_books', bId));
-            } catch (err) {}
+            try { await deleteDoc(doc(db, 'curriculum_books', bId)); } catch (err) {}
           }
           if (state.activeBookId === bId) state.activeBookId = null;
           state.books = state.books.filter(b => b.id !== bId);
@@ -2169,7 +2352,6 @@
     tbSearchBox.addEventListener('input', renderBooksList);
     tbFilterClass.addEventListener('change', renderBooksList);
 
-    // Sync Pacing Inputs to State
     classSelect.addEventListener('change', (e) => { 
       state.currentClass = e.target.value; 
       checkAndLoadChapterRoadmap();
@@ -2254,7 +2436,7 @@
     });
 
     // =========================================================================
-    // CHAPTER ROADMAP LOCKING (SUPPORTS MULTIPLE COS PER DAY)
+    // CHAPTER ROADMAP LOCKING (WITH EDITED CO COMPATIBILITY)
     // =========================================================================
     function getRoadmapStorageKey(cls, subject, unit) {
       const cleanSub = (subject || '').toLowerCase().trim().replace(/[^a-z0-9]/g, '_');
@@ -2289,7 +2471,9 @@
           
           const day = dayNumberInput.value;
           const assignedCO = parsed.dailyDistribution?.[day];
-          if (assignedCO) {
+          if (assignedCO && !state.customTargetedCO) {
+            const coString = Array.isArray(assignedCO) ? assignedCO.join('; ') : assignedCO;
+            customCoInput.value = coString;
             document.querySelectorAll('.u-meta-co').forEach(el => el.innerHTML = formatCODisplay(assignedCO));
           }
           return;
@@ -2301,10 +2485,12 @@
 
     unitTitleInput.addEventListener('input', checkAndLoadChapterRoadmap);
     dayNumberInput.addEventListener('input', () => {
-      if (state.lockedRoadmap) {
-        const day = dayNumberInput.value;
+      const day = dayNumberInput.value;
+      if (state.lockedRoadmap && !state.customTargetedCO) {
         const assignedCO = state.lockedRoadmap.dailyDistribution?.[day];
         if (assignedCO) {
+          const coString = Array.isArray(assignedCO) ? assignedCO.join('; ') : assignedCO;
+          customCoInput.value = coString;
           document.querySelectorAll('.u-meta-co').forEach(el => el.innerHTML = formatCODisplay(assignedCO));
         }
       }
@@ -2317,6 +2503,7 @@
       const key = getRoadmapStorageKey(state.currentClass, state.currentSubject, unit);
       localStorage.removeItem(key);
       state.lockedRoadmap = null;
+      setEditedCOState(null, false);
       roadmapStatusPill.style.display = 'none';
       showToast("Chapter COs unlocked! Next generation will calculate a fresh pacing roadmap.");
     });
@@ -2384,7 +2571,6 @@
       window.open(`https://api.whatsapp.com/send?text=${encodeURIComponent(text)}`, '_blank');
     });
 
-    // Pacing scope switcher
     scopeRadios.forEach(radio => {
       radio.addEventListener('change', () => {
         const isWholeUnit = document.getElementById('scope-whole-unit').checked;
@@ -2449,7 +2635,7 @@
     }
 
     // =========================================================================
-    // SINGLE-THREADED READ ALOUD (ELIMINATES DUAL VOICES)
+    // SINGLE-THREADED READ ALOUD
     // =========================================================================
     class RobustSpeechEngine {
       constructor() {
@@ -2484,7 +2670,7 @@
 
         if (this.activeBtn) {
           this.activeBtn.classList.remove('speaking');
-          this.activeBtn.innerHTML = `🔊 `;
+          this.activeBtn.innerHTML = `🔊`;
           this.activeBtn = null;
         }
       }
@@ -2630,7 +2816,7 @@
     function toggleReadAloud(tabId, buttonEl) {
       if (speechEngine.isPlaying && speechEngine.activeBtn === buttonEl) {
         speechEngine.stop();
-        showToast("Stopped 🔊 ");
+        showToast("Stopped 🔊");
         return;
       }
 
@@ -2652,7 +2838,7 @@
     });
 
     // =========================================================================
-    // MALAYALAM TRANSLATION ENGINE (POWERED BY GEMINI 3.6 FLASH)
+    // MALAYALAM TRANSLATION ENGINE
     // =========================================================================
     async function translateActiveTab(tabId, buttonEl) {
       speechEngine.stop();
@@ -2670,6 +2856,7 @@
           contentWrapperEl.classList.remove('malayalam-font');
           buttonEl.classList.remove('active-ml');
           buttonEl.innerHTML = `🌐 മലയാളം`;
+          attachHeaderCOEditListeners();
           showToast("Switched to English (Header & Body)");
           return;
         }
@@ -2684,6 +2871,7 @@
         contentWrapperEl.classList.add('malayalam-font');
         buttonEl.classList.add('active-ml');
         buttonEl.innerHTML = `🌐 English`;
+        attachHeaderCOEditListeners();
         showToast("Loaded Malayalam (Header & Body)");
         return;
       }
@@ -2725,6 +2913,7 @@ ${contentHtml}
         contentWrapperEl.classList.add('malayalam-font');
         buttonEl.classList.add('active-ml');
         buttonEl.innerHTML = `🌐 English`;
+        attachHeaderCOEditListeners();
 
         hideSpinner();
         showToast("Translated Header & Body to Malayalam!");
@@ -2761,11 +2950,19 @@ ${contentHtml}
       document.querySelectorAll('.u-meta-unit').forEach(el => el.textContent = unitTitle);
       document.querySelectorAll('.u-meta-day').forEach(el => el.textContent = dayNumber);
       document.querySelectorAll('.u-meta-total').forEach(el => el.textContent = totalDays);
-      document.querySelectorAll('.u-meta-co').forEach(el => el.innerHTML = formatCODisplay(targetedCO));
+      
+      const isCustom = Boolean(state.customTargetedCO);
+      document.querySelectorAll('.u-meta-co').forEach(el => {
+        el.innerHTML = `
+          ${formatCODisplay(targetedCO)}
+          ${isCustom ? '<div style="margin-top:4px;"><span class="u-co-badge-custom">⚡ Custom Teacher-Edited CO Active</span></div>' : ''}
+        `;
+      });
+      attachHeaderCOEditListeners();
     }
 
     // =========================================================================
-    // WORKSPACE RENDERING (SPACIOUS 35-MIN BREAKDOWN & UNIFIED CARDS)
+    // WORKSPACE RENDERING
     // =========================================================================
     function renderPackageToWorkspace(pkgData, unitTitle, dayNumber, totalDays, classId, partId = state.currentPart) {
       document.querySelectorAll('.translate-tab-btn').forEach(b => {
@@ -2774,7 +2971,7 @@ ${contentHtml}
       });
       speechEngine.stop();
 
-      const targetedCO = pkgData.targetedCurricularObjectives || pkgData.targetedCurricularObjective;
+      const targetedCO = state.customTargetedCO || pkgData.targetedCurricularObjectives || pkgData.targetedCurricularObjective;
       updateAllUniversalHeaders(state.currentSubject, unitTitle, dayNumber, totalDays, classId, partId, targetedCO);
 
       // 1. Render Lesson Plan
@@ -2838,10 +3035,10 @@ ${contentHtml}
       // 4. Render WhatsApp Broadcast
       renderWhatsAppBroadcast(pkgData.whatsappSummary, pkgData.blackboardQa || [], unitTitle, dayNumber, totalDays, classId);
       
-      // 5. Render Evaluation Worksheet (Unified Cards)
+      // 5. Render Evaluation Worksheet
       renderWorksheetCards(pkgData.worksheetQuestions || pkgData.blackboardQa || [], unitTitle, dayNumber, totalDays, classId);
 
-      // 6. Render Answer Key (Unified Cards)
+      // 6. Render Answer Key
       renderAnswerKeyCards(pkgData.worksheetAnswers || pkgData.blackboardQa || [], unitTitle, dayNumber, totalDays);
     }
 
@@ -2929,6 +3126,7 @@ ${contentHtml}
           </div>
         `;
       });
+
       html += `</div>`;
       container.innerHTML = html;
       attachSingleCopyListeners(container);
@@ -2977,6 +3175,7 @@ ${contentHtml}
           </div>
         `;
       });
+
       html += `</div>`;
       container.innerHTML = html;
       attachSingleCopyListeners(container);
@@ -3115,6 +3314,7 @@ ${contentHtml}
     function resetWorkspace() {
       state.currentPackage = null;
       state.activePackageId = null;
+      setEditedCOState(null, false);
       updateGeneratorUIStatus();
       speechEngine.stop();
 
@@ -3169,6 +3369,11 @@ ${contentHtml}
 
       state.currentPackage = pkg.data;
       state.activePackageId = pkg.id;
+
+      if (pkg.data.customTargetedCO || pkg.data.targetedCurricularObjective) {
+        setEditedCOState(pkg.data.customTargetedCO || pkg.data.targetedCurricularObjective, Boolean(pkg.data.customTargetedCO));
+      }
+
       renderPackageToWorkspace(pkg.data, pkg.unitTitle, pkg.dayNumber, pkg.totalDays, pkg.classId, pkg.partId);
       updateGeneratorUIStatus(`Std ${pkg.classId} - ${pkg.unitTitle} (D${pkg.dayNumber})`);
 
@@ -3187,7 +3392,9 @@ ${contentHtml}
           snap.forEach(docSnap => {
             if (docSnap.exists()) cloudPackages.push(docSnap.data());
           });
-        } catch (e) {}
+        } catch (e) {
+          console.warn("Firestore fetch packages:", e.message);
+        }
       }
 
       const localPackages = await idb.getAllPackages();
@@ -3258,7 +3465,7 @@ ${contentHtml}
     }
 
     // =========================================================================
-    // COMPLETE INSTRUCTIONAL GENERATOR (LINKED WITH ACTIVE/LOCKED BOOK)
+    // GENERATOR: STRICTLY GROUNDED ON EDITED CO(S)
     // =========================================================================
     generateBtn.addEventListener('click', async () => {
       const unitTitle = unitTitleInput.value.trim();
@@ -3272,7 +3479,7 @@ ${contentHtml}
         return showMessageBox("Day in Unit cannot exceed Total Planned Days.", "Invalid Pacing");
       }
 
-      // Check for an active locked textbook from 100+ book repository
+      // Check textbook PDF
       let activeBook = state.books.find(b => b.id === state.activeBookId);
       if (!activeBook) {
         activeBook = state.books.find(b => 
@@ -3291,27 +3498,43 @@ ${contentHtml}
       const roadmapKey = getRoadmapStorageKey(state.currentClass, state.currentSubject, unitTitle);
       const existingRoadmap = state.lockedRoadmap;
 
+      // Check if user edited the CO
+      const activeEditedCO = state.customTargetedCO || customCoInput.value.trim();
+
       showSpinner(isWholeUnit 
-        ? `Synthesizing Entire ${state.currentSubject} Unit Plan (${totalDays} Days)...` 
-        : `Synthesizing Day ${dayNumber} of ${totalDays} for "${unitTitle}"...`
+        ? `Synthesizing Entire ${state.currentSubject} Unit Plan on Edited Roadmap...` 
+        : `Synthesizing Day ${dayNumber} of ${totalDays} Grounded on Edited CO...`
       );
 
-      let roadmapInstruction = "";
-      if (existingRoadmap && existingRoadmap.dailyDistribution) {
-        roadmapInstruction = `
+      let coInstruction = "";
+      if (activeEditedCO) {
+        coInstruction = `
+CRITICAL DIRECTIVE - TEACHER-EDITED CURRICULAR OBJECTIVE(S) ACTIVE:
+The teacher has explicitly customized the targeted Curricular Objective(s) for Day ${dayNumber}:
+"""
+${activeEditedCO}
+"""
+You MUST strictly and exclusively ground EVERY single output section on this exact edited Curricular Objective!
+- The 35-minute period breakdown (Entry, Inquiry, Evaluation, Chalkboard) must target this edited CO.
+- Blackboard questions and model answers must directly assess this edited CO at application/HOTS level.
+- Evaluation Worksheet questions (5 total scores) must evaluate this edited CO.
+- WhatsApp parent broadcast message must summarize the study of this edited CO.
+Do NOT replace, alter, or ignore this teacher-specified objective!
+`;
+      } else if (existingRoadmap && existingRoadmap.dailyDistribution) {
+        coInstruction = `
 LOCKED CHAPTER PACING ROADMAP ACTIVE:
 Master Curricular Objectives for the whole unit:
 ${JSON.stringify(existingRoadmap.allUnitCurricularObjectives, null, 2)}
 Pre-allocated Daily Distribution across days:
 ${JSON.stringify(existingRoadmap.dailyDistribution, null, 2)}
-DO NOT alter the master objectives. Ensure strict continuity.
+Strictly ground Day ${dayNumber}'s package on its roadmap CO.
 `;
       } else {
-        roadmapInstruction = `
-NEW COMPLETE CHAPTER PACING ROADMAP REQUIRED:
-1. "allUnitCurricularObjectives": You MUST generate an EXHAUSTIVE master list of Curricular Objectives (CO 1, CO 2, ... CO N) covering THE ENTIRE CONTENT OF THIS FULL TEXTBOOK CHAPTER from start to finish.
-2. "chapterPacingRoadmap": Rigorously distribute ALL master Curricular Objectives across the ${totalDays} Total Planned Days so 100% of chapter competencies are covered across Day 1 to Day ${totalDays}.
-   - CRITICAL PACING RULE: If COs exceed days, group multiple COs per day.
+        coInstruction = `
+NEW CHAPTER PACING ROADMAP REQUIRED:
+1. "allUnitCurricularObjectives": Generate an exhaustive master list of Curricular Objectives (CO 1, CO 2, ... CO N) covering the complete chapter.
+2. "chapterPacingRoadmap": Distribute all COs across the ${totalDays} Total Planned Days so 100% of chapter competencies are covered.
 `;
       }
 
@@ -3343,8 +3566,8 @@ NEW COMPLETE CHAPTER PACING ROADMAP REQUIRED:
   "dailyPackages": [
     {
       "dayNumber": 1,
-      "targetedCurricularObjectives": ["CO 1: ..."],
-      "targetedCurricularObjective": "CO 1: ...",
+      "targetedCurricularObjectives": ["${activeEditedCO || 'CO 1: ...'}"],
+      "targetedCurricularObjective": "${activeEditedCO || 'CO 1: ...'}",
       ${singleDayPackageSchema}
     }
   ]
@@ -3357,8 +3580,8 @@ NEW COMPLETE CHAPTER PACING ROADMAP REQUIRED:
     "totalDays": ${totalDays},
     "dailyDistribution": {"1": ["CO 1: ..."], "2": ["CO 2: ..."]}
   },
-  "targetedCurricularObjectives": ["CO 1: ..."],
-  "targetedCurricularObjective": "CO 1: ...",
+  "targetedCurricularObjectives": ["${activeEditedCO || 'CO ...'}"],
+  "targetedCurricularObjective": "${activeEditedCO || 'CO ...'}",
   ${singleDayPackageSchema}
 }`;
       }
@@ -3373,13 +3596,13 @@ Formulate an authentic, practical daily instructional package for:
 - Unit Name: ${unitTitle}
 - Total Planned Days: ${totalDays} Days.
 
-${roadmapInstruction}
+${coInstruction}
 ${isWholeUnit ? `WHOLE UNIT BATCH: Generate instructional packages for EVERY SINGLE DAY from Day 1 to Day ${totalDays}.` : `SINGLE DAY PERIOD MODE: Target Day ${dayNumber} of ${totalDays}.`}
 
 CRITICAL PEDAGOGICAL SPECIFICATIONS:
-1. 35-MINUTE TIMELINE: Formulate spacious breakdown stages (0-5, 5-20, 20-25, 25-35 min).
-2. BLACKBOARD NOTES: 2-3 HOTS questions and chalkboard answers.
-3. WORKSHEET & ANSWER KEY: Distinct application-level activities totalling 5 scores with explicit scoring criteria rubric points.
+1. 35-MINUTE TIMELINE: Formulate spacious breakdown stages (0-5, 5-20, 20-25, 25-35 min) focused directly on achieving the targeted CO.
+2. BLACKBOARD NOTES: 2-3 HOTS questions and chalkboard answers derived from the CO.
+3. WORKSHEET & ANSWER KEY: Distinct application-level activities totalling 5 scores with explicit scoring criteria rubric points testing this CO.
 4. WHATSAPP BROADCAST: 100-word daily recap with exact Blackboard Q&As.
 
 OUTPUT MUST BE A STRICT JSON OBJECT MATCHING THIS SCHEMA:
@@ -3407,12 +3630,22 @@ ${responseSchemaDescription}
         rawJson = rawJson.replace(/^```(?:json)?\s*/i, '').replace(/\s*```$/i, '').trim();
         const result = JSON.parse(rawJson);
 
+        // Retain user's custom CO in output if present
+        if (activeEditedCO) {
+          result.targetedCurricularObjective = activeEditedCO;
+          result.targetedCurricularObjectives = [activeEditedCO];
+          result.customTargetedCO = activeEditedCO;
+        }
+
         if (!existingRoadmap && result.chapterPacingRoadmap) {
           const roadmapToSave = {
             totalDays: totalDays,
             allUnitCurricularObjectives: result.allUnitCurricularObjectives || [],
             dailyDistribution: result.chapterPacingRoadmap.dailyDistribution || {}
           };
+          if (activeEditedCO) {
+            roadmapToSave.dailyDistribution[dayNumber] = [activeEditedCO];
+          }
           localStorage.setItem(roadmapKey, JSON.stringify(roadmapToSave));
           state.lockedRoadmap = roadmapToSave;
           roadmapStatusPill.style.display = 'flex';
@@ -3464,7 +3697,7 @@ ${responseSchemaDescription}
 
           await refreshPackageArchiveUI();
           hideSpinner();
-          showMessageBox(`All ${totalDays} daily lesson packages for "${unitTitle}" have been generated and archived!`, "Unit Plan Complete");
+          showMessageBox(`All ${totalDays} daily lesson packages for "${unitTitle}" have been generated on the ground of your COs!`, "Unit Plan Complete");
         } else {
           state.currentPackage = result;
           renderPackageToWorkspace(result, unitTitle, dayNumber, totalDays, state.currentClass, state.currentPart);
@@ -3496,7 +3729,7 @@ ${responseSchemaDescription}
           await refreshPackageArchiveUI();
 
           hideSpinner();
-          showToast("Daily lesson package generated & saved!");
+          showToast("Daily lesson package generated on edited COs!");
         }
       } catch (err) {
         hideSpinner();
@@ -3530,6 +3763,7 @@ ${responseSchemaDescription}
       refreshPackageArchiveUI();
       checkAndLoadChapterRoadmap();
       updateVoiceUIElements();
+      attachHeaderCOEditListeners();
       if (!GEMINI_API_KEY) {
         setTimeout(showKeyModal, 600);
       }
