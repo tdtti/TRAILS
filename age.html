@@ -1,0 +1,116 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Age Category Checker</title>
+    <style>
+        body {
+            font-family: Arial, sans-serif;
+            background-color: #f4f6f9;
+            display: flex;
+            justify-content: center;
+            align-items: center;
+            height: 100vh;
+            margin: 0;
+        }
+        .card {
+            background: #fff;
+            padding: 25px 30px;
+            border-radius: 8px;
+            box-shadow: 0 4px 10px rgba(0, 0, 0, 0.1);
+            text-align: center;
+            width: 320px;
+        }
+        h2 {
+            margin-top: 0;
+            color: #333;
+        }
+        input[type="date"] {
+            width: 100%;
+            padding: 10px;
+            font-size: 16px;
+            border: 1px solid #ccc;
+            border-radius: 5px;
+            box-sizing: border-box;
+            margin-bottom: 15px;
+        }
+        button {
+            width: 100%;
+            padding: 10px;
+            font-size: 16px;
+            background-color: #007bff;
+            color: white;
+            border: none;
+            border-radius: 5px;
+            cursor: pointer;
+        }
+        button:hover {
+            background-color: #0056b3;
+        }
+        #result {
+            margin-top: 20px;
+            font-size: 18px;
+            font-weight: bold;
+            padding: 12px;
+            border-radius: 5px;
+            display: none;
+        }
+        .kiddies {
+            background-color: #d4edda;
+            color: #155724;
+            display: block !important;
+        }
+        .sub-junior {
+            background-color: #cce5ff;
+            color: #004085;
+            display: block !important;
+        }
+        .not-eligible {
+            background-color: #f8d7da;
+            color: #721c24;
+            display: block !important;
+        }
+    </style>
+</head>
+<body>
+
+    <div class="card">
+        <h2>Category Checker</h2>
+        <label for="dob" style="display:block; text-align:left; margin-bottom:6px; font-weight:bold;">Select Date of Birth:</label>
+        <input type="date" id="dob">
+        
+        <button onclick="checkCategory()">Check Category</button>
+
+        <div id="result"></div>
+    </div>
+
+    <script>
+        function checkCategory() {
+            const dob = document.getElementById("dob").value;
+            const resultDiv = document.getElementById("result");
+
+            if (!dob) {
+                resultDiv.className = "not-eligible";
+                resultDiv.innerText = "Please select a date!";
+                return;
+            }
+
+            // Dates in YYYY-MM-DD format:
+            // Kiddies: On or after 2015-01-01
+            // Sub Juniors: On or after 2013-01-01 (and before 2015-01-01)
+            if (dob >= "2015-01-01") {
+                resultDiv.className = "kiddies";
+                resultDiv.innerText = "KIDDIES";
+            } else if (dob >= "2013-01-01") {
+                resultDiv.className = "sub-junior";
+                resultDiv.innerText = "SUB JUNIOR";
+            } else {
+                resultDiv.className = "not-eligible";
+                resultDiv.innerText = "NOT ELIGIBLE (Above Sub Junior)";
+            }
+        }
+    </script>
+
+</body>
+</html>
