@@ -1939,11 +1939,12 @@
       measurementId: "G-5B7SB0HHN6"
     };
 
+    
     /* =========================================================================
        INTERNAL GEMINI API KEY SPECIFICATION
        ========================================================================= */
-    const HARDCODED_GEMINI_KEY = "YOUR_GEMINI_API_KEY_HERE";
-    let GEMINI_API_KEY = localStorage.getItem('SCERT_GEMINI_KEY') || HARDCODED_GEMINI_KEY || "";
+    // ✅ SAFE: Only loads from browser's private memory
+    let GEMINI_API_KEY = localStorage.getItem('SCERT_GEMINI_KEY') || "";
 
     const PRIMARY_MODEL = "gemini-3.6-flash";
     const FALLBACK_MODEL = "gemini-3.5-flash-lite";
@@ -2130,6 +2131,28 @@
     const apiLedBadge = document.getElementById('api-led-badge');
     const apiLedDot = document.getElementById('api-led-dot');
     const apiLedText = document.getElementById('api-led-text');
+    // Make the LED badge clickable to add/update your Gemini API key
+    apiLedBadge.style.cursor = 'pointer';
+    apiLedBadge.addEventListener('click', () => {
+      const currentKey = localStorage.getItem('SCERT_GEMINI_KEY') || '';
+      const newKey = prompt("🔑 Enter your Gemini AI Studio API Key:", currentKey);
+      if (newKey !== null) {
+        const trimmed = newKey.trim();
+        if (trimmed.length > 10) {
+          localStorage.setItem('SCERT_GEMINI_KEY', trimmed);
+          GEMINI_API_KEY = trimmed;
+          updateApiLedStatus(true);
+          showToast("Gemini API Key saved successfully!");
+        } else if (trimmed.length === 0) {
+          localStorage.removeItem('SCERT_GEMINI_KEY');
+          GEMINI_API_KEY = "";
+          updateApiLedStatus(false);
+          showToast("Gemini Key cleared.");
+        } else {
+          showMessageBox("The key you entered looks too short. Please copy the complete key from Google AI Studio.", "Invalid Key");
+        }
+      }
+    });
 
     const addTextbookBtn = document.getElementById('add-textbook-btn');
     const tbSearchBox = document.getElementById('tb-search-box');
@@ -2248,11 +2271,11 @@
       if (isConnected) {
         apiLedDot.className = "led-dot led-green";
         apiLedText.textContent = "Connected";
-        apiLedBadge.title = "Gemini AI Studio Key: Connected & Active";
+        apiLedBadge.title = "Gemini Key: Active (Click to change key)";
       } else {
         apiLedDot.className = "led-dot led-red";
-        apiLedText.textContent = "Offline";
-        apiLedBadge.title = "Gemini AI Key is not configured or failed to connect.";
+        apiLedText.textContent = "Set API Key";
+        apiLedBadge.title = "No Gemini Key set. Click here to enter your key.";
       }
     }
 
@@ -3289,9 +3312,16 @@ unlockRoadmapBtn.addEventListener('click', () => {
 
     async function executeSmartGeneration(payload) {
       if (!GEMINI_API_KEY) {
-        updateApiLedStatus(false);
-        throw new Error("Gemini API key is missing. Please configure the key in the script.");
-      }
+  const key = prompt("Please enter your free Gemini API Key from Google AI Studio:");
+  if (key) {
+    localStorage.setItem('SCERT_GEMINI_KEY', key.trim());
+    GEMINI_API_KEY = key.trim();
+    updateApiLedStatus(true);
+  } else {
+    showMessageBox("API Key is required to generate lessons.", "Key Required");
+    return;
+  }
+}
       showSpinner(`Synthesizing with ${PRIMARY_MODEL}...`);
       let result = await callGemini(PRIMARY_MODEL, payload);
       if (result.success) return result.data;
