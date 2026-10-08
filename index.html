@@ -3,6 +3,8 @@
 <head>
   <meta charset="UTF-8">
   <meta name="viewport" content="width=device-width, initial-scale=1.0, maximum-scale=5.0, user-scalable=yes">
+  <!-- Required for authentic streaming audio without referrer blocks -->
+  <meta name="referrer" content="no-referrer">
   <title>TDTTI THURAVOOR Smart Teacher Planner & Worksheet Studio</title>
   
   <!-- Fonts: Inter, Merriweather & Malayalam Manjari -->
@@ -12,7 +14,7 @@
 
   <style>
     /* ==========================================================================
-       1. GLASSMORPHISM WITH ACCENT BLUE & WHITE COMBINATIONS
+       1. FROSTED GLASSMORPHISM & THEME TOKENS
        ========================================================================== */
     :root {
       --primary: #0284c7;
@@ -23,17 +25,15 @@
       --accent-soft: #e0f2fe;
       --secondary: #334155;
       
-      /* Frosted Glass Tokens */
-      --glass-bg: rgba(255, 255, 255, 0.75);
-      --glass-bg-subtle: rgba(255, 255, 255, 0.55);
-      --glass-bg-card: rgba(255, 255, 255, 0.88);
+      --glass-bg: rgba(255, 255, 255, 0.78);
+      --glass-bg-subtle: rgba(255, 255, 255, 0.58);
+      --glass-bg-card: rgba(255, 255, 255, 0.9);
       --glass-border: rgba(255, 255, 255, 0.85);
-      --glass-border-blue: rgba(56, 189, 248, 0.45);
       --glass-blur: blur(16px);
       --glass-shadow: 0 8px 32px 0 rgba(2, 132, 199, 0.08);
       --glass-glow: inset 0 1px 1px 0 rgba(255, 255, 255, 0.95);
 
-      --border: rgba(203, 213, 225, 0.65);
+      --border: rgba(203, 213, 225, 0.7);
       --text: #0f172a;
       --text-muted: #64748b;
       --success: #10b981;
@@ -67,10 +67,10 @@
     .malayalam-font { font-family: 'Manjari', 'Inter', sans-serif !important; }
 
     /* ==========================================================================
-       2. GLASSMORPHIC HEADER
+       2. GLASSMORPHIC HEADER & LED CONNECTION STATUS
        ========================================================================== */
     header.app-header {
-      background: linear-gradient(135deg, rgba(2, 132, 199, 0.88), rgba(3, 105, 161, 0.92));
+      background: linear-gradient(135deg, rgba(2, 132, 199, 0.9), rgba(3, 105, 161, 0.94));
       backdrop-filter: var(--glass-blur);
       -webkit-backdrop-filter: var(--glass-blur);
       color: #fff;
@@ -114,7 +114,38 @@
       flex-shrink: 0;
       box-shadow: 0 2px 6px rgba(0,0,0,0.08);
     }
-    .header-controls { display: flex; align-items: center; gap: 6px; flex-shrink: 0; }
+    .header-controls { display: flex; align-items: center; gap: 8px; flex-shrink: 0; }
+
+    /* LED API Status Badge */
+    .api-led-badge {
+      display: inline-flex;
+      align-items: center;
+      gap: 6px;
+      background: rgba(255, 255, 255, 0.2);
+      border: 1px solid rgba(255, 255, 255, 0.45);
+      padding: 5px 9px;
+      border-radius: 20px;
+      font-size: 0.72rem;
+      font-weight: 700;
+      color: #fff;
+      box-shadow: var(--glass-glow);
+      user-select: none;
+    }
+    .led-dot {
+      width: 9px;
+      height: 9px;
+      border-radius: 50%;
+      display: inline-block;
+      transition: all 0.3s ease;
+    }
+    .led-green {
+      background: #10b981;
+      box-shadow: 0 0 8px #10b981, inset 0 0 2px #fff;
+    }
+    .led-red {
+      background: #ef4444;
+      box-shadow: 0 0 8px #ef4444, inset 0 0 2px #fff;
+    }
 
     .btn-header {
       background: rgba(255, 255, 255, 0.2);
@@ -140,7 +171,7 @@
     }
 
     /* ==========================================================================
-       3. TOP DRAWER & CONTROLS
+       3. TOP DRAWER (FIXED-HEIGHT & SCROLLABLE CONTAINER CARDS)
        ========================================================================== */
     .top-controls-panel {
       background: var(--glass-bg);
@@ -198,9 +229,10 @@
       font-weight: 700;
     }
 
+    /* Fixed-Height Desktop & Tablet Grid */
     .top-controls-grid {
       display: grid;
-      grid-template-columns: 1.05fr 1.15fr 1.45fr 1.05fr;
+      grid-template-columns: repeat(4, 1fr);
       gap: 12px;
       align-items: stretch;
       max-width: 1600px;
@@ -221,54 +253,63 @@
       .ctrl-card { display: flex !important; }
     }
 
+    /* Standardized Fixed Container Card with Scrollable Body */
     .ctrl-card {
       background: var(--glass-bg-card);
       backdrop-filter: var(--glass-blur);
       -webkit-backdrop-filter: var(--glass-blur);
       border: 1px solid var(--glass-border);
       border-radius: 10px;
-      padding: 11px 13px;
+      padding: 10px 12px;
       flex-direction: column;
-      justify-content: space-between;
+      height: 250px;
       min-width: 0;
       box-shadow: var(--glass-shadow), var(--glass-glow);
+      overflow: hidden;
     }
     .ctrl-card h3 {
       font-size: 0.8rem;
       font-weight: 700;
       color: var(--primary-dark);
       border-bottom: 1px solid rgba(226, 232, 240, 0.8);
-      padding-bottom: 6px;
-      margin-bottom: 8px;
+      padding-bottom: 5px;
+      margin-bottom: 6px;
       display: flex;
       justify-content: space-between;
       align-items: center;
+      flex-shrink: 0;
+    }
+    .ctrl-card-body-scroll {
+      flex: 1;
+      overflow-y: auto;
+      padding-right: 3px;
+      display: flex;
+      flex-direction: column;
+      gap: 5px;
     }
 
-    .form-group { margin-bottom: 6px; }
+    .form-group { margin-bottom: 5px; }
     .form-group label {
       display: block;
-      font-size: 0.7rem;
+      font-size: 0.69rem;
       font-weight: 600;
       margin-bottom: 2px;
       color: var(--text-muted);
     }
     .form-control {
       width: 100%;
-      padding: 6px 9px;
+      padding: 5px 8px;
       border: 1px solid rgba(203, 213, 225, 0.8);
-      border-radius: 6px;
-      font-size: 0.8rem;
-      background: rgba(255, 255, 255, 0.9);
-      backdrop-filter: blur(6px);
+      border-radius: 5px;
+      font-size: 0.78rem;
+      background: rgba(255, 255, 255, 0.95);
       color: var(--text);
       transition: all 0.15s ease;
     }
     .form-control:focus {
       outline: none;
       border-color: var(--primary);
-      background: #ffffff;
-      box-shadow: 0 0 0 3px rgba(2, 132, 199, 0.15);
+      box-shadow: 0 0 0 2px rgba(2, 132, 199, 0.15);
     }
     .form-row { display: flex; gap: 6px; }
     .form-row .half { flex: 1; min-width: 0; }
@@ -278,84 +319,82 @@
       display: flex;
       background: rgba(224, 242, 254, 0.85);
       border: 1px solid rgba(186, 230, 253, 0.9);
-      padding: 3px;
-      border-radius: 8px;
-      margin-bottom: 8px;
-      gap: 4px;
+      padding: 2px;
+      border-radius: 6px;
+      margin-bottom: 6px;
+      gap: 3px;
     }
     .seg-btn {
       flex: 1;
       display: inline-flex;
       align-items: center;
       justify-content: center;
-      gap: 5px;
-      padding: 6px 8px;
+      gap: 4px;
+      padding: 5px 6px;
       border: none;
       background: transparent;
       color: var(--secondary);
-      font-size: 0.72rem;
+      font-size: 0.7rem;
       font-weight: 600;
-      border-radius: 6px;
+      border-radius: 4px;
       cursor: pointer;
-      transition: all 0.2s ease;
+      transition: all 0.15s ease;
       white-space: nowrap;
     }
     .seg-btn.active {
       background: #ffffff;
       color: var(--primary-dark);
-      box-shadow: 0 2px 8px rgba(2, 132, 199, 0.18);
+      box-shadow: 0 1px 4px rgba(2, 132, 199, 0.18);
     }
 
     .roadmap-status-pill {
       background: rgba(224, 242, 254, 0.9);
       border: 1px solid rgba(186, 230, 253, 0.9);
       color: var(--primary-dark);
-      font-size: 0.68rem;
+      font-size: 0.67rem;
       font-weight: 700;
-      padding: 4px 7px;
-      border-radius: 6px;
-      margin-bottom: 6px;
+      padding: 3px 6px;
+      border-radius: 5px;
+      margin-bottom: 5px;
       display: none;
       align-items: center;
       justify-content: space-between;
     }
 
-    /* Generator Control: Interactive CO Engine Layout */
+    /* Generator Step Box */
     .generator-step-box {
       background: rgba(240, 249, 255, 0.7);
       border: 1px solid rgba(186, 230, 253, 0.85);
-      border-radius: 8px;
-      padding: 8px;
-      margin-bottom: 8px;
+      border-radius: 6px;
+      padding: 6px;
       display: flex;
       flex-direction: column;
-      gap: 6px;
+      gap: 5px;
     }
     .generator-step-title {
       display: flex;
       justify-content: space-between;
       align-items: center;
-      font-size: 0.74rem;
+      font-size: 0.72rem;
       font-weight: 700;
       color: var(--primary-dark);
     }
     .co-separate-scroll {
       display: flex;
       flex-direction: column;
-      gap: 5px;
-      max-height: 140px;
+      gap: 4px;
+      max-height: 85px;
       overflow-y: auto;
       padding-right: 2px;
     }
     .co-item-card {
       background: rgba(255, 255, 255, 0.95);
       border: 1px solid rgba(226, 232, 240, 0.95);
-      border-radius: 6px;
-      padding: 5px 8px;
+      border-radius: 5px;
+      padding: 4px 6px;
       display: flex;
       flex-direction: column;
       gap: 2px;
-      transition: all 0.15s;
     }
     .co-item-card.active-period-co {
       border: 1.5px solid var(--primary);
@@ -372,96 +411,87 @@
       background: var(--primary-dark);
       color: #fff;
       font-weight: 700;
-      font-size: 0.62rem;
-      padding: 1px 5px;
-      border-radius: 4px;
+      font-size: 0.6rem;
+      padding: 1px 4px;
+      border-radius: 3px;
     }
     .co-day-tag {
       background: #e0f2fe;
       color: #0369a1;
-      font-size: 0.62rem;
+      font-size: 0.6rem;
       font-weight: 600;
-      padding: 1px 5px;
-      border-radius: 4px;
+      padding: 1px 4px;
+      border-radius: 3px;
     }
-    .co-item-actions { display: flex; gap: 3px; align-items: center; }
+    .co-item-actions { display: flex; gap: 2px; align-items: center; }
     .co-act-btn {
       background: #f1f5f9;
       border: 1px solid #cbd5e1;
       border-radius: 3px;
-      padding: 2px 5px;
-      font-size: 0.64rem;
+      padding: 1px 4px;
+      font-size: 0.62rem;
       cursor: pointer;
       font-weight: 600;
     }
-    .co-act-btn:hover { background: #e2e8f0; }
     .co-act-btn.del { color: #dc2626; border-color: #fca5a5; }
     .co-item-text {
-      font-size: 0.71rem;
+      font-size: 0.68rem;
       color: #1e293b;
-      line-height: 1.35;
+      line-height: 1.3;
       word-break: break-word;
     }
 
-    /* Textbook Compact List */
+    /* Textbook List */
     .tb-library-toolbar {
       display: flex;
-      gap: 5px;
-      margin-bottom: 6px;
+      gap: 4px;
+      margin-bottom: 4px;
       align-items: center;
+      flex-shrink: 0;
     }
     .tb-search-input {
       flex: 1;
       min-width: 0;
-      padding: 5px 8px;
-      font-size: 0.72rem;
+      padding: 4px 6px;
+      font-size: 0.7rem;
       border: 1px solid rgba(203, 213, 225, 0.8);
-      border-radius: 6px;
+      border-radius: 5px;
       background: rgba(255, 255, 255, 0.95);
     }
     .tb-filter-select {
-      padding: 5px 6px;
-      font-size: 0.72rem;
+      padding: 4px 5px;
+      font-size: 0.7rem;
       border: 1px solid rgba(203, 213, 225, 0.8);
-      border-radius: 6px;
+      border-radius: 5px;
       background: #fff;
-      max-width: 85px;
+      max-width: 75px;
     }
     .tb-compact-scroll {
       display: flex;
       flex-direction: column;
-      gap: 4px;
-      max-height: 185px;
+      gap: 3px;
+      flex: 1;
       overflow-y: auto;
       padding-right: 2px;
     }
     .tb-compact-row {
       background: rgba(255, 255, 255, 0.9);
       border: 1px solid rgba(226, 232, 240, 0.95);
-      border-radius: 6px;
-      padding: 5px 7px;
+      border-radius: 5px;
+      padding: 4px 6px;
       display: flex;
       align-items: center;
       justify-content: space-between;
-      gap: 6px;
+      gap: 5px;
       transition: all 0.15s ease;
-    }
-    .tb-compact-row:hover {
-      background: #ffffff;
-      border-color: var(--primary);
     }
     .tb-compact-row.is-active-target {
       border: 1.5px solid var(--primary);
       background: rgba(240, 253, 244, 0.95);
     }
-    .tb-row-meta {
-      display: flex;
-      flex-direction: column;
-      min-width: 0;
-      flex: 1;
-    }
+    .tb-row-meta { display: flex; flex-direction: column; min-width: 0; flex: 1; }
     .tb-row-title {
-      font-size: 0.72rem;
+      font-size: 0.7rem;
       font-weight: 700;
       color: #0f172a;
       white-space: nowrap;
@@ -469,142 +499,113 @@
       text-overflow: ellipsis;
       display: flex;
       align-items: center;
-      gap: 4px;
+      gap: 3px;
     }
     .tb-row-sub {
-      font-size: 0.62rem;
+      font-size: 0.6rem;
       color: var(--text-muted);
       white-space: nowrap;
       overflow: hidden;
       text-overflow: ellipsis;
     }
-    .tb-micro-actions {
-      display: flex;
-      align-items: center;
-      gap: 3px;
-      flex-shrink: 0;
-    }
+    .tb-micro-actions { display: flex; align-items: center; gap: 2px; flex-shrink: 0; }
     .tb-micro-btn {
       background: rgba(241, 245, 249, 0.9);
       border: 1px solid rgba(203, 213, 225, 0.85);
-      border-radius: 4px;
-      padding: 3px 6px;
-      font-size: 0.66rem;
+      border-radius: 3px;
+      padding: 2px 5px;
+      font-size: 0.64rem;
       font-weight: 600;
       cursor: pointer;
       display: inline-flex;
       align-items: center;
-      gap: 2px;
-      transition: all 0.15s ease;
       line-height: 1;
     }
-    .tb-micro-btn:hover {
-      background: #ffffff;
-      border-color: var(--primary);
-    }
-    .tb-micro-btn.active-target {
-      background: var(--primary);
-      border-color: var(--primary);
-      color: #ffffff;
-    }
-    .tb-micro-btn.view-pdf {
-      background: #e0f2fe;
-      border-color: #7dd3fc;
-      color: #0369a1;
-    }
-    .tb-micro-btn.view-pdf:hover { background: #bae6fd; }
-    .tb-micro-btn.del {
-      color: #dc2626;
-      border-color: rgba(252, 165, 165, 0.9);
-    }
-    .tb-micro-btn.del:hover { background: #fee2e2; }
+    .tb-micro-btn.active-target { background: var(--primary); border-color: var(--primary); color: #ffffff; }
+    .tb-micro-btn.view-pdf { background: #e0f2fe; border-color: #7dd3fc; color: #0369a1; }
+    .tb-micro-btn.del { color: #dc2626; border-color: rgba(252, 165, 165, 0.9); }
 
     /* Saved Packages Archive */
     .pkg-archive-container {
       display: flex;
       flex-direction: column;
-      gap: 6px;
-      max-height: 200px;
+      gap: 5px;
+      flex: 1;
       overflow-y: auto;
     }
     .pkg-card {
       border: 1px solid var(--glass-border);
-      background: rgba(255, 255, 255, 0.85);
-      border-radius: 8px;
-      padding: 8px 10px;
-      font-size: 0.76rem;
+      background: rgba(255, 255, 255, 0.9);
+      border-radius: 6px;
+      padding: 6px 8px;
+      font-size: 0.74rem;
       display: flex;
       flex-direction: column;
-      gap: 5px;
-      box-shadow: 0 2px 6px rgba(0,0,0,0.02);
-      transition: all 0.15s;
+      gap: 3px;
+      box-shadow: 0 1px 3px rgba(0,0,0,0.02);
     }
     .pkg-card.active-loaded {
       border: 1.5px solid var(--primary);
       background: rgba(240, 253, 244, 0.95);
-      box-shadow: 0 4px 14px rgba(2, 132, 199, 0.12);
+    }
+    .pkg-card.is-master-unit {
+      border-left: 4px solid #8b5cf6;
+      background: rgba(245, 243, 255, 0.9);
     }
     .pkg-card-top {
       display: flex;
       justify-content: space-between;
       align-items: flex-start;
-      gap: 6px;
+      gap: 5px;
     }
-    .pkg-title-text { font-weight: 700; color: #1e293b; font-size: 0.78rem; }
-    .pkg-meta-text { font-size: 0.65rem; color: var(--text-muted); margin-top: 1px; }
+    .pkg-title-text { font-weight: 700; color: #1e293b; font-size: 0.74rem; }
+    .pkg-meta-text { font-size: 0.62rem; color: var(--text-muted); margin-top: 1px; }
     .pkg-co-preview {
-      font-size: 0.68rem;
+      font-size: 0.66rem;
       color: #334155;
       background: rgba(248, 250, 252, 0.9);
-      padding: 3px 7px;
-      border-radius: 4px;
-      border-left: 3px solid var(--primary);
+      padding: 2px 5px;
+      border-radius: 3px;
+      border-left: 2.5px solid var(--primary);
       overflow: hidden;
       text-overflow: ellipsis;
       white-space: nowrap;
     }
-    .pkg-actions-row { display: flex; gap: 4px; margin-top: 2px; align-items: center; }
+    .pkg-actions-row { display: flex; gap: 3px; margin-top: 2px; align-items: center; }
 
     .active-status-bar {
       background: rgba(254, 249, 195, 0.88);
       border: 1px solid rgba(253, 224, 71, 0.9);
       color: #854d0e;
-      padding: 5px 8px;
-      border-radius: 6px;
-      font-size: 0.72rem;
-      margin-bottom: 6px;
+      padding: 4px 6px;
+      border-radius: 5px;
+      font-size: 0.7rem;
+      margin-bottom: 5px;
       display: none;
       align-items: center;
       justify-content: space-between;
-      box-shadow: 0 2px 6px rgba(0,0,0,0.02);
     }
 
     /* Buttons */
     .btn {
       cursor: pointer;
       border: none;
-      border-radius: 6px;
-      padding: 6px 11px;
+      border-radius: 5px;
+      padding: 5px 10px;
       font-size: 0.76rem;
       font-weight: 600;
       display: inline-flex;
       align-items: center;
       justify-content: center;
-      gap: 5px;
+      gap: 4px;
       transition: all 0.15s ease;
       touch-action: manipulation;
-      min-height: 30px;
-      box-shadow: 0 2px 4px rgba(0,0,0,0.04);
+      min-height: 28px;
     }
-    .btn:disabled {
-      opacity: 0.55;
-      cursor: not-allowed;
-      pointer-events: none;
-    }
+    .btn:disabled { opacity: 0.5; cursor: not-allowed; pointer-events: none; }
     .btn-primary {
       background: linear-gradient(135deg, #0284c7, #0369a1);
       color: #fff;
-      box-shadow: 0 3px 8px rgba(2, 132, 199, 0.25);
     }
     .btn-primary:hover {
       background: linear-gradient(135deg, #0369a1, #075985);
@@ -639,53 +640,36 @@
       100% { opacity: 1; }
     }
     .btn-block { width: 100%; }
-    .btn-sm { padding: 4px 8px; font-size: 0.7rem; min-height: 26px; }
+    .btn-sm { padding: 3px 6px; font-size: 0.68rem; min-height: 24px; }
 
     /* Voice & Speed Modal */
-    .voice-option-grid {
-      display: grid;
-      grid-template-columns: 1fr 1fr;
-      gap: 10px;
-      margin-bottom: 14px;
-    }
+    .voice-option-grid { display: grid; grid-template-columns: 1fr 1fr; gap: 8px; margin-bottom: 12px; }
     .voice-gender-card {
       border: 1.5px solid var(--glass-border);
       background: rgba(255, 255, 255, 0.8);
-      border-radius: 8px;
-      padding: 10px;
+      border-radius: 7px;
+      padding: 8px;
       text-align: center;
       cursor: pointer;
-      transition: all 0.15s;
     }
     .voice-gender-card.selected {
       border-color: var(--primary);
       background: rgba(240, 249, 255, 0.95);
-      box-shadow: 0 4px 12px rgba(2, 132, 199, 0.15);
     }
-    .voice-gender-icon { font-size: 1.6rem; display: block; margin-bottom: 4px; }
-    .speed-slider-wrapper { margin: 12px 0 8px 0; }
-    .speed-slider-labels {
-      display: flex;
-      justify-content: space-between;
-      font-size: 0.74rem;
-      color: var(--text-muted);
-      margin-top: 4px;
-    }
-    .speed-presets-row { display: flex; gap: 5px; margin-top: 10px; flex-wrap: wrap; }
+    .voice-gender-icon { font-size: 1.4rem; display: block; margin-bottom: 2px; }
+    .speed-slider-wrapper { margin: 10px 0 6px 0; }
+    .speed-slider-labels { display: flex; justify-content: space-between; font-size: 0.72rem; color: var(--text-muted); margin-top: 3px; }
+    .speed-presets-row { display: flex; gap: 4px; margin-top: 8px; flex-wrap: wrap; }
     .preset-pill {
-      padding: 3px 8px;
+      padding: 2px 6px;
       background: rgba(241, 245, 249, 0.85);
       border: 1px solid rgba(203, 213, 225, 0.8);
-      border-radius: 5px;
-      font-size: 0.72rem;
+      border-radius: 4px;
+      font-size: 0.7rem;
       cursor: pointer;
       font-weight: 600;
     }
-    .preset-pill.active {
-      background: var(--primary);
-      color: #fff;
-      border-color: var(--primary);
-    }
+    .preset-pill.active { background: var(--primary); color: #fff; border-color: var(--primary); }
 
     /* ==========================================================================
        4. WORKSPACE CANVAS & TABS
@@ -829,9 +813,7 @@
       font-weight: 700;
     }
 
-    /* ==========================================================================
-       5. UNIFIED CARD-STYLED UI SYSTEM (ALL 6 TABS)
-       ========================================================================== */
+    /* Cards Stack */
     .cards-stack-container { display: flex; flex-direction: column; gap: 10px; width: 100%; }
     
     .unified-card {
@@ -845,9 +827,7 @@
       width: 100%;
       transition: all 0.2s ease;
     }
-    .unified-card:hover {
-      box-shadow: 0 10px 30px rgba(2, 132, 199, 0.12);
-    }
+    .unified-card:hover { box-shadow: 0 10px 30px rgba(2, 132, 199, 0.12); }
     .unified-card-header {
       background: rgba(240, 249, 255, 0.65);
       border-bottom: 1px solid rgba(226, 232, 240, 0.85);
@@ -951,6 +931,105 @@
       box-shadow: 0 2px 6px rgba(0,0,0,0.02);
     }
 
+    /* Unit Progression Bar */
+    .unit-day-switcher-bar {
+      display: none;
+      flex-direction: column;
+      gap: 8px;
+      background: linear-gradient(135deg, rgba(240, 249, 255, 0.94), rgba(224, 242, 254, 0.9));
+      border: 1px solid rgba(186, 230, 253, 0.95);
+      border-radius: 10px;
+      padding: 10px 12px;
+      margin: 0 14px 12px 14px;
+      box-shadow: 0 4px 14px rgba(2, 132, 199, 0.08);
+    }
+    .unit-day-pill {
+      background: #ffffff;
+      border: 1px solid rgba(203, 213, 225, 0.85);
+      border-radius: 6px;
+      padding: 4px 10px;
+      font-size: 0.72rem;
+      font-weight: 700;
+      color: var(--secondary);
+      cursor: pointer;
+      white-space: nowrap;
+      transition: all 0.15s ease;
+    }
+    .unit-day-pill.active {
+      background: var(--primary);
+      border-color: var(--primary);
+      color: #ffffff;
+      box-shadow: 0 2px 6px rgba(2, 132, 199, 0.25);
+    }
+
+    /* Locked Chapter COs Panel (Displayed directly under unit progression) */
+    .unit-progression-cos-panel {
+      background: rgba(255, 255, 255, 0.95);
+      border: 1px solid rgba(203, 213, 225, 0.85);
+      border-radius: 8px;
+      padding: 9px 12px;
+      display: flex;
+      flex-direction: column;
+      gap: 7px;
+      box-shadow: 0 1px 4px rgba(0,0,0,0.03);
+    }
+    .u-prog-co-header {
+      display: flex;
+      justify-content: space-between;
+      align-items: center;
+      flex-wrap: wrap;
+      gap: 6px;
+      border-bottom: 1px solid rgba(226, 232, 240, 0.8);
+      padding-bottom: 5px;
+    }
+    .u-prog-co-title {
+      font-size: 0.74rem;
+      font-weight: 800;
+      color: var(--primary-dark);
+      display: flex;
+      align-items: center;
+      gap: 5px;
+    }
+    .u-prog-co-grid {
+      display: grid;
+      grid-template-columns: repeat(auto-fill, minmax(280px, 1fr));
+      gap: 6px;
+      max-height: 180px;
+      overflow-y: auto;
+      padding-right: 2px;
+    }
+    @media (max-width: 640px) {
+      .u-prog-co-grid { grid-template-columns: 1fr; }
+    }
+    .u-prog-co-item {
+      background: #f8fafc;
+      border: 1px solid #cbd5e1;
+      border-radius: 6px;
+      padding: 6px 9px;
+      font-size: 0.72rem;
+      line-height: 1.4;
+      color: #334155;
+      display: flex;
+      flex-direction: column;
+      gap: 3px;
+      transition: all 0.2s ease;
+      cursor: pointer;
+      text-align: left;
+    }
+    .u-prog-co-item.is-highlighted {
+      background: #f0fdf4 !important;
+      border: 2px solid #10b981 !important;
+      box-shadow: 0 0 0 2px rgba(16, 185, 129, 0.22);
+      color: #064e3b !important;
+      transform: translateY(-1px);
+    }
+    .u-prog-co-item-top {
+      display: flex;
+      justify-content: space-between;
+      align-items: center;
+      gap: 4px;
+    }
+
     /* Modals & Glass Overlays */
     .spinner-overlay {
       position: fixed;
@@ -1047,7 +1126,7 @@
       }
       .no-print, header, .top-controls-panel, nav, button, .pane-header,
       .pane-header-actions, .spinner-overlay, .modal-overlay, .toast-popup,
-      .wa-view-switch {
+      .wa-view-switch, .unit-day-switcher-bar {
         display: none !important;
       }
       .canvas, .tab-content-wrapper {
@@ -1107,7 +1186,7 @@
     </div>
   </div>
 
-  <!-- General Notification Modal -->
+  <!-- General Styled Modal Dialog -->
   <div id="custom-modal-overlay" class="modal-overlay no-print" style="display:none;">
     <div class="modal-box">
       <div class="modal-header">
@@ -1161,7 +1240,6 @@
       </div>
       <div class="modal-body">
         <input type="hidden" id="edit-book-id" value="">
-        
         <div class="form-row">
           <div class="form-group half">
             <label for="modal-book-class">🏫 Class (Standard):</label>
@@ -1273,29 +1351,29 @@
     </div>
   </div>
 
-  <!-- Dedicated API Key Modal -->
-  <div id="key-modal-overlay" class="modal-overlay no-print" style="display:none;">
-    <div class="modal-box">
-      <div class="modal-header">
-        <h4>🔑 Gemini API Key</h4>
-        <button id="key-modal-close-btn" class="modal-close">&times;</button>
+
+  <!-- Styled In-App Confirmation Modal (Replaces browser confirm() popups) -->
+  <div id="confirm-modal-overlay" class="modal-overlay no-print" style="display:none;">
+    <div class="modal-box" style="max-width: 440px;">
+      <div class="modal-header" style="background: linear-gradient(135deg, var(--primary), var(--primary-dark));">
+        <h4 id="confirm-modal-title">Confirm Action</h4>
+        <button id="confirm-modal-close-btn" class="modal-close">&times;</button>
       </div>
-      <div class="modal-body">
-        <p style="font-size:0.8rem; color:var(--text-muted); margin-bottom:8px;">
-          Enter your free key from <a href="https://aistudio.google.com/apikey" target="_blank" rel="noopener" style="color:var(--primary); font-weight:700;">Google AI Studio ↗</a>.
-        </p>
-        <input type="password" id="key-modal-input" class="form-control" placeholder="Paste AIza... key">
+      <div class="modal-body" id="confirm-modal-message" style="font-size:0.86rem; line-height:1.55; color:var(--text);">
+        Are you sure you want to proceed?
       </div>
-      <div class="modal-footer">
-        <button id="save-key-modal-btn" class="btn btn-primary btn-sm">💾 Save Key</button>
+      <div class="modal-footer" style="display:flex; justify-content:flex-end; gap:8px;">
+        <button id="confirm-modal-cancel-btn" class="btn btn-outline btn-sm">✖️ Cancel</button>
+        <button id="confirm-modal-ok-btn" class="btn btn-danger btn-sm">✔️ Confirm</button>
       </div>
     </div>
   </div>
+  
 
   <!-- Floating Toast Notification -->
   <div id="toast-popup" class="toast-popup no-print">🔔 Notification</div>
 
-  <!-- Glassmorphic Header -->
+  <!-- Glassmorphic Header with LED Connection Indicator -->
   <header class="app-header no-print">
     <div class="header-brand">
       <button id="controls-toggle-btn" class="btn-header" title="Toggle Controls">
@@ -1308,11 +1386,14 @@
       </div>
     </div>
     <div class="header-controls">
+      <!-- LED API Connection Status Indicator -->
+      <div class="api-led-badge" id="api-led-badge" title="Gemini AI Studio Key Connection Status">
+        <span class="led-dot led-green" id="api-led-dot"></span>
+        <span id="api-led-text">Connected</span>
+      </div>
+
       <button id="header-voice-btn" class="btn-header" title="Speech Voice Gender & Speed">
         🎙️ <span id="hdr-voice-text">👩 1.0x</span>
-      </button>
-      <button id="header-key-btn" class="btn-header" title="Change Gemini API Key">
-        🔑 <span>Key</span>
       </button>
     </div>
   </header>
@@ -1327,73 +1408,74 @@
     </div>
 
     <div class="top-controls-grid">
-      <!-- Card 1: Pacing Target (Focused syllabus setup) -->
+      <!-- Card 1: Pacing Target (Fixed Container with Internal Scroll) -->
       <div class="ctrl-card mob-active" data-section="pacing">
         <h3><span>🎯 1. Pacing Target</span></h3>
-        <div id="roadmap-status-pill" class="roadmap-status-pill">
-          <span id="roadmap-status-text">🔒 </span>
-          <button id="unlock-roadmap-btn" class="btn btn-danger btn-sm" style="padding: 1px 6px; font-size:0.64rem;">🔓 Unlock</button>
-        </div>
-
-        <!-- Sleek Segmented Switcher (No Checkboxes or Radio Ticks) -->
-        <div class="segmented-pacing-switch" id="pacing-scope-switch">
-          <button type="button" class="seg-btn active" data-scope="single" id="btn-scope-single">
-            <span>📅 Single Day</span>
-          </button>
-          <button type="button" class="seg-btn" data-scope="unit" id="btn-scope-unit">
-            <span>📦 Entire Unit Plan</span>
-          </button>
-        </div>
-
-        <div class="form-row">
-          <div class="form-group half">
-            <label for="target-subject">🧪 Subject (From Books):</label>
-            <select id="target-subject" class="form-control">
-              <option value="">Loading books...</option>
-            </select>
+        <div class="ctrl-card-body-scroll">
+          <div id="roadmap-status-pill" class="roadmap-status-pill">
+            <span id="roadmap-status-text">🔒 </span>
+            <button id="unlock-roadmap-btn" class="btn btn-danger btn-sm" style="padding: 1px 6px; font-size:0.64rem;">🔓 Unlock</button>
           </div>
-          <div class="form-group half">
-            <label>🏫 Class & Part:</label>
-            <div class="form-row">
-              <select id="class-select" class="form-control" style="flex:1;">
-                <option value="1">Std 1</option>
-                <option value="2">Std 2</option>
-                <option value="3">Std 3</option>
-                <option value="4">Std 4</option>
-                <option value="5" selected>Std 5</option>
-                <option value="6">Std 6</option>
-                <option value="7">Std 7</option>
-                <option value="8">Std 8</option>
-                <option value="9">Std 9</option>
-                <option value="10">Std 10</option>
-              </select>
-              <select id="part-select" class="form-control" style="flex:1;">
-                <option value="part1" selected>Pt 1</option>
-                <option value="part2">Pt 2</option>
-                <option value="full">Full</option>
+
+          <div class="segmented-pacing-switch" id="pacing-scope-switch">
+            <button type="button" class="seg-btn active" data-scope="single" id="btn-scope-single">
+              <span>📅 Single Day</span>
+            </button>
+            <button type="button" class="seg-btn" data-scope="unit" id="btn-scope-unit">
+              <span>📦 Entire Unit Plan</span>
+            </button>
+          </div>
+
+          <div class="form-row">
+            <div class="form-group half">
+              <label for="target-subject">🧪 Subject:</label>
+              <select id="target-subject" class="form-control">
+                <option value="">Loading books...</option>
               </select>
             </div>
+            <div class="form-group half">
+              <label>🏫 Class & Part:</label>
+              <div class="form-row">
+                <select id="class-select" class="form-control" style="flex:1;">
+                  <option value="1">Std 1</option>
+                  <option value="2">Std 2</option>
+                  <option value="3">Std 3</option>
+                  <option value="4">Std 4</option>
+                  <option value="5" selected>Std 5</option>
+                  <option value="6">Std 6</option>
+                  <option value="7">Std 7</option>
+                  <option value="8">Std 8</option>
+                  <option value="9">Std 9</option>
+                  <option value="10">Std 10</option>
+                </select>
+                <select id="part-select" class="form-control" style="flex:1;">
+                  <option value="part1" selected>Pt 1</option>
+                  <option value="part2">Pt 2</option>
+                  <option value="full">Full</option>
+                </select>
+              </div>
+            </div>
           </div>
-        </div>
 
-        <div class="form-group">
-          <label>📖 Chapter Title:</label>
-          <input type="text" id="unit-title" class="form-control" placeholder="e.g. Reflection of Light">
-        </div>
-
-        <div class="form-row">
-          <div class="form-group half" id="day-number-container">
-            <label>⏱️ Day in Unit:</label>
-            <input type="number" id="day-number" class="form-control" value="1" min="1" max="25">
+          <div class="form-group">
+            <label>📖 Chapter Title:</label>
+            <input type="text" id="unit-title" class="form-control" placeholder="e.g. Reflection of Light">
           </div>
-          <div class="form-group half" id="total-days-container">
-            <label>📊 Total Days:</label>
-            <input type="number" id="total-days" class="form-control" value="5" min="1" max="25">
+
+          <div class="form-row">
+            <div class="form-group half" id="day-number-container">
+              <label>⏱️ Day in Unit:</label>
+              <input type="number" id="day-number" class="form-control" value="1" min="1" max="25">
+            </div>
+            <div class="form-group half" id="total-days-container">
+              <label>📊 Total Days:</label>
+              <input type="number" id="total-days" class="form-control" value="5" min="1" max="25">
+            </div>
           </div>
         </div>
       </div>
 
-      <!-- Card 2: Restructured 100+ Books Management (Space-Efficient Compact List + View PDF Just Left of Unlock) -->
+      <!-- Card 2: Locked Textbooks (Fixed Container with Internal Scroll) -->
       <div class="ctrl-card" data-section="books">
         <h3>
           <span>📚 2. Locked Textbooks (<span id="locked-count">0</span>)</span>
@@ -1403,7 +1485,7 @@
         <div class="tb-library-toolbar">
           <input type="text" id="tb-search-box" class="tb-search-input" placeholder="🔍 Search Books...">
           <select id="tb-filter-class" class="tb-filter-select">
-            <option value="all">All Stds</option>
+            <option value="all">All</option>
             <option value="5">Std 5</option>
             <option value="6">Std 6</option>
             <option value="7">Std 7</option>
@@ -1420,59 +1502,59 @@
         </div>
       </div>
 
-      <!-- Card 3: Generator Control (HOUSES TWO-PHASE CO & PACKAGE GENERATOR) -->
+      <!-- Card 3: Generator Control (Fixed Container with Internal Scroll) -->
       <div class="ctrl-card" data-section="generate">
         <h3>
           <span>⚡ 3. Generator Control</span>
           <span id="co-workflow-badge" class="badge-tag" style="background:#e0f2fe; color:#0369a1;">Step 1: COs</span>
         </h3>
         
-        <div id="active-status-bar" class="active-status-bar">
-          <span id="active-status-text">🔒 Active Reference</span>
-          <button id="quick-reset-btn" class="btn btn-danger btn-sm">Reset</button>
-        </div>
-
-        <!-- PHASE 1: GENERATE & CONFIRM CHAPTER COs (NO DEFAULTS, REAL CHAPTER CONTENT ONLY) -->
-        <div class="generator-step-box">
-          <div class="generator-step-title">
-            <span>🎯 1. Chapter Curricular Objectives (COs)</span>
-            <span id="cos-status-pill" class="pill-qnum" style="background:#f1f5f9; color:#475569; font-size:0.6rem;">Awaiting Extraction</span>
+        <div class="ctrl-card-body-scroll">
+          <div id="active-status-bar" class="active-status-bar">
+            <span id="active-status-text">🔒 Active Reference</span>
+            <button id="quick-reset-btn" class="btn btn-danger btn-sm">Reset</button>
           </div>
 
-          <div style="display:flex; gap:4px;">
-            <button id="generate-cos-btn" class="btn btn-outline btn-sm" style="flex:2; border-color:var(--primary); color:var(--primary);">
-              🎯 Extract & Generate COs
-            </button>
-            <button id="btn-add-new-co" class="btn btn-outline btn-sm" style="flex:1;">
-              ➕ Add CO
-            </button>
-          </div>
-
-          <!-- Separated CO List Explorer (View 👁️, Modify ✏️, Delete 🗑️) -->
-          <div class="co-separate-scroll" id="co-separate-list">
-            <div style="font-size: 0.68rem; color: var(--text-muted); text-align: center; padding: 10px; font-style: italic;">
-              No default COs. Select chapter & textbook, then tap "Extract & Generate COs" above.
+          <!-- PHASE 1: GENERATE & CONFIRM CHAPTER COs -->
+          <div class="generator-step-box">
+            <div class="generator-step-title">
+              <span>🎯 1. Chapter Curricular Objectives</span>
+              <span id="cos-status-pill" class="pill-qnum" style="background:#f1f5f9; color:#475569; font-size:0.6rem;">Awaiting</span>
             </div>
+
+            <div style="display:flex; gap:4px;">
+              <button id="generate-cos-btn" class="btn btn-outline btn-sm" style="flex:2; border-color:var(--primary); color:var(--primary);">
+                🎯 Extract COs
+              </button>
+              <button id="btn-add-new-co" class="btn btn-outline btn-sm" style="flex:1;">
+                ➕ Add
+              </button>
+            </div>
+
+            <div class="co-separate-scroll" id="co-separate-list">
+              <div style="font-size: 0.68rem; color: var(--text-muted); text-align: center; padding: 10px; font-style: italic;">
+                Select chapter & textbook, then tap "Extract COs".
+              </div>
+            </div>
+
+            <button id="lock-cos-btn" class="btn btn-outline btn-sm" style="border-color:#10b981; color:#047857;" disabled>
+              🔒 Confirm & Lock COs for Generation
+            </button>
           </div>
 
-          <!-- Confirm & Lock Action -->
-          <button id="lock-cos-btn" class="btn btn-outline btn-sm" style="border-color:#10b981; color:#047857;" disabled>
-            🔒 Confirm & Lock COs for Generation
-          </button>
-        </div>
-
-        <!-- PHASE 2: PACKAGE GENERATOR (LOCKED TO CONFIRMED/MODIFIED COs) -->
-        <div style="display:flex; flex-direction:column; gap:4px;">
-          <button id="generate-btn" class="btn btn-primary btn-block" style="padding: 8px 10px;" disabled>
-            ✨ 2. Generate Package (Locked to COs)
-          </button>
-          <button id="reset-workspace-btn" class="btn btn-outline btn-block btn-sm">
-            🔄 Reset Workspace
-          </button>
+          <!-- PHASE 2: PACKAGE GENERATOR -->
+          <div style="display:flex; flex-direction:column; gap:4px; margin-top: 4px;">
+            <button id="generate-btn" class="btn btn-primary btn-block" style="padding: 7px 10px;" disabled>
+              ✨ 2. Generate Package (Locked to COs)
+            </button>
+            <button id="reset-workspace-btn" class="btn btn-outline btn-block btn-sm">
+              🔄 Reset Workspace
+            </button>
+          </div>
         </div>
       </div>
 
-      <!-- Card 4: Saved Packages -->
+      <!-- Card 4: Saved Packages (Fixed Container with Internal Scroll) -->
       <div class="ctrl-card" data-section="archive">
         <h3>
           <span>💾 4. Saved Packages</span>
@@ -1492,6 +1574,18 @@
        MAIN WORKSPACE CANVAS (UNIFIED CARD UI ACROSS ALL 6 TABS)
        ========================================================================== -->
   <main class="canvas">
+
+    <!-- Interactive Unit Progression Bar & Chapter CO Roadmap Explorer -->
+    <div id="unit-day-switcher-bar" class="unit-day-switcher-bar no-print">
+      <div style="display:flex; align-items:center; justify-content:space-between; flex-wrap:wrap; gap:6px; width:100%;">
+        <div style="display:flex; align-items:center; gap:6px; overflow-x:auto; padding-bottom:2px;">
+          <span style="font-size:0.75rem; font-weight:800; color:var(--primary-dark); margin-right:4px; white-space:nowrap;">📅 Unit Progression:</span>
+          <div id="unit-day-pills-container" style="display:flex; gap:5px; align-items:center;"></div>
+        </div>
+      </div>
+      <!-- Under Unit Progression: All Locked Chapter COs Panel with Highlighting & Interactive Loading -->
+      <div id="unit-progression-cos-panel" class="unit-progression-cos-panel"></div>
+    </div>
     
     <nav class="canvas-tabs no-print">
       <button class="tab-btn active" data-tab="lesson-plan">
@@ -1564,7 +1658,7 @@
           <h2>Digital Media Recommendations</h2>
           <div class="pane-header-actions">
             <button class="btn btn-translate btn-sm translate-tab-btn" data-tab="tab-media-resources">🌐 <span>മലയാളം</span></button>
-            <button class="btn btn-tts btn-sm tts-tab-btn" data-tab="tab-media-resources">🔊</span></button>
+            <button class="btn btn-tts btn-sm tts-tab-btn" data-tab="tab-media-resources">🔊</button>
             <button class="btn btn-outline btn-sm tts-cfg-btn" title="Voice Gender & Speed">⚙️ <span class="cfg-spd-lbl">1.0x</span></button>
             <button class="btn btn-secondary btn-sm" id="copy-all-media-btn">📋 <span>Copy All</span></button>
             <button class="btn btn-primary btn-sm print-tab-btn">🖨️ <span>Print Sheet</span></button>
@@ -1648,7 +1742,7 @@
           <h2>Daily WhatsApp Broadcast</h2>
           <div class="pane-header-actions">
             <button class="btn btn-translate btn-sm translate-tab-btn" data-tab="tab-whatsapp-summary">🌐 <span>മലയാളം</span></button>
-            <button class="btn btn-tts btn-sm tts-tab-btn" data-tab="tab-whatsapp-summary">🔊</span></button>
+            <button class="btn btn-tts btn-sm tts-tab-btn" data-tab="tab-whatsapp-summary">🔊</button>
             <button class="btn btn-outline btn-sm tts-cfg-btn" title="Voice Gender & Speed">⚙️ <span class="cfg-spd-lbl">1.0x</span></button>
             <button id="share-whatsapp-btn" class="btn btn-whatsapp btn-sm">📲 <span>Send WhatsApp</span></button>
             <button class="btn btn-secondary btn-sm" id="copy-whatsapp-text-btn">📋 <span>Copy All</span></button>
@@ -1789,6 +1883,40 @@
        6. JAVASCRIPT ENGINE
        ========================================================================== -->
   <script type="module">
+
+    // =========================================================================
+    // UNIVERSAL IN-APP STYLED CONFIRMATION MODAL (Zero Native Popups)
+    // =========================================================================
+    let onConfirmDialogCallback = null;
+
+    function showConfirmDialog(message, title = "Confirm Action", onConfirm, isDanger = true) {
+      const modal = document.getElementById('confirm-modal-overlay');
+      const titleEl = document.getElementById('confirm-modal-title');
+      const msgEl = document.getElementById('confirm-modal-message');
+      const okBtn = document.getElementById('confirm-modal-ok-btn');
+
+      titleEl.textContent = title;
+      msgEl.innerHTML = message;
+      onConfirmDialogCallback = onConfirm;
+
+      okBtn.className = isDanger ? "btn btn-danger btn-sm" : "btn btn-primary btn-sm";
+      okBtn.textContent = isDanger ? "🗑️ Confirm Delete" : "✔️ Proceed";
+      modal.style.display = 'flex';
+    }
+
+    function hideConfirmDialog() {
+      document.getElementById('confirm-modal-overlay').style.display = 'none';
+      onConfirmDialogCallback = null;
+    }
+
+    document.getElementById('confirm-modal-close-btn').addEventListener('click', hideConfirmDialog);
+    document.getElementById('confirm-modal-cancel-btn').addEventListener('click', hideConfirmDialog);
+    document.getElementById('confirm-modal-ok-btn').addEventListener('click', () => {
+      const cb = onConfirmDialogCallback;
+      hideConfirmDialog();
+      if (cb) cb();
+    });
+
     import { initializeApp } from "https://www.gstatic.com/firebasejs/10.13.0/firebase-app.js";
     import { 
       getFirestore, 
@@ -1811,7 +1939,12 @@
       measurementId: "G-5B7SB0HHN6"
     };
 
-    let GEMINI_API_KEY = localStorage.getItem('SCERT_GEMINI_KEY') || "";
+    /* =========================================================================
+       INTERNAL GEMINI API KEY SPECIFICATION
+       ========================================================================= */
+    const HARDCODED_GEMINI_KEY = "YOUR_GEMINI_API_KEY_HERE";
+    let GEMINI_API_KEY = localStorage.getItem('SCERT_GEMINI_KEY') || HARDCODED_GEMINI_KEY || "";
+
     const PRIMARY_MODEL = "gemini-3.6-flash";
     const FALLBACK_MODEL = "gemini-3.5-flash-lite";
 
@@ -1930,12 +2063,14 @@
       currentPackage: null,
       activePackageId: null,
       lockedRoadmap: null,
-      allCOsList: [],       // Separated real chapter COs
-      isCOConfirmed: false, // Must be confirmed/locked before generation
+      allCOsList: [],
+      isCOConfirmed: false,
       savedPackages: [],
       ttsGender: localStorage.getItem('SCERT_TTS_GENDER') || 'female',
       ttsSpeed: parseFloat(localStorage.getItem('SCERT_TTS_SPEED') || '1.0'),
-      translations: {}
+      translations: {},
+      currentUnitPlan: null,
+      activeUnitPlanDay: 1
     };
 
     // DOM Elements
@@ -1952,11 +2087,12 @@
     const totalDaysInput = document.getElementById('total-days');
     const dayNumberContainer = document.getElementById('day-number-container');
     
-    // Segmented Scope Switch
     const btnScopeSingle = document.getElementById('btn-scope-single');
     const btnScopeUnit = document.getElementById('btn-scope-unit');
+    const unitDaySwitcherBar = document.getElementById('unit-day-switcher-bar');
+    const unitDayPillsContainer = document.getElementById('unit-day-pills-container');
+    const unitProgressionCosPanel = document.getElementById('unit-progression-cos-panel');
 
-    // Generator Control Elements
     const coWorkflowBadge = document.getElementById('co-workflow-badge');
     const cosStatusPill = document.getElementById('cos-status-pill');
     const generateCosBtn = document.getElementById('generate-cos-btn');
@@ -1969,7 +2105,6 @@
     const activeStatusBar = document.getElementById('active-status-bar');
     const activeStatusText = document.getElementById('active-status-text');
 
-    // CO Modal Elements
     const coModalOverlay = document.getElementById('co-modal-overlay');
     const coModalCloseBtn = document.getElementById('co-modal-close-btn');
     const coModalCancelBtn = document.getElementById('co-modal-cancel-btn');
@@ -1989,17 +2124,18 @@
     const mobLockedPill = document.getElementById('mob-locked-pill');
     const lockedCountLabel = document.getElementById('locked-count');
     const shareWhatsAppBtn = document.getElementById('share-whatsapp-btn');
-    const headerKeyBtn = document.getElementById('header-key-btn');
     const headerVoiceBtn = document.getElementById('header-voice-btn');
     const hdrVoiceText = document.getElementById('hdr-voice-text');
 
-    // Textbook Library Controls
+    const apiLedBadge = document.getElementById('api-led-badge');
+    const apiLedDot = document.getElementById('api-led-dot');
+    const apiLedText = document.getElementById('api-led-text');
+
     const addTextbookBtn = document.getElementById('add-textbook-btn');
     const tbSearchBox = document.getElementById('tb-search-box');
     const tbFilterClass = document.getElementById('tb-filter-class');
     const tbLibraryList = document.getElementById('tb-library-list');
 
-    // Textbook Modal
     const bookModalOverlay = document.getElementById('book-modal-overlay');
     const bookModalTitle = document.getElementById('book-modal-title');
     const bookModalCloseBtn = document.getElementById('book-modal-close-btn');
@@ -2013,7 +2149,6 @@
     const modalBookLock = document.getElementById('modal-book-lock');
     const modalFileStatus = document.getElementById('modal-file-status');
 
-    // General Modals
     const spinnerOverlay = document.getElementById('spinner-overlay');
     const spinnerText = document.getElementById('spinner-text');
     const modalOverlay = document.getElementById('custom-modal-overlay');
@@ -2022,11 +2157,6 @@
     const modalCloseBtn = document.getElementById('modal-close-btn');
     const modalOkBtn = document.getElementById('modal-ok-btn');
     const toastPopup = document.getElementById('toast-popup');
-
-    const keyModalOverlay = document.getElementById('key-modal-overlay');
-    const keyModalInput = document.getElementById('key-modal-input');
-    const keyModalCloseBtn = document.getElementById('key-modal-close-btn');
-    const saveKeyModalBtn = document.getElementById('save-key-modal-btn');
 
     const voiceModalOverlay = document.getElementById('voice-modal-overlay');
     const voiceModalCloseBtn = document.getElementById('voice-modal-close-btn');
@@ -2054,7 +2184,7 @@
       topControlsPanel.classList.toggle('collapsed');
       const isHidden = topControlsPanel.classList.contains('collapsed');
       toggleIcon.textContent = isHidden ? '🔽' : '🔼';
-      toggleText.textContent = 'Controls';
+      toggleText.textContent = '';
     });
 
     function setGenerationScope(scope) {
@@ -2076,9 +2206,10 @@
       spinnerOverlay.style.display = "none";
     }
 
+    // Styled in-app message dialog
     function showMessageBox(message, title = "Teacher Studio") {
       modalTitle.textContent = title;
-      modalMessage.textContent = message;
+      modalMessage.innerHTML = message;
       modalOverlay.style.display = "flex";
     }
 
@@ -2088,28 +2219,6 @@
 
     modalCloseBtn.addEventListener('click', hideMessageBox);
     modalOkBtn.addEventListener('click', hideMessageBox);
-
-    function showKeyModal() {
-      keyModalInput.value = GEMINI_API_KEY;
-      keyModalOverlay.style.display = "flex";
-      keyModalInput.focus();
-    }
-
-    function hideKeyModal() {
-      keyModalOverlay.style.display = "none";
-    }
-
-    headerKeyBtn.addEventListener('click', showKeyModal);
-    keyModalCloseBtn.addEventListener('click', hideKeyModal);
-
-    saveKeyModalBtn.addEventListener('click', () => {
-      const val = keyModalInput.value.trim();
-      if (!val) return alert("Please enter a valid Google AI Studio API key.");
-      localStorage.setItem('SCERT_GEMINI_KEY', val);
-      GEMINI_API_KEY = val;
-      hideKeyModal();
-      showToast("Gemini API Key saved!");
-    });
 
     function showToast(message) {
       toastPopup.textContent = message;
@@ -2134,79 +2243,76 @@
       document.body.removeChild(ta);
     }
 
-    // NATIVE ASYNC BLOB STREAMING (No synchronous loop, no timeout)
-    // =========================================================================
-// NON-BLOCKING BASE64 TO BLOB (IMMUNE TO 400ms LOOP TIMEOUT & POPUP BLOCKS)
-// =========================================================================
-async function base64ToBlob(base64, mimeType = 'application/pdf') {
-  // 1. Modern Native C++ Decoder (Chrome 140+, Safari 18.2+, Firefox 133+) -> 0 Loops, ~2ms
-  if (typeof Uint8Array.fromBase64 === 'function') {
-    return new Blob([Uint8Array.fromBase64(base64)], { type: mimeType });
-  }
-
-  // 2. Safe Time-Sliced Fallback (Each chunk takes ~1ms, completely resetting sandbox loop timers)
-  const binary = atob(base64);
-  const len = binary.length;
-  const bytes = new Uint8Array(len);
-  const chunkSize = 500000; // 500 KB chunks
-
-  return new Promise((resolve) => {
-    function processChunk(offset) {
-      if (offset >= len) {
-        resolve(new Blob([bytes], { type: mimeType }));
-        return;
+    // Update LED Indicator Status
+    function updateApiLedStatus(isConnected) {
+      if (isConnected) {
+        apiLedDot.className = "led-dot led-green";
+        apiLedText.textContent = "Connected";
+        apiLedBadge.title = "Gemini AI Studio Key: Connected & Active";
+      } else {
+        apiLedDot.className = "led-dot led-red";
+        apiLedText.textContent = "Offline";
+        apiLedBadge.title = "Gemini AI Key is not configured or failed to connect.";
       }
-      const end = Math.min(offset + chunkSize, len);
-      for (let i = offset; i < end; i++) {
-        bytes[i] = binary.charCodeAt(i);
+    }
+
+    // PDF Blob Generation & Preview
+    async function base64ToBlob(base64, mimeType = 'application/pdf') {
+      if (typeof Uint8Array.fromBase64 === 'function') {
+        return new Blob([Uint8Array.fromBase64(base64)], { type: mimeType });
       }
-      // Yield to the browser event loop to reset loop watchdog timers
-      setTimeout(() => processChunk(end), 0);
-    }
-    processChunk(0);
-  });
-}
+      const binary = atob(base64);
+      const len = binary.length;
+      const bytes = new Uint8Array(len);
+      const chunkSize = 500000;
 
-async function viewBookPdf(bookId) {
-  const book = state.books.find(b => b.id === bookId);
-
-  // Open tab synchronously on click to prevent browser popup blockers
-  const newTab = window.open('', '_blank');
-  if (newTab) {
-    newTab.document.write('<title>Opening PDF...</title><body style="display:flex;align-items:center;justify-content:center;height:100vh;font-family:sans-serif;background:#0f172a;color:#38bdf8;"><h3>Loading Textbook PDF...</h3></body>');
-  }
-
-  try {
-    const cached = await idb.getBook(bookId);
-
-    // 1. Instant preview if already stored as a native Blob/File (0ms)
-    if (cached?.blob instanceof Blob) {
-      const blobUrl = URL.createObjectURL(cached.blob);
-      if (newTab) newTab.location.href = blobUrl;
-      else window.open(blobUrl, '_blank');
-      return;
+      return new Promise((resolve) => {
+        function processChunk(offset) {
+          if (offset >= len) {
+            resolve(new Blob([bytes], { type: mimeType }));
+            return;
+          }
+          const end = Math.min(offset + chunkSize, len);
+          for (let i = offset; i < end; i++) {
+            bytes[i] = binary.charCodeAt(i);
+          }
+          setTimeout(() => processChunk(end), 0);
+        }
+        processChunk(0);
+      });
     }
 
-    // 2. Fallback to cached Base64
-    const base64 = cached?.base64 || cached;
-    if (!base64 || typeof base64 !== 'string') {
-      if (newTab) newTab.close();
-      return showMessageBox("No cached PDF file found for this book. Please re-upload.", "File Missing");
+    async function viewBookPdf(bookId) {
+      const newTab = window.open('', '_blank');
+      if (newTab) {
+        newTab.document.write('<title>Opening PDF...</title><body style="display:flex;align-items:center;justify-content:center;height:100vh;font-family:sans-serif;background:#0f172a;color:#38bdf8;"><h3>Loading Textbook PDF...</h3></body>');
+      }
+
+      try {
+        const cached = await idb.getBook(bookId);
+        if (cached?.blob instanceof Blob) {
+          const blobUrl = URL.createObjectURL(cached.blob);
+          if (newTab) newTab.location.href = blobUrl;
+          else window.open(blobUrl, '_blank');
+          return;
+        }
+
+        const base64 = cached?.base64 || cached;
+        if (!base64 || typeof base64 !== 'string') {
+          if (newTab) newTab.close();
+          return showMessageBox("No cached PDF file found for this book. Please re-upload.", "File Missing");
+        }
+
+        const blob = await base64ToBlob(base64, 'application/pdf');
+        const blobUrl = URL.createObjectURL(blob);
+        if (newTab) newTab.location.href = blobUrl;
+        else window.open(blobUrl, '_blank');
+      } catch (err) {
+        if (newTab) newTab.close();
+        showMessageBox("Unable to open PDF: " + err.message, "PDF Preview");
+      }
     }
 
-    const blob = await base64ToBlob(base64, 'application/pdf');
-    const blobUrl = URL.createObjectURL(blob);
-    if (newTab) newTab.location.href = blobUrl;
-    else window.open(blobUrl, '_blank');
-  } catch (err) {
-    if (newTab) newTab.close();
-    showMessageBox("Unable to open PDF viewer: " + err.message, "PDF Preview Notice");
-  }
-}
-
-    // =========================================================================
-    // DYNAMIC SUBJECT SYNC (STRICTLY FROM UPLOADED TEXTBOOKS IN CARD 2)
-    // =========================================================================
     function syncSubjectDropdown() {
       const currentCls = classSelect.value;
       const booksForClass = state.books.filter(b => b.classId === currentCls);
@@ -2244,12 +2350,40 @@ async function viewBookPdf(bookId) {
     });
 
     // =========================================================================
-    // STEP 1: CO GENERATION & MANAGEMENT (NO DEFAULTS, REAL CHAPTER CONTENT ONLY)
+    // CO ENGINE & SPECIFIC DAY EXTRACTION
     // =========================================================================
+    function getDaySpecificCOs(pkgData, dayNumber) {
+      const targetDay = Number(dayNumber) || 1;
+
+      if (state.allCOsList && state.allCOsList.length > 0) {
+        const matching = state.allCOsList.filter(c => Number(c.day) === targetDay);
+        if (matching.length > 0) {
+          return matching.map(c => `${c.num}: ${c.text}`);
+        }
+      }
+
+      if (state.lockedRoadmap && state.lockedRoadmap.dailyDistribution) {
+        const dist = state.lockedRoadmap.dailyDistribution[targetDay] || state.lockedRoadmap.dailyDistribution[String(targetDay)];
+        if (dist) {
+          return Array.isArray(dist) ? dist : [dist];
+        }
+      }
+
+      if (pkgData && pkgData.targetedCurricularObjectives && Array.isArray(pkgData.targetedCurricularObjectives)) {
+        return pkgData.targetedCurricularObjectives;
+      }
+
+      if (pkgData && pkgData.targetedCurricularObjective) {
+        return [pkgData.targetedCurricularObjective];
+      }
+
+      return [];
+    }
+
     function resetCOEngineToEmpty() {
       state.allCOsList = [];
       state.isCOConfirmed = false;
-      cosStatusPill.textContent = "Awaiting Extraction";
+      cosStatusPill.textContent = "Awaiting";
       cosStatusPill.style.background = "#f1f5f9";
       cosStatusPill.style.color = "#475569";
       coWorkflowBadge.textContent = "Step 1: COs";
@@ -2257,12 +2391,13 @@ async function viewBookPdf(bookId) {
       coWorkflowBadge.style.color = "#0369a1";
 
       lockCosBtn.disabled = true;
+      lockCosBtn.innerHTML = `🔒 Confirm & Lock COs for Generation`;
       generateBtn.disabled = true;
       generateBtn.innerHTML = `✨ 2. Generate Package (Locked to COs)`;
 
       coSeparateList.innerHTML = `
         <div style="font-size: 0.68rem; color: var(--text-muted); text-align: center; padding: 10px; font-style: italic;">
-          No default COs. Select chapter & textbook, then tap "Extract & Generate COs" above.
+          Select chapter & textbook, then tap "Extract COs" above.
         </div>
       `;
       document.querySelectorAll('.u-meta-co').forEach(el => {
@@ -2290,8 +2425,8 @@ async function viewBookPdf(bookId) {
               </div>
               <div class="co-item-actions">
                 <button type="button" class="co-act-btn co-view-btn" data-index="${idx}" title="View Objective">👁️</button>
-                <button type="button" class="co-act-btn co-modify-btn" data-index="${idx}" title="Modify Objective">✏️ Modify</button>
-                <button type="button" class="co-act-btn co-delete-btn del" data-index="${idx}" title="Delete Objective">🗑️ Delete</button>
+                <button type="button" class="co-act-btn co-modify-btn" data-index="${idx}" title="Modify Objective">✏️</button>
+                <button type="button" class="co-act-btn co-delete-btn del" data-index="${idx}" title="Delete Objective">🗑️</button>
               </div>
             </div>
             <div class="co-item-text">${escapeHtml(co.text)}</div>
@@ -2300,23 +2435,26 @@ async function viewBookPdf(bookId) {
       });
       coSeparateList.innerHTML = html;
 
-      // Enable lock action
-      lockCosBtn.disabled = false;
-      cosStatusPill.textContent = `${state.allCOsList.length} COs Extracted`;
+      if (!state.isCOConfirmed) {
+        lockCosBtn.disabled = false;
+      }
+      cosStatusPill.textContent = `${state.allCOsList.length} COs`;
       cosStatusPill.style.background = "#e0f2fe";
       cosStatusPill.style.color = "#0369a1";
 
-      // Event handlers
       coSeparateList.querySelectorAll('.co-view-btn').forEach(btn => {
         btn.addEventListener('click', (e) => {
           const idx = parseInt(e.currentTarget.dataset.index, 10);
           const co = state.allCOsList[idx];
-          showMessageBox(`[${co.num} - Assigned to Day ${co.day}]\n\n${co.text}`, "Curricular Objective Details");
+          showMessageBox(`<div style="line-height:1.6;"><strong>[${co.num} — Assigned to Day ${co.day}]</strong><br><br>${co.text}</div>`, "Curricular Objective Details");
         });
       });
 
       coSeparateList.querySelectorAll('.co-modify-btn').forEach(btn => {
         btn.addEventListener('click', (e) => {
+          if (state.isCOConfirmed) {
+            return showMessageBox("Objectives are currently locked. Tap 'Reset Workspace' to modify.", "Locked State");
+          }
           const idx = parseInt(e.currentTarget.dataset.index, 10);
           openCOModalForIndex(idx);
         });
@@ -2324,9 +2462,11 @@ async function viewBookPdf(bookId) {
 
       coSeparateList.querySelectorAll('.co-delete-btn').forEach(btn => {
         btn.addEventListener('click', (e) => {
+          if (state.isCOConfirmed) {
+            return showMessageBox("Objectives are currently locked. Tap 'Reset Workspace' to delete.", "Locked State");
+          }
           const idx = parseInt(e.currentTarget.dataset.index, 10);
           const co = state.allCOsList[idx];
-          if (!confirm(`Delete "${co.num}"? The teaching package will ground strictly on remaining objectives.`)) return;
           state.allCOsList.splice(idx, 1);
           renderSeparatedCOList();
           showToast(`Deleted ${co.num}`);
@@ -2335,16 +2475,23 @@ async function viewBookPdf(bookId) {
     }
 
     function getEffectiveTargetedCOText() {
-      const currentDay = parseInt(dayNumberInput.value, 10) || 1;
-      const matching = state.allCOsList.filter(c => c.day === currentDay);
+      const currentDay = (state.currentUnitPlan && state.activeUnitPlanDay) 
+        ? state.activeUnitPlanDay 
+        : (parseInt(dayNumberInput.value, 10) || 1);
+
+      const matching = state.allCOsList.filter(c => Number(c.day) === Number(currentDay));
       if (matching.length > 0) {
         return matching.map(c => `${c.num}: ${c.text}`).join('\n');
       }
       return state.allCOsList[0] ? `${state.allCOsList[0].num}: ${state.allCOsList[0].text}` : '';
     }
 
-    // Step 1 Trigger: Extract & Generate Chapter COs from Textbook
+    // Step 1: Extract Real Chapter COs
     generateCosBtn.addEventListener('click', async () => {
+      if (state.isCOConfirmed) {
+        return showMessageBox("COs are already locked. Reset workspace to extract anew.", "Notice");
+      }
+
       const unitTitle = unitTitleInput.value.trim();
       if (!unitTitle) return showMessageBox("Please enter a Chapter or Unit Title before extracting COs.", "Missing Chapter");
 
@@ -2376,10 +2523,9 @@ Analyze the chapter "${unitTitle}" for:
 - Total Planned Days: ${totalDays}
 
 TASK:
-Extract and formulate the exact, authentic Curricular Objectives (CO 1, CO 2, ... CO N) systematically and rigorously from the real content of this specific chapter.
-DO NOT use generic or placeholder templates. Reflect the exact scientific/social/mathematical concepts, activities, experiments, process skills, and competencies found in this chapter.
-
-Map them across ${totalDays} days in "dailyDistribution". (Multiple COs can be grouped per day if CO count exceeds days).
+Extract and formulate the authentic Curricular Objectives (CO 1, CO 2, ... CO N) systematically from the real content of this specific chapter.
+DO NOT use generic templates. Reflect the exact scientific/social concepts, experiments, inquiry activities, and competencies.
+Map them across ${totalDays} days in "dailyDistribution".
 
 OUTPUT STRICT JSON:
 {
@@ -2397,8 +2543,7 @@ OUTPUT STRICT JSON:
         const parts = [{ text: prompt }];
         if (activeBase64 && typeof activeBase64 === 'string') {
           const sizeInMB = (activeBase64.length * 0.75) / (1024 * 1024);
-          // Keep browser payload <= 4MB to prevent connection drops
-          if (sizeInMB <= 4) {
+          if (sizeInMB <= 15) {
             parts.unshift({ inlineData: { mimeType: "application/pdf", data: activeBase64 } });
           }
         }
@@ -2442,12 +2587,14 @@ OUTPUT STRICT JSON:
         showToast(`Extracted ${state.allCOsList.length} authentic chapter COs!`);
       } catch (err) {
         hideSpinner();
-        showMessageBox("Failed to extract chapter COs: " + err.message, "CO Extraction Error");
+        showMessageBox("Failed to extract chapter COs: " + err.message, "CO Extraction Notice");
       }
     });
 
-    // Add New Custom CO
     btnAddNewCo.addEventListener('click', () => {
+      if (state.isCOConfirmed) {
+        return showMessageBox("COs are currently locked. Reset workspace to add new.", "Locked State");
+      }
       openCOModalForIndex(-1);
     });
 
@@ -2479,7 +2626,8 @@ OUTPUT STRICT JSON:
 
     coModalSaveBtn.addEventListener('click', () => {
       const text = modalTargetedCo.value.trim();
-      if (!text) return alert("Please enter the Curricular Objective statement.");
+      // Replace: if (!val) return alert("Please enter a valid Google AI Studio API key.");
+if (!val) return showMessageBox("Please enter a valid Google AI Studio API key.", "Key Required");
       const day = parseInt(modalCoDayAssign.value, 10) || 1;
       const num = modalCoNumAssign.value.trim() || "CO";
       const idx = parseInt(modalCoIndex.value, 10);
@@ -2495,7 +2643,7 @@ OUTPUT STRICT JSON:
       showToast("Curricular Objective saved!");
     });
 
-    // Confirm & Lock COs Action -> Unlocks Package Generation
+    // Confirm & Lock COs Action -> INACTIVATES ITSELF UNTIL RESET
     lockCosBtn.addEventListener('click', () => {
       if (state.allCOsList.length === 0) return;
 
@@ -2519,41 +2667,50 @@ OUTPUT STRICT JSON:
       localStorage.setItem(roadmapKey, JSON.stringify(roadmapObj));
       state.lockedRoadmap = roadmapObj;
 
-      // Update UI
       roadmapStatusPill.style.display = 'flex';
       roadmapStatusText.textContent = `🔒 Chapter COs Locked (${totalDays} Days Roadmap)`;
       cosStatusPill.textContent = `🔒 ${state.allCOsList.length} COs Locked`;
       cosStatusPill.style.background = "#dcfce7";
       cosStatusPill.style.color = "#15803d";
       
-      coWorkflowBadge.textContent = "Step 2: Package Ready";
+      coWorkflowBadge.textContent = "Step 2: Ready";
       coWorkflowBadge.style.background = "#dcfce7";
       coWorkflowBadge.style.color = "#15803d";
 
-      // Enable Step 2 Package Generation
+      // INACTIVATE LOCK BUTTON UNTIL RESET
+      lockCosBtn.disabled = true;
+      lockCosBtn.innerHTML = `🔒 COs Locked (Active)`;
+
+      // ACTIVATE GENERATE BUTTON
       generateBtn.disabled = false;
 
-      // Update Universal Headers across all tabs
-      const currentTargetedCO = getEffectiveTargetedCOText();
+      const currentDay = parseInt(dayNumberInput.value, 10) || 1;
+      const daySpecificCOs = getDaySpecificCOs(null, currentDay);
       document.querySelectorAll('.u-meta-co').forEach(el => {
         el.innerHTML = `
-          ${formatCODisplay(currentTargetedCO)}
+          ${formatCODisplay(daySpecificCOs)}
           <div style="margin-top:4px;"><span class="u-co-badge-custom">🔒 Confirmed & Locked Chapter COs</span></div>
         `;
       });
 
-      showToast("Curricular Objectives locked! Package generator is now unlocked.");
+      // Update interactive CO pills
+      renderUnitProgressionAndCOs(unitTitle, currentDay, totalDays);
+
+      showToast("Curricular Objectives locked! Proceed to generate package.");
     });
 
     function attachHeaderCOEditListeners() {
       document.querySelectorAll('.btn-edit-co-header').forEach(btn => {
-        btn.onclick = () => openCOModalForIndex(0);
+        btn.onclick = () => {
+          if (state.isCOConfirmed) {
+            return showMessageBox("COs are currently locked. Tap 'Reset Workspace' to edit.", "Locked Notice");
+          }
+          openCOModalForIndex(0);
+        };
       });
     }
 
-    // =========================================================================
-    // DYNAMIC TEXTBOOK REPOSITORY
-    // =========================================================================
+    // Textbook Modal
     function openBookModal(book = null) {
       if (book) {
         bookModalTitle.textContent = "✏️ Modify Textbook";
@@ -2562,7 +2719,7 @@ OUTPUT STRICT JSON:
         modalBookPart.value = book.partId || "part1";
         modalBookSubject.value = book.subject || "Basic Science";
         modalBookLock.checked = (book.isLocked !== false);
-        modalFileStatus.textContent = `Current File: ${book.fileName || 'Attached PDF'} (${book.fileSize || 'Size N/A'}). Upload new file to replace.`;
+        modalFileStatus.textContent = `Current: ${book.fileName || 'Attached PDF'}`;
       } else {
         bookModalTitle.textContent = "📚 Add New Textbook";
         editBookIdInput.value = "";
@@ -2632,10 +2789,10 @@ OUTPUT STRICT JSON:
         };
 
         await idb.setBook(bookId, { 
-  ...bookObj, 
-  base64: base64Data, 
-  blob: file || existing?.blob 
-});
+          ...bookObj, 
+          base64: base64Data, 
+          blob: file || existing?.blob 
+        });
 
         if (db) {
           try {
@@ -2679,191 +2836,172 @@ OUTPUT STRICT JSON:
       renderBooksList();
     }
 
-    // =========================================================================
-// RENDER TEXTBOOKS (CLASSWISE -> ALPHABETICAL BY SUBJECT -> PART ORDER)
-// =========================================================================
-function renderBooksList() {
-  const searchTerm = tbSearchBox.value.trim().toLowerCase();
-  const filterClass = tbFilterClass.value;
+    function renderBooksList() {
+      const searchTerm = tbSearchBox.value.trim().toLowerCase();
+      const filterClass = tbFilterClass.value;
 
-  let filtered = state.books.filter(b => {
-    const matchesSearch = !searchTerm || 
-      (b.subject && b.subject.toLowerCase().includes(searchTerm)) || 
-      (b.fileName && b.fileName.toLowerCase().includes(searchTerm)) ||
-      (`std ${b.classId}`.includes(searchTerm));
-    const matchesClass = (filterClass === 'all') || (b.classId === filterClass);
-    return matchesSearch && matchesClass;
-  });
+      let filtered = state.books.filter(b => {
+        const matchesSearch = !searchTerm || 
+          (b.subject && b.subject.toLowerCase().includes(searchTerm)) || 
+          (b.fileName && b.fileName.toLowerCase().includes(searchTerm)) ||
+          (`std ${b.classId}`.includes(searchTerm));
+        const matchesClass = (filterClass === 'all') || (b.classId === filterClass);
+        return matchesSearch && matchesClass;
+      });
 
-  const lockedCount = state.books.filter(b => b.isLocked).length;
-  lockedCountLabel.textContent = `${lockedCount} Locked`;
-  mobLockedPill.textContent = lockedCount;
+      const lockedCount = state.books.filter(b => b.isLocked).length;
+      lockedCountLabel.textContent = `${lockedCount} Locked`;
+      mobLockedPill.textContent = lockedCount;
 
-  if (filtered.length === 0) {
-    tbLibraryList.innerHTML = `
-      <div style="font-size: 0.7rem; color: var(--text-muted); text-align: center; padding: 12px;">
-        ${state.books.length === 0 ? 'No books uploaded yet. Click "+ Add Book".' : 'No textbooks match search criteria.'}
-      </div>
-    `;
-    return;
-  }
-
-  // Part order helper
-  const partRank = { 'part1': 1, 'part2': 2, 'part3': 3, 'full': 99 };
-
-  // SORT: 1. Class (1, 2, 3...) -> 2. Subject (A to Z) -> 3. Part (Pt 1 -> Pt 2)
-  filtered.sort((a, b) => {
-    // 1. Classwise numerical order
-    const classA = parseInt(a.classId || 0, 10);
-    const classB = parseInt(b.classId || 0, 10);
-    if (classA !== classB) return classA - classB;
-
-    // 2. Alphabetical order by Subject
-    const subA = (a.subject || '').trim().toLowerCase();
-    const subB = (b.subject || '').trim().toLowerCase();
-    if (subA !== subB) return subA.localeCompare(subB);
-
-    // 3. Part order (Part 1, Part 2, Full)
-    const pA = partRank[String(a.partId || '').toLowerCase()] || 1;
-    const pB = partRank[String(b.partId || '').toLowerCase()] || 1;
-    return pA - pB;
-  });
-
-  let html = '';
-  let currentClassGroup = null;
-
-  filtered.forEach(book => {
-    // Show Class Section Header when viewing all classes
-    if (filterClass === 'all' && book.classId !== currentClassGroup) {
-      currentClassGroup = book.classId;
-      html += `
-        <div style="font-size: 0.66rem; font-weight: 800; color: var(--primary-dark); background: rgba(224, 242, 254, 0.85); border: 1px solid rgba(186, 230, 253, 0.8); padding: 2px 7px; border-radius: 4px; margin: 5px 0 2px 0; display: flex; align-items: center; gap: 4px;">
-          <span>🏫 Class ${currentClassGroup} (Std ${currentClassGroup})</span>
-        </div>
-      `;
-    }
-
-    const isTarget = (state.activeBookId === book.id) || 
-      (state.currentClass === book.classId && state.currentPart === book.partId && (state.currentSubject || '').toLowerCase() === (book.subject || '').toLowerCase());
-    const isLocked = book.isLocked !== false;
-    const partLabel = (book.partId === 'part2') ? 'P2' : (book.partId === 'full') ? 'Full' : 'P1';
-
-    html += `
-      <div class="tb-compact-row ${isTarget ? 'is-active-target' : ''}" data-id="${book.id}">
-        <div class="tb-row-meta">
-          <div class="tb-row-title">
-            <span>📖 ${escapeHtml(book.subject || 'Subject')}</span>
-            <span class="pill-qnum" style="font-size:0.58rem; padding:1px 5px;">Std ${book.classId} (${partLabel})</span>
+      if (filtered.length === 0) {
+        tbLibraryList.innerHTML = `
+          <div style="font-size: 0.7rem; color: var(--text-muted); text-align: center; padding: 12px;">
+            ${state.books.length === 0 ? 'No books uploaded yet.' : 'No textbooks match criteria.'}
           </div>
-          <div class="tb-row-sub" title="${escapeHtml(book.fileName || '')}">
-            ${escapeHtml(book.fileName || 'PDF')} • ${book.fileSize || ''}
+        `;
+        return;
+      }
+
+      const partRank = { 'part1': 1, 'part2': 2, 'part3': 3, 'full': 99 };
+
+      filtered.sort((a, b) => {
+        const classA = parseInt(a.classId || 0, 10);
+        const classB = parseInt(b.classId || 0, 10);
+        if (classA !== classB) return classA - classB;
+
+        const subA = (a.subject || '').trim().toLowerCase();
+        const subB = (b.subject || '').trim().toLowerCase();
+        if (subA !== subB) return subA.localeCompare(subB);
+
+        const pA = partRank[String(a.partId || '').toLowerCase()] || 1;
+        const pB = partRank[String(b.partId || '').toLowerCase()] || 1;
+        return pA - pB;
+      });
+
+      let html = '';
+      filtered.forEach(book => {
+        const isTarget = (state.activeBookId === book.id) || 
+          (state.currentClass === book.classId && state.currentPart === book.partId && (state.currentSubject || '').toLowerCase() === (book.subject || '').toLowerCase());
+        const isLocked = book.isLocked !== false;
+        const partLabel = (book.partId === 'part2') ? 'P2' : (book.partId === 'full') ? 'Full' : 'P1';
+
+        html += `
+          <div class="tb-compact-row ${isTarget ? 'is-active-target' : ''}" data-id="${book.id}">
+            <div class="tb-row-meta">
+              <div class="tb-row-title">
+                <span>📖 ${escapeHtml(book.subject || 'Subject')}</span>
+                <span class="pill-qnum" style="font-size:0.56rem; padding:1px 4px;">Std ${book.classId} (${partLabel})</span>
+              </div>
+              <div class="tb-row-sub" title="${escapeHtml(book.fileName || '')}">
+                ${escapeHtml(book.fileName || 'PDF')} • ${book.fileSize || ''}
+              </div>
+            </div>
+            <div class="tb-micro-actions">
+              <button class="tb-micro-btn ${isTarget ? 'active-target' : ''} tb-use-btn" data-id="${book.id}" title="Set as Target">🎯</button>
+              <button class="tb-micro-btn view-pdf tb-view-btn" data-id="${book.id}" title="View PDF">📖</button>
+              <button class="tb-micro-btn tb-lock-toggle-btn" data-id="${book.id}" title="${isLocked ? 'Unlock' : 'Lock'}">${isLocked ? '🔒' : '🔓'}</button>
+              <button class="tb-micro-btn tb-edit-btn" data-id="${book.id}" title="Edit">✏️</button>
+              <button class="tb-micro-btn del tb-delete-btn" data-id="${book.id}" title="Delete">🗑️</button>
+            </div>
           </div>
-        </div>
-        <div class="tb-micro-actions">
-          <button class="tb-micro-btn ${isTarget ? 'active-target' : ''} tb-use-btn" data-id="${book.id}" title="Set as Active Target">
-            🎯 ${isTarget ? '' : ''}
-          </button>
-          <button class="tb-micro-btn view-pdf tb-view-btn" data-id="${book.id}" title="View Full PDF Document">📖
+        `;
+      });
+      tbLibraryList.innerHTML = html;
+
+      tbLibraryList.querySelectorAll('.tb-view-btn').forEach(btn => {
+        btn.addEventListener('click', (e) => viewBookPdf(e.currentTarget.dataset.id));
+      });
+
+      tbLibraryList.querySelectorAll('.tb-use-btn').forEach(btn => {
+        btn.addEventListener('click', (e) => {
+          const bId = e.currentTarget.dataset.id;
+          const book = state.books.find(b => b.id === bId);
+          if (book) {
+            state.activeBookId = book.id;
+            state.currentClass = book.classId;
+            state.currentPart = book.partId;
+            state.currentSubject = book.subject;
+
+            classSelect.value = book.classId;
+            partSelect.value = book.partId;
+            syncSubjectDropdown();
+            targetSubjectInput.value = book.subject;
             
-          </button>
-          <button class="tb-micro-btn tb-lock-toggle-btn" data-id="${book.id}" title="${isLocked ? 'Unlock Textbook' : 'Lock Textbook'}">
-            ${isLocked ? '🔒' : '🔓'}
-          </button>
-          <button class="tb-micro-btn tb-edit-btn" data-id="${book.id}" title="Modify Details">
-            ✏️
-          </button>
-          <button class="tb-micro-btn del tb-delete-btn" data-id="${book.id}" title="Delete from Database">
-            🗑️
-          </button>
-        </div>
-      </div>
-    `;
-  });
-  tbLibraryList.innerHTML = html;
+            checkAndLoadChapterRoadmap();
+            resetCOEngineToEmpty();
+            renderBooksList();
+            showToast(`Target Set: ${book.subject} Std ${book.classId}`);
+          }
+        });
+      });
 
-  // Re-attach handlers
-  tbLibraryList.querySelectorAll('.tb-view-btn').forEach(btn => {
-    btn.addEventListener('click', (e) => {
-      const bId = e.currentTarget.dataset.id;
-      viewBookPdf(bId);
-    });
-  });
+      tbLibraryList.querySelectorAll('.tb-lock-toggle-btn').forEach(btn => {
+        btn.addEventListener('click', async (e) => {
+          const bId = e.currentTarget.dataset.id;
+          const book = state.books.find(b => b.id === bId);
+          if (!book) return;
 
-  tbLibraryList.querySelectorAll('.tb-use-btn').forEach(btn => {
-    btn.addEventListener('click', (e) => {
-      const bId = e.currentTarget.dataset.id;
-      const book = state.books.find(b => b.id === bId);
-      if (book) {
-        state.activeBookId = book.id;
-        state.currentClass = book.classId;
-        state.currentPart = book.partId;
-        state.currentSubject = book.subject;
+          book.isLocked = !book.isLocked;
+          const cached = await idb.getBook(bId);
+          await idb.setBook(bId, { ...cached, ...book, isLocked: book.isLocked });
 
-        classSelect.value = book.classId;
-        partSelect.value = book.partId;
-        syncSubjectDropdown();
-        targetSubjectInput.value = book.subject;
-        
-        checkAndLoadChapterRoadmap();
-        resetCOEngineToEmpty();
-        renderBooksList();
-        showToast(`Active Target: ${book.subject} Std ${book.classId}`);
-      }
-    });
-  });
+          if (db) {
+            try {
+              await setDoc(doc(db, 'curriculum_books', bId), { isLocked: book.isLocked }, { merge: true });
+            } catch (err) {}
+          }
+          showToast(`Textbook ${book.isLocked ? 'Locked' : 'Unlocked'}`);
+          renderBooksList();
+        });
+      });
 
-  tbLibraryList.querySelectorAll('.tb-lock-toggle-btn').forEach(btn => {
-    btn.addEventListener('click', async (e) => {
-      const bId = e.currentTarget.dataset.id;
-      const book = state.books.find(b => b.id === bId);
-      if (!book) return;
+      tbLibraryList.querySelectorAll('.tb-edit-btn').forEach(btn => {
+        btn.addEventListener('click', (e) => {
+          const bId = e.currentTarget.dataset.id;
+          const book = state.books.find(b => b.id === bId);
+          if (book) openBookModal(book);
+        });
+      });
 
-      book.isLocked = !book.isLocked;
-      const cached = await idb.getBook(bId);
-      await idb.setBook(bId, { ...cached, ...book, isLocked: book.isLocked });
+      tbLibraryList.querySelectorAll('.tb-delete-btn').forEach(btn => {
+        btn.addEventListener('click', async (e) => {
+          const bId = e.currentTarget.dataset.id;
+          const book = state.books.find(b => b.id === bId);
+          if (!book) return;
+          // ✅ Styled In-App Dialog
+showConfirmDialog(
+  `Are you sure you want to remove <strong>"${escapeHtml(book.subject)} Std ${book.classId}"</strong> from the textbook repository?`,
+  "🗑️ Delete Textbook",
+  async () => {
+    await idb.deleteBook(bId);
+    if (db) {
+      try { await deleteDoc(doc(db, 'curriculum_books', bId)); } catch (err) {}
+    }
+    if (state.activeBookId === bId) state.activeBookId = null;
+    state.books = state.books.filter(b => b.id !== bId);
+    syncSubjectDropdown();
+    renderBooksList();
+    showToast("Textbook deleted.");
+  },
+  true
+);
 
-      if (db) {
-        try {
-          await setDoc(doc(db, 'curriculum_books', bId), { isLocked: book.isLocked }, { merge: true });
-        } catch (err) {}
-      }
-      showToast(`Textbook ${book.isLocked ? 'Locked' : 'Unlocked'}`);
-      renderBooksList();
-    });
-  });
-
-  tbLibraryList.querySelectorAll('.tb-edit-btn').forEach(btn => {
-    btn.addEventListener('click', (e) => {
-      const bId = e.currentTarget.dataset.id;
-      const book = state.books.find(b => b.id === bId);
-      if (book) openBookModal(book);
-    });
-  });
-
-  tbLibraryList.querySelectorAll('.tb-delete-btn').forEach(btn => {
-    btn.addEventListener('click', async (e) => {
-      const bId = e.currentTarget.dataset.id;
-      const book = state.books.find(b => b.id === bId);
-      if (!book) return;
-      if (!confirm(`Delete "${book.subject} Std ${book.classId}" from repository?`)) return;
-
-      await idb.deleteBook(bId);
-      if (db) {
-        try { await deleteDoc(doc(db, 'curriculum_books', bId)); } catch (err) {}
-      }
-      if (state.activeBookId === bId) state.activeBookId = null;
-      state.books = state.books.filter(b => b.id !== bId);
-      syncSubjectDropdown();
-      renderBooksList();
-      showToast("Textbook deleted.");
-    });
-  });
-}
+          await idb.deleteBook(bId);
+          if (db) {
+            try { await deleteDoc(doc(db, 'curriculum_books', bId)); } catch (err) {}
+          }
+          if (state.activeBookId === bId) state.activeBookId = null;
+          state.books = state.books.filter(b => b.id !== bId);
+          syncSubjectDropdown();
+          renderBooksList();
+          showToast("Textbook deleted.");
+        });
+      });
+    }
 
     tbSearchBox.addEventListener('input', renderBooksList);
     tbFilterClass.addEventListener('change', renderBooksList);
 
-    // Sync Pacing Inputs to State
     classSelect.addEventListener('change', (e) => { 
       state.currentClass = e.target.value; 
       syncSubjectDropdown();
@@ -2882,16 +3020,18 @@ function renderBooksList() {
       checkAndLoadChapterRoadmap();
       resetCOEngineToEmpty();
     });
+
     dayNumberInput.addEventListener('input', () => {
-      if (state.isCOConfirmed) {
-        const currentTargetedCO = getEffectiveTargetedCOText();
-        document.querySelectorAll('.u-meta-co').forEach(el => {
-          el.innerHTML = `
-            ${formatCODisplay(currentTargetedCO)}
-            <div style="margin-top:4px;"><span class="u-co-badge-custom">🔒 Confirmed & Locked Chapter COs</span></div>
-          `;
-        });
-      }
+      const currentDay = parseInt(dayNumberInput.value, 10) || 1;
+      const daySpecificCOs = getDaySpecificCOs(state.currentPackage, currentDay);
+      document.querySelectorAll('.u-meta-co').forEach(el => {
+        el.innerHTML = `
+          ${formatCODisplay(daySpecificCOs)}
+          ${state.isCOConfirmed ? '<div style="margin-top:4px;"><span class="u-co-badge-custom">🔒 Confirmed & Locked Chapter COs</span></div>' : ''}
+        `;
+      });
+      const totalDays = parseInt(totalDaysInput.value, 10) || 5;
+      renderUnitProgressionAndCOs(unitTitleInput.value.trim() || 'Unit', currentDay, totalDays);
     });
 
     const withTimeout = (promise, ms = 2500) => 
@@ -2900,9 +3040,7 @@ function renderBooksList() {
         new Promise((_, reject) => setTimeout(() => reject(new Error("Network timeout")), ms))
       ]);
 
-    // =========================================================================
-    // VOICE & SPEED SETTINGS
-    // =========================================================================
+    // Voice & Speed UI
     function updateVoiceUIElements() {
       const isFemale = (state.ttsGender === 'female');
       voiceOptFemale.classList.toggle('selected', isFemale);
@@ -2961,9 +3099,14 @@ function renderBooksList() {
       showToast(`Saved Voice: ${state.ttsGender === 'female' ? '👩 Female' : '👨 Male'} at ${state.ttsSpeed.toFixed(2)}x`);
     });
 
-    // =========================================================================
-    // CHAPTER ROADMAP CHECK
-    // =========================================================================
+    testMlSpeechBtn.addEventListener('click', () => {
+      speechEngine.speak("ടി.ഡി.ടി.ടി.ഐ തുറവൂർ അധ്യാപക സഹായിയിലേക്ക് സ്വാഗതം. ഇത് പരീക്ഷണ ശബ്ദമാണ്.", testMlSpeechBtn, state.ttsGender, state.ttsSpeed);
+    });
+
+    testEnSpeechBtn.addEventListener('click', () => {
+      speechEngine.speak("Welcome to TDTTI Thuravoor Teacher Studio. Voice test successful.", testEnSpeechBtn, state.ttsGender, state.ttsSpeed);
+    });
+
     function getRoadmapStorageKey(cls, subject, unit) {
       const cleanSub = (subject || '').toLowerCase().trim().replace(/[^a-z0-9]/g, '_');
       const cleanUnit = (unit || '').toLowerCase().trim().replace(/[^a-z0-9]/g, '_');
@@ -2998,10 +3141,20 @@ function renderBooksList() {
           if (parsed.allUnitCurricularObjectives && parsed.allUnitCurricularObjectives.length > 0) {
             state.allCOsList = parsed.allUnitCurricularObjectives.map((str, i) => {
               const parts = str.split(':');
+              let assignedDay = 1;
+              if (parsed.dailyDistribution) {
+                for (let d in parsed.dailyDistribution) {
+                  const arr = parsed.dailyDistribution[d];
+                  if (Array.isArray(arr) && arr.some(item => item.includes(parts[0].trim()) || str.includes(item))) {
+                    assignedDay = parseInt(d, 10);
+                    break;
+                  }
+                }
+              }
               return {
                 num: parts[0].trim() || `CO ${i+1}`,
                 text: parts.slice(1).join(':').trim() || str,
-                day: 1
+                day: assignedDay
               };
             });
             state.isCOConfirmed = true;
@@ -3015,19 +3168,26 @@ function renderBooksList() {
       state.lockedRoadmap = null;
     }
 
-    unlockRoadmapBtn.addEventListener('click', () => {
-      const unit = unitTitleInput.value.trim();
-      if (!unit) return;
-      if (!confirm(`Unlock and clear Curricular Objectives for "${unit}"?`)) return;
+    // ✅ Styled In-App Dialog
+unlockRoadmapBtn.addEventListener('click', () => {
+  const unit = unitTitleInput.value.trim();
+  if (!unit) return;
+
+  showConfirmDialog(
+    `Are you sure you want to unlock and clear the Curricular Objectives roadmap for <strong>"${escapeHtml(unit)}"</strong>?<br><br>This will allow you to generate a fresh pacing plan.`,
+    "🔓 Unlock Chapter Roadmap",
+    () => {
       const key = getRoadmapStorageKey(state.currentClass, state.currentSubject, unit);
       localStorage.removeItem(key);
       state.lockedRoadmap = null;
       roadmapStatusPill.style.display = 'none';
       resetCOEngineToEmpty();
       showToast("Chapter COs unlocked!");
-    });
+    },
+    false // Not danger
+  );
+});
 
-    // Copy Handlers
     document.getElementById('copy-all-lp-btn').addEventListener('click', () => {
       copyText(document.getElementById('lesson-plan-body').innerText, "Copied Complete Lesson Plan!");
     });
@@ -3055,7 +3215,6 @@ function renderBooksList() {
       window.open(`https://api.whatsapp.com/send?text=${encodeURIComponent(text)}`, '_blank');
     });
 
-    // WhatsApp View Switcher
     const waBtnChat = document.getElementById('wa-btn-chat');
     const waBtnRaw = document.getElementById('wa-btn-raw');
     const waStyledContainer = document.getElementById('wa-styled-container');
@@ -3072,29 +3231,38 @@ function renderBooksList() {
 
     const delay = (ms) => new Promise((resolve) => setTimeout(resolve, ms));
 
-    // =========================================================================
-    // ROBUST GEMINI CLIENT WITH PAYLOAD SAFETY & CORS RESILIENCE
-    // =========================================================================
+    // Robust Gemini Client
     async function callGemini(modelName, payload) {
       if (!GEMINI_API_KEY) {
+        updateApiLedStatus(false);
         return { success: false, isAuthError: true, error: "Missing Gemini API Key." };
       }
 
       try {
-        const endpoint = `https://generativelanguage.googleapis.com/v1beta/models/${modelName}:generateContent?key=${encodeURIComponent(GEMINI_API_KEY)}`;
+        const endpoint = `https://generativelanguage.googleapis.com/v1beta/models/${modelName}:generateContent`;
         const response = await fetch(endpoint, {
           method: "POST",
-          headers: { "Content-Type": "application/json" },
+          headers: { 
+            "Content-Type": "application/json",
+            "x-goog-api-key": GEMINI_API_KEY
+          },
           body: JSON.stringify(payload)
         });
 
         const data = await response.json();
         if (response.ok && data.candidates && data.candidates[0]?.content) {
+          updateApiLedStatus(true);
           return { success: true, data: data };
         }
 
         const errorMsg = data.error?.message || `HTTP ${response.status}`;
         const msgLower = errorMsg.toLowerCase();
+        const isAuthError = response.status === 400 || response.status === 401 || response.status === 403 || msgLower.includes("key") || msgLower.includes("api_key");
+
+        if (isAuthError) {
+          updateApiLedStatus(false);
+        }
+
         const isBusy = response.status === 503 || 
                        response.status === 429 || 
                        msgLower.includes("high demand") || 
@@ -3105,14 +3273,15 @@ function renderBooksList() {
         return { 
           success: false, 
           error: errorMsg, 
-          isAuthError: response.status === 400 || response.status === 401 || response.status === 403 || msgLower.includes("key") || msgLower.includes("api_key"),
+          isAuthError: isAuthError,
           isBusy: isBusy,
           isModelError: response.status === 404 || msgLower.includes("no longer available") || msgLower.includes("not found")
         };
       } catch (netErr) {
+        updateApiLedStatus(false);
         return {
           success: false,
-          error: `Connection notice: ${netErr.message}. Ensure internet is active and PDF size is within browser limits.`,
+          error: `Connection notice: ${netErr.message}. Ensure internet is active.`,
           isNetworkError: true
         };
       }
@@ -3120,15 +3289,15 @@ function renderBooksList() {
 
     async function executeSmartGeneration(payload) {
       if (!GEMINI_API_KEY) {
-        showKeyModal();
-        throw new Error("Please enter your Google AI Studio API key to continue.");
+        updateApiLedStatus(false);
+        throw new Error("Gemini API key is missing. Please configure the key in the script.");
       }
       showSpinner(`Synthesizing with ${PRIMARY_MODEL}...`);
       let result = await callGemini(PRIMARY_MODEL, payload);
       if (result.success) return result.data;
       if (result.isAuthError) {
-        showKeyModal();
-        throw new Error("Invalid or expired Gemini API key. Please update your key above.");
+        updateApiLedStatus(false);
+        throw new Error("Invalid or expired Gemini API key. Please verify your API key.");
       }
       if (result.isBusy || result.isModelError) {
         showSpinner(`Server updating. Auto-switching to ${FALLBACK_MODEL}...`);
@@ -3140,7 +3309,7 @@ function renderBooksList() {
     }
 
     // =========================================================================
-    // SINGLE-THREADED READ ALOUD
+    // ROBUST SPEECH ENGINE (PERMANENT MALAYALAM GC PIN & CHUNK STREAMING)
     // =========================================================================
     class RobustSpeechEngine {
       constructor() {
@@ -3150,11 +3319,32 @@ function renderBooksList() {
         this.activeBtn = null;
         this.queue = [];
         this.currentIndex = 0;
+        this.heartbeatTimer = null;
 
-        this.audio.addEventListener('ended', () => this.playNextAudioChunk(this.currentSessionId));
-        this.audio.addEventListener('error', () => {
-          setTimeout(() => { if (this.isPlaying) this.playNextAudioChunk(this.currentSessionId); }, 80);
+        this.audio.addEventListener('ended', () => {
+          setTimeout(() => { if (this.isPlaying) this.playNextAudioChunk(this.currentSessionId); }, 60);
         });
+        this.audio.addEventListener('error', (e) => {
+          console.warn("Audio stream chunk notice, continuing...", e);
+          setTimeout(() => { if (this.isPlaying) this.playNextAudioChunk(this.currentSessionId); }, 120);
+        });
+      }
+
+      startHeartbeat() {
+        this.stopHeartbeat();
+        this.heartbeatTimer = setInterval(() => {
+          if ('speechSynthesis' in window && window.speechSynthesis.speaking) {
+            window.speechSynthesis.pause();
+            window.speechSynthesis.resume();
+          }
+        }, 10000);
+      }
+
+      stopHeartbeat() {
+        if (this.heartbeatTimer) {
+          clearInterval(this.heartbeatTimer);
+          this.heartbeatTimer = null;
+        }
       }
 
       stop() {
@@ -3162,6 +3352,7 @@ function renderBooksList() {
         this.isPlaying = false;
         this.queue = [];
         this.currentIndex = 0;
+        this.stopHeartbeat();
 
         try {
           this.audio.pause();
@@ -3172,6 +3363,7 @@ function renderBooksList() {
         if ('speechSynthesis' in window) {
           try { window.speechSynthesis.cancel(); } catch (e) {}
         }
+        window.activeTtsUtterance = null;
 
         if (this.activeBtn) {
           this.activeBtn.classList.remove('speaking');
@@ -3233,8 +3425,10 @@ function renderBooksList() {
         const voices = ('speechSynthesis' in window) ? window.speechSynthesis.getVoices() : [];
         const nativeMlVoice = voices.find(v => v.lang && (v.lang.startsWith('ml') || v.lang.includes('ml-') || v.lang.includes('malayalam')));
 
+        this.startHeartbeat();
+
         if (isMalayalam && !nativeMlVoice) {
-          this.queue = this.chunkText(text, 40);
+          this.queue = this.chunkText(text, 48);
           if (this.queue.length === 0) return this.stop();
           this.currentIndex = 0;
           this.playNextAudioChunk(activeSession);
@@ -3266,7 +3460,7 @@ function renderBooksList() {
 
         this.audio.play().catch(() => {
           if (this.isPlaying && sessionId === this.currentSessionId) {
-            setTimeout(() => this.playNextAudioChunk(sessionId), 120);
+            setTimeout(() => this.playNextAudioChunk(sessionId), 140);
           }
         });
       }
@@ -3277,12 +3471,13 @@ function renderBooksList() {
 
         const chunk = this.queue[this.currentIndex++];
         const utterance = new SpeechSynthesisUtterance(chunk);
+        window.activeTtsUtterance = utterance;
         utterance.rate = speed;
 
         if (isMalayalam) {
           utterance.lang = 'ml-IN';
           if (mlVoice) utterance.voice = mlVoice;
-          utterance.pitch = (gender === 'male') ? 0.70 : 1.25;
+          utterance.pitch = (gender === 'male') ? 0.72 : 1.25;
         } else {
           utterance.lang = 'en-IN';
           const voices = window.speechSynthesis.getVoices();
@@ -3342,9 +3537,7 @@ function renderBooksList() {
       btn.addEventListener('click', () => toggleReadAloud(btn.dataset.tab, btn));
     });
 
-    // =========================================================================
-    // MALAYALAM TRANSLATION ENGINE
-    // =========================================================================
+    // Translation Engine
     async function translateActiveTab(tabId, buttonEl) {
       speechEngine.stop();
       const contentWrapperEl = document.getElementById(`content-${tabId}`);
@@ -3427,7 +3620,7 @@ ${contentHtml}
         showToast("Translated Header & Body to Malayalam!");
       } catch (err) {
         hideSpinner();
-        showMessageBox(`Translation error: ${err.message}`, "Translation Error");
+        showMessageBox(`Translation notice: ${err.message}`, "Translation");
       }
     }
 
@@ -3470,7 +3663,149 @@ ${contentHtml}
     }
 
     // =========================================================================
-    // UNIVERSAL RENDERERS (UNIFIED CARD-STYLED UI ACROSS ALL 6 TABS)
+    // DYNAMIC UNIT PROGRESSION & INTERACTIVE CLICKABLE CO PILLS
+    // =========================================================================
+    function renderUnitProgressionAndCOs(unitTitle, dayNumber, totalDays) {
+      const activeDay = Number(dayNumber) || 1;
+      const numDays = Number(totalDays) || 5;
+
+      unitDaySwitcherBar.style.display = 'flex';
+
+      // 1. Day Pills
+      unitDayPillsContainer.innerHTML = '';
+      for (let d = 1; d <= numDays; d++) {
+        const btn = document.createElement('button');
+        btn.type = 'button';
+        btn.className = `unit-day-pill ${d === activeDay ? 'active' : ''}`;
+        btn.innerHTML = `📅 Day ${d}`;
+        btn.addEventListener('click', () => loadConcernedDay(d, unitTitle, numDays));
+        unitDayPillsContainer.appendChild(btn);
+      }
+
+      // 2. Gather All Chapter Locked COs
+      let allCOs = [];
+      if (state.allCOsList && state.allCOsList.length > 0) {
+        allCOs = state.allCOsList;
+      } else if (state.lockedRoadmap && state.lockedRoadmap.allUnitCurricularObjectives) {
+        allCOs = state.lockedRoadmap.allUnitCurricularObjectives.map((str, i) => {
+          const parts = str.split(':');
+          let assignedDay = 1;
+          if (state.lockedRoadmap.dailyDistribution) {
+            for (let d in state.lockedRoadmap.dailyDistribution) {
+              const arr = state.lockedRoadmap.dailyDistribution[d];
+              if (Array.isArray(arr) && arr.some(item => item.includes(parts[0].trim()) || str.includes(item))) {
+                assignedDay = parseInt(d, 10);
+                break;
+              }
+            }
+          }
+          return { num: parts[0].trim() || `CO ${i+1}`, text: parts.slice(1).join(':').trim() || str, day: assignedDay };
+        });
+      }
+
+      if (allCOs.length === 0) {
+        unitProgressionCosPanel.innerHTML = `
+          <div style="font-size:0.7rem; color:var(--text-muted); text-align:center; padding:6px;">
+            Awaiting chapter curricular objectives extraction and locking.
+          </div>
+        `;
+        return;
+      }
+
+      // 3. Render Clickable Interactive CO Buttons
+      const formattedAllCOsText = allCOs.map(c => `• ${c.num} (Day ${c.day}): ${c.text}`).join('\n');
+
+      let html = `
+        <div class="u-prog-co-header">
+          <div class="u-prog-co-title">
+            <span>🎯 Chapter Curricular Objectives (Locked Scope: ${allCOs.length} Objectives)</span>
+          </div>
+          <button type="button" class="btn btn-outline btn-sm" id="btn-copy-all-chapter-cos" style="padding:2px 8px; font-size:0.68rem; height:24px;">
+            📋 Copy All Chapter COs
+          </button>
+        </div>
+        <div class="u-prog-co-grid">
+      `;
+
+      allCOs.forEach((co) => {
+        const isCurrentDay = (Number(co.day) === activeDay);
+        const itemCopyText = `${co.num} (Day ${co.day}): ${co.text}`;
+
+        html += `
+          <button type="button" class="u-prog-co-item ${isCurrentDay ? 'is-highlighted' : ''}" data-day="${co.day}" title="Click to load Day ${co.day} focus">
+            <div class="u-prog-co-item-top">
+              <div style="display:flex; align-items:center; gap:4px;">
+                <span class="pill-qnum" style="font-size:0.6rem; padding:1px 5px; ${isCurrentDay ? 'background:#059669;' : ''}">${co.num}</span>
+                <span style="font-size:0.62rem; font-weight:700; color:${isCurrentDay ? '#065f46' : 'var(--text-muted)'};">
+                  ${isCurrentDay ? `🎯 Day ${co.day} (Active Focus)` : `Day ${co.day}`}
+                </span>
+              </div>
+              <span class="copy-single-prog-co" data-text="${escapeHtml(itemCopyText)}" style="font-size:0.72rem; padding:1px 4px;" title="Copy CO text">📋</span>
+            </div>
+            <div class="u-prog-co-text" style="font-weight:${isCurrentDay ? '700' : '500'};">${escapeHtml(co.text)}</div>
+          </button>
+        `;
+      });
+
+      html += `</div>`;
+      unitProgressionCosPanel.innerHTML = html;
+
+      // Clickable CO button loads concerned day
+      unitProgressionCosPanel.querySelectorAll('.u-prog-co-item').forEach(btn => {
+        btn.addEventListener('click', (e) => {
+          if (e.target.classList.contains('copy-single-prog-co')) return;
+          const targetDay = parseInt(btn.dataset.day, 10) || 1;
+          loadConcernedDay(targetDay, unitTitle, numDays);
+        });
+      });
+
+      const copyAllBtn = document.getElementById('btn-copy-all-chapter-cos');
+      if (copyAllBtn) {
+        copyAllBtn.onclick = () => {
+          copyText(`📚 ${unitTitle} — Locked Chapter Curricular Objectives:\n\n${formattedAllCOsText}`, "Copied All Chapter COs!");
+        };
+      }
+
+      unitProgressionCosPanel.querySelectorAll('.copy-single-prog-co').forEach(btn => {
+        btn.onclick = (e) => {
+          e.stopPropagation();
+          copyText(e.currentTarget.dataset.text, "Copied Curricular Objective!");
+        };
+      });
+    }
+
+    function loadConcernedDay(d, unitTitle, numDays) {
+      dayNumberInput.value = d;
+      
+      if (state.currentUnitPlan && Array.isArray(state.currentUnitPlan.dailyPackages)) {
+        state.activeUnitPlanDay = d;
+        const dp = state.currentUnitPlan.dailyPackages.find(p => Number(p.dayNumber) === d) || state.currentUnitPlan.dailyPackages[d - 1];
+        if (dp) {
+          const dayData = {
+            ...dp,
+            allUnitCurricularObjectives: state.currentUnitPlan.allUnitCurricularObjectives || []
+          };
+          renderPackageToWorkspace(dayData, state.currentUnitPlan.unitTitle, d, numDays, state.currentUnitPlan.classId, state.currentUnitPlan.partId);
+          showToast(`Switched to Day ${d} of ${numDays}`);
+        }
+      } else {
+        const dayCOs = getDaySpecificCOs(state.currentPackage, d);
+        updateAllUniversalHeaders(state.currentSubject, unitTitle, d, numDays, state.currentClass, state.currentPart, dayCOs);
+        renderUnitProgressionAndCOs(unitTitle, d, numDays);
+        showToast(`Loaded Day ${d} in Unit Progression`);
+      }
+    }
+
+    function setupUnitDaySwitcherBar(unitPlan) {
+      if (!unitPlan || !Array.isArray(unitPlan.dailyPackages) || unitPlan.dailyPackages.length === 0) {
+        unitDaySwitcherBar.style.display = 'none';
+        return;
+      }
+      renderUnitProgressionAndCOs(unitPlan.unitTitle, state.activeUnitPlanDay || 1, unitPlan.totalDays);
+    }
+
+    // =========================================================================
+    // WORKSPACE RENDERING
     // =========================================================================
     function renderPackageToWorkspace(pkgData, unitTitle, dayNumber, totalDays, classId, partId = state.currentPart) {
       document.querySelectorAll('.translate-tab-btn').forEach(b => {
@@ -3479,8 +3814,10 @@ ${contentHtml}
       });
       speechEngine.stop();
 
-      const targetedCO = getEffectiveTargetedCOText() || pkgData.targetedCurricularObjectives || pkgData.targetedCurricularObjective;
-      updateAllUniversalHeaders(state.currentSubject, unitTitle, dayNumber, totalDays, classId, partId, targetedCO);
+      const concernedDayCOs = getDaySpecificCOs(pkgData, dayNumber);
+      updateAllUniversalHeaders(state.currentSubject, unitTitle, dayNumber, totalDays, classId, partId, concernedDayCOs);
+
+      renderUnitProgressionAndCOs(unitTitle, dayNumber, totalDays);
 
       renderLessonPlanCards(pkgData, unitTitle, dayNumber, totalDays, classId);
       renderMediaCards(pkgData.mediaResources || [], unitTitle, classId);
@@ -3501,22 +3838,22 @@ ${contentHtml}
         <div class="cards-stack-container">
       `;
 
-      const coList = pkgData.allUnitCurricularObjectives || state.allCOsList.map(c => `${c.num}: ${c.text}`) || [];
-      if (coList.length > 0) {
+      const concernedCOs = getDaySpecificCOs(pkgData, dayNumber);
+      if (concernedCOs.length > 0) {
         html += `
           <div class="unified-card">
             <div class="unified-card-header">
               <div class="card-tag-group">
-                <span class="pill-qnum">CO Alignment</span>
-                <span class="pill-cognitive">Unit Master Curricular Objectives (${coList.length})</span>
+                <span class="pill-qnum">Day ${dayNumber} Focus</span>
+                <span class="pill-cognitive">Targeted Curricular Competencies (${concernedCOs.length})</span>
               </div>
-              <button class="btn btn-outline btn-sm copy-single-item" data-text="Curricular Objectives:\n${escapeHtml(coList.join('\n'))}">📋 Copy</button>
+              <button class="btn btn-outline btn-sm copy-single-item" data-text="Day ${dayNumber} Targeted CO(s):\n${escapeHtml(concernedCOs.join('\n'))}">📋 Copy</button>
             </div>
             <div class="unified-card-body">
               <div class="section-rubric">
-                <div class="label-rubric">Comprehensive Chapter Competencies</div>
+                <div class="label-rubric">Comprehensive Chapter Competencies (Day ${dayNumber} Focus)</div>
                 <ul style="padding-left:18px; margin-top:4px;">
-                  ${coList.map(co => `<li style="margin-bottom:3px; line-height:1.45;">${co}</li>`).join('')}
+                  ${concernedCOs.map(co => `<li style="margin-bottom:3px; line-height:1.45; font-weight:600; color:#0f172a;">${co}</li>`).join('')}
                 </ul>
               </div>
             </div>
@@ -3569,9 +3906,22 @@ ${contentHtml}
     // Tab 2: Digital Media Cards
     function renderMediaCards(mediaList, unitTitle, classId) {
       const container = document.getElementById('media-resources-body');
-      if (!mediaList || mediaList.length === 0) {
-        container.innerHTML = `<div class="cards-stack-container"><div class="unified-card"><div class="unified-card-body"><p style="color:var(--text-muted); font-style:italic;">No media suggestions found.</p></div></div></div>`;
-        return;
+      if (!mediaList) mediaList = [];
+
+      // GUARANTEE: Ensure at least one YouTube video is always present
+      const hasYouTubeVideo = mediaList.some(item => 
+        (item.type === 'video') || 
+        (item.platform && item.platform.toLowerCase().includes('youtube'))
+      );
+
+      if (!hasYouTubeVideo) {
+        mediaList.unshift({
+          title: `${unitTitle} — Concept Video & Demonstration`,
+          type: "video",
+          platform: "YouTube",
+          description: `Visual experiment and classroom concept animation for Std ${classId} ${unitTitle}.`,
+          searchQuery: `SCERT Kerala Class ${classId} ${state.currentSubject} ${unitTitle} Malayalam Victers`
+        });
       }
 
       let html = `
@@ -3587,10 +3937,10 @@ ${contentHtml}
         let searchUrl = `https://www.youtube.com/results?search_query=${queryEncoded}`;
         let actionLabel = "Search YouTube ↗";
 
-        if (item.type === 'diksha' || item.platform?.toLowerCase().includes('diksha')) {
+        if (item.type === 'diksha' || (item.platform && item.platform.toLowerCase().includes('diksha'))) {
           searchUrl = `https://diksha.gov.in/explore?query=${queryEncoded}`;
           actionLabel = "Open DIKSHA ↗";
-        } else if (item.type === 'sim' || item.platform?.toLowerCase().includes('phet')) {
+        } else if (item.type === 'sim' || (item.platform && item.platform.toLowerCase().includes('phet'))) {
           searchUrl = `https://www.google.com/search?q=${encodeURIComponent(item.searchQuery + ' phet simulation')}`;
           actionLabel = "Open Simulation ↗";
         }
@@ -3600,20 +3950,20 @@ ${contentHtml}
             <div class="unified-card-header">
               <div class="card-tag-group">
                 <span class="pill-qnum">Media ${idx+1}</span>
-                <span class="pill-score">${escapeHtml(item.platform || 'Digital Media')}</span>
-                <span class="pill-cognitive">${escapeHtml(item.type || 'Resource')}</span>
+                <span class="pill-score">${escapeHtml(item.platform || 'YouTube')}</span>
+                <span class="pill-cognitive">${escapeHtml(item.type || 'video')}</span>
               </div>
               <a href="${searchUrl}" target="_blank" rel="noopener noreferrer" class="btn btn-primary btn-sm" style="padding:2px 9px; font-size:0.68rem;">${actionLabel}</a>
             </div>
             <div class="unified-card-body">
               <div class="section-q">
                 <div class="label-q">Resource Concept & Focus</div>
-                <div class="text-q">${item.title}</div>
-                <div style="font-size:0.8rem; color:#475569; margin-top:4px;">${item.description}</div>
+                <div class="text-q">${escapeHtml(item.title)}</div>
+                <div style="font-size:0.8rem; color:#475569; margin-top:4px;">${escapeHtml(item.description)}</div>
               </div>
               <div class="section-a">
-                <div class="label-a">Recommended Keyword Query</div>
-                <div class="text-a">🔍 "${item.searchQuery || item.title}"</div>
+                <div class="label-a">Recommended Search Query</div>
+                <div class="text-a">🔍 "${escapeHtml(item.searchQuery || item.title)}"</div>
               </div>
             </div>
           </div>
@@ -3765,7 +4115,7 @@ ${contentHtml}
       rawBody.textContent = rawText;
     }
 
-    // Tab 5: Evaluation Worksheet Cards
+    // Tab 5: Evaluation Worksheet Cards (Minimum Score: 1)
     function renderWorksheetCards(qList, unitTitle, dayNumber, totalDays, classId) {
       const container = document.getElementById('worksheet-render-area');
       if (!qList || qList.length === 0) {
@@ -3783,7 +4133,9 @@ ${contentHtml}
 
       qList.forEach((item, index) => {
         const qNum = item.qNum || (index + 1);
-        const score = item.score || (index === 0 ? 2 : 1);
+        // Ensure scores are integers and NEVER below 1
+        const rawScore = parseInt(item.score, 10);
+        const score = (!isNaN(rawScore) && rawScore >= 1) ? rawScore : (index === 0 ? 2 : 1);
         const domain = item.cognitiveDomain || "Application & Inference";
 
         html += `
@@ -3816,7 +4168,7 @@ ${contentHtml}
       attachSingleCopyListeners(container);
     }
 
-    // Tab 6: Answer Key Cards
+    // Tab 6: Answer Key Cards (Minimum Score: 1)
     function renderAnswerKeyCards(aList, unitTitle, dayNumber, totalDays) {
       const container = document.getElementById('worksheet-answers-body');
       if (!aList || aList.length === 0) {
@@ -3834,7 +4186,8 @@ ${contentHtml}
 
       aList.forEach((item, index) => {
         const qNum = item.qNum || (index + 1);
-        const score = item.score || (index === 0 ? 2 : 1);
+        const rawScore = parseInt(item.score, 10);
+        const score = (!isNaN(rawScore) && rawScore >= 1) ? rawScore : (index === 0 ? 2 : 1);
         const rubric = item.rubric || "Scientific accuracy, logical inference, and conceptual clarity.";
         const modelSolution = formatMarkdown(item.answer || item.modelAnswer || item.solution || '');
 
@@ -3892,7 +4245,7 @@ ${contentHtml}
     }
 
     function updateGeneratorUIStatus(pkgTitle = "") {
-      if (state.currentPackage) {
+      if (state.currentPackage || state.currentUnitPlan) {
         activeStatusBar.style.display = "flex";
         activeStatusText.textContent = `Active: ${pkgTitle || 'Current Package'}`;
       } else {
@@ -3903,6 +4256,10 @@ ${contentHtml}
     function resetWorkspace() {
       state.currentPackage = null;
       state.activePackageId = null;
+      state.currentUnitPlan = null;
+      state.activeUnitPlanDay = 1;
+      unitDaySwitcherBar.style.display = 'none';
+
       resetCOEngineToEmpty();
       updateGeneratorUIStatus();
       speechEngine.stop();
@@ -3938,9 +4295,16 @@ ${contentHtml}
     resetWorkspaceBtn.addEventListener('click', resetWorkspace);
     quickResetBtn.addEventListener('click', resetWorkspace);
 
+    // =========================================================================
+    // LOAD SAVED PACKAGE OR ENTIRE MASTER UNIT ARCHIVE
+    // =========================================================================
     async function loadSavedPackage(pkgId) {
-      const allPkgs = await idb.getAllPackages();
-      let pkg = allPkgs.find(p => p.id === pkgId);
+      let pkg = state.savedPackages.find(p => p.id === pkgId);
+
+      if (!pkg) {
+        const allPkgs = await idb.getAllPackages();
+        pkg = allPkgs.find(p => p.id === pkgId);
+      }
 
       if (!pkg && db) {
         try {
@@ -3960,166 +4324,207 @@ ${contentHtml}
       syncSubjectDropdown();
       targetSubjectInput.value = state.currentSubject;
       unitTitleInput.value = pkg.unitTitle;
-      dayNumberInput.value = pkg.dayNumber;
       totalDaysInput.value = pkg.totalDays;
 
       checkAndLoadChapterRoadmap();
       renderBooksList();
 
-      state.currentPackage = pkg.data;
       state.activePackageId = pkg.id;
 
-      renderPackageToWorkspace(pkg.data, pkg.unitTitle, pkg.dayNumber, pkg.totalDays, pkg.classId, pkg.partId);
-      updateGeneratorUIStatus(`Std ${pkg.classId} - ${pkg.unitTitle} (D${pkg.dayNumber})`);
+      if (pkg.isMasterUnit && pkg.data && Array.isArray(pkg.data.dailyPackages)) {
+        state.currentUnitPlan = {
+          unitTitle: pkg.unitTitle,
+          classId: pkg.classId,
+          partId: pkg.partId,
+          subject: pkg.subject,
+          totalDays: pkg.totalDays,
+          allUnitCurricularObjectives: pkg.data.allUnitCurricularObjectives || [],
+          dailyPackages: pkg.data.dailyPackages
+        };
+        state.activeUnitPlanDay = 1;
+        dayNumberInput.value = 1;
+        setGenerationScope('unit');
+
+        setupUnitDaySwitcherBar(state.currentUnitPlan);
+
+        const firstDayPkg = pkg.data.dailyPackages[0] || {};
+        const fullDayData = {
+          ...firstDayPkg,
+          allUnitCurricularObjectives: pkg.data.allUnitCurricularObjectives || []
+        };
+        state.currentPackage = fullDayData;
+        renderPackageToWorkspace(fullDayData, pkg.unitTitle, 1, pkg.totalDays, pkg.classId, pkg.partId);
+        updateGeneratorUIStatus(`📦 Master Unit: ${pkg.unitTitle} (Day 1/${pkg.totalDays})`);
+        showToast(`Loaded Master Unit Plan: ${pkg.unitTitle}`);
+      } else {
+        state.currentUnitPlan = null;
+        unitDaySwitcherBar.style.display = 'none';
+        state.activeUnitPlanDay = pkg.dayNumber || 1;
+        dayNumberInput.value = state.activeUnitPlanDay;
+        setGenerationScope('single');
+
+        renderUnitProgressionAndCOs(pkg.unitTitle, state.activeUnitPlanDay, pkg.totalDays);
+
+        state.currentPackage = pkg.data;
+        renderPackageToWorkspace(pkg.data, pkg.unitTitle, pkg.dayNumber, pkg.totalDays, pkg.classId, pkg.partId);
+        updateGeneratorUIStatus(`${pkg.subject || ''} Std ${pkg.classId} - ${pkg.unitTitle} (D${pkg.dayNumber})`);
+        showToast(`Loaded: ${pkg.unitTitle} (Day ${pkg.dayNumber})`);
+      }
 
       document.querySelectorAll('.pkg-card').forEach(c => c.classList.toggle('active-loaded', c.dataset.id === pkg.id));
       document.querySelector('[data-tab="lesson-plan"]').click();
-      showToast(`Loaded: ${pkg.unitTitle} (Day ${pkg.dayNumber})`);
     }
 
     // =========================================================================
-// REFRESH PACKAGE ARCHIVE (SORT & DISPLAY: CLASS -> SUBJECT -> PART -> UNIT)
-// =========================================================================
-async function refreshPackageArchiveUI() {
-  let cloudPackages = [];
+    // REFRESH PACKAGE ARCHIVE
+    // =========================================================================
+    async function refreshPackageArchiveUI() {
+      let cloudPackages = [];
 
-  if (db) {
-    try {
-      if (auth && !auth.currentUser) await signInAnonymously(auth).catch(() => {});
-      const snap = await withTimeout(getDocs(collection(db, 'saved_packages')), 2500);
-      snap.forEach(docSnap => {
-        if (docSnap.exists()) cloudPackages.push(docSnap.data());
+      if (db) {
+        try {
+          if (auth && !auth.currentUser) await signInAnonymously(auth).catch(() => {});
+          const snap = await withTimeout(getDocs(collection(db, 'saved_packages')), 2500);
+          snap.forEach(docSnap => {
+            if (docSnap.exists()) cloudPackages.push(docSnap.data());
+          });
+        } catch (e) {
+          console.warn("Firestore fetch packages:", e.message);
+        }
+      }
+
+      const localPackages = await idb.getAllPackages();
+      const packageMap = new Map();
+      localPackages.forEach(p => packageMap.set(p.id, p));
+      cloudPackages.forEach(p => {
+        packageMap.set(p.id, p);
+        idb.savePackage(p); // Mirror cloud packages to local storage
       });
-    } catch (e) {
-      console.warn("Firestore fetch packages:", e.message);
-    }
-  }
 
-  const localPackages = await idb.getAllPackages();
-  const packageMap = new Map();
-  localPackages.forEach(p => packageMap.set(p.id, p));
-  cloudPackages.forEach(p => {
-    packageMap.set(p.id, p);
-    idb.savePackage(p);
-  });
+      state.savedPackages = Array.from(packageMap.values());
+      packageCountBadge.textContent = state.savedPackages.length;
+      if (mobPkgPill) mobPkgPill.textContent = state.savedPackages.length;
 
-  state.savedPackages = Array.from(packageMap.values());
-  packageCountBadge.textContent = state.savedPackages.length;
-  if (mobPkgPill) mobPkgPill.textContent = state.savedPackages.length;
+      if (state.savedPackages.length === 0) {
+        pkgArchiveList.innerHTML = `<div style="font-size: 0.68rem; color: var(--text-muted); text-align: center; padding: 10px;">No saved packages yet.</div>`;
+        return;
+      }
 
-  if (state.savedPackages.length === 0) {
-    pkgArchiveList.innerHTML = `<div style="font-size: 0.68rem; color: var(--text-muted); text-align: center; padding: 10px;">No saved packages yet.</div>`;
-    return;
-  }
+      const extractPartNum = (part) => {
+        if (!part) return 1;
+        const match = String(part).match(/\d+/);
+        if (match) return parseInt(match[0], 10);
+        if (String(part).toLowerCase().includes('full')) return 99;
+        return 1;
+      };
 
-  // Helper to extract clean numerical part (e.g. "part1" -> 1, "part2" -> 2, "full" -> 99)
-  const extractPartNum = (part) => {
-    if (!part) return 1;
-    const match = String(part).match(/\d+/);
-    if (match) return parseInt(match[0], 10);
-    if (String(part).toLowerCase().includes('full')) return 99;
-    return 1;
-  };
+      // Sort: Class -> Subject -> Part -> Unit -> Master first -> Days
+      state.savedPackages.sort((a, b) => {
+        const classA = parseInt(a.classId, 10) || 0;
+        const classB = parseInt(b.classId, 10) || 0;
+        if (classA !== classB) return classA - classB;
 
-  // 1, 2, 3 Ascending Sort: Class -> Subject -> Part -> Unit -> Day
-  state.savedPackages.sort((a, b) => {
-    // 1. Class / Standard (1, 2, 3... ascending)
-    const classA = parseInt(a.classId, 10) || 0;
-    const classB = parseInt(b.classId, 10) || 0;
-    if (classA !== classB) return classA - classB;
+        const subA = (a.subject || '').trim().toLowerCase();
+        const subB = (b.subject || '').trim().toLowerCase();
+        if (subA !== subB) return subA.localeCompare(subB);
 
-    // 2. Subject (A -> Z alphabetical)
-    const subA = (a.subject || '').trim().toLowerCase();
-    const subB = (b.subject || '').trim().toLowerCase();
-    if (subA !== subB) return subA.localeCompare(subB);
+        const partA = extractPartNum(a.partId);
+        const partB = extractPartNum(b.partId);
+        if (partA !== partB) return partA - partB;
 
-    // 3. Part (Part 1 -> Part 2 -> Part 3 order)
-    const partA = extractPartNum(a.partId);
-    const partB = extractPartNum(b.partId);
-    if (partA !== partB) return partA - partB;
+        const unitA = (a.unitTitle || '').trim().toLowerCase();
+        const unitB = (b.unitTitle || '').trim().toLowerCase();
+        if (unitA !== unitB) return unitA.localeCompare(unitB);
 
-    // 4. Unit / Chapter Title (A -> Z)
-    const unitA = (a.unitTitle || '').trim().toLowerCase();
-    const unitB = (b.unitTitle || '').trim().toLowerCase();
-    if (unitA !== unitB) return unitA.localeCompare(unitB);
+        if (a.isMasterUnit && !b.isMasterUnit) return -1;
+        if (!a.isMasterUnit && b.isMasterUnit) return 1;
 
-    // 5. Day progression (Day 1, 2, 3... ascending)
-    const dayA = parseInt(a.dayNumber, 10) || 1;
-    const dayB = parseInt(b.dayNumber, 10) || 1;
-    return dayA - dayB;
-  });
+        const dayA = parseInt(a.dayNumber, 10) || 1;
+        const dayB = parseInt(b.dayNumber, 10) || 1;
+        return dayA - dayB;
+      });
 
-  // Display Cards with Class, Subject, Part, and Unit badges
-  let html = '';
-  state.savedPackages.forEach(pkg => {
-    const isLoaded = (pkg.id === state.activePackageId);
-    const coSnippet = pkg.data?.targetedCurricularObjective || 'Standard SCERT Lesson';
-    const partNum = extractPartNum(pkg.partId);
-    const partLabel = (partNum === 99) ? 'Full Book' : `Part ${partNum}`;
+      let html = '';
+      state.savedPackages.forEach(pkg => {
+        const isLoaded = (pkg.id === state.activePackageId);
+        const coSnippet = pkg.data?.targetedCurricularObjective || (pkg.isMasterUnit ? `${pkg.totalDays}-Day Comprehensive Unit Plan` : 'Standard SCERT Lesson');
+        const partNum = extractPartNum(pkg.partId);
+        const partLabel = (partNum === 99) ? 'Full Book' : `Part ${partNum}`;
 
-    html += `
-      <div class="pkg-card ${isLoaded ? 'active-loaded' : ''}" data-id="${pkg.id}">
-        <div class="pkg-card-top">
-          <div style="min-width:0; flex:1;">
-            <!-- Class, Subject & Part Order Display -->
-            <div style="display:flex; align-items:center; gap:5px; flex-wrap:wrap; margin-bottom:2px;">
-              <span class="pill-qnum" style="font-size:0.62rem; padding:1px 6px;">Std ${pkg.classId}</span>
-              <span style="font-size:0.72rem; font-weight:700; color:var(--primary-dark);">🧪 ${escapeHtml(pkg.subject || 'Curriculum')}</span>
-              <span class="pill-time" style="font-size:0.62rem; padding:1px 6px;">${partLabel}</span>
-            </div>
-            
-            <!-- Unit / Chapter Title -->
-            <div style="font-size:0.76rem; font-weight:700; color:#1e293b; margin-top:2px; word-break:break-word;">
-              📖 Unit: ${escapeHtml(pkg.unitTitle)}
+        html += `
+          <div class="pkg-card ${isLoaded ? 'active-loaded' : ''} ${pkg.isMasterUnit ? 'is-master-unit' : ''}" data-id="${pkg.id}">
+            <div class="pkg-card-top">
+              <div style="min-width:0; flex:1;">
+                <div style="display:flex; align-items:center; gap:4px; flex-wrap:wrap; margin-bottom:2px;">
+                  <span class="pill-qnum" style="font-size:0.6rem; padding:1px 5px;">Std ${pkg.classId}</span>
+                  <span style="font-size:0.7rem; font-weight:700; color:var(--primary-dark);">🧪 ${escapeHtml(pkg.subject || 'Curriculum')}</span>
+                  <span class="pill-time" style="font-size:0.6rem; padding:1px 5px;">${partLabel}</span>
+                  ${pkg.isMasterUnit ? '<span class="pill-cognitive" style="font-size:0.58rem; padding:1px 5px; background:#f3e8ff; color:#7e22ce;">📦 Master Unit</span>' : ''}
+                </div>
+                
+                <div style="font-size:0.74rem; font-weight:700; color:#1e293b; margin-top:1px; word-break:break-word;">
+                  ${pkg.isMasterUnit ? '📦 Full Unit:' : '📖 Chapter:'} ${escapeHtml(pkg.unitTitle)}
+                </div>
+
+                <div class="pkg-meta-text">
+                  ${pkg.isMasterUnit ? `📊 Complete Unit: Days 1 to ${pkg.totalDays}` : `⏱️ Day ${pkg.dayNumber}/${pkg.totalDays}`} • ${pkg.dateFormatted}
+                </div>
+              </div>
+
+              <span class="badge-tag" style="background:${isLoaded ? '#0284c7' : '#e2e8f0'}; color:${isLoaded ? '#fff' : '#334155'}; font-size:0.58rem;">
+                ${isLoaded ? 'ACTIVE' : 'SAVED'}
+              </span>
             </div>
 
-            <!-- Day & Date Metadata -->
-            <div class="pkg-meta-text" style="margin-top:2px;">
-              ⏱️ Day ${pkg.dayNumber}/${pkg.totalDays} • ${pkg.dateFormatted}
+            <div class="pkg-co-preview" title="${coSnippet}">🎯 ${coSnippet}</div>
+
+            <div class="pkg-actions-row">
+              <button class="btn btn-primary btn-sm btn-load-pkg" data-id="${pkg.id}">📥 Load</button>
+              <button class="btn btn-outline btn-sm btn-reset-pkg" data-id="${pkg.id}">🔄 Reset</button>
+              <button class="btn btn-outline btn-sm btn-del-pkg" data-id="${pkg.id}" style="color:#ef4444; border-color:#fca5a5;">🗑️ Delete</button>
             </div>
           </div>
+        `;
+      });
+      pkgArchiveList.innerHTML = html;
 
-          <span class="badge-tag" style="background:${isLoaded ? '#0284c7' : '#e2e8f0'}; color:${isLoaded ? '#fff' : '#334155'}; font-size:0.6rem;">
-            ${isLoaded ? 'ACTIVE' : 'SAVED'}
-          </span>
-        </div>
+      pkgArchiveList.querySelectorAll('.btn-load-pkg').forEach(btn => {
+        btn.addEventListener('click', (e) => loadSavedPackage(e.currentTarget.dataset.id));
+      });
 
-        <div class="pkg-co-preview" title="${coSnippet}">🎯 ${coSnippet}</div>
+      pkgArchiveList.querySelectorAll('.btn-reset-pkg').forEach(btn => btn.addEventListener('click', resetWorkspace));
 
-        <div class="pkg-actions-row">
-          <button class="btn btn-primary btn-sm btn-load-pkg" data-id="${pkg.id}">📥 Load</button>
-          <button class="btn btn-outline btn-sm btn-reset-pkg" data-id="${pkg.id}">🔄 Reset</button>
-          <button class="btn btn-outline btn-sm btn-del-pkg" data-id="${pkg.id}" style="color:#ef4444; border-color:#fca5a5;">🗑️ Delete</button>
-        </div>
-      </div>
-    `;
-  });
-  pkgArchiveList.innerHTML = html;
-
-  // Re-attach action handlers
-  pkgArchiveList.querySelectorAll('.btn-load-pkg').forEach(btn => {
-    btn.addEventListener('click', (e) => loadSavedPackage(e.currentTarget.dataset.id));
-  });
-
-  pkgArchiveList.querySelectorAll('.btn-reset-pkg').forEach(btn => btn.addEventListener('click', resetWorkspace));
-
-  pkgArchiveList.querySelectorAll('.btn-del-pkg').forEach(btn => {
-    btn.addEventListener('click', async (e) => {
-      const id = e.currentTarget.dataset.id;
-      if (!confirm("Delete this package from local memory and cloud database?")) return;
-      await idb.deletePackage(id);
-      if (db) {
-        try { await deleteDoc(doc(db, 'saved_packages', id)); } catch (err) {}
-      }
-      if (state.activePackageId === id) resetWorkspace();
-      refreshPackageArchiveUI();
-      showToast("Package deleted.");
-    });
-  });
-}
+      pkgArchiveList.querySelectorAll('.btn-del-pkg').forEach(btn => {
+        btn.addEventListener('click', async (e) => {
+          const id = e.currentTarget.dataset.id;
+          // ✅ Styled In-App Dialog
+showConfirmDialog(
+  `Are you sure you want to delete this package from <strong>local memory and cloud database</strong>?`,
+  "🗑️ Delete Saved Package",
+  async () => {
+    await idb.deletePackage(id);
+    if (db) {
+      try { await deleteDoc(doc(db, 'saved_packages', id)); } catch (err) {}
+    }
+    if (state.activePackageId === id) resetWorkspace();
+    refreshPackageArchiveUI();
+    showToast("Package deleted successfully.");
+  },
+  true // Red danger button
+);
+          await idb.deletePackage(id);
+          if (db) {
+            try { await deleteDoc(doc(db, 'saved_packages', id)); } catch (err) {}
+          }
+          if (state.activePackageId === id) resetWorkspace();
+          refreshPackageArchiveUI();
+          showToast("Package deleted.");
+        });
+      });
+    }
 
     // =========================================================================
-    // STEP 2: PACKAGE GENERATION (PARALLEL PROMISE.ALL PREVENTS 400MS LOOP TIMEOUT)
+    // STEP 2: PACKAGE GENERATION WITH DUPLICATE BLOCK & BUTTON INACTIVATION
     // =========================================================================
     generateBtn.addEventListener('click', async () => {
       if (!state.isCOConfirmed || state.allCOsList.length === 0) {
@@ -4135,6 +4540,30 @@ async function refreshPackageArchiveUI() {
 
       if (dayNumber > totalDays) {
         return showMessageBox("Day in Unit cannot exceed Total Planned Days.", "Invalid Pacing");
+      }
+
+      // =======================================================================
+      // DUPLICATE PREVENTION: BLOCK GENERATION IF SAME CLASS, SUBJECT & PART EXISTS
+      // =======================================================================
+      const duplicateExists = state.savedPackages.find(p => 
+        String(p.classId) === String(state.currentClass) &&
+        String(p.partId).toLowerCase() === String(state.currentPart).toLowerCase() &&
+        (p.subject || '').trim().toLowerCase() === (state.currentSubject || '').trim().toLowerCase()
+      );
+
+      if (duplicateExists) {
+        return showMessageBox(
+          `<div style="line-height:1.6;">
+            <strong style="color:var(--error); font-size:0.92rem;">⚠️ Generation Restricted: Duplicate Found</strong><br><br>
+            A package already exists in saved archive for:<br>
+            • <strong>Class:</strong> Std ${state.currentClass}<br>
+            • <strong>Subject:</strong> ${state.currentSubject}<br>
+            • <strong>Part:</strong> ${state.currentPart.toUpperCase()}<br>
+            • <strong>Unit on File:</strong> "${duplicateExists.unitTitle}" (Day ${duplicateExists.dayNumber}/${duplicateExists.totalDays})<br><br>
+            To generate anew for this Subject, Class, and Part, please delete the existing package from <strong>4. Saved Packages</strong> or tap <strong>Reset Workspace</strong>.
+          </div>`,
+          "Duplicate Package Blocked"
+        );
       }
 
       let activeBook = state.books.find(b => b.id === state.activeBookId);
@@ -4155,26 +4584,31 @@ async function refreshPackageArchiveUI() {
       const activeTargetedCO = getEffectiveTargetedCOText();
       const allCOStatements = state.allCOsList.map(c => `${c.num}: ${c.text}`).join('\n');
 
+      // INACTIVATE GENERATE BUTTON IMMEDIATELY DURING SYNTHESIS
+      generateBtn.disabled = true;
+      generateBtn.innerHTML = `⏳ Synthesizing Package...`;
+
       showSpinner(isWholeUnit 
-        ? `Synthesizing Entire ${state.currentSubject} Unit Plan on Locked COs...` 
+        ? `Synthesizing Entire ${state.currentSubject} Unit Plan (${totalDays} Days) on Locked COs...` 
         : `Synthesizing Day ${dayNumber} of ${totalDays} Grounded on Locked CO...`
       );
 
       let coInstruction = `
 CRITICAL SUPREME DIRECTIVE - TEACHER-CONFIRMED & LOCKED COs MANDATORY:
-The teacher has finalized and locked the following Curricular Objective(s) for Day ${dayNumber}:
-"""
-${activeTargetedCO}
-"""
-Full Chapter Confirmed Objectives:
+The teacher has finalized and locked the Curricular Objectives for this chapter:
 """
 ${allCOStatements}
 """
-EVERY SINGLE SCENARIO AND DELIVERABLE MUST BE DERIVED 100% EXCLUSIVELY FROM THESE LOCKED COs!
-- 35-MINUTE TIMELINE (Entry Hook, Concept Inquiry, Evaluation, Chalkboard): Each phase must target this locked CO.
-- BLACKBOARD APPLICATION NOTES: 2-3 HOTS questions & chalk answers derived from this locked CO.
-- EVALUATION WORKSHEET (5 SCORES): Activities & writing lines assessing this locked CO.
-- ANSWER KEY & RUBRIC: Model answers and scoring points directly tied to this locked CO.
+Active Targeted Objective for Day ${dayNumber}:
+"""
+${activeTargetedCO}
+"""
+EVERY SINGLE SCENARIO, WORKSHEET ACTIVITY, AND DELIVERABLE MUST BE DERIVED 100% EXCLUSIVELY FROM THESE LOCKED COs!
+- 35-MINUTE TIMELINE (0-5, 5-20, 20-25, 25-35 min): Target the allocated COs directly.
+- BLACKBOARD NOTES: 2-3 HOTS questions & chalk answers derived from the locked CO.
+- EVALUATION WORKSHEET (5 SCORES TOTAL): Activities assessing this locked CO.
+  CRITICAL WORKSHEET SCORE RULE: Every single question score MUST be an integer greater than or equal to 1 (strictly NO scores below 1, e.g. 0.5 or 0 are completely forbidden). The sum of all scores must equal exactly 5.
+- ANSWER KEY: Model answers and scoring points directly tied to this locked CO with scores matching the worksheet (no scores below 1).
 - WHATSAPP BROADCAST: 100-word daily recap explaining exploration of this locked CO.
 DO NOT substitute, drift, or invent alternative objectives!
 `;
@@ -4191,8 +4625,14 @@ DO NOT substitute, drift, or invent alternative objectives!
       "mediaResources": [{"title": "...", "type": "video|diksha|sim", "platform": "...", "description": "...", "searchQuery": "..."}],
       "blackboardQa": [{"qNum": 1, "cognitiveDomain": "HOTS", "question": "...", "answer": "..."}],
       "whatsappSummary": {"dailyRecap": "...", "studyTip": "...", "dikshaKeywords": "..."},
-      "worksheetQuestions": [{"qNum": 1, "score": 2, "cognitiveDomain": "Application", "question": "..."}],
-      "worksheetAnswers": [{"qNum": 1, "score": 2, "rubric": "...", "answer": "..."}]
+      "worksheetQuestions": [
+        {"qNum": 1, "score": 2, "cognitiveDomain": "Application", "question": "..."},
+        {"qNum": 2, "score": 3, "cognitiveDomain": "Problem Solving", "question": "..."}
+      ],
+      "worksheetAnswers": [
+        {"qNum": 1, "score": 2, "rubric": "1 Mark for principle, 1 Mark for calculation.", "answer": "..."},
+        {"qNum": 2, "score": 3, "rubric": "1.5 Marks for explanation, 1.5 Marks for inference.", "answer": "..."}
+      ]
 `;
 
       let responseSchemaDescription = "";
@@ -4201,12 +4641,12 @@ DO NOT substitute, drift, or invent alternative objectives!
 {
   "allUnitCurricularObjectives": ["CO 1: ...", "CO 2: ..."],
   "dailyPackages": [
-    {
-      "dayNumber": 1,
-      "targetedCurricularObjectives": ["${activeTargetedCO || 'CO 1: ...'}"],
-      "targetedCurricularObjective": "${activeTargetedCO || 'CO 1: ...'}",
+    ${Array.from({length: totalDays}, (_, i) => `{
+      "dayNumber": ${i + 1},
+      "targetedCurricularObjectives": ["CO for day ${i + 1}"],
+      "targetedCurricularObjective": "CO for day ${i + 1}",
       ${singleDayPackageSchema}
-    }
+    }`).join(',\n')}
   ]
 }`;
       } else {
@@ -4221,8 +4661,8 @@ DO NOT substitute, drift, or invent alternative objectives!
 
       try {
         const prompt = `
-You are an expert pedagogical assistant for Kerala SCERT curriculum.
-Formulate an authentic daily instructional package for:
+You are an expert pedagogical assistant for the Kerala SCERT curriculum.
+Formulate an authentic instructional package for:
 - Subject: ${state.currentSubject}
 - Standard: Class ${state.currentClass}
 - Textbook: Part ${state.currentPart}
@@ -4230,12 +4670,14 @@ Formulate an authentic daily instructional package for:
 - Total Planned Days: ${totalDays} Days.
 
 ${coInstruction}
-${isWholeUnit ? `WHOLE UNIT BATCH: Generate instructional packages for EVERY SINGLE DAY from Day 1 to Day ${totalDays}.` : `SINGLE DAY PERIOD MODE: Target Day ${dayNumber} of ${totalDays}.`}
+${isWholeUnit 
+  ? `WHOLE UNIT BATCH MODE: Formulate comprehensive, independent, fully detailed lesson plans and worksheets for EVERY SINGLE DAY from Day 1 to Day ${totalDays}.` 
+  : `SINGLE DAY PERIOD MODE: Formulate the detailed plan strictly for Day ${dayNumber} of ${totalDays}.`}
 
 CRITICAL SPECIFICATIONS:
-1. 35-MINUTE TIMELINE: Formulate spacious breakdown stages (0-5, 5-20, 20-25, 25-35 min) focused directly on the locked CO.
-2. BLACKBOARD NOTES: 2-3 HOTS questions and chalkboard answers derived from the locked CO.
-3. WORKSHEET & ANSWER KEY: Distinct application-level activities totalling 5 scores with explicit rubric points.
+1. 35-MINUTE TIMELINE: Distinct breakdown stages (0-5, 5-20, 20-25, 25-35 min) focused directly on the locked COs.
+2. BLACKBOARD NOTES: 2-3 HOTS questions and chalkboard answers derived from the locked COs.
+3. WORKSHEET & ANSWER KEY: Distinct activities totalling 5 scores with explicit rubric points. ZERO SCORES BELOW 1.
 4. WHATSAPP BROADCAST: 100-word daily recap with exact Blackboard Q&As.
 
 OUTPUT MUST BE A STRICT JSON OBJECT MATCHING THIS SCHEMA:
@@ -4246,7 +4688,7 @@ ${responseSchemaDescription}
 
         if (activeBase64 && typeof activeBase64 === 'string') {
           const sizeInMB = (activeBase64.length * 0.75) / (1024 * 1024);
-          if (sizeInMB <= 4) {
+          if (sizeInMB <= 15) {
             parts.unshift({
               inlineData: { mimeType: "application/pdf", data: activeBase64 }
             });
@@ -4263,15 +4705,39 @@ ${responseSchemaDescription}
         rawJson = rawJson.replace(/^```(?:json)?\s*/i, '').replace(/\s*```$/i, '').trim();
         const result = JSON.parse(rawJson);
 
-        result.targetedCurricularObjective = activeTargetedCO;
-        result.targetedCurricularObjectives = [activeTargetedCO];
-
         const now = new Date();
+        const baseTimestamp = now.getTime();
 
         if (isWholeUnit && Array.isArray(result.dailyPackages)) {
-          let firstDayPkg = null;
-          
-          // PARALLEL EXECUTION: Promise.all avoids Babel loop-protect 400ms timeout
+          // =========================================================================
+          // SAVE BOTH: 1. COMPLETE MASTER UNIT ARCHIVE + 2. INDIVIDUAL DAILY PLANS
+          // =========================================================================
+          const masterUnitPkgId = `pkg_master_${baseTimestamp}`;
+          const masterUnitPackage = {
+            id: masterUnitPkgId,
+            classId: state.currentClass,
+            partId: state.currentPart,
+            subject: state.currentSubject,
+            unitTitle: unitTitle,
+            isMasterUnit: true,
+            totalDays: totalDays,
+            createdAt: baseTimestamp,
+            dateFormatted: now.toLocaleDateString('en-IN', { day: '2-digit', month: 'short' }),
+            data: {
+              allUnitCurricularObjectives: state.allCOsList.map(c => `${c.num}: ${c.text}`),
+              dailyPackages: result.dailyPackages
+            }
+          };
+
+          await idb.savePackage(masterUnitPackage);
+          if (db) {
+            try {
+              if (auth && !auth.currentUser) await signInAnonymously(auth).catch(() => {});
+              await setDoc(doc(db, 'saved_packages', masterUnitPkgId), masterUnitPackage);
+            } catch (e) {}
+          }
+
+          let firstDayDailyPkg = null;
           await Promise.all(result.dailyPackages.map(async (dayPkg, index) => {
             const currentDayNum = dayPkg.dayNumber || (index + 1);
             const fullDayData = {
@@ -4279,16 +4745,17 @@ ${responseSchemaDescription}
               allUnitCurricularObjectives: state.allCOsList.map(c => `${c.num}: ${c.text}`)
             };
 
-            const pkgId = `pkg_${now.getTime()}_d${currentDayNum}`;
+            const dayPkgId = `pkg_${baseTimestamp}_d${currentDayNum}`;
             const dailyClassPackage = {
-              id: pkgId,
+              id: dayPkgId,
               classId: state.currentClass,
               partId: state.currentPart,
               subject: state.currentSubject,
               unitTitle: unitTitle,
+              isMasterUnit: false,
               dayNumber: currentDayNum,
               totalDays: totalDays,
-              createdAt: now.getTime() + currentDayNum,
+              createdAt: baseTimestamp + currentDayNum,
               dateFormatted: now.toLocaleDateString('en-IN', { day: '2-digit', month: 'short' }) + ` (Day ${currentDayNum}/${totalDays})`,
               data: fullDayData
             };
@@ -4297,38 +4764,71 @@ ${responseSchemaDescription}
             if (db) {
               try {
                 if (auth && !auth.currentUser) await signInAnonymously(auth).catch(() => {});
-                await setDoc(doc(db, 'saved_packages', pkgId), dailyClassPackage);
+                await setDoc(doc(db, 'saved_packages', dayPkgId), dailyClassPackage);
               } catch (e) {}
             }
-            if (currentDayNum === 1) firstDayPkg = dailyClassPackage;
+
+            if (currentDayNum === 1) firstDayDailyPkg = dailyClassPackage;
           }));
 
-          if (firstDayPkg) {
-            state.currentPackage = firstDayPkg.data;
-            state.activePackageId = firstDayPkg.id;
+          state.currentUnitPlan = {
+            unitTitle: unitTitle,
+            classId: state.currentClass,
+            partId: state.currentPart,
+            subject: state.currentSubject,
+            totalDays: totalDays,
+            allUnitCurricularObjectives: state.allCOsList.map(c => `${c.num}: ${c.text}`),
+            dailyPackages: result.dailyPackages
+          };
+          state.activeUnitPlanDay = 1;
+          state.activePackageId = masterUnitPkgId;
+          setupUnitDaySwitcherBar(state.currentUnitPlan);
+
+          if (firstDayDailyPkg) {
+            state.currentPackage = firstDayDailyPkg.data;
             dayNumberInput.value = 1;
-            renderPackageToWorkspace(firstDayPkg.data, unitTitle, 1, totalDays, state.currentClass, state.currentPart);
-            updateGeneratorUIStatus(`${state.currentSubject} Std ${state.currentClass} - ${unitTitle} (Day 1/${totalDays})`);
+            renderPackageToWorkspace(firstDayDailyPkg.data, unitTitle, 1, totalDays, state.currentClass, state.currentPart);
+            updateGeneratorUIStatus(`📦 Master Unit: ${unitTitle} (Day 1/${totalDays})`);
           }
 
           await refreshPackageArchiveUI();
           hideSpinner();
-          showMessageBox(`All ${totalDays} daily packages for "${unitTitle}" generated strictly grounded on locked COs!`, "Unit Complete");
+
+          // INACTIVATE GENERATE BUTTON UPON SUCCESSFUL CREATION UNTIL RESET
+          generateBtn.disabled = true;
+          generateBtn.innerHTML = `🔒 Package Generated (Locked)`;
+
+          showMessageBox(
+            `<div style="line-height:1.6;">
+              <strong>All ${totalDays} days successfully generated!</strong><br><br>
+              Saved as a Complete Master Unit Plan and separate Daily Class Packages in the archive.<br><br>
+              <em>To generate a new package, tap <strong>Reset Workspace</strong>.</em>
+            </div>`,
+            "Unit Plan Complete"
+          );
         } else {
+          // SINGLE DAY PACKAGE SAVE
+          state.currentUnitPlan = null;
+          unitDaySwitcherBar.style.display = 'none';
+
+          result.targetedCurricularObjective = activeTargetedCO;
+          result.targetedCurricularObjectives = [activeTargetedCO];
+
           state.currentPackage = result;
           renderPackageToWorkspace(result, unitTitle, dayNumber, totalDays, state.currentClass, state.currentPart);
 
-          const pkgId = 'pkg_' + Date.now();
+          const pkgId = `pkg_${baseTimestamp}`;
           const newPkg = {
             id: pkgId,
             classId: state.currentClass,
             partId: state.currentPart,
             subject: state.currentSubject,
             unitTitle: unitTitle,
+            isMasterUnit: false,
             dayNumber: dayNumber,
             totalDays: totalDays,
-            createdAt: now.getTime(),
-            dateFormatted: now.toLocaleDateString('en-IN', { day: '2-digit', month: 'short' }) + ' ' + now.toLocaleTimeString('en-IN', { hour: '2-digit', minute: '2-digit' }),
+            createdAt: baseTimestamp,
+            dateFormatted: now.toLocaleDateString('en-IN', { day: '2-digit', month: 'short' }),
             data: result
           };
 
@@ -4345,12 +4845,19 @@ ${responseSchemaDescription}
           await refreshPackageArchiveUI();
 
           hideSpinner();
+
+          // INACTIVATE GENERATE BUTTON UPON SUCCESSFUL CREATION UNTIL RESET
+          generateBtn.disabled = true;
+          generateBtn.innerHTML = `🔒 Package Generated (Locked)`;
+
           showToast("Daily package generated strictly on locked COs!");
         }
       } catch (err) {
         hideSpinner();
+        generateBtn.disabled = false;
+        generateBtn.innerHTML = `✨ 2. Generate Package (Locked to COs)`;
         console.error(err);
-        showMessageBox(err.message, "Notice");
+        showMessageBox(`<div style="line-height:1.5;"><strong>Generation failed:</strong><br>${err.message}</div>`, "Generation Error");
       }
     });
 
@@ -4369,12 +4876,16 @@ ${responseSchemaDescription}
     window.addEventListener('DOMContentLoaded', async () => {
       await idb.init();
       await loadAndRenderBooks();
-      refreshPackageArchiveUI();
+      await refreshPackageArchiveUI();
       checkAndLoadChapterRoadmap();
       updateVoiceUIElements();
       attachHeaderCOEditListeners();
-      if (!GEMINI_API_KEY) {
-        setTimeout(showKeyModal, 600);
+
+      // Check Gemini API Key and illuminate LED status badge
+      if (GEMINI_API_KEY && GEMINI_API_KEY.trim().length > 10) {
+        updateApiLedStatus(true);
+      } else {
+        updateApiLedStatus(false);
       }
     });
   </script>
